@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->nullable();
             $table->string('telefone_celular')->nullable();
             $table->string('telefone_celular2')->nullable();
-            $table->string('sexo')->nullable(); //0 = feminino; 1 = masculino
 
             // pessoa
             $table->bigInteger('id_pessoa')->unsigned()->nullable();

@@ -24,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'cpf', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'sexo',
+        'cpf', 'password', 'email', 'telefone_celular', 'telefone_celular2',
         'id_pessoa','lotacao', 'id_tipo_perfil', 'importado', 'id_importacao', 'tentativa_senha',
         'bloqueadoPorTentativa', 'dataBloqueadoPorTentativa', 'envio_email_recuperacao', 'envio_email_confirmacaoApi',
         'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'validado', 'validadoPorUsuario',

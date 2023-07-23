@@ -123,26 +123,6 @@
                                         <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ $user->pessoa->apelidoFantasia != null ? $user->pessoa->apelidoFantasia : old('apelidoFantasia') }}">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label">Sexo</label>
-                                        <select name="sexo" class="form-control select2">
-                                            @switch($user->sexo)
-                                                @case('0')
-                                                    <option value="0" selected>Feminino</option>
-                                                    <option value="1">Masculino</option>
-                                                    @break
-                                                @case('1')
-                                                    <option value="0">Feminino</option>
-                                                    <option value="1" selected>Masculino</option>
-                                                    @break
-                                                @default
-                                                    <option value="" selected disabled>--Selecione--</option>
-                                                    <option value="0">Feminino</option>
-                                                    <option value="1">Masculino</option>
-                                                    @break
-                                            @endswitch
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label class="form-label">*CPF</label>
                                         <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ $user->cpf != null ? $user->cpf: old('cpf') }}">
                                     </div>
@@ -190,17 +170,6 @@
                                     <div class="form-group col-md-12">
                                         <label for="ponto_referencia">Ponto de Referência</label>
                                         <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ $user->pessoa->ponto_referencia != null ? $user->pessoa->ponto_referencia : old('ponto_referencia') }}">
-                                    </div>
-                                    <div class="form-group col-md-12">
-                                        <label for="id_municipio">*Município</label>
-                                        <select name="id_municipio" id="id_municipio" class="form-control select2">
-                                            @if ($user->pessoa->id_municipio == null)
-                                                    <option value="" selected disabled>-- Selecione --</option>
-                                            @endif
-                                            @foreach ($municipios as $municipio)
-                                                <option value="{{ $municipio->id }}" {{ $municipio->id == $user->pessoa->id_municipio ? 'selected' : '' }}>{{ $municipio->descricao }}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -396,33 +365,6 @@
 
     });
 
-    function alterarMunicipio(codIbge){
-        $.ajax({
-            url: "{{ route('municipio.busca-municipios.codIbge', '') }}"  + "/" + codIbge,
-            type: "GET",
-            dataType: 'json',
-            success: function(resp){
-                if (resp.data.tem == 1){
-                    var municipio = resp.data.municipio;
-
-                    if ($('#id_municipio').find("option[value='" + municipio.id + "']").length){
-                        $('#id_municipio').val(null).trigger('change'); //limpa
-                        $('#id_municipio').val(municipio.id).trigger('change'); //seleciona
-                    }
-                    else{
-                        alert('Município não encontrado! Selecione manualmente.');
-                    }
-                }
-                else{
-                    alert('Município não encontrado! Selecione manualmente.');
-                }
-            },
-            error: function(resp){
-                alert('Município não encontrado! Selecione manualmente.');
-            },
-        });
-    }
-
     $(document).ready(function() {
 
         $('.select2').select2({
@@ -433,25 +375,6 @@
             },
             closeOnSelect: true,
             width: '100%',
-        });
-
-        $('#uf').on('change', function() {
-            var b = true;
-            var idEstado = $('#uf').select2("val");
-            $.get("{{ route('municipio.busca-municipios', '') }}" + "/" + idEstado, function(municipios) {
-                $('select[name=id_municipio]').empty();
-                // $('select[name=id_nucleo]').empty();
-                $.each(municipios,
-                    function(key, value) {
-                        if (b){
-                            $('select[name=id_municipio]').append('<option value="" selected disabled>Selecione um município</option>');
-                            // $('select[name=id_nucleo]').append('<option value="" selected disabled>Selecione um programa</option>');
-                        }
-                        b = false;
-                        $('select[name=id_municipio]').append('<option value=' + value.id +
-                            '>' + value.descricao + '</option>');
-                    });
-            });
         });
 
     });

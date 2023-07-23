@@ -90,14 +90,6 @@
                                                     <label class="form-label">Celular/Telefone Recado</label>
                                                     <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ old('telefone_celular2')}}">
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Sexo</label>
-                                                    <select name="sexo" class="form-control">
-                                                        <option value="" selected disabled>--Selecione--</option>
-                                                        <option value="0">Feminino</option>
-                                                        <option value="1">Masculino</option>
-                                                    </select>
-                                                </div>
                                                 {{-- <div class="mb-3">
                                                     <label for="uf">UF</label>
                                                     <select name="uf" id="uf" class="form-control select2" required>

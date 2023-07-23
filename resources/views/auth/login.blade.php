@@ -46,9 +46,8 @@
                 </a>
             </div> --}}
 
-            <ul class="nav justify-content-end">
+            {{-- <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    {{-- <a class="nav-link" href="{{route('pub.acervo.indexpub',$link='acervo')}}"> --}}
                     <a class="nav-link" href="{{ route('pub.acervo.index') }}">
                         <button type="button" class="btn btn-outline-primary btn-lg">Biblioteca</button>
                     </a>
@@ -59,8 +58,7 @@
                         <button type="button" class="btn btn-outline-success btn-lg">Eventos</button>
                     </a>
                 </li>
-
-            </ul>
+            </ul> --}}
 
         </nav>
         <main class="content d-flex p-0">

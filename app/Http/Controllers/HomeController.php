@@ -29,12 +29,10 @@ class HomeController extends Controller
         try{
             $user = User::where('id', '=', auth()->user()->id)
                 ->select(
-                    'id', 'cpf', 'email', 'telefone_celular', 'telefone_celular2', 'sexo',
+                    'id', 'cpf', 'email', 'telefone_celular', 'telefone_celular2',
                     'id_pessoa'
                 )->first();
 
-            $estados = Estado::where('ativo', '=', 1)->get();
-            $municipios = Municipio::where('id_estado', '=', '16')->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
             $foto_perfil = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', 1)->first();
 
             $temFoto = 0;
@@ -51,7 +49,7 @@ class HomeController extends Controller
 
             $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
 
-            return view('home.home', compact('user', 'estados', 'municipios', 'foto_perfil', 'temFoto', 'filesize'));
+            return view('home.home', compact('user', 'foto_perfil', 'temFoto', 'filesize'));
         }
         catch(\Exception $ex){
             // return $ex->getMessage();
@@ -80,7 +78,6 @@ class HomeController extends Controller
                 'nomeCompleto' => $request->nomeCompleto,
                 'apelidoFantasia' => $request->apelidoFantasia,
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
-                'sexo' => $request->sexo,
                 'cep' => $request->cep,
                 'endereco' => $request->endereco,
                 'bairro' => $request->bairro,
@@ -98,7 +95,6 @@ class HomeController extends Controller
                 'nomeCompleto' => 'required|max:255',
                 'apelidoFantasia' => 'max:255',
                 'dt_nascimento_fundacao' => 'required|date',
-                'sexo' => 'max:255',
                 'cep' => 'max:255',
                 'endereco' => 'max:255',
                 'bairro' => 'max:255',
@@ -144,7 +140,6 @@ class HomeController extends Controller
             $user->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
             $user->telefone_celular = preg_replace('/[^0-9]/', '', $request->telefone_celular);
             $user->telefone_celular2 = preg_replace('/[^0-9]/', '', $request->telefone_celular2);
-            $user->sexo = $request->sexo;
 
             if ($request->password != null){
 
@@ -218,7 +213,7 @@ class HomeController extends Controller
 
     //         $user = User::where('id', '=', auth()->user()->id)
     //             ->select(
-    //                 'id', 'cpf', 'email', 'telefone_celular', 'telefone_celular2', 'sexo',
+    //                 'id', 'cpf', 'email', 'telefone_celular', 'telefone_celular2',
     //                 'id_pessoa', 'id_perfil'
     //             )->first();
 
