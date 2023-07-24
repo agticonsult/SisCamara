@@ -47,7 +47,8 @@
             <a class="sidebar-brand" href="">
                 <div class="max-width">
                     <div class="imageContainer">
-                        <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="30%" height="30%" alt="">
+                        <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}"
+                            class="img-thumbnail" width="30%" height="30%" alt="">
                         <span class="align-middle mr-3" style="font-size: .999rem;">IDR-Paraná</span>
                     </div>
                 </div>
@@ -59,14 +60,60 @@
                 </li>
 
                 @if (Auth::user())
-
                     <li class="sidebar-item {{ Route::current()->uri == 'home' ? 'active' : null }}">
                         <a href="{{ route('home') }}" class="sidebar-link">
                             <i class="fas fa-user-circle"></i>
                             Dados do Usuário
                         </a>
                     </li>
+                @endif
 
+                {{-- Configuração --}}
+                @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||
+                        Auth::user()->temPermissao('FinalidadeGrupo', 'Cadastro') == 1 ||
+                        Auth::user()->temPermissao('FinalidadeGrupo', 'Alteração') == 1 ||
+                        Auth::user()->temPermissao('FinalidadeGrupo', 'Relatório') == 1 ||
+                        Auth::user()->temPermissao('Filesize', 'Listagem') == 1 ||
+                        Auth::user()->temPermissao('Filesize', 'Cadastro') == 1 ||
+                        Auth::user()->temPermissao('Filesize', 'Alteração') == 1 ||
+                        Auth::user()->temPermissao('Filesize', 'Relatório') == 1 ||
+                        Auth::user()->temPermissao('TipoEvento', 'Listagem') == 1 ||
+                        Auth::user()->temPermissao('TipoEvento', 'Cadastro') == 1 ||
+                        Auth::user()->temPermissao('TipoEvento', 'Alteração') == 1 ||
+                        Auth::user()->temPermissao('TipoEvento', 'Relatório') == 1)
+                    <li class="sidebar-item">
+                        <a href="#configuracao" data-toggle="collapse" class="sidebar-link collapsed">
+                            <i class="fas fa-cog"></i>
+                            Configuração
+                        </a>
+                        <ul id="configuracao"
+                            class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ||
+                            Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ||
+                            Route::current()->getPrefix() == 'configuracao/tipo-evento'
+                                ? 'active'
+                                : 'collapse' }}">
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ? 'active' : null }}">
+                                <a class="sidebar-link "
+                                    href="{{ route('configuracao.finalidade_grupo.index') }}">Finalidade dos
+                                    Grupos de Usuário</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tamanho-anexo' // mudar as rotas e criar a pagina
+                                    ? 'active'
+                                    : null }}">
+                                <a class="sidebar-link " href="{{ route('configuracao.tamanho_anexo.index') }}">Tamanho
+                                    dos Anexos</a>
+                            </li>
+                            {{-- <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-evento' // mudar as rotas e criar a pagina
+                                    ? 'active'
+                                    : null }}">
+                                <a class="sidebar-link " href="{{ route('configuracao.tipo_evento.index') }}">Tipos de
+                                    Evento</a>
+                            </li> --}}
+                        </ul>
+                    </li>
                 @endif
             </ul>
         </div>
@@ -135,8 +182,7 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Sair
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </div>
