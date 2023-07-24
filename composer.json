@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.3|^8.1",
         "ext-gd": "*",
+        "alaminfirdows/laravel-editorjs": "^2.0",
         "beyondcode/laravel-websockets": "^1.13",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",

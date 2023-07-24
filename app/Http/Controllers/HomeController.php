@@ -83,8 +83,7 @@ class HomeController extends Controller
                 'bairro' => $request->bairro,
                 'numero' => $request->numero,
                 'complemento' => $request->complemento,
-                'ponto_referencia' => $request->ponto_referencia,
-                'id_municipio' => $request->id_municipio
+                'ponto_referencia' => $request->ponto_referencia
             ];
             $rules = [
                 //Usuário
@@ -100,8 +99,7 @@ class HomeController extends Controller
                 'bairro' => 'max:255',
                 'numero' => 'max:255',
                 'complemento' => 'max:255',
-                'ponto_referencia' => 'max:255',
-                'id_municipio' => 'required'
+                'ponto_referencia' => 'max:255'
             ];
 
             $validarUsuario = Validator::make($input, $rules);
@@ -174,7 +172,6 @@ class HomeController extends Controller
                 $pessoa->numero = $request->numero;
                 $pessoa->complemento = $request->complemento;
                 $pessoa->ponto_referencia = $request->ponto_referencia;
-                $pessoa->id_municipio = $request->id_municipio;
                 $pessoa->save();
             }
 
