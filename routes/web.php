@@ -4,7 +4,9 @@ use App\Http\Controllers\AtoController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\ConfirmacaoEmailController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
@@ -114,8 +116,8 @@ Route::group(['middleware' => 'auth'], function () {
 
          // tamanho dos anexos
          Route::group(['prefix' => '/tamanho-anexo', 'as' => 'tamanho_anexo.'], function() {
-            Route::get('/index', [TipoFilesizeController::class, 'index'])->name('index');
-            Route::post('/update', [FilesizeController::class, 'update'])->name('update');
+            Route::get('/index', [FilesizeController::class, 'index'])->name('index');
+            Route::post('/update', [FileSizeController::class, 'update'])->name('update');
         });
 
     });
