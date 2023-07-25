@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-    <title>IDR-Paraná</title>
+    <title>SisCamara</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
@@ -48,7 +48,7 @@
                 <div class="max-width">
                     <div class="imageContainer">
                         <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="30%" height="30%" alt="">
-                        <span class="align-middle mr-3" style="font-size: .999rem;">IDR-Paraná</span>
+                        <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                     </div>
                 </div>
             </a>
@@ -66,6 +66,16 @@
                             Dados do Usuário
                         </a>
                     </li>
+
+                    @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
+                        <li
+                            class="sidebar-item {{ Route::current()->getPrefix() == 'ato' ? 'active' : null }}">
+                            <a href="{{ route('ato.index') }}" class="sidebar-link">
+                                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                <span>Atos</span>
+                            </a>
+                        </li>
+                    @endif
 
                 @endif
             </ul>
@@ -158,7 +168,7 @@
                     <div class="col-6 text-right">
                         <p class="mb-0">
                             {{-- &copy; 2022 - <a href="" class="text-muted">IDR - Paraná</a> --}}
-                            © <?php echo date('Y'); ?> - <a href="" class="text-muted">IDR - Paraná</a>
+                            © <?php echo date('Y'); ?> - <a href="" class="text-muted">SisCamara</a>
                         </p>
                     </div>
                 </div>

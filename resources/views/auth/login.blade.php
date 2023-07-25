@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>IDR-Paraná</title>
+    <title>SisCamara</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
 
     {{-- Styles --}}
@@ -31,7 +31,7 @@
                     <div class="max-width">
                         <div class="imageContainer">
                             <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
-                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span>
+                            <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         </div>
                     </div>
                     {{-- <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}"

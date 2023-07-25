@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AtoController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\ConfirmacaoEmailController;
 use App\Http\Controllers\Auth\LoginController;
@@ -58,6 +59,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/alterar-perfil', [HomeController::class, 'alterarPerfil'])->name('home.alterarPerfil');
     Route::post('/update/{id}', [HomeController::class, 'update'])->name('home.update');
     Route::post('/foto', [FotoPerfilController::class, 'store'])->name('upload_foto');
+
+    // Ato
+    Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
+        Route::get('/index', [AtoController::class, 'index'])->name('index');
+        Route::get('/create', [AtoController::class, 'create'])->name('create');
+        Route::post('/store', [AtoController::class, 'store'])->name('store');
+        Route::get('/edit', [AtoController::class, 'edit'])->name('edit');
+        Route::post('/update', [AtoController::class, 'update'])->name('update');
+        Route::post('/destroy', [AtoController::class, 'destroy'])->name('destroy');
+    });
+
+
 
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {
