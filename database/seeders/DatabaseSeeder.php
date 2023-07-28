@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
 
 
         // User::factory(10)->create();
+        $this->call(GrupoSeeder::class);
         $this->call(PerfilTableSeeder::class);
         $this->call(PessoaUserTableSeeder::class);
         $this->call(TipoEmailTableSeeder::class);
@@ -36,5 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoAnexoTableSeeder::class);
         $this->call(FilesizeTableSeeder::class);
         $this->call(SeederTeste::class);
+        $this->call(TipoAtoTableSeeder::class);
     }
 }

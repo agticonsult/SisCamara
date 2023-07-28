@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ato;
 use App\Models\ErrorLog;
+use App\Models\Grupo;
+use App\Models\TipoAto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,7 +42,10 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            return view('ato.create');
+            $grupos = Grupo::where('ativo', '=', 1)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+
+            return view('ato.create', compact('grupos', 'tipo_atos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

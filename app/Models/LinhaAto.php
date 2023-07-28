@@ -6,31 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class Ato extends Model implements Auditable
+class LinhaAto extends Model implements Auditable
 {
     use HasFactory;
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'ano', 'numero', 'subtitulo', 'id_grupo', 'id_tipo_ato', 'cadastradoPorUsuario',
-        'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'ordem', 'texto', 'id_ato', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'atos';
+    protected $table = 'linha_atos';
 
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
-    public function grupo()
+    public function ato()
     {
-        return $this->belongsTo(Grupo::class ,'id_grupo');
-    }
-    public function tipo_ato()
-    {
-        return $this->belongsTo(TipoAto::class ,'id_tipo_ato');
+        return $this->belongsTo(Ato::class, 'id_ato');
     }
 }
 

@@ -32,6 +32,49 @@
                 @csrf
                 @method('POST')
 
+                <h3>Dados Gerais</h3>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Título</label>
+                        <input type="text" class="form-control" name="titulo">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Ano</label>
+                        <input type="text" class="form-control" name="ano">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Número</label>
+                        <input type="text" class="form-control" name="numero">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Grupo</label>
+                        <select name="id_grupo" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($grupos as $grupo)
+                                <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Tipo de Ato</label>
+                        <select name="tipo_ato" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($tipo_atos as $tipo_ato)
+                                <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <br><hr>
+                <h3>Texto</h3>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Subtítulo</label>
+                        <textarea name="subtitulo" cols="30" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Corpo do Texto</label>
@@ -173,66 +216,50 @@
 
     $("#form").validate({
         rules : {
-            nomeCompleto:{
+            titulo:{
                 required:true
             },
-            cpf:{
+            ano:{
                 required:true
             },
-            dt_nascimento_fundacao:{
+            numero:{
                 required:true
             },
-            email:{
+            id_grupo:{
                 required:true
             },
-            password:{
-                required:true,
-                minlength:6,
-                maxlength:35
-            },
-            confirmacao:{
-                required:true,
-                minlength:6,
-                maxlength:35
-            },
-            lotacao:{
+            tipo_ato:{
                 required:true
             },
-            tipo_perfil:{
+            subtitulo:{
+                required:true
+            },
+            corpo_texto:{
                 required:true
             }
         },
         messages:{
-            nomeCompleto:{
+            titulo:{
                 required:"Campo obrigatório"
             },
-            cpf:{
+            ano:{
                 required:"Campo obrigatório"
             },
-            dt_nascimento_fundacao:{
-                required:"Campo obrigatório",
-                min:"Data mínima: 01/01/1899",
-                max:"Data máxima: data de hoje",
-            },
-            email:{
+            numero:{
                 required:"Campo obrigatório"
             },
-            password:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres",
-                maxlength:"Máximo 35 caracteres"
-            },
-            confirmacao:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres",
-                maxlength:"Máximo 35 caracteres"
-            },
-            lotacao:{
+            id_grupo:{
                 required:"Campo obrigatório"
             },
-            tipo_perfil:{
+            tipo_ato:{
                 required:"Campo obrigatório"
             },
+            subtitulo:{
+                required:"Campo obrigatório"
+            },
+            corpo_texto:{
+                required:"Campo obrigatório"
+            }
         }
     });
 
@@ -246,73 +273,6 @@
             },
             closeOnSelect: true,
             width: '100%',
-        });
-
-        $('#tipo_perfil').on('change', function(){
-            var valores = $('#tipo_perfil').val();
-
-            switch (valores.length) {
-
-                case 1:
-                    selected = valores[0];
-                    switch (selected) {
-                        case '1':
-                            $('#administrador').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '2':
-                            $('#funcionario').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '3':
-                            $('#cliente').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            break;
-
-                        default:
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                    }
-                    break;
-
-                case 2:
-                    console.log(valores);
-                    if ((valores[0] == 1 && valores[1] == 2) || (valores[0] == 2 && valores[1] == 1)){
-                        $('#administrador').removeClass('d-none');
-                        $('#funcionario').removeClass('d-none');
-                        $('#cliente').addClass('d-none');
-                    }
-                    else{
-                        if ((valores[0] == 1 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 1)){
-                            $('#administrador').removeClass('d-none');
-                            $('#cliente').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                        }
-                        else{
-                            if ((valores[0] == 2 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 2)){
-                                $('#funcionario').removeClass('d-none');
-                                $('#cliente').removeClass('d-none');
-                                $('#administrador').addClass('d-none');
-                            }
-                        }
-                    }
-                    break;
-
-                case 3:
-                    console.log(valores);
-                    $('#administrador').removeClass('d-none');
-                    $('#funcionario').removeClass('d-none');
-                    $('#cliente').removeClass('d-none');
-                    break;
-
-                default:
-                    break;
-            }
         });
 
     });
