@@ -35,6 +35,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Ato</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Cadastrado por</th>
+                            <th scope="col">Ações</th>
                             {{-- <th scope="col">CPF</th>
                             <th scope="col">Email</th>
                             <th scope="col">Lotação (apenas para funcionários)</th>
@@ -47,49 +50,24 @@
                         @foreach ($atos as $ato)
                             <tr>
                                 <td>
+                                    @php
+                                        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                                        date_default_timezone_set('America/Sao_Paulo');
+                                    @endphp
                                     {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
                                     Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
-                                    de
+                                    de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
                                 </td>
-                                {{-- <td>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</td>
-                                <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
-                                <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
+                                <td>{{ $ato->titulo }}</td>
                                 <td>
-                                    @if ($usuario->lotacao)
-                                    @else
-                                        não informado
-                                    @endif
+                                    <strong>{{ $ato->cadastradoPorUsuario != null ? $ato->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $ato->created_at != null ? $ato->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <ol>
-                                        @foreach ($usuario->permissoes_ativas as $permissao)
-                                            <li>
-                                                {{ $permissao->perfil->descricao }} -
-                                                {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}
-                                            </li>
-                                        @endforeach
-                                    </ol>
+                                    <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
+                                    <a href="{{ route('ato.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
                                 </td>
-                                <td>
-                                    <strong>{{ $usuario->created_at != null ? $usuario->created_at->format('d/m/Y H:i:s') : 'sem registro' }}</strong>
-                                </td>
-                                <td>
-                                    @if ($usuario->ativo == 1)
-                                        <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-warning">Alterar</a>
-                                        @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
-                                            <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuario->id }}">Excluir</button>
-                                        @endif
-                                    @else
-                                        <button type="button" class="btn btn-danger m-1">
-                                            Excluído por <strong>{{ $usuario->inativadoPorUsuario != null ? $usuario->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                            em <strong>{{ date('d/m/Y H:i:s', strtotime($usuario->dataInativado)) }}</strong> <br>
-                                            Motivo: {{ $usuario->motivoInativado }}</strong>
-                                        </button>
-                                        @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
-                                            <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModalRecadastrar{{ $usuario->id }}">Recadastrar</button>
-                                        @endif
-                                    @endif
-                                </td> --}}
                             </tr>
 
                             {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"

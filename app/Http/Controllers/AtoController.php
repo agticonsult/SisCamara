@@ -118,6 +118,9 @@ class AtoController extends Controller
                 }
             }
 
+            setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+            date_default_timezone_set('America/Campo_Grande');
+
             return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso.');
         }
         catch (ValidationException $e ) {
@@ -139,9 +142,28 @@ class AtoController extends Controller
         }
     }
 
-    public function show(Ato $ato)
+    public function show($id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+
+            return view('ato.show', compact('ato'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoController";
+            $erro->funcao = "create";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     public function edit(Ato $ato)
