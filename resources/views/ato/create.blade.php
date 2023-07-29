@@ -32,12 +32,30 @@
                 @csrf
                 @method('POST')
 
-                <h3>Dados Gerais</h3>
+                <h3>Texto</h3>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Título</label>
-                        <input type="text" class="form-control" name="titulo">
+                        <textarea name="titulo" cols="10" rows="5" class="form-control"></textarea>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Subtítulo</label>
+                        <textarea name="subtitulo" cols="10" rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Corpo do Texto</label>
+                        <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <br><hr>
+
+                <h3>Dados Gerais</h3>
+                <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Ano</label>
                         <input type="text" class="form-control" name="ano">
@@ -59,7 +77,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Tipo de Ato</label>
-                        <select name="tipo_ato" class="select2 form-control">
+                        <select name="id_tipo_ato" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipo_atos as $tipo_ato)
                                 <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
@@ -67,116 +85,6 @@
                         </select>
                     </div>
                 </div>
-                <br><hr>
-                <h3>Texto</h3>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="form-label">*Subtítulo</label>
-                        <textarea name="subtitulo" cols="30" rows="10" class="form-control"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="form-label">*Corpo do Texto</label>
-                        <textarea name="corpo_texto" cols="30" rows="10" class="form-control"></textarea>
-                    </div>
-                </div>
-
-                {{-- <h5>Dados Pessoais</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*Nome</label>
-                                <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe o nome" value="{{ old('nomeCompleto') }}">
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*CPF</label>
-                                <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe o CPF" value="{{ old('cpf') }}">
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*Data de Nascimento</label>
-                                <input class="dataFormat form-control" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ old('dt_nascimento_fundacao') }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*Email</label>
-                                <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                <input class="form-control" type="password" name="password" placeholder="Informe uma senha" value="{{ old('password') }}">
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="form-label">*Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                <input class="form-control" type="password" name="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br><hr><br>
-                <h5>Dados Gerais</h5>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-label">*Tipo de Perfil</label>
-                                <select name="tipo_perfil[]" id="tipo_perfil" class="form-control select2" multiple required>
-                                    <option value="2">Funcionário</option>
-                                    <option value="3">Cliente</option>
-                                    <option value="1">Administrador</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="lotacao">*Lotação</label>
-                                <select name="lotacao" id="lotacao" class="form-control select2">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($municipios as $municipio)
-                                        <option value="{{ $municipio->id }}">{{ $municipio->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-none form-group col-md-6" id="funcionario">
-                                <label class="form-label">*Perfil Funcionário</label>
-                                <select name="id_perfil_funcionario[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_funcionarios as $pf)
-                                        <option value="{{ $pf->id }}">
-                                            {{ $pf->descricao }} -
-                                            {{ $pf->id_abrangencia != null ? $pf->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="d-none form-group col-md-6" id="cliente">
-                                <label class="form-label">*Perfil Cliente</label>
-                                <select name="id_perfil_cliente[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_clientes as $pc)
-                                        <option value="{{ $pc->id }}">
-                                            {{ $pc->descricao }} -
-                                            {{ $pc->id_abrangencia != null ? $pc->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="d-none form-group col-md-6" id="administrador">
-                                <label class="form-label">*Perfil Administrador</label>
-                                <select name="id_perfil_adm[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_adms as $pa)
-                                        <option value="{{ $pa->id }}">
-                                            {{ $pa->descricao }} -
-                                            {{ $pa->id_abrangencia != null ? $pa->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
 
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
@@ -196,7 +104,6 @@
 
 <script>
     $('#cep').mask('00.000-000');
-    $('.cpf').mask('000.000.000-00');
 
     var today = new Date();
     var dd = today.getDate();
@@ -228,7 +135,7 @@
             id_grupo:{
                 required:true
             },
-            tipo_ato:{
+            id_tipo_ato:{
                 required:true
             },
             subtitulo:{
@@ -251,7 +158,7 @@
             id_grupo:{
                 required:"Campo obrigatório"
             },
-            tipo_ato:{
+            id_tipo_ato:{
                 required:"Campo obrigatório"
             },
             subtitulo:{

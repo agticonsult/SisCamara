@@ -24,8 +24,8 @@
         </h2>
     </div>
 
-    {{-- <div class="card-body">
-        @if (Count($usuarios) == 0)
+    <div class="card-body">
+        @if (Count($atos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -34,19 +34,24 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">CPF</th>
+                            <th scope="col">Ato</th>
+                            {{-- <th scope="col">CPF</th>
                             <th scope="col">Email</th>
                             <th scope="col">Lotação (apenas para funcionários)</th>
                             <th scope="col">Perfis ativos</th>
                             <th scope="col">Cadastrado em</th>
-                            <th scope="col">Ações</th>
+                            <th scope="col">Ações</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($usuarios as $usuario)
+                        @foreach ($atos as $ato)
                             <tr>
-                                <td>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</td>
+                                <td>
+                                    {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                    Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
+                                    de
+                                </td>
+                                {{-- <td>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</td>
                                 <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
                                 <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
                                 <td>
@@ -84,10 +89,10 @@
                                             <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModalRecadastrar{{ $usuario->id }}">Recadastrar</button>
                                         @endif
                                     @endif
-                                </td>
+                                </td> --}}
                             </tr>
 
-                            <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
+                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -137,13 +142,13 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         @endforeach
                     </tbody>
                 </table>
             </div>
         @endif
-    </div> --}}
+    </div>
 
     <div class="card-footer">
         <a href="{{ route('ato.create') }}" class="btn btn-primary">Cadastrar Ato</a>
