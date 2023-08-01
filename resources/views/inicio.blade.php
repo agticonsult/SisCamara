@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Ágile</title>
 
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
     <script defer src="{{asset('js/fontawesome-all.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('css/fontawesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Copyright -->
-    <div class="footer-copyright text-center text-white py-3">© 2018 Copyright:
+    <div class="footer-copyright text-center text-white py-3">© <?php echo date('Y'); ?> Copyright:
         <a href="http://agile.inf.br/" target="_blank" class="text-white"> Ágile</a>
     </div>
     <!-- Copyright -->
