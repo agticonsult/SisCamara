@@ -38,5 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FilesizeTableSeeder::class);
         $this->call(SeederTeste::class);
         $this->call(TipoAtoTableSeeder::class);
+        $this->call(TipoLinhaAtoTableSeeder::class);
     }
 }

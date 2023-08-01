@@ -32,6 +32,14 @@ class Ato extends Model implements Auditable
     {
         return $this->belongsTo(TipoAto::class ,'id_tipo_ato');
     }
+    public function linhas_originais_ativas()
+    {
+        return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1);
+    }
+    public function todas_linhas_ativas()
+    {
+        return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
+    }
 }
 
 

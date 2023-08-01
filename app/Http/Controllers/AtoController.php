@@ -71,11 +71,22 @@ class AtoController extends Controller
             }
 
             $input = [
-                'id_evento' => $request->id_evento
-
+                'titulo' => $request->titulo,
+                'ano' => $request->ano,
+                'numero' => $request->numero,
+                'id_grupo' => $request->id_grupo,
+                'id_tipo_ato' => $request->id_tipo_ato,
+                'subtitulo' => $request->subtitulo,
+                'corpo_texto' => $request->corpo_texto
             ];
             $rules = [
-                'id_evento' => 'required|integer'
+                'titulo' => 'required',
+                'ano' => 'required|integer',
+                'numero' => 'required',
+                'id_grupo' => 'required',
+                'id_tipo_ato' => 'required',
+                'subtitulo' => 'required',
+                'corpo_texto' => 'required',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
@@ -111,7 +122,8 @@ class AtoController extends Controller
                     $linha_ato = new LinhaAto();
                     $linha_ato->ordem = $i + 1;
                     $linha_ato->texto = $array_corpo_texto[$i];
-                    $linha_ato->id_ato = $ato->id;
+                    $linha_ato->id_ato_principal = $ato->id;
+                    $linha_ato->id_tipo_linha = 1;
                     $linha_ato->cadastradoPorUsuario = Auth::user()->id;
                     $linha_ato->ativo = 1;
                     $linha_ato->save();
