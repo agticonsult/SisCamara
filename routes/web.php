@@ -11,6 +11,7 @@ use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
@@ -34,8 +35,12 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+//Inicio
+Route::get('/', [InicioController::class, 'index'])->name('index');
+Route::get('/login', [InicioController::class, 'login'])->name('login');
+
+
 //Login
-Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/autenticacao', [LoginController::class, 'autenticacao'])->name('login.autenticacao');
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
