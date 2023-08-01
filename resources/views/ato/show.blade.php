@@ -41,7 +41,6 @@
                     <a class="nav-link" id="compilado-tab" data-toggle="tab" href="#compilado" role="tab"
                        aria-controls="compilado" aria-selected="false">Compilada</a>
                 </li>
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-link"></i>Atos relacionados</a>
@@ -58,32 +57,22 @@
                         @endif --}}
                     </div>
                 </li>
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-paperclip"></i> Anexos</a>
-
                     <div class="dropdown-menu">
-
                         {{-- @foreach($ato->anexos as $anexo)
                             <a class="dropdown-item" href="{{url('storage/Atos/Anexos/'.$anexo->nome_hash)}}"
                                target="_blank">
                                 {{ $anexo->nome_original }}
                             </a>
                         @endforeach --}}
-
-
                     </div>
-
                 </li>
-
                 <li class="nav-item ">
-                    <a href="" class="nav-link" title="Imprimir"> <i class="fas fa-print"></i> </a>
+                    <a href="" class="nav-link" title="Imprimir"><i class="fas fa-print"></i></a>
                 </li>
-
-
             </ul>
-
 
             <div class="tab-content" id="myTabContent">
 
@@ -93,15 +82,9 @@
                     date_default_timezone_set('America/Sao_Paulo');
                 @endphp
 
-                <!-- COMPILADO -->
-                <div class="tab-pane fade" id="compilado" role="tabpanel" aria-labelledby="compilado-tab">
-
-
+                <div class="tab-pane fade show" id="original" role="tabpanel" aria-labelledby="original-tab">
                     <div class="card mt-2">
-
                         <div class="card-body">
-
-
                             <ul>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
@@ -117,33 +100,24 @@
                             {{-- @foreach($arquivos as $arquivo)
                                 @php echo str_replace($tags, "", $arquivo->corpo)  ; @endphp
                             @endforeach --}}
-
                         </div>
                     </div>
-
                 </div>
-                <!-- COMPILADO -->
 
-
-                <!-- CONSOLIDADA -->
-                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="consolidada">
-
-
-                    <ul>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="">PDF</a>
-                                <a class="dropdown-item" href="">HTML</a>
-                                <a class="dropdown-item" href="">TXT</a>
-                                <a class="dropdown-item" href="">DOC</a>
-                            </div>
-                        </li>
-                    </ul>
-
-
+                <div class="tab-pane fade" id="consolidada" role="tabpanel" aria-labelledby="consolidada-tab">
                     <div class="card mt-2">
                         <div class="card-body">
+                            <ul>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="">PDF</a>
+                                        <a class="dropdown-item" href="">HTML</a>
+                                        <a class="dropdown-item" href="">TXT</a>
+                                        <a class="dropdown-item" href="">DOC</a>
+                                    </div>
+                                </li>
+                            </ul>
                             @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp
                             <br>
                             {{-- @foreach($arquivos as $arquivo)
@@ -154,25 +128,21 @@
                         </div>
                     </div>
                 </div>
-                <!-- CONSOLIDADA -->
 
-
-                <!-- COMPILADA -->
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <ul>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="">PDF</a>
-                                <a class="dropdown-item" href="">HTML</a>
-                                <a class="dropdown-item" href="">TXT</a>
-                                <a class="dropdown-item" href="">DOC</a>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="tab-pane fade" id="compilado" role="tabpanel" aria-labelledby="compilado-tab">
                     <div class="card mt-2">
                         <div class="card-body">
-
+                            <ul>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="">PDF</a>
+                                        <a class="dropdown-item" href="">HTML</a>
+                                        <a class="dropdown-item" href="">TXT</a>
+                                        <a class="dropdown-item" href="">DOC</a>
+                                    </div>
+                                </li>
+                            </ul>
                             @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp
                             <br>
                             {{-- @foreach($arquivos as $arquivo)
@@ -180,15 +150,10 @@
                                    title="Ver arquivo"> @php echo $arquivo->titulo ; @endphp</a>
                                 @php echo str_replace($tags, "", $arquivo->corpo)  ; @endphp
                             @endforeach --}}
-
                         </div>
                     </div>
                 </div>
-                <!-- COMPILADA -->
-
-
             </div>
-
         </div>
     </div>
 
