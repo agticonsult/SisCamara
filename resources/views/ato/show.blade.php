@@ -82,7 +82,7 @@
                     date_default_timezone_set('America/Sao_Paulo');
                 @endphp
 
-                <div class="tab-pane fade show" id="original" role="tabpanel" aria-labelledby="original-tab">
+                <div class="tab-pane fade show active" id="original" role="tabpanel" aria-labelledby="original-tab">
                     <div class="card mt-2">
                         <div class="card-body">
                             <ul>
@@ -159,6 +159,7 @@
 
 </div>
 
+<script src="{{asset('js/popper.min.js')}}"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="{{asset('js/jquery.validate.js')}}"></script>
 <script src="{{ asset('js/datatables.js') }}"></script>
