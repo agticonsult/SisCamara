@@ -30,7 +30,7 @@
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
                         <div class="imageContainer">
-                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
+                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
                             <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         </div>
                     </div>
