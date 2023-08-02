@@ -43,7 +43,7 @@
 
 <div class="wrapper">
     <nav id="sidebar" class="sidebar">
-        <div class="sidebar-content js-simplebar">
+        <div class="sidebar sidebar-content js-simplebar">
             <a class="sidebar-brand" href="">
                 <div class="max-width">
                     <div class="imageContainer">

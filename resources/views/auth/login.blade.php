@@ -25,7 +25,7 @@
 
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #293042">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #00008b">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
