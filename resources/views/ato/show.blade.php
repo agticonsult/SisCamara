@@ -79,7 +79,7 @@
                 @php
                     $tags = array('<span style="text-decoration: line-through;">');
                     setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-                    date_default_timezone_set('America/Sao_Paulo');
+                    date_default_timezone_set('America/Campo_Grande');
                 @endphp
 
                 <div class="tab-pane fade show active" id="original" role="tabpanel" aria-labelledby="original-tab">
@@ -96,10 +96,15 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp
-                            {{-- @foreach($arquivos as $arquivo)
-                                @php echo str_replace($tags, "", $arquivo->corpo)  ; @endphp
-                            @endforeach --}}
+                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at)); @endphp
+                            {{-- @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp --}}
+                            @if (Count($ato->linhas_originais_ativas) != 0)
+                                @foreach($ato->linhas_originais_ativas as $linha_original_ativa)
+                                    {{ $linha_original_ativa->texto }}
+                                @endforeach
+                            @else
+
+                            @endif
                         </div>
                     </div>
                 </div>

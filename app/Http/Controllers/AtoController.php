@@ -162,6 +162,7 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            dd($ato->linhas_originais_ativas);
 
             return view('ato.show', compact('ato'));
         }

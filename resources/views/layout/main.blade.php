@@ -22,6 +22,7 @@
     <script src="{{ asset('js/jquery.js') }}"></script>
 </head>
 
+
 {{-- @php
     use App\Models\Encaminhamento;
     // use App\AvisoVisualizacao;

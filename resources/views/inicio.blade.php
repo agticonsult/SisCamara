@@ -84,7 +84,7 @@
                                         <div class="mt-3">
                                             <a href="{{ route('login') }}">
                                                 <button type="button" class="btn btn-lg btn-dark"
-                                                    style="width: 100%; margin-bottom: 0.7rem">Login</button>
+                                                    style="width: 100%; margin-bottom: 0.7rem">SisCamara</button>
                                             </a>
                                         </div>
                                         <div class="mt-3">
