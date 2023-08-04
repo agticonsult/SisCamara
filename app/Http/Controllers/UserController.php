@@ -33,7 +33,7 @@ class UserController extends Controller
             $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->select(
                     'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo',
-                    'users.inativadoPorUsuario', 'users.dataInativado', 'users.motivoInativado'
+                    'users.created_at', 'users.inativadoPorUsuario', 'users.dataInativado', 'users.motivoInativado'
                 )
                 ->orderBy('users.ativo', 'asc')
                 ->orderBy('pessoas.nomeCompleto', 'asc')
@@ -63,9 +63,8 @@ class UserController extends Controller
             $perfil_funcionarios = Perfil::where('id_tipo_perfil', '=', 2)->where('ativo', '=', 1)->get(); // perfil de funcionário
             $perfil_clientes = Perfil::where('id_tipo_perfil', '=', 3)->where('ativo', '=', 1)->get(); // perfil de cliente
             $perfil_adms = Perfil::where('id_tipo_perfil', '=', 1)->where('ativo', '=', 1)->get(); // perfil de adm
-            $municipios = Municipio::where('id_estado', '=', '16')->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
 
-            return view('usuario.create', compact('municipios', 'perfil_funcionarios', 'perfil_clientes', 'perfil_adms'));
+            return view('usuario.create', compact('perfil_funcionarios', 'perfil_clientes', 'perfil_adms'));
         }
         catch(\Exception $ex){
             $erro = new ErrorLog();
@@ -96,7 +95,6 @@ class UserController extends Controller
                 'password' => $request->password,
                 'confirmacao' => $request->confirmacao,
                 'tipo_perfil' => $request->tipo_perfil,
-                'lotacao' => $request->lotacao
             ];
             $rules = [
                 'nomeCompleto' => 'required|max:255',
@@ -106,7 +104,6 @@ class UserController extends Controller
                 'password' => 'required|min:6|max:35',
                 'confirmacao' => 'required|min:6|max:35',
                 'tipo_perfil' => 'required',
-                'lotacao' => 'required'
             ];
 
             $validarUsuario = Validator::make($input, $rules);
@@ -190,7 +187,6 @@ class UserController extends Controller
             $novaPessoa = new Pessoa();
             $novaPessoa->nomeCompleto = $request->nomeCompleto;
             $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
-            $novaPessoa->id_municipio = $request->lotacao;
             $novaPessoa->pessoaJuridica = 0;
             $novaPessoa->ativo = 1;
             $novaPessoa->save();
@@ -199,7 +195,6 @@ class UserController extends Controller
             $novoUsuario = new User();
             $novoUsuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
             $novoUsuario->email = $request->email;
-            $novoUsuario->lotacao = $request->lotacao;
             $novoUsuario->password = Hash::make($request->password);
             $novoUsuario->id_pessoa = $novaPessoa->id;
             $novoUsuario->tentativa_senha = 0;
