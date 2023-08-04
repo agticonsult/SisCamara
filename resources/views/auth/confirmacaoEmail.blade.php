@@ -22,13 +22,13 @@
 </head>
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #293042">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #1e70b8">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
                         <div class="imageContainer">
-                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
-                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span>
+                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
+                            <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         </div>
                     </div>
                 </a>
