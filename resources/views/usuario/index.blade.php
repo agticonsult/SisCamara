@@ -37,7 +37,6 @@
                             <th scope="col">Nome</th>
                             <th scope="col">CPF</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Lotação (apenas para funcionários)</th>
                             <th scope="col">Perfis ativos</th>
                             <th scope="col">Cadastrado em</th>
                             <th scope="col">Ações</th>
@@ -49,14 +48,6 @@
                                 <td>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</td>
                                 <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
                                 <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
-                                <td>
-                                    @if ($usuario->lotacao)
-                                        {{ $usuario->lot->descricao }}
-                                        {{-- {{ $usuario->lot->descricao }} - Região de {{ $usuario->lot->regiao->descricao }}/{{ $usuario->lot->regiao->mesorregiao->descricao }} --}}
-                                    @else
-                                        não informado
-                                    @endif
-                                </td>
                                 <td>
                                     <ol>
                                         @foreach ($usuario->permissoes_ativas as $permissao)

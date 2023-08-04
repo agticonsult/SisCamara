@@ -32,7 +32,7 @@ class UserController extends Controller
             // $usuarios = User::all();
             $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->select(
-                    'users.id', 'users.cpf', 'users.email', 'users.lotacao', 'users.id_pessoa', 'users.ativo',
+                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo',
                     'users.inativadoPorUsuario', 'users.dataInativado', 'users.motivoInativado'
                 )
                 ->orderBy('users.ativo', 'asc')
