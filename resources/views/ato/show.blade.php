@@ -96,11 +96,11 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at)); @endphp
+                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
                             {{-- @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp --}}
-                            @if (Count($ato->linhas_originais_ativas) != 0)
-                                @foreach($ato->linhas_originais_ativas as $linha_original_ativa)
-                                    {{ $linha_original_ativa->texto }}
+                            @if (Count($ato->linhas_originais_ativas()) != 0)
+                                @foreach($ato->linhas_originais_ativas() as $linha_original_ativa)
+                                    {{ $linha_original_ativa->texto }} <br>
                                 @endforeach
                             @else
 
@@ -123,7 +123,7 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp
+                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
                             <br>
                             {{-- @foreach($arquivos as $arquivo)
                                 <a href="{{ url('arquivo/verArquivo', $arquivo->id) }}"
@@ -148,7 +148,7 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp
+                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
                             <br>
                             {{-- @foreach($arquivos as $arquivo)
                                 <a href="{{ url('arquivo/verArquivo', $arquivo->id) }}"

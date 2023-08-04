@@ -34,13 +34,15 @@ class Ato extends Model implements Auditable
     }
     public function linhas_originais_ativas()
     {
-        $linhas = LinhaAto::where('id_tipo_linha', '=', 1)->where('ativo', '=', 1)->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1)->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1);
     }
     public function todas_linhas_ativas()
     {
-        return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('ativo', '=', 1)->get();
+        return $linhas;
+        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
 }
 

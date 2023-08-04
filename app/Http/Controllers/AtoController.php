@@ -162,7 +162,7 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            dd($ato->linhas_originais_ativas);
+            // dd($ato->todas_linhas_ativas());
 
             return view('ato.show', compact('ato'));
         }
@@ -179,17 +179,37 @@ class AtoController extends Controller
         }
     }
 
-    public function edit(Ato $ato)
+    public function edit($id)
+    {
+        try {
+            if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            // dd($ato->todas_linhas_ativas());
+
+            return view('ato.edit', compact('ato'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoController";
+            $erro->funcao = "edit";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function update(Request $request)
     {
         //
     }
 
-    public function update(Request $request, Ato $ato)
-    {
-        //
-    }
-
-    public function destroy(Ato $ato)
+    public function destroy()
     {
         //
     }
