@@ -296,14 +296,14 @@ class UserController extends Controller
 
             $usuario = User::where('id', '=', $id)
                 ->where('ativo', '=', 1)
-                ->select('id', 'cpf', 'id_pessoa', 'email', 'lotacao')
+                ->select('id', 'cpf', 'id_pessoa', 'email')
                 ->first();
 
             if (!$usuario) {
                 return redirect()->route('usuario.index')->with('erro', 'Não é possível alterar este usuário.');
             }
 
-            $municipios = Municipio::where('id_estado', '=', '16')->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
+            // $municipios = Municipio::where('id_estado', '=', '16')->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
             $tipo_perfis_ativos = $usuario->tipo_perfis_ativos;
 
             $ehAdm = 0;
@@ -378,7 +378,7 @@ class UserController extends Controller
             }
 
             return view('usuario.edit', compact(
-                'usuario', 'municipios', 'array_perfil_adms', 'array_perfil_funcionarios', 'array_perfil_clientes', 'tipo_perfis_ativos',
+                'usuario', 'array_perfil_adms', 'array_perfil_funcionarios', 'array_perfil_clientes', 'tipo_perfis_ativos',
                 'ehAdm', 'ehFunc', 'ehClient'
             ));
         }
@@ -451,20 +451,20 @@ class UserController extends Controller
                 }
             }
 
-            if ($usuario->ehFuncionario() == 1){
+            // if ($usuario->ehFuncionario() == 1){
 
-                $input2 = [
-                    'lotacao' => $request->lotacao
-                ];
-                $rules2 = [
-                    'lotacao' => 'required|max:255'
-                ];
+            //     $input2 = [
+            //         'lotacao' => $request->lotacao
+            //     ];
+            //     $rules2 = [
+            //         'lotacao' => 'required|max:255'
+            //     ];
 
-                $validarLotacao = Validator::make($input2, $rules2);
-                $validarLotacao->validate();
+            //     $validarLotacao = Validator::make($input2, $rules2);
+            //     $validarLotacao->validate();
 
-                $usuario->lotacao = $request->lotacao;
-            }
+            //     $usuario->lotacao = $request->lotacao;
+            // }
 
             $usuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
             $usuario->email = $request->email;
@@ -659,17 +659,17 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Não é possível excluir este usuário.')->withInput();
             }
 
-            if ($usuario->ehCliente() == 1){
-                $agricultor = Agricultor::where('id_user', '=', $id)->where('ativo', '=', 1)->first();
-                if ($agricultor){
-                    $agricultor->dataInativado = Carbon::now();
-                    $agricultor->inativadoPorUsuario = Auth::user()->id;
-                    $agricultor->motivoInativado = $motivo;
-                    $agricultor->ativo = 0;
-                    $agricultor->excluidoUserEAgricultor = 1;
-                    $agricultor->save();
-                }
-            }
+            // if ($usuario->ehCliente() == 1){
+            //     $agricultor = Agricultor::where('id_user', '=', $id)->where('ativo', '=', 1)->first();
+            //     if ($agricultor){
+            //         $agricultor->dataInativado = Carbon::now();
+            //         $agricultor->inativadoPorUsuario = Auth::user()->id;
+            //         $agricultor->motivoInativado = $motivo;
+            //         $agricultor->ativo = 0;
+            //         $agricultor->excluidoUserEAgricultor = 1;
+            //         $agricultor->save();
+            //     }
+            // }
 
             $usuario->inativadoPorUsuario = Auth::user()->id;
             $usuario->dataInativado = Carbon::now();
@@ -731,17 +731,17 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Este usuário está ativo.')->withInput();
             }
 
-            if ($usuario->ehCliente() == 1){
-                $agricultor = Agricultor::where('id_user', '=', $id)->where('excluidoUserEAgricultor', '=', 1)->first();
-                if ($agricultor){
-                    $agricultor->dataInativado = null;
-                    $agricultor->inativadoPorUsuario = null;
-                    $agricultor->motivoInativado = null;
-                    $agricultor->ativo = 1;
-                    $agricultor->excluidoUserEAgricultor = 0;
-                    $agricultor->save();
-                }
-            }
+            // if ($usuario->ehCliente() == 1){
+            //     $agricultor = Agricultor::where('id_user', '=', $id)->where('excluidoUserEAgricultor', '=', 1)->first();
+            //     if ($agricultor){
+            //         $agricultor->dataInativado = null;
+            //         $agricultor->inativadoPorUsuario = null;
+            //         $agricultor->motivoInativado = null;
+            //         $agricultor->ativo = 1;
+            //         $agricultor->excluidoUserEAgricultor = 0;
+            //         $agricultor->save();
+            //     }
+            // }
 
             $usuario->inativadoPorUsuario = null;
             $usuario->dataInativado = null;
