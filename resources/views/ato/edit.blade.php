@@ -25,7 +25,7 @@
     </div>
 
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form action="" method="POST" class="form_prevent_multiple_submits">
                     @csrf
@@ -36,26 +36,36 @@
                             <strong>Alteração dos dados do dispositivo</strong>
                         </h5>
                     </div>
-                    {{-- <div class="modal-body">
+                    <div class="modal-body">
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label for="data">Data</label>
                                 <input type="date" class="form-control" name="data" id="data" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="id_municipio">*Município</label>
-                                <select name="id_municipio" id="id_municipio" class="form-control select2">
-                                    @if (Auth::user()->pessoa->id_municipio == null)
-                                            <option value="" selected disabled>-- Selecione --</option>
-                                    @endif
-                                    @foreach ($municipios as $municipio)
-                                        <option value="{{ $municipio->id }}" {{ $municipio->id == Auth::user()->pessoa->id_municipio ? 'selected' : '' }}>{{ $municipio->descricao }}</option>
+                            </div> --}}
+                            <div class="form-group col-md-12">
+                                <label for="id_ato_add">*Ato que contém a alteração</label>
+                                <select name="id_ato_add" id="id_ato_add" class="form-control select2">
+                                    <option value="" selected disabled>-- Selecione --</option>
+                                    @foreach ($atos_relacionados as $atos_relacionado)
+                                        <option value="{{ $atos_relacionado->id }}">
+                                            @php
+                                                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                                                date_default_timezone_set('America/Sao_Paulo');
+                                            @endphp
+                                            {{ $atos_relacionado->id_tipo_ato != null ? $atos_relacionado->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                            Nº {{ $atos_relacionado->numero != null ? $atos_relacionado->numero : 'não informado' }},
+                                            de {{ strftime('%d de %B de %Y', strtotime($atos_relacionado->created_at)) }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label">*Nova linha</label>
+                                <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
+                            </div>
                         </div>
 
-                        <div class="col-md-12 m-3">
+                        {{-- <div class="col-md-12 m-3">
                             <input class="form-check-input" type="checkbox" name="manha" id="manha">
                             <label class="form-check-label" for="manha">
                                 Manhã
@@ -73,8 +83,8 @@
                             <label class="form-check-label" for="cancelamento">
                                 Cancelar atendimentos nesta data
                             </label>
-                        </div>
-                    </div> --}}
+                        </div> --}}
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Cancelar
@@ -244,6 +254,16 @@
         $("#ajaxModel").on('hide.bs.modal', function(){
             $('#' + id_ultimo_clicado).prop("checked", false);
             // alert('The modal is about to be hidden.');
+        });
+
+        $('.select2').select2({
+            language: {
+                noResults: function() {
+                    return "Nenhum resultado encontrado";
+                }
+            },
+            closeOnSelect: true,
+            width: '100%',
         });
 
         $('#datatables-reponsive').dataTable({

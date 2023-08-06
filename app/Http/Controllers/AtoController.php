@@ -102,10 +102,18 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Tipo de ato inválido.');
             }
 
+            $altera_dispositivo = 0;
+            if (isset($request->altera_dispositivo)){
+                if ($request->altera_dispositivo == 'on'){
+                    $altera_dispositivo = 1;
+                }
+            }
+
             $ato = new Ato();
             $ato->titulo = $request->titulo;
             $ato->ano = $request->ano;
             $ato->numero = $request->numero;
+            $ato->altera_dispositivo = $altera_dispositivo;
             $ato->id_grupo = $request->id_grupo;
             $ato->id_tipo_ato = $request->id_tipo_ato;
             $ato->subtitulo = $request->subtitulo;
@@ -187,9 +195,10 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
             // dd($ato->todas_linhas_ativas());
 
-            return view('ato.edit', compact('ato'));
+            return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

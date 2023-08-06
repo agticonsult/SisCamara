@@ -86,8 +86,8 @@
                     </div>
                 </div>
                 <div class="form-check col-md-6">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Este ato altera algum dispositivo legal</label>
+                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
+                    <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>
                 </div>
                 <br>
 
