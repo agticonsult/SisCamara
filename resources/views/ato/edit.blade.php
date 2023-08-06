@@ -24,6 +24,68 @@
         </h2>
     </div>
 
+    <div class="modal fade" id="ajaxModel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="" method="POST" class="form_prevent_multiple_submits">
+                    @csrf
+                    @method('POST')
+
+                    <div class="modal-header btn-success">
+                        <h5 class="modal-title text-center" id="exampleModalLabel">
+                            <strong>Alteração dos dados do dispositivo</strong>
+                        </h5>
+                    </div>
+                    {{-- <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="data">Data</label>
+                                <input type="date" class="form-control" name="data" id="data" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_municipio">*Município</label>
+                                <select name="id_municipio" id="id_municipio" class="form-control select2">
+                                    @if (Auth::user()->pessoa->id_municipio == null)
+                                            <option value="" selected disabled>-- Selecione --</option>
+                                    @endif
+                                    @foreach ($municipios as $municipio)
+                                        <option value="{{ $municipio->id }}" {{ $municipio->id == Auth::user()->pessoa->id_municipio ? 'selected' : '' }}>{{ $municipio->descricao }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 m-3">
+                            <input class="form-check-input" type="checkbox" name="manha" id="manha">
+                            <label class="form-check-label" for="manha">
+                                Manhã
+                            </label>
+                        </div>
+                        <div class="col-md-12 m-3">
+                            <input class="form-check-input" type="checkbox" name="tarde" id="tarde">
+                            <label class="form-check-label" for="tarde">
+                                Tarde
+                            </label>
+                        </div>
+                        <br><br><hr>
+                        <div class="col-md-12 m-3">
+                            <input class="form-check-input" type="checkbox" name="cancelamento" id="cancelamento">
+                            <label class="form-check-label" for="cancelamento">
+                                Cancelar atendimentos nesta data
+                            </label>
+                        </div>
+                    </div> --}}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="button_submit btn btn-success">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="card-body">
         @if (Count($ato->todas_linhas_ativas()) == 0)
             <div>
@@ -34,22 +96,23 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">Ato</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th>
-                            {{-- <th scope="col">CPF</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Lotação (apenas para funcionários)</th>
-                            <th scope="col">Perfis ativos</th>
-                            <th scope="col">Cadastrado em</th>
-                            <th scope="col">Ações</th> --}}
+                            <th scope="col">#</th>
+                            <th scope="col">Texto</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($atos as $ato)
+                        @foreach ($ato->todas_linhas_ativas() as $linha)
                             <tr>
                                 <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitch{{ $linha->id }}" name="{{ $linha->id }}">
+                                        <label class="custom-control-label" for="customSwitch{{ $linha->id }}"></label>
+                                        {{-- <label class="custom-control-label" for="customSwitch{{ $linha->id }}">Clique para selecionar</label> --}}
+                                    </div>
+                                </td>
+                                <td>{{ $linha->texto }}</td>
+
+                                {{-- <td>
                                     @php
                                         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
                                         date_default_timezone_set('America/Sao_Paulo');
@@ -67,7 +130,7 @@
                                     <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
                                     <a href="{{ route('ato.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
-                                </td>
+                                </td> --}}
                             </tr>
 
                             {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
@@ -139,9 +202,49 @@
 
 <script>
 
-    $('.cpf').mask('000.000.000-00');
+    // $('#ajaxModel').modal('hide', function(){
+    //     console.log("Close");
+    // });
 
     $(document).ready(function() {
+
+        var quantidade_checks = 0;
+        var id_ultimo_clicado = null;
+
+        $('.custom-control-input').on('change.bootstrapSwitch', function(e){
+            if (id_ultimo_clicado != null && id_ultimo_clicado != ''){
+                if (id_ultimo_clicado != this.id){
+                    $('#' + id_ultimo_clicado).prop("checked", false);
+                    $('#id_horario').val(this.name);
+                    $('#descricao_horario').val($(this).attr("descricao"));
+                }
+                else{
+                    if (this.checked == false){
+                        $('#id_horario').val('');
+                        $('#descricao_horario').val('');
+                    }
+                    else{
+                        $('#id_horario').val(this.name);
+                        $('#descricao_horario').val($(this).attr("descricao"));
+                    }
+                }
+            }
+            else{
+                $('#id_horario').val(this.name);
+                $('#descricao_horario').val($(this).attr("descricao"));
+            }
+
+            id_ultimo_clicado = this.id;
+            $('#ajaxModel').modal('show');
+            // console.log(this);
+            // console.log(this.name);
+            // console.log($(this).attr("descricao"));
+        });
+
+        $("#ajaxModel").on('hide.bs.modal', function(){
+            $('#' + id_ultimo_clicado).prop("checked", false);
+            // alert('The modal is about to be hidden.');
+        });
 
         $('#datatables-reponsive').dataTable({
             "oLanguage": {
