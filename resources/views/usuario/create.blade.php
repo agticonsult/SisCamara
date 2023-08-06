@@ -80,16 +80,6 @@
                                     <option value="1">Administrador</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="lotacao">*Lotação</label>
-                                <select name="lotacao" id="lotacao" class="form-control select2">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($municipios as $municipio)
-                                        <option value="{{ $municipio->id }}">{{ $municipio->descricao }}</option>
-                                        {{-- <option value="{{ $municipio->id }}">{{ $municipio->descricao }} - Região de {{ $municipio->regiao->descricao }}/{{ $municipio->regiao->mesorregiao->descricao }}</option> --}}
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="d-none form-group col-md-6" id="funcionario">
@@ -309,35 +299,7 @@
             }
         });
 
-        // $('#uf').on('change', function() {
-        //     var b = true;
-        //     var idEstado = $('#uf').select2("val");
-        //     $.get("{{ route('municipio.busca-municipios', '') }}" + "/" + idEstado, function(municipios) {
-        //         $('select[name=id_municipio]').empty();
-        //         // $('select[name=id_nucleo]').empty();
-        //         $.each(municipios,
-        //             function(key, value) {
-        //                 if (b){
-        //                     $('select[name=id_municipio]').append('<option value="" selected disabled>Selecione um município</option>');
-        //                     // $('select[name=id_nucleo]').append('<option value="" selected disabled>Selecione um programa</option>');
-        //                 }
-        //                 b = false;
-        //                 $('select[name=id_municipio]').append('<option value=' + value.id +
-        //                     '>' + value.descricao + '</option>');
-        //             });
-        //     });
-        // });
 
-        // $('#id_municipio').on('change', function() {
-        //     var idMunicipio = $('#id_municipio').select2("val");
-        //     $.get("{{ route('distrito.busca-distritos', '') }}" + "/" + idMunicipio, function(distritos) {
-        //         $('select[name=id_distrito]').empty();
-        //         $.each(distritos, function(key, value) {
-        //             $('select[name=id_distrito]').append('<option value=' + value.id +
-        //                 '>' + value.descricao + '</option>');
-        //         });
-        //     });
-        // });
 
     });
 

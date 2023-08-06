@@ -48,7 +48,8 @@
             <a class="sidebar-brand" href="">
                 <div class="max-width">
                     <div class="imageContainer">
-                        <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="30%" height="30%" alt="">
+                        <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}"
+                            class="img-thumbnail" width="30%" height="30%" alt="">
                         <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         {{-- <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}"
                             class="img-thumbnail" width="30%" height="30%" alt="">
@@ -72,8 +73,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
-                    <li
-                        class="sidebar-item {{ Route::current()->getPrefix() == 'ato' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'ato' ? 'active' : null }}">
                         <a href="{{ route('ato.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Atos</span>
@@ -125,6 +125,32 @@
                                 <a class="sidebar-link " href="{{ route('configuracao.tipo_evento.index') }}">Tipos de
                                     Evento</a>
                             </li> --}}
+                        </ul>
+                    </li>
+                @endif
+
+                {{-- Usuários --}}
+                @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
+                    <li class="sidebar-item">
+                        <a href="#usuarios" data-toggle="collapse" class="sidebar-link collapsed">
+                            <i class="fas fa-users"></i>
+                            Usuários
+                        </a>
+                        <ul id="usuarios"
+                            class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/usuario' || Route::current()->getPrefix() == '/auditoria'
+                                ? 'active'
+                                : 'collapse' }}">
+                            <li
+                                class="sidebar-item {{ Route::current()->uri == 'usuario/index' || Route::current()->uri == 'usuario/edit/{id}' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('usuario.index') }}">Listagem</a>
+                            </li>
+                            <li class="sidebar-item {{ Route::current()->uri == 'usuario/create' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('usuario.create') }}">Cadastro</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('auditoria.index') }}">Auditoria</a>
+                            </li>
                         </ul>
                     </li>
                 @endif
@@ -195,7 +221,8 @@
                                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Sair
                                 </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-none">
                                     @csrf
                                 </form>
                             </div>

@@ -193,16 +193,16 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label for="lotacao">*Lotação</label>
                                 <select name="lotacao" id="lotacao" class="form-control select2">
                                     <option value="" selected disabled>--Selecione--</option>
                                     @foreach ($municipios as $municipio)
                                         <option value="{{ $municipio->id }}" {{ $usuario->lotacao == $municipio->id ? 'selected' : '' }}>{{ $municipio->descricao }}</option>
-                                        {{-- <option value="{{ $municipio->id }}" {{ $usuario->lotacao == $municipio->id ? 'selected' : '' }}>{{ $municipio->descricao }} - Região de {{ $municipio->regiao->descricao }}/{{ $municipio->regiao->mesorregiao->descricao }}</option> --}}
+                                        <option value="{{ $municipio->id }}" {{ $usuario->lotacao == $municipio->id ? 'selected' : '' }}>{{ $municipio->descricao }} - Região de {{ $municipio->regiao->descricao }}/{{ $municipio->regiao->mesorregiao->descricao }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             @if ($ehFunc == 1)
