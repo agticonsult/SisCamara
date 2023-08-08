@@ -85,6 +85,11 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-check col-md-6">
+                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
+                    <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>
+                </div>
+                <br>
 
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
