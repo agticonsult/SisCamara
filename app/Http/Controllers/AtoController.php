@@ -213,6 +213,46 @@ class AtoController extends Controller
         }
     }
 
+    public function alterarLinha(Request $request)
+    {
+        try {
+            if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            dd($request->all());
+            // $linha_ato = new LinhaAto();
+            // $linha_ato->ordem = $i + 1;
+            // $linha_ato->ordem = $i + 1;
+            // $linha_ato->texto = $array_corpo_texto[$i];
+            // $linha_ato->id_ato_principal = $ato->id;
+            // $linha_ato->id_tipo_linha = 1;
+            // $linha_ato->cadastradoPorUsuario = Auth::user()->id;
+            // $linha_ato->ativo = 1;
+            // $linha_ato->save();
+
+            // 'ordem', 'sub_ordem', 'texto', 'id_ato_principal', 'id_ato_add', 'id_tipo_linha',
+            // 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+
+            // $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            // $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
+            // dd($ato->todas_linhas_ativas());
+
+            return view('ato.edit', compact('ato', 'atos_relacionados'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoController";
+            $erro->funcao = "edit";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
     public function update(Request $request)
     {
         //

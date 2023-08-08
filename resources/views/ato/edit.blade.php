@@ -27,7 +27,7 @@
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('ato.alterarLinha') }}" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 
@@ -42,6 +42,7 @@
                                 <label for="data">Data</label>
                                 <input type="date" class="form-control" name="data" id="data" readonly>
                             </div> --}}
+                            <input type="hidden" name="id_linha_ato" id="id_linha_ato">
                             <div class="form-group col-md-12">
                                 <label for="id_ato_add">*Ato que contém a alteração</label>
                                 <select name="id_ato_add" id="id_ato_add" class="form-control select2">
@@ -225,23 +226,19 @@
             if (id_ultimo_clicado != null && id_ultimo_clicado != ''){
                 if (id_ultimo_clicado != this.id){
                     $('#' + id_ultimo_clicado).prop("checked", false);
-                    $('#id_horario').val(this.name);
-                    $('#descricao_horario').val($(this).attr("descricao"));
+                    $('#id_linha_ato').val(this.name);
                 }
                 else{
                     if (this.checked == false){
-                        $('#id_horario').val('');
-                        $('#descricao_horario').val('');
+                        $('#id_linha_ato').val('');
                     }
                     else{
-                        $('#id_horario').val(this.name);
-                        $('#descricao_horario').val($(this).attr("descricao"));
+                        $('#id_linha_ato').val(this.name);
                     }
                 }
             }
             else{
-                $('#id_horario').val(this.name);
-                $('#descricao_horario').val($(this).attr("descricao"));
+                $('#id_linha_ato').val(this.name);
             }
 
             id_ultimo_clicado = this.id;
