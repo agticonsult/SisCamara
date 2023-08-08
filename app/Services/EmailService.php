@@ -18,7 +18,7 @@ class EmailService
         Config::set('mail.mailers.smtp.port', '587');
         Config::set('mail.mailers.smtp.encryption', 'tls');
         Config::set('mail.from.address', 'no-reply@agile.inf.br');
-        Config::set('mail.from.name', 'Instituto de Desenvolvimento Rural - Paraná');
+        Config::set('mail.from.name', 'SisCamara');
     }
 
     //cria um novo e-email para um novo usuário assim que a função é chamada
