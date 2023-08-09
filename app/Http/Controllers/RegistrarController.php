@@ -33,8 +33,7 @@ class RegistrarController extends Controller
     public function registrar()
     {
         try {
-            $municipios = Municipio::where('id_estado', '=', 16)->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
-            return view('auth.registrar', compact('municipios'));
+            return view('auth.registrar');
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -65,7 +64,6 @@ class RegistrarController extends Controller
                 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'email' => $request->email,
-                'id_municipio' => $request->id_municipio,
                 'password' => $request->password,
                 'confirmacao' => $request->confirmacao,
                 'telefone_celular' => preg_replace('/[^0-9]/', '', $request->telefone_celular),
@@ -75,7 +73,6 @@ class RegistrarController extends Controller
                 'name' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email',
-                'id_municipio' => 'required',
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'password' => 'required|min:6|max:35',
                 'confirmacao' => 'required|min:6|max:35',
@@ -91,9 +88,6 @@ class RegistrarController extends Controller
 
                 'email.required' => 'O email é obrigatório.',
                 'email.max' => 'Email: Máximo 255 caracteres',
-
-                'id_municipio.required' => 'O Município é obrigatório.',
-                'id_municipio.max' => 'Município: Máximo 255 caracteres',
 
                 'dt_nascimento_fundacao.required' => 'Data nascimento é obrigatório',
                 'dt_nascimento_fundacao.max' => 'Data nascimento: Máximo 11 caracteres',
@@ -143,22 +137,14 @@ class RegistrarController extends Controller
                 return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
             }
 
-            $ehFamiliar = ComposicaoFamiliar::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))->where('ativo', '=', 1)->first();
-            if ($ehFamiliar){
-                $id_pessoa = $ehFamiliar->id_pessoa;
-            }
-            else{
-                //nova Pessoa
-                $novaPessoa = new Pessoa();
-                $novaPessoa->pessoaJuridica = 0;
-                $novaPessoa->nomeCompleto = $request->name;
-                $novaPessoa->id_municipio = $request->id_municipio;
-                $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
-                $novaPessoa->ativo = 1;
-                $novaPessoa->save();
+            $novaPessoa = new Pessoa();
+            $novaPessoa->pessoaJuridica = 0;
+            $novaPessoa->nomeCompleto = $request->name;
+            $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
+            $novaPessoa->ativo = 1;
+            $novaPessoa->save();
 
-                $id_pessoa = $novaPessoa->id;
-            }
+            $id_pessoa = $novaPessoa->id;
 
             //novo Usuário
             $novoUsuario = new User();
@@ -191,11 +177,6 @@ class RegistrarController extends Controller
             $permissao->ativo = 1;
             $permissao->save();
 
-            if ($ehFamiliar){
-                $ehFamiliar->ehUsuario = 1;
-                $ehFamiliar->id_user = $novoUsuario->id;
-                $ehFamiliar->save();
-            }
 
             //gera um link temporário e criptogrado
             $link = URL::temporarySignedRoute('confirmacao_email', now()->addMinutes(20), [Crypt::encrypt($novoUsuario->id)]);

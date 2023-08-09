@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>IDR-Paraná</title>
+    <title>SisCamara</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&amp;display=swap" rel="stylesheet">
@@ -26,13 +26,13 @@
 </head>
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #293042">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #1e70b8">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
                         <div class="imageContainer">
-                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
-                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span>
+                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
+                            <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         </div>
                     </div>
                 </a>
@@ -73,7 +73,7 @@
                                                     <label class="form-label">*Data de nascimento</label>
                                                     <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min="1899-01-01" max="2000-13-13" value="{{ old('dt_nascimento_fundacao') }}">
                                                 </div>
-                                                <div class="mb-3">
+                                                {{-- <div class="mb-3">
                                                     <label for="id_municipio">*Município</label>
                                                     <select name="id_municipio" id="id_municipio" class="form-control select2" required>
                                                         <option value="" selected disabled>Selecione município</option>
@@ -81,7 +81,7 @@
                                                             <option value="{{ $municipio->id }}">{{ $municipio->descricao }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div>
+                                                </div> --}}
                                                 <div class="mb-3">
                                                     <label class="form-label">Celular/Telefone</label>
                                                     <input class="telefone form-control" type="text" name="telefone_celular" value="{{ old('telefone_celular')}}">
