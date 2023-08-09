@@ -44,6 +44,12 @@ class Ato extends Model implements Auditable
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+    public function linhas_inalteradas_ativas()
+    {
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('alterado', '=', 0)->where('ativo', '=', 1)->orderBy('ordem', 'asc')->orderBy('sub_ordem', 'asc')->get();
+        return $linhas;
+        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
+    }
 }
 
 

@@ -16,8 +16,9 @@ class CreateLinhaAtosTable extends Migration
         Schema::create('linha_atos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ordem')->nullable();
-            $table->integer('sub_ordem')->nullable();
+            $table->integer('sub_ordem')->nullable()->default(0);
             $table->text('texto')->nullable();
+            $table->boolean('alterado')->nullable();
             $table->bigInteger('id_ato_principal')->unsigned()->nullable();
             $table->foreign('id_ato_principal')->references('id')->on('atos');
             $table->bigInteger('id_ato_add')->unsigned()->nullable();
