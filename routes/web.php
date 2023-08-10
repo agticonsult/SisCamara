@@ -88,6 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/store', [UserController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::post('/desbloquear/{id}', [UserController::class, 'desbloquear'])->name('desbloquear');
         Route::post('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
         Route::post('/restore/{id}', [UserController::class, 'restore'])->name('restore');
         // Route::get('/edit-perfil/{id}', [UserController::class, 'editPerfil'])->name('editPerfil');

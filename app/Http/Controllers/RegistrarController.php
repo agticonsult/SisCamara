@@ -157,6 +157,7 @@ class RegistrarController extends Controller
             $novoUsuario->bloqueadoPorTentativa = 0;
             $novoUsuario->ativo = 1;
             $novoUsuario->id_pessoa = $id_pessoa;
+            $novoUsuario->id_tipo_perfil = 3;
             $novoUsuario->confirmacao_email = 0;
             $novoUsuario->envio_email_confirmacao = 0;
             $novoUsuario->save();
