@@ -65,26 +65,6 @@
                                 <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
                             </div>
                         </div>
-
-                        {{-- <div class="col-md-12 m-3">
-                            <input class="form-check-input" type="checkbox" name="manha" id="manha">
-                            <label class="form-check-label" for="manha">
-                                Manhã
-                            </label>
-                        </div>
-                        <div class="col-md-12 m-3">
-                            <input class="form-check-input" type="checkbox" name="tarde" id="tarde">
-                            <label class="form-check-label" for="tarde">
-                                Tarde
-                            </label>
-                        </div>
-                        <br><br><hr>
-                        <div class="col-md-12 m-3">
-                            <input class="form-check-input" type="checkbox" name="cancelamento" id="cancelamento">
-                            <label class="form-check-label" for="cancelamento">
-                                Cancelar atendimentos nesta data
-                            </label>
-                        </div> --}}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"
@@ -112,17 +92,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($ato->todas_linhas_ativas() as $linha)
+                        @foreach ($ato->linhas_inalteradas_ativas() as $linha)
                             <tr>
-                                <td>
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="customSwitch{{ $linha->id }}" name="{{ $linha->id }}">
-                                        <label class="custom-control-label" for="customSwitch{{ $linha->id }}"></label>
-                                        {{-- <label class="custom-control-label" for="customSwitch{{ $linha->id }}">Clique para selecionar</label> --}}
-                                    </div>
-                                </td>
-                                <td>{{ $linha->texto }}</td>
-
+                                {{-- @if ($linha->alterado == 1)
+                                    <td>
+                                        <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    </td>
+                                    <td class="d-none"></td>
+                                    <td colspan="2" style="text-decoration: line-through">{{ $linha->texto }}</td>
+                                @else --}}
+                                    <td>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{ $linha->id }}" name="{{ $linha->id }}">
+                                            <label class="custom-control-label" for="customSwitch{{ $linha->id }}"></label>
+                                            {{-- <label class="custom-control-label" for="customSwitch{{ $linha->id }}">Clique para selecionar</label> --}}
+                                        </div>
+                                    </td>
+                                    <td>{{ $linha->texto }}</td>
+                                {{-- @endif --}}
+                            </tr>
                                 {{-- <td>
                                     @php
                                         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
@@ -142,7 +130,6 @@
                                     <a href="{{ route('ato.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
                                 </td> --}}
-                            </tr>
 
                             {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"

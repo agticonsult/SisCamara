@@ -96,14 +96,14 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
-                            {{-- @php echo strftime('%A, %d de %B de %Y', strtotime($ato->created_at)); @endphp --}}
+                            {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                            Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
+                            de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }} <br><br>
+                            <p>{{ $ato->titulo }}</p>
                             @if (Count($ato->linhas_originais_ativas()) != 0)
                                 @foreach($ato->linhas_originais_ativas() as $linha_original_ativa)
-                                    {{ $linha_original_ativa->texto }} <br>
+                                    <p>{{ $linha_original_ativa->texto }}</p>
                                 @endforeach
-                            @else
-
                             @endif
                         </div>
                     </div>
@@ -123,13 +123,27 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
-                            <br>
-                            {{-- @foreach($arquivos as $arquivo)
-                                <a href="{{ url('arquivo/verArquivo', $arquivo->id) }}"
-                                   title="Ver arquivo"> @php echo $arquivo->titulo ; @endphp</a>
-                                @php echo  $arquivo->corpo ; @endphp
-                            @endforeach --}}
+                            {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                            Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
+                            de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }} <br><br>
+                            <p>{{ $ato->titulo }}</p>
+                            @foreach($ato->todas_linhas_ativas() as $linha_ativa)
+                                @if ($linha_ativa->alterado == 1)
+                                    <p style="text-decoration: line-through">{{ $linha_ativa->texto }}</p>
+                                @else
+                                    <p>
+                                        {{ $linha_ativa->texto }}
+                                        @if ($linha_ativa->id_tipo_linha == 2)
+                                            <a href="{{ route('ato.show', $linha_ativa->id_ato_add) }}">
+                                                (Redação dada pela(o)
+                                                {{ $linha_ativa->ato_add->id_tipo_ato != null ? $linha_ativa->ato_add->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                                Nº {{ $linha_ativa->ato_add->numero != null ? $linha_ativa->ato_add->numero : 'não informado' }},
+                                                de {{ strftime('%Y', strtotime($linha_ativa->ato_add->created_at)) }})
+                                            </a>
+                                        @endif
+                                    </p>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -148,13 +162,23 @@
                                     </div>
                                 </li>
                             </ul>
-                            @php echo strftime('%d de %B de %Y', strtotime($ato->created_at));  @endphp <br><br>
-                            <br>
-                            {{-- @foreach($arquivos as $arquivo)
-                                <a href="{{ url('arquivo/verArquivo', $arquivo->id) }}"
-                                   title="Ver arquivo"> @php echo $arquivo->titulo ; @endphp</a>
-                                @php echo str_replace($tags, "", $arquivo->corpo)  ; @endphp
-                            @endforeach --}}
+                            {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                            Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
+                            de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }} <br><br>
+                            <p>{{ $ato->titulo }}</p>
+                            @foreach($ato->linhas_inalteradas_ativas() as $linha_inalterada_ativa)
+                                <p>
+                                    {{ $linha_inalterada_ativa->texto }}
+                                    @if ($linha_inalterada_ativa->id_tipo_linha == 2)
+                                        <a href="{{ route('ato.show', $linha_inalterada_ativa->id_ato_add) }}">
+                                            (Redação dada pela(o)
+                                            {{ $linha_inalterada_ativa->ato_add->id_tipo_ato != null ? $linha_inalterada_ativa->ato_add->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                            Nº {{ $linha_inalterada_ativa->ato_add->numero != null ? $linha_inalterada_ativa->ato_add->numero : 'não informado' }},
+                                            de {{ strftime('%Y', strtotime($linha_inalterada_ativa->ato_add->created_at)) }})
+                                        </a>
+                                    @endif
+                                </p>
+                            @endforeach
                         </div>
                     </div>
                 </div>

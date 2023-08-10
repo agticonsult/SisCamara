@@ -36,6 +36,8 @@
                         <tr>
                             <th scope="col">Ato</th>
                             <th scope="col">Título</th>
+                            <th scope="col">Assunto</th>
+                            <th scope="col">Altera dispositivo</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Ações</th>
                             {{-- <th scope="col">CPF</th>
@@ -59,6 +61,8 @@
                                     de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
                                 </td>
                                 <td>{{ $ato->titulo }}</td>
+                                <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
+                                <td>{{ $ato->id_assunto != null ? $ato->assunto->descricao : 'não informado' }}</td>
                                 <td>
                                     <strong>{{ $ato->cadastradoPorUsuario != null ? $ato->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $ato->created_at != null ? $ato->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>

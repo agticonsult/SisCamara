@@ -85,6 +85,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Assunto</label>
+                        <select name="id_assunto" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($assuntos as $assunto)
+                                <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="form-check col-md-6">
                     <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
                     <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>

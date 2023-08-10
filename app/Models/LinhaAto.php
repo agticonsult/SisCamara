@@ -12,7 +12,8 @@ class LinhaAto extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'ordem', 'sub_ordem', 'texto', 'id_ato_principal', 'id_ato_add', 'id_tipo_linha', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'ordem', 'sub_ordem', 'texto', 'alterado', 'id_ato_principal', 'id_ato_add', 'id_tipo_linha',
+        'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];

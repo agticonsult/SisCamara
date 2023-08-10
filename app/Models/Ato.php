@@ -12,7 +12,7 @@ class Ato extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'ano', 'numero', 'subtitulo', 'altera_dispositivo', 'id_grupo', 'id_tipo_ato', 'cadastradoPorUsuario',
+        'titulo', 'ano', 'numero', 'subtitulo', 'altera_dispositivo', 'id_assunto', 'id_grupo', 'id_tipo_ato', 'cadastradoPorUsuario',
         'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
@@ -23,6 +23,10 @@ class Ato extends Model implements Auditable
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
+    }
+    public function assunto()
+    {
+        return $this->belongsTo(AssuntoAto::class ,'id_assunto');
     }
     public function grupo()
     {
@@ -41,6 +45,12 @@ class Ato extends Model implements Auditable
     public function todas_linhas_ativas()
     {
         $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('ativo', '=', 1)->orderBy('ordem')->get();
+        return $linhas;
+        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
+    }
+    public function linhas_inalteradas_ativas()
+    {
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('alterado', '=', 0)->where('ativo', '=', 1)->orderBy('ordem', 'asc')->orderBy('sub_ordem', 'asc')->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
