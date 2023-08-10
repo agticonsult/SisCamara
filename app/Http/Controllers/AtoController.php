@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\ErrorLog;
 use App\Models\Grupo;
@@ -47,9 +48,10 @@ class AtoController extends Controller
             }
 
             $grupos = Grupo::where('ativo', '=', 1)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
 
-            return view('ato.create', compact('grupos', 'tipo_atos'));
+            return view('ato.create', compact('grupos', 'tipo_atos', 'assuntos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -76,6 +78,7 @@ class AtoController extends Controller
                 'ano' => $request->ano,
                 'numero' => $request->numero,
                 'id_grupo' => $request->id_grupo,
+                'id_assunto' => $request->id_assunto,
                 'id_tipo_ato' => $request->id_tipo_ato,
                 'subtitulo' => $request->subtitulo,
                 'corpo_texto' => $request->corpo_texto
@@ -84,8 +87,9 @@ class AtoController extends Controller
                 'titulo' => 'required',
                 'ano' => 'required|integer',
                 'numero' => 'required',
-                'id_grupo' => 'required',
-                'id_tipo_ato' => 'required',
+                'id_grupo' => 'required|integer',
+                'id_assunto' => 'required|integer',
+                'id_tipo_ato' => 'required|integer',
                 'subtitulo' => 'required',
                 'corpo_texto' => 'required',
             ];
@@ -115,6 +119,7 @@ class AtoController extends Controller
             $ato->ano = $request->ano;
             $ato->numero = $request->numero;
             $ato->altera_dispositivo = $altera_dispositivo;
+            $ato->id_assunto = $request->id_assunto;
             $ato->id_grupo = $request->id_grupo;
             $ato->id_tipo_ato = $request->id_tipo_ato;
             $ato->subtitulo = $request->subtitulo;
@@ -223,16 +228,23 @@ class AtoController extends Controller
             }
 
             $input = [
+                'id_ato_add' => $request->id_ato_add,
                 'id_linha_ato' => $request->id_linha_ato,
                 'corpo_texto' => $request->corpo_texto,
             ];
             $rules = [
+                'id_ato_add' => 'required|integer',
                 'id_linha_ato' => 'required|integer',
                 'corpo_texto' => 'required',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
+
+            $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', 1)->first();
+            if (!$ato_add){
+                return redirect()->back()->with('erro', 'Ato que contém a alteração inválido.');
+            }
 
             $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('ativo', '=', 1)->first();
             if (!$linha_antiga){
@@ -247,7 +259,9 @@ class AtoController extends Controller
             $linha_ato->ordem = $linha_antiga->ordem;
             $linha_ato->sub_ordem = $linha_antiga->sub_ordem + 1;
             $linha_ato->texto = $request->corpo_texto;
+            $linha_ato->alterado = 0;
             $linha_ato->id_ato_principal = $linha_antiga->id_ato_principal;
+            $linha_ato->id_ato_add = $request->id_ato_add;
             $linha_ato->id_tipo_linha = 2;
             $linha_ato->cadastradoPorUsuario = Auth::user()->id;
             $linha_ato->ativo = 1;
