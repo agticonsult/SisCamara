@@ -61,8 +61,8 @@
                                     de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
                                 </td>
                                 <td>{{ $ato->titulo }}</td>
-                                <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
                                 <td>{{ $ato->id_assunto != null ? $ato->assunto->descricao : 'não informado' }}</td>
+                                <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
                                 <td>
                                     <strong>{{ $ato->cadastradoPorUsuario != null ? $ato->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $ato->created_at != null ? $ato->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
