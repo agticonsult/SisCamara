@@ -28,7 +28,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('ato.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('ato.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -100,8 +100,31 @@
                     <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
                     <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>
                 </div>
-                <br>
 
+                <br><hr>
+
+                <h3>Anexo</h3>
+                <div class="col-12">
+                    <br> Observações
+                    <ul>
+                        <li>Tamanho máximo do anexo: {{ $filesize->mb }}MB</li>
+                    </ul>
+                    Extensões permitidas
+                    <ul>
+                        <li>Documento (txt,pdf,xls,xlsx,doc,docx,odt)</li>
+                        <li>Imagem (jpg,jpeg,png)</li>
+                        <li>Áudio (mp3)</li>
+                        <li>Vídeo (mp4, mkv)</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="anexo">Arquivo</label>
+                        <input type="file" name="anexo[]" id="anexo" class="form-control-file" multiple>
+                    </div>
+                </div>
+
+                <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
                 </div>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnexoAto;
 use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\ErrorLog;
+use App\Models\Filesize;
 use App\Models\Grupo;
 use App\Models\LinhaAto;
 use App\Models\TipoAto;
@@ -13,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Uuid;
 
 class AtoController extends Controller
 {
@@ -50,8 +53,9 @@ class AtoController extends Controller
             $grupos = Grupo::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
 
-            return view('ato.create', compact('grupos', 'tipo_atos', 'assuntos'));
+            return view('ato.create', compact('grupos', 'tipo_atos', 'assuntos', 'filesize'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -81,7 +85,8 @@ class AtoController extends Controller
                 'id_assunto' => $request->id_assunto,
                 'id_tipo_ato' => $request->id_tipo_ato,
                 'subtitulo' => $request->subtitulo,
-                'corpo_texto' => $request->corpo_texto
+                'corpo_texto' => $request->corpo_texto,
+                'arquivo[]' => $request->arquivo,
             ];
             $rules = [
                 'titulo' => 'required',
@@ -92,6 +97,7 @@ class AtoController extends Controller
                 'id_tipo_ato' => 'required|integer',
                 'subtitulo' => 'required',
                 'corpo_texto' => 'required',
+                'arquivo[]' => 'nullable',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
@@ -148,7 +154,128 @@ class AtoController extends Controller
             setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
             date_default_timezone_set('America/Campo_Grande');
 
-            return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso.');
+            $arquivos = $request->file('anexo');
+
+            $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
+            if ($max_filesize){
+                if ($max_filesize->mb != null){
+                    if (is_int($max_filesize->mb)){
+                        $mb = $max_filesize->mb;
+                    }
+                    else{
+                        $mb = 2;
+                    }
+                }
+                else{
+                    $mb = 2;
+                }
+            }
+            else{
+                $mb = 2;
+            }
+
+            $count = 0;
+            $resultados = array();
+
+            foreach ($arquivos as $arquivo) {
+                $filezinho = array();
+                $valido = 0;
+                $nome_original = $arquivo->getClientOriginalName();
+                array_push($filezinho, $nome_original);
+
+                // if ($arquivo->isValid() && (filesize($arquivo) <= 2097152)) {
+                if ($arquivo->isValid()) {
+                    if (filesize($arquivo) <= 1048576 * $mb){
+
+                        $extensao = $arquivo->extension();
+
+                        switch ($request->id_tipo_anexo) {
+                            case '1': // Documento (txt,pdf,xls,xlsx,doc,docx,odt)
+                                if (
+                                    $extensao == 'txt' ||
+                                    $extensao == 'pdf' ||
+                                    $extensao == 'xls' ||
+                                    $extensao == 'xlsx' ||
+                                    $extensao == 'doc' ||
+                                    $extensao == 'docx' ||
+                                    $extensao == 'odt'
+                                ) {
+                                    $valido = 1;
+                                }
+                                break;
+                            case '2': // Imagem (jpg,jpeg,png)
+                                if (
+                                    $extensao == 'jpg' ||
+                                    $extensao == 'jpeg' ||
+                                    $extensao == 'png'
+                                ) {
+                                    $valido = 1;
+                                }
+                                break;
+                            case '3': // Áudio (mp3)
+                                if (
+                                    $extensao == 'mp3'
+                                ) {
+                                    $valido = 1;
+                                }
+                                break;
+                            case '4': // Vídeo (mp4 e mkv)
+                                if (
+                                    $extensao == 'mp4' ||
+                                    $extensao == 'mkv'
+                                ) {
+                                    $valido = 1;
+                                }
+                                break;
+                        }
+
+                        if ($valido == 1) {
+                            $nome_hash = Uuid::uuid4();
+                            $nome_hash = $nome_hash . '-' . $count . '.' . $extensao;
+                            $upload = $arquivo->storeAs('public/anexos-ato/', $nome_hash);
+
+                            if ($upload) {
+                                $file = new AnexoAto();
+                                $file->nome_original = $nome_original;
+                                $file->nome_hash = $nome_hash;
+                                $file->justificativa = $request->justificativa;
+                                $file->assunto = $request->assunto;
+                                $file->diretorio = 'public/anexos-ato';
+                                $file->id_ato = $ato->id;
+                                $file->cadastradoPorUsuario = Auth::user()->id;
+                                $file->ativo = 1;
+                                $file->save();
+
+                                array_push($filezinho, 'arquivo adicionado com sucesso');
+                                $count++;
+                            }
+                            else {
+                                array_push($filezinho, 'falha ao salvar o arquivo');
+                            }
+                        }
+                        else {
+                            array_push($filezinho, 'extensão inválida');
+                        }
+                    }
+                    else{
+                        array_push($filezinho, 'arquivo maior que ' . $mb . 'MB');
+                    }
+                }
+                else {
+                    array_push($filezinho, 'arquivo inválido');
+                }
+
+                array_push($resultados, $filezinho);
+            }
+
+            $result = array();
+            for ($i=0; $i<Count($resultados); $i++) {
+                $selected = $resultados[$i];
+                $resultadoTexto = $selected[0] . ": " . $selected[1];
+                array_push($result, $resultadoTexto);
+            }
+
+            return redirect()->route('ato.index', $ato->id)->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
         }
         catch (ValidationException $e ) {
             $message = $e->errors();

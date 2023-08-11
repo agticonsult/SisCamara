@@ -14,7 +14,7 @@ class CreateLinhaAtosTable extends Migration
     public function up()
     {
         Schema::create('linha_atos', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('ordem')->nullable();
             $table->integer('sub_ordem')->nullable()->default(0);
             $table->text('texto')->nullable();
