@@ -32,8 +32,9 @@ class UserController extends Controller
             // $usuarios = User::all();
             $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->select(
-                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo',
-                    'users.created_at', 'users.inativadoPorUsuario', 'users.dataInativado', 'users.motivoInativado'
+                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
+                    'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
+                    'users.dataInativado', 'users.motivoInativado'
                 )
                 ->orderBy('users.ativo', 'asc')
                 ->orderBy('pessoas.nomeCompleto', 'asc')
@@ -628,6 +629,40 @@ class UserController extends Controller
             $erro->save();
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
+    }
+
+    function desbloquear($id) {
+        try {
+            if (Auth::user()->temPermissao('User', 'Alteração') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $usuario = User::where('id', '=', $id)->where('ativo', '=', 1)->first();
+
+            if (!$usuario){
+                return redirect()->back()->with('erro', 'Não é possível desbloquear este usuário.')->withInput();
+            }
+
+            $usuario->tentativa_senha = 0;
+            $usuario->bloqueadoPorTentativa = false;
+            $usuario->dataBloqueadoPorTentativa = null;
+            $usuario->save();
+
+
+            return redirect()->route('usuario.index')->with('success', 'Usuário desbloqueado com sucesso.');
+
+        } catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "UserController";
+            $erro->funcao = "desbloquear";
+            if (Auth::check()) {
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
+
     }
 
     public function destroy(Request $request, $id)
