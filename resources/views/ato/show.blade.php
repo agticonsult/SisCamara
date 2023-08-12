@@ -61,12 +61,16 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-paperclip"></i> Anexos</a>
                     <div class="dropdown-menu">
-                        {{-- @foreach($ato->anexos as $anexo)
-                            <a class="dropdown-item" href="{{url('storage/Atos/Anexos/'.$anexo->nome_hash)}}"
-                               target="_blank">
-                                {{ $anexo->nome_original }}
-                            </a>
-                        @endforeach --}}
+                        @if (Count($ato->anexos()) != 0)
+                            @foreach($ato->anexos() as $anexo)
+                                <a class="dropdown-item" href="{{url('storage/Atos/Anexos/'.$anexo->nome_hash)}}"
+                                target="_blank">
+                                    {{ $anexo->nome_original }}
+                                </a>
+                            @endforeach
+                        @else
+                            Sem anexo cadastrado
+                        @endif
                     </div>
                 </li>
                 <li class="nav-item ">

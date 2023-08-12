@@ -189,58 +189,34 @@ class AtoController extends Controller
 
                         $extensao = $arquivo->extension();
 
-                        switch ($request->id_tipo_anexo) {
-                            case '1': // Documento (txt,pdf,xls,xlsx,doc,docx,odt)
-                                if (
-                                    $extensao == 'txt' ||
-                                    $extensao == 'pdf' ||
-                                    $extensao == 'xls' ||
-                                    $extensao == 'xlsx' ||
-                                    $extensao == 'doc' ||
-                                    $extensao == 'docx' ||
-                                    $extensao == 'odt'
-                                ) {
-                                    $valido = 1;
-                                }
-                                break;
-                            case '2': // Imagem (jpg,jpeg,png)
-                                if (
-                                    $extensao == 'jpg' ||
-                                    $extensao == 'jpeg' ||
-                                    $extensao == 'png'
-                                ) {
-                                    $valido = 1;
-                                }
-                                break;
-                            case '3': // Áudio (mp3)
-                                if (
-                                    $extensao == 'mp3'
-                                ) {
-                                    $valido = 1;
-                                }
-                                break;
-                            case '4': // Vídeo (mp4 e mkv)
-                                if (
-                                    $extensao == 'mp4' ||
-                                    $extensao == 'mkv'
-                                ) {
-                                    $valido = 1;
-                                }
-                                break;
+                        if (
+                            $extensao == 'txt' ||
+                            $extensao == 'pdf' ||
+                            $extensao == 'xls' ||
+                            $extensao == 'xlsx' ||
+                            $extensao == 'doc' ||
+                            $extensao == 'docx' ||
+                            $extensao == 'odt' ||
+                            $extensao == 'jpg' ||
+                            $extensao == 'jpeg' ||
+                            $extensao == 'png' ||
+                            $extensao == 'mp3' ||
+                            $extensao == 'mp4' ||
+                            $extensao == 'mkv'
+                        ) {
+                            $valido = 1;
                         }
 
                         if ($valido == 1) {
                             $nome_hash = Uuid::uuid4();
                             $nome_hash = $nome_hash . '-' . $count . '.' . $extensao;
-                            $upload = $arquivo->storeAs('public/anexos-ato/', $nome_hash);
+                            $upload = $arquivo->storeAs('public/Ato/Anexo/', $nome_hash);
 
                             if ($upload) {
                                 $file = new AnexoAto();
                                 $file->nome_original = $nome_original;
                                 $file->nome_hash = $nome_hash;
-                                $file->justificativa = $request->justificativa;
-                                $file->assunto = $request->assunto;
-                                $file->diretorio = 'public/anexos-ato';
+                                $file->diretorio = 'public/Ato/Anexo';
                                 $file->id_ato = $ato->id;
                                 $file->cadastradoPorUsuario = Auth::user()->id;
                                 $file->ativo = 1;
@@ -275,7 +251,7 @@ class AtoController extends Controller
                 array_push($result, $resultadoTexto);
             }
 
-            return redirect()->route('ato.index', $ato->id)->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
+            return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
         }
         catch (ValidationException $e ) {
             $message = $e->errors();

@@ -54,6 +54,12 @@ class Ato extends Model implements Auditable
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+    public function anexos()
+    {
+        $anexos = AnexoAto::where('id_ato', '=', $this->id)->where('ativo', '=', 1)->get();
+        return $anexos;
+        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
+    }
 }
 
 
