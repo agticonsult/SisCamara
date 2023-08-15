@@ -1,7 +1,3 @@
-@extends('layout.main')
-
-@section('content')
-
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
@@ -15,17 +11,61 @@
 
 <div class="card" style="background-color:white">
 
-    <div class="card-header" style="background-color:white">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
+    <div class="modal fade" id="ajaxModel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="{{ route('ato.alterarLinha') }}" method="POST" class="form_prevent_multiple_submits">
+                    @csrf
+                    @method('POST')
+
+                    <div class="modal-header btn-success">
+                        <h5 class="modal-title text-center" id="exampleModalLabel">
+                            <strong>Alteração dos dados do dispositivo</strong>
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            {{-- <div class="form-group col-md-6">
+                                <label for="data">Data</label>
+                                <input type="date" class="form-control" name="data" id="data" readonly>
+                            </div> --}}
+                            <input type="hidden" name="id_linha_ato" id="id_linha_ato">
+                            <div class="form-group col-md-12">
+                                <label for="id_ato_add">*Ato que contém a alteração</label>
+                                <select name="id_ato_add" id="id_ato_add" class="form-control select2">
+                                    <option value="" selected disabled>-- Selecione --</option>
+                                    @foreach ($atos_relacionados as $atos_relacionado)
+                                        <option value="{{ $atos_relacionado->id }}">
+                                            @php
+                                                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+                                                date_default_timezone_set('America/Sao_Paulo');
+                                            @endphp
+                                            {{ $atos_relacionado->id_tipo_ato != null ? $atos_relacionado->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                            Nº {{ $atos_relacionado->numero != null ? $atos_relacionado->numero : 'não informado' }},
+                                            de {{ strftime('%d de %B de %Y', strtotime($atos_relacionado->created_at)) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label">*Nova linha</label>
+                                <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="button_submit btn btn-success">Salvar</button>
+                    </div>
+                </form>
             </div>
-            <strong>Listagem de Atos</strong>
-        </h2>
+        </div>
     </div>
 
     <div class="card-body">
-        @if (Count($atos) == 0)
+        @if (Count($ato->todas_linhas_ativas()) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -34,24 +74,31 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">Ato</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Assunto</th>
-                            <th scope="col">Altera dispositivo</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th>
-                            {{-- <th scope="col">CPF</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Lotação (apenas para funcionários)</th>
-                            <th scope="col">Perfis ativos</th>
-                            <th scope="col">Cadastrado em</th>
-                            <th scope="col">Ações</th> --}}
+                            <th scope="col">#</th>
+                            <th scope="col">Texto</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($atos as $ato)
+                        @foreach ($ato->linhas_inalteradas_ativas() as $linha)
                             <tr>
-                                <td>
+                                {{-- @if ($linha->alterado == 1)
+                                    <td>
+                                        <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    </td>
+                                    <td class="d-none"></td>
+                                    <td colspan="2" style="text-decoration: line-through">{{ $linha->texto }}</td>
+                                @else --}}
+                                    <td>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="customSwitch{{ $linha->id }}" name="{{ $linha->id }}">
+                                            <label class="custom-control-label" for="customSwitch{{ $linha->id }}"></label>
+                                            {{-- <label class="custom-control-label" for="customSwitch{{ $linha->id }}">Clique para selecionar</label> --}}
+                                        </div>
+                                    </td>
+                                    <td>{{ $linha->texto }}</td>
+                                {{-- @endif --}}
+                            </tr>
+                                {{-- <td>
                                     @php
                                         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
                                         date_default_timezone_set('America/Sao_Paulo');
@@ -61,18 +108,15 @@
                                     de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
                                 </td>
                                 <td>{{ $ato->titulo }}</td>
-                                <td>{{ $ato->id_assunto != null ? $ato->assunto->descricao : 'não informado' }}</td>
-                                <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
                                 <td>
                                     <strong>{{ $ato->cadastradoPorUsuario != null ? $ato->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $ato->created_at != null ? $ato->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
                                     <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
-                                    <a href="{{ route('ato.editDadosGerais', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('ato.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
-                                </td>
-                            </tr>
+                                </td> --}}
 
                             {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
@@ -143,9 +187,55 @@
 
 <script>
 
-    $('.cpf').mask('000.000.000-00');
+    // $('#ajaxModel').modal('hide', function(){
+    //     console.log("Close");
+    // });
 
     $(document).ready(function() {
+
+        var quantidade_checks = 0;
+        var id_ultimo_clicado = null;
+
+        $('.custom-control-input').on('change.bootstrapSwitch', function(e){
+            if (id_ultimo_clicado != null && id_ultimo_clicado != ''){
+                if (id_ultimo_clicado != this.id){
+                    $('#' + id_ultimo_clicado).prop("checked", false);
+                    $('#id_linha_ato').val(this.name);
+                }
+                else{
+                    if (this.checked == false){
+                        $('#id_linha_ato').val('');
+                    }
+                    else{
+                        $('#id_linha_ato').val(this.name);
+                    }
+                }
+            }
+            else{
+                $('#id_linha_ato').val(this.name);
+            }
+
+            id_ultimo_clicado = this.id;
+            $('#ajaxModel').modal('show');
+            // console.log(this);
+            // console.log(this.name);
+            // console.log($(this).attr("descricao"));
+        });
+
+        $("#ajaxModel").on('hide.bs.modal', function(){
+            $('#' + id_ultimo_clicado).prop("checked", false);
+            // alert('The modal is about to be hidden.');
+        });
+
+        $('.select2').select2({
+            language: {
+                noResults: function() {
+                    return "Nenhum resultado encontrado";
+                }
+            },
+            closeOnSelect: true,
+            width: '100%',
+        });
 
         $('#datatables-reponsive').dataTable({
             "oLanguage": {
@@ -166,5 +256,3 @@
     });
 
 </script>
-
-@endsection

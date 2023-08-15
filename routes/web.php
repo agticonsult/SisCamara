@@ -77,6 +77,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/update/{id}', [AtoController::class, 'update'])->name('update');
         Route::post('/destroy', [AtoController::class, 'destroy'])->name('destroy');
         Route::post('/alterar-linha', [AtoController::class, 'alterarLinha'])->name('alterarLinha');
+        Route::get('/edit/corpo-do-texto/{id}', [AtoController::class, 'editCorpoTexto'])->name('editCorpoTexto');
+        Route::get('/edit/dados-gerais/{id}', [AtoController::class, 'editDadosGerais'])->name('editDadosGerais');
+        Route::post('/update/dados-gerais/{id}', [AtoController::class, 'updateDadosGerais'])->name('updateDadosGerais');
     });
 
 
