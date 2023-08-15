@@ -144,9 +144,11 @@
                                                 @method('POST')
                                                 <div class="modal-header btn-primary">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelDesbloquear">
-                                                        <strong style="font-size: 1.2rem">Desbloquear
-                                                            <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                        <strong style="font-size: 1.2rem">Desbloqueio</strong>
                                                     </h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Deseja desbloquear o usuário: <strong>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</strong>?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
