@@ -101,8 +101,10 @@
                         </a>
                         <ul id="configuracao"
                             class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ||
-                            Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ||
-                            Route::current()->getPrefix() == 'configuracao/tipo-evento'
+                            Route::current()->getPrefix() == 'configuracao/assunto-ato' ||
+                            Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
+                            Route::current()->getPrefix() == 'configuracao/tamanho-anexo'
+
                                 ? 'active'
                                 : 'collapse' }}">
                             <li
@@ -110,6 +112,13 @@
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.assunto_ato.index') }}">Assuntos
+                                </a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-ato' // mudar as rotas e criar a pagina
+                                    ? 'active'
+                                    : null }}">
+                                <a class="sidebar-link " href="{{ route('configuracao.tipo_ato.index') }}">Tipos de Ato
                                 </a>
                             </li>
                             <li

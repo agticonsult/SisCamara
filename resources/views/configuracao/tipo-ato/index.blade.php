@@ -23,7 +23,7 @@
                 <div>
                     <span><i class="fas fa-address-book"></i></span>
                 </div>
-                <strong>Assunto do Ato</strong>
+                <strong>Tipos de Ato</strong>
             </h2>
         </div>
 
@@ -39,7 +39,7 @@
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
                     <div class="card-body">
-                        <form action="{{ route('configuracao.assunto_ato.store') }}" id="form" method="POST"
+                        <form action="{{ route('configuracao.tipo_ato.store') }}" id="form" method="POST"
                             class="form_prevent_multiple_submits">
                             @csrf
                             @method('POST')
@@ -49,7 +49,7 @@
                                     <div class="form-group col-md-6">
                                         <label class="form-label">*Nome</label>
                                         <input class="form-control" type="text" name="descricao" id="descricao"
-                                            placeholder="Informe o nome do assunto" value="{{ old('descricao') }}">
+                                            placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
                                     </div>
                                 </div>
                             </div>
@@ -79,26 +79,26 @@
                             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Nome do Assunto</th>
+                                        <th scope="col">Tipo de Evento</th>
                                         <th scope="col">Cadastrado por</th>
                                         <th scope="col">Editar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($assuntoAtos as $assunto)
+                                    @foreach ($tipoAtos as $tipo)
                                         <tr>
-                                            <td>{{ $assunto->descricao != null ? $assunto->descricao : 'não informado' }}</td>
+                                            <td>{{ $tipo->descricao != null ? $tipo->descricao : 'não informado' }}</td>
                                             <td>
-                                                <strong>{{ $assunto->cadastradoPorUsuario != null ? $assunto->cad_usuario->pessoa->nomeCompleto : 'cadastrado pelo sistema' }}</strong>
+                                                <strong>{{ $tipo->cadastradoPorUsuario != null ? $tipo->cad_usuario->pessoa->nomeCompleto : 'cadastrado pelo sistema' }}</strong>
                                                 em
-                                                <strong>{{ $assunto->created_at != null ? $assunto->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                                <strong>{{ $tipo->created_at != null ? $tipo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                             </td>
                                             {{-- <td>
                                             <a href="{{ route('configuracao.finalidade_grupo.edit', $finalidade->id) }}"
                                             class="btn btn-warning">Alterar</a>
                                         </td> --}}
                                             <td>
-                                                <a href="{{ route('configuracao.assunto_ato.edit', $assunto->id) }}"
+                                                <a href="{{ route('configuracao.tipo_ato.edit', $tipo->id) }}"
                                                     class="btn btn-warning"><i
                                                         class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                             </td>
