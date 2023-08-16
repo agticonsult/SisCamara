@@ -1,30 +1,21 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
-<style>
-    .error{
-        color:red
-    }
-</style>
-@include('errors.alerts')
-@include('errors.errors')
-
 <div class="card" style="background-color:white">
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('ato.updateDadosGerais') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('ato.updateDadosGerais', $ato->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Ano</label>
-                        <input type="text" class="form-control" name="ano">
+                        <input type="text" class="form-control" name="ano" value="{{ $ato->ano }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Número</label>
-                        <input type="text" class="form-control" name="numero">
+                        <input type="text" class="form-control" name="numero" value="{{ $ato->numero }}">
                     </div>
                 </div>
                 <div class="row">
@@ -33,7 +24,7 @@
                         <select name="id_grupo" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($grupos as $grupo)
-                                <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
+                                <option value="{{ $grupo->id }}" {{ $grupo->id == $ato->id_grupo ? 'selected' : '' }}>{{ $grupo->nome }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -42,7 +33,7 @@
                         <select name="id_tipo_ato" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipo_atos as $tipo_ato)
-                                <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
+                                <option value="{{ $tipo_ato->id }}" {{ $tipo_ato->id == $ato->id_tipo_ato ? 'selected' : '' }}>{{ $tipo_ato->descricao }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -53,13 +44,13 @@
                         <select name="id_assunto" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($assuntos as $assunto)
-                                <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
+                                <option value="{{ $assunto->id }}" {{ $assunto->id == $ato->id_assunto ? 'selected' : '' }}>{{ $assunto->descricao }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="form-check col-md-6">
-                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
+                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo" {{ $ato->altera_dispositivo == 1 ? 'checked' : '' }}>
                     <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>
                 </div>
 
@@ -84,40 +75,6 @@
     // });
 
     $(document).ready(function() {
-
-        var quantidade_checks = 0;
-        var id_ultimo_clicado = null;
-
-        $('.custom-control-input').on('change.bootstrapSwitch', function(e){
-            if (id_ultimo_clicado != null && id_ultimo_clicado != ''){
-                if (id_ultimo_clicado != this.id){
-                    $('#' + id_ultimo_clicado).prop("checked", false);
-                    $('#id_linha_ato').val(this.name);
-                }
-                else{
-                    if (this.checked == false){
-                        $('#id_linha_ato').val('');
-                    }
-                    else{
-                        $('#id_linha_ato').val(this.name);
-                    }
-                }
-            }
-            else{
-                $('#id_linha_ato').val(this.name);
-            }
-
-            id_ultimo_clicado = this.id;
-            $('#ajaxModel').modal('show');
-            // console.log(this);
-            // console.log(this.name);
-            // console.log($(this).attr("descricao"));
-        });
-
-        $("#ajaxModel").on('hide.bs.modal', function(){
-            $('#' + id_ultimo_clicado).prop("checked", false);
-            // alert('The modal is about to be hidden.');
-        });
 
         $('.select2').select2({
             language: {

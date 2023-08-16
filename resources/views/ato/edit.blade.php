@@ -35,6 +35,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('ato.editCorpoTexto', $ato->id) || Route::current()->uri == 'ato/edit/corpo-do-texto/{id}' ? 'active' : null }}" href="{{ route('ato.editCorpoTexto', $ato->id) }}">Corpo do texto</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('ato.editAnexos', $ato->id) || Route::current()->uri == 'ato/edit/anexos/{id}' ? 'active' : null }}" href="{{ route('ato.editAnexos', $ato->id) }}">Anexos</a>
+                </li>
                {{--
                 <li class="nav-item">
                     <a
@@ -74,6 +77,13 @@
                 </div>
             @endif
 
+            @if ((request()->routeIs('ato.editAnexos', $ato->id) || (Route::current()->uri =='ato/edit/anexos/{id}')))
+                <div class="tab-pane {{ request()->routeIs('ato.editAnexos', $ato->id) || Route::current()->uri == 'ato/edit/anexos/{id}' ? 'active' : null }}"
+                    id="{{ route('ato.editAnexos', $ato->id) }}">
+                    @include('ato.editAnexos')
+                </div>
+            @endif
+
             {{--
 
             @if ((request()->routeIs('gerenciamento.processo.cliente.index', $processo->id) || (Route::current()->uri =='gerenciamento/processo/cliente/index/{id}')))
@@ -106,6 +116,13 @@
 
         </div>
     </div>
+
+    <div class="card-footer">
+        <div class="col-md-12">
+            <a href="{{ route('ato.index') }}" class="btn btn-light">Voltar</a>
+        </div>
+    </div>
+
 </div>
 
 @stop

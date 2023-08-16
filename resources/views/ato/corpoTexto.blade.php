@@ -1,14 +1,5 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
-<style>
-    .error{
-        color:red
-    }
-</style>
-@include('errors.alerts')
-@include('errors.errors')
-
 <div class="card" style="background-color:white">
 
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
@@ -32,7 +23,7 @@
                             <input type="hidden" name="id_linha_ato" id="id_linha_ato">
                             <div class="form-group col-md-12">
                                 <label for="id_ato_add">*Ato que contém a alteração</label>
-                                <select name="id_ato_add" id="id_ato_add" class="form-control select2">
+                                <select name="id_ato_add" id="id_ato_add" class="form-control select2" required>
                                     <option value="" selected disabled>-- Selecione --</option>
                                     @foreach ($atos_relacionados as $atos_relacionado)
                                         <option value="{{ $atos_relacionado->id }}">
@@ -49,7 +40,7 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="form-label">*Nova linha</label>
-                                <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
+                                <textarea name="corpo_texto" cols="10" rows="10" class="form-control" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -88,7 +79,7 @@
                                     <td class="d-none"></td>
                                     <td colspan="2" style="text-decoration: line-through">{{ $linha->texto }}</td>
                                 @else --}}
-                                    <td>
+                                    <td style="width: 5%">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input" id="customSwitch{{ $linha->id }}" name="{{ $linha->id }}">
                                             <label class="custom-control-label" for="customSwitch{{ $linha->id }}"></label>
@@ -174,10 +165,6 @@
                 </table>
             </div>
         @endif
-    </div>
-
-    <div class="card-footer">
-        <a href="{{ route('ato.create') }}" class="btn btn-primary">Cadastrar Ato</a>
     </div>
 
 </div>
