@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssuntoAtoController;
 use App\Http\Controllers\AtoController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\ConfirmacaoEmailController;
@@ -126,6 +127,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Configuração
     Route::group(['prefix' => '/configuracao', 'as' => 'configuracao.'], function() {
+
+        //Assunto do Ato
+        Route::group(['prefix' => '/assunto-ato', 'as' => 'assunto_ato.'], function() {
+            Route::get('/index', [AssuntoAtoController::class, 'index'])->name('index');
+            Route::get('/create', [AssuntoAtoController::class, 'create'])->name('create');
+            Route::post('/store', [AssuntoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [AssuntoAtoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [AssuntoAtoController::class, 'update'])->name('update');
+        });
 
         // Finalidade dos Grupos de Usuário
         Route::group(['prefix' => '/finalidade-grupo', 'as' => 'finalidade_grupo.'], function() {

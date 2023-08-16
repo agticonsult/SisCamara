@@ -20,6 +20,7 @@ class FuncionalidadeTableSeeder extends Seeder
     {
         DB::table('entidades')->insert([
             ['descricao'=>'Ato', 'nomeEntidade'=>'Ato', 'ativo'=>1],
+            ['descricao'=>'AssuntoAto', 'nomeEntidade'=>'AssuntoAto', 'ativo'=>1],
             ['descricao'=>'Grupo de Usuário', 'nomeEntidade'=>'Grupo', 'ativo'=>1],
             ['descricao'=>'Usuário', 'nomeEntidade'=>'User', 'ativo'=>1],
             ['descricao'=>'Perfil', 'nomeEntidade'=>'Perfil', 'ativo'=>1],

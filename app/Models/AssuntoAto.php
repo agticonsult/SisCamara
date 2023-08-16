@@ -17,4 +17,9 @@ class AssuntoAto extends Model implements Auditable
     protected $guarded = ['id', 'created_at', 'update_at'];
 
     protected $table = 'assunto_atos';
+
+    public function cad_usuario()
+    {
+        return $this->belongsTo(User::class, 'cadastradoPorUsuario');
+    }
 }
