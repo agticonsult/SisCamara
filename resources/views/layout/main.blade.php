@@ -104,6 +104,7 @@
                             Route::current()->getPrefix() == 'configuracao/assunto-ato' ||
                             Route::current()->getPrefix() == 'configuracao/autoridade' ||
                             Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
+                            Route::current()->getPrefix() == 'configuracao/publicacao-ato' ||
                             Route::current()->getPrefix() == 'configuracao/tamanho-anexo'
                                 ? 'active'
                                 : 'collapse' }}">
@@ -126,6 +127,13 @@
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.tipo_ato.index') }}">Tipos de Ato
+                                </a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/publicacao-ato' // mudar as rotas e criar a pagina
+                                    ? 'active'
+                                    : null }}">
+                                <a class="sidebar-link " href="{{ route('configuracao.publicacao_ato.index') }}">Publicações
                                 </a>
                             </li>
                             <li

@@ -37,13 +37,13 @@ crossorigin=""/>
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração da Autoridade</strong>
+            <strong>Alteração da Publicação</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('configuracao.autoridade.update', $autoridade->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('configuracao.publicacao_ato.update', $publicacao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -51,7 +51,7 @@ crossorigin=""/>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label class="form-label">*Nome</label>
-                            <input class="form-control" type="text" name="descricao" id="descricao" value="{{ $autoridade->descricao != null ? $autoridade->descricao : old('descricao') }}">
+                            <input class="form-control" type="text" name="descricao" id="descricao" value="{{ $publicacao->descricao != null ? $publicacao->descricao : old('descricao') }}">
                         </div>
                         <div class="col-md-12">
                             <button type="submit" class="button_submit btn btn-primary">Salvar</button>

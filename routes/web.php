@@ -17,6 +17,7 @@ use App\Http\Controllers\InicioController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\PublicacaoAtoController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoFilesizeController;
@@ -159,6 +160,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [TipoAtoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [TipoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [TipoAtoController::class, 'update'])->name('update');
+        });
+
+        //Publicação do Ato
+        Route::group(['prefix' => '/publicacao-ato', 'as' => 'publicacao_ato.'], function() {
+            Route::get('/index', [PublicacaoAtoController::class, 'index'])->name('index');
+            Route::get('/create', [PublicacaoAtoController::class, 'create'])->name('create');
+            Route::post('/store', [PublicacaoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [PublicacaoAtoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [PublicacaoAtoController::class, 'update'])->name('update');
         });
 
         // Finalidade dos Grupos de Usuário
