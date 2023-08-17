@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ConfirmacaoEmailController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\AutoridadeController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
@@ -140,6 +141,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [AssuntoAtoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [AssuntoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [AssuntoAtoController::class, 'update'])->name('update');
+        });
+
+        //Autoridades
+        Route::group(['prefix' => '/autoridade', 'as' => 'autoridade.'], function() {
+            Route::get('/index', [AutoridadeController::class, 'index'])->name('index');
+            Route::get('/create', [AutoridadeController::class, 'create'])->name('create');
+            Route::post('/store', [AutoridadeController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [AutoridadeController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [AutoridadeController::class, 'update'])->name('update');
         });
 
         //Tipos de Ato

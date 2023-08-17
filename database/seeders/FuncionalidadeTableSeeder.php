@@ -22,6 +22,8 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Ato', 'nomeEntidade'=>'Ato', 'ativo'=>1],
             ['descricao'=>'AssuntoAto', 'nomeEntidade'=>'AssuntoAto', 'ativo'=>1],
             ['descricao'=>'TipoAto', 'nomeEntidade'=>'TipoAto', 'ativo'=>1],
+            ['descricao'=>'Autoridade', 'nomeEntidade'=>'Autoridade', 'ativo'=>1],
+            ['descricao'=>'PublicacaoAto', 'nomeEntidade'=>'PublicacaoAto', 'ativo'=>1],
             ['descricao'=>'Grupo de Usuário', 'nomeEntidade'=>'Grupo', 'ativo'=>1],
             ['descricao'=>'Usuário', 'nomeEntidade'=>'User', 'ativo'=>1],
             ['descricao'=>'Perfil', 'nomeEntidade'=>'Perfil', 'ativo'=>1],

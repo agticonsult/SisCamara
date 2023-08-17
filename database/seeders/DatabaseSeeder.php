@@ -40,5 +40,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoAtoTableSeeder::class);
         $this->call(TipoLinhaAtoTableSeeder::class);
         $this->call(AssuntoAtoTableSeeder::class);
+        $this->call(AutoridadeSeeder::class);
     }
 }
