@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AssuntoAto;
 use App\Models\ErrorLog;
+use App\Models\PublicacaoAto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class AssuntoAtoController extends Controller
+class PublicacaoAtoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,18 +19,18 @@ class AssuntoAtoController extends Controller
     public function index()
     {
         try {
-            if(Auth::user()->temPermissao('AssuntoAto', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('PublicacaoAto', 'Listagem') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $assuntoAtos = AssuntoAto::where('ativo', '=', 1)->get();
+            $publicacaos = PublicacaoAto::where('ativo', '=', 1)->get();
 
-            return view('configuracao.assunto-ato.index', compact('assuntoAtos'));
+            return view('configuracao.publicacao-ato.index', compact('publicacaos'));
         }
         catch(\Exception $ex){
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AssuntoAtoController";
+            $erro->controlador = "PublicacaoAtoController";
             $erro->funcao = "index";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -59,7 +59,7 @@ class AssuntoAtoController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('PublicacaoAto', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -73,13 +73,13 @@ class AssuntoAtoController extends Controller
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $assuntoAto = new AssuntoAto();
-            $assuntoAto->descricao = $request->descricao;
-            $assuntoAto->cadastradoPorUsuario = Auth::user()->id;
-            $assuntoAto->ativo = 1;
-            $assuntoAto->save();
+            $publicacao = new PublicacaoAto();
+            $publicacao->descricao = $request->descricao;
+            $publicacao->cadastradoPorUsuario = Auth::user()->id;
+            $publicacao->ativo = 1;
+            $publicacao->save();
 
-            return redirect()->route('configuracao.assunto_ato.index')->with('success', 'Cadastro realizado com sucesso.');
+            return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Cadastro realizado com sucesso.');
 
         }
         catch (ValidationException $e ) {
@@ -91,7 +91,7 @@ class AssuntoAtoController extends Controller
         catch(\Exception $ex){
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AssuntoAtoController";
+            $erro->controlador = "PublicacaoAtoController";
             $erro->funcao = "store";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -121,22 +121,22 @@ class AssuntoAtoController extends Controller
     public function edit($id)
     {
         try {
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('PublicacaoAto', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
 
-            if (!$assunto){
-                return redirect()->route('configuracao.assunto_ato.index')->with('erro', 'Não é possível alterar este assunto.');
+            if (!$publicacao){
+                return redirect()->route('configuracao.publicacao_ato.index')->with('erro', 'Não é possível alterar esta publicacao.');
             }
 
-            return view('configuracao.assunto-ato.edit', compact('assunto'));
+            return view('configuracao.publicacao-ato.edit', compact('publicacao'));
         }
         catch(\Exception $ex){
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AssuntoAtoController";
+            $erro->controlador = "PublicacaoAtoController";
             $erro->funcao = "edit";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -156,7 +156,7 @@ class AssuntoAtoController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('PublicacaoAto', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -170,11 +170,11 @@ class AssuntoAtoController extends Controller
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $assunto = AssuntoAto::find($id);
-            $assunto->descricao = $request->descricao;
-            $assunto->save();
+            $publicacao = PublicacaoAto::find($id);
+            $publicacao->descricao = $request->descricao;
+            $publicacao->save();
 
-            return redirect()->route('configuracao.assunto_ato.index')->with('success', 'Alteração realizada com sucesso.');
+            return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Alteração realizada com sucesso.');
 
         }
         catch (ValidationException $e ) {
@@ -186,7 +186,7 @@ class AssuntoAtoController extends Controller
         catch(\Exception $ex){
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AssuntoAtoController";
+            $erro->controlador = "PublicacaoAtoController";
             $erro->funcao = "update";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
