@@ -61,8 +61,8 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-paperclip"></i> Anexos</a>
                     <div class="dropdown-menu">
-                        @if (Count($ato->anexos()) != 0)
-                            @foreach($ato->anexos() as $anexo)
+                        @if (Count($ato->anexos_ativos()) != 0)
+                            @foreach($ato->anexos_ativos() as $anexo)
                                 <a class="dropdown-item" href="{{url('storage/Atos/Anexos/'.$anexo->nome_hash)}}"
                                 target="_blank">
                                     {{ $anexo->nome_original }}
@@ -93,8 +93,8 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="">PDF</a>
-                                        <a class="dropdown-item" href="">HTML</a>
+                                        <a class="dropdown-item" href="{{ route('ato.export.original.pdf', $ato->id) }}">PDF</a>
+                                        <a class="dropdown-item" href="{{ route('ato.export.original.html', $ato->id) }}">HTML</a>
                                         <a class="dropdown-item" href="">TXT</a>
                                         <a class="dropdown-item" href="">DOC</a>
                                     </div>

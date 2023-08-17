@@ -41,41 +41,34 @@
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Anexar arquivo ao processo
+                    Anexar arquivo ao ato
                 </button>
                 </h5>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
                 <div class="card-body">
                     <div class="col-md-12">
-                        <form action="" class="form_prevent_multiple_submits" id="form-anexo" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('ato.anexos.store', $ato->id) }}" class="form_prevent_multiple_submits" id="form-anexo" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
 
                             <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="id_tipo_anexo">*Tipo de Arquivo</label>
-                                        <select name="id_tipo_anexo" class="form-control">
-                                            <option value="" selected disabled>--Selecione--</option>
-                                            <option value="1">Documento (txt,pdf,xls,xlsx,doc,docx,odt)</option>
-                                            <option value="2">Imagem (jpg,jpeg,png)</option>
-                                            <option value="3">Áudio (mp3)</option>
-                                            <option value="4">Vídeo (mp4)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="arquivo">*Arquivo (tamanho máximo dos arquivos: {{ $filesize->mb }}MB)</label>
-                                        <input type="file" name="arquivo[]" id="arquivo" class="form-control-file" multiple>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="assunto">Assunto</label>
-                                        <input type="text" name="assunto" id="assunto" class="form-control">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="justificativa">Justificativa</label>
-                                        <input type="text" name="justificativa" id="justificativa" class="form-control">
-                                    </div>
+                                <br> Observações
+                                <ul>
+                                    <li>Tamanho máximo do anexo: {{ $filesize->mb }}MB</li>
+                                </ul>
+                                Extensões permitidas
+                                <ul>
+                                    <li>Documento (txt,pdf,xls,xlsx,doc,docx,odt)</li>
+                                    <li>Imagem (jpg,jpeg,png)</li>
+                                    <li>Áudio (mp3)</li>
+                                    <li>Vídeo (mp4, mkv)</li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="anexo">Arquivo</label>
+                                    <input type="file" name="anexo[]" id="anexo" class="form-control-file" multiple>
                                 </div>
                             </div>
 
@@ -97,7 +90,7 @@
             <div class="card-header" id="headingFour">
                 <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Arquivos anexados ao processo
+                    Arquivos anexados ao ato
                 </button>
                 </h5>
             </div>

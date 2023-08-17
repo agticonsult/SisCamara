@@ -28,6 +28,7 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Auditoria', 'nomeEntidade'=>'Auditoria', 'ativo'=>1],
             ['descricao'=>'Finalidade Grupo de Usuário', 'nomeEntidade'=>'FinalidadeGrupo', 'ativo'=>1],
             ['descricao'=>'Filesize', 'nomeEntidade'=>'Filesize', 'ativo'=>1],
+            ['descricao'=>'Anexo do Ato', 'nomeEntidade'=>'AnexoAto', 'ativo'=>1],
         ]);
 
         DB::table('tipo_funcionalidades')->insert([

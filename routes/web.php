@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnexoAtoController;
 use App\Http\Controllers\AssuntoAtoController;
 use App\Http\Controllers\AtoController;
 use App\Http\Controllers\AuditController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Auth\ConfirmacaoEmailController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
@@ -93,8 +95,38 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Corpo do texto
         Route::group(['prefix' => '/anexos', 'as' => 'anexos.'], function() {
-            Route::get('/edit/{id}', [AtoController::class, 'editAnexos'])->name('edit');
-            Route::post('/destroy/{id}', [AtoController::class, 'destroyAnexo'])->name('destroy');
+            Route::post('/store/{id}', [AnexoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [AnexoAtoController::class, 'edit'])->name('edit');
+            Route::post('/destroy/{id}', [AnexoAtoController::class, 'destroy'])->name('destroy');
+        });
+
+        // PDF
+        Route::group(['prefix' => '/export', 'as' => 'export.'], function() {
+
+            // Original
+            Route::group(['prefix' => '/original', 'as' => 'original.'], function() {
+                Route::get('/pdf/{id}', [ExportAtoController::class, 'pdfOriginal'])->name('pdf');
+                Route::get('/html/{id}', [ExportAtoController::class, 'htmlOriginal'])->name('html');
+                Route::get('/texto/{id}', [ExportAtoController::class, 'textoOriginal'])->name('texto');
+                Route::get('/doc/{id}', [ExportAtoController::class, 'docOriginal'])->name('doc');
+            });
+
+            // Consolidada
+            Route::group(['prefix' => '/consolidada', 'as' => 'consolidada.'], function() {
+                Route::get('/pdf/{id}', [ExportAtoController::class, 'pdfConsolidada'])->name('pdf');
+                Route::get('/html/{id}', [ExportAtoController::class, 'htmlConsolidada'])->name('html');
+                Route::get('/texto/{id}', [ExportAtoController::class, 'textoConsolidada'])->name('texto');
+                Route::get('/doc/{id}', [ExportAtoController::class, 'docConsolidada'])->name('doc');
+            });
+
+            // Compilada
+            Route::group(['prefix' => '/compilada', 'as' => 'compilada.'], function() {
+                Route::get('/pdf/{id}', [ExportAtoController::class, 'pdfCompilada'])->name('pdf');
+                Route::get('/html/{id}', [ExportAtoController::class, 'htmlCompilada'])->name('html');
+                Route::get('/texto/{id}', [ExportAtoController::class, 'textoCompilada'])->name('texto');
+                Route::get('/doc/{id}', [ExportAtoController::class, 'docCompilada'])->name('doc');
+            });
+
         });
 
     });

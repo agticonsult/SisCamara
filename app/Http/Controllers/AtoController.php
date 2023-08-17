@@ -308,6 +308,10 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$ato){
+                return redirect()->back()->with('erro', 'Ato inválido.');
+            }
+
             $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
             // dd($ato->todas_linhas_ativas());
 
@@ -375,23 +379,14 @@ class AtoController extends Controller
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$ato){
-                return redirect()->back()->with('erro', 'Ato inválido.');
-            }
-
             $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', 1)->first();
             if (!$ato_add){
                 return redirect()->back()->with('erro', 'Ato que contém a alteração inválido.');
             }
 
-            $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('ativo', '=', 1)->first();
+            $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('id_ato_principal', '=', $id)->where('ativo', '=', 1)->first();
             if (!$linha_antiga){
-                return redirect()->back()->with('erro', 'Linha inválida.');
-            }
-
-            if ($id != $linha_antiga->id_ato_principal){
-                return redirect()->back()->with('erro', 'Ato inválido.');
+                return redirect()->back()->with('erro', 'Não é possível alterar esta linha.');
             }
 
             $linha_antiga->alterado = 1;
@@ -439,6 +434,9 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$ato){
+                return redirect()->back()->with('erro', 'Ato inválido.');
+            }
             $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
 
             $grupos = Grupo::where('ativo', '=', 1)->get();
@@ -531,31 +529,6 @@ class AtoController extends Controller
             $erro->erro = $ex->getMessage();
             $erro->controlador = "AtoController";
             $erro->funcao = "updateDadosGerais";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
-        }
-    }
-
-    public function editAnexos($id)
-    {
-        try {
-            if(Auth::user()->temPermissao('Ato', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
-
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
-
-            return view('ato.edit', compact('ato', 'filesize'));
-        }
-        catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "editAnexos";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
             }
