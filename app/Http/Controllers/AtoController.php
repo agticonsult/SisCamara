@@ -352,7 +352,7 @@ class AtoController extends Controller
         }
     }
 
-    public function alterarLinha(Request $request)
+    public function alterarLinha(Request $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Alteração') != 1){
@@ -360,11 +360,13 @@ class AtoController extends Controller
             }
 
             $input = [
+                'id' => $request->id,
                 'id_ato_add' => $request->id_ato_add,
                 'id_linha_ato' => $request->id_linha_ato,
                 'corpo_texto' => $request->corpo_texto,
             ];
             $rules = [
+                'id' => 'required|integer',
                 'id_ato_add' => 'required|integer',
                 'id_linha_ato' => 'required|integer',
                 'corpo_texto' => 'required',
@@ -372,6 +374,11 @@ class AtoController extends Controller
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
+
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$ato){
+                return redirect()->back()->with('erro', 'Ato inválido.');
+            }
 
             $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', 1)->first();
             if (!$ato_add){
@@ -381,6 +388,10 @@ class AtoController extends Controller
             $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('ativo', '=', 1)->first();
             if (!$linha_antiga){
                 return redirect()->back()->with('erro', 'Linha inválida.');
+            }
+
+            if ($id != $linha_antiga->id_ato_principal){
+                return redirect()->back()->with('erro', 'Ato inválido.');
             }
 
             $linha_antiga->alterado = 1;
@@ -399,7 +410,7 @@ class AtoController extends Controller
             $linha_ato->ativo = 1;
             $linha_ato->save();
 
-            return redirect()->route('ato.editCorpoTexto', $linha_antiga->id_ato_principal)->with('success', 'Alteração realizada com sucesso.');
+            return redirect()->route('ato.corpo_texto.edit', $linha_antiga->id_ato_principal)->with('success', 'Alteração realizada com sucesso.');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -507,7 +518,7 @@ class AtoController extends Controller
             $ato->id_tipo_ato = $request->id_tipo_ato;
             $ato->save();
 
-            return redirect()->route('ato.index')->with('success', 'Alteração realizada com sucesso');
+            return redirect()->route('ato.dados_gerais.edit', $ato->id)->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -536,8 +547,9 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
 
-            return view('ato.edit', compact('ato'));
+            return view('ato.edit', compact('ato', 'filesize'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

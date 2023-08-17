@@ -5,7 +5,7 @@
     <div class="modal fade" id="ajaxModel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="{{ route('ato.alterarLinha') }}" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('ato.corpo_texto.alterarLinha', $ato->id) }}" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 

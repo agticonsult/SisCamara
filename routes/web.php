@@ -74,23 +74,27 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', [AtoController::class, 'create'])->name('create');
         Route::post('/store', [AtoController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [AtoController::class, 'edit'])->name('edit');
-
-        // Dados Gerais
-        Route::group(['prefix' => '/finalidade-grupo', 'as' => 'finalidade_grupo.'], function() {
-            Route::get('/index', [FinalidadeGrupoController::class, 'index'])->name('index');
-            Route::get('/create', [FinalidadeGrupoController::class, 'create'])->name('create');
-            Route::post('/store', [FinalidadeGrupoController::class, 'store'])->name('store');
-            Route::get('/edit/{id}', [FinalidadeGrupoController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}', [FinalidadeGrupoController::class, 'update'])->name('update');
-        });
-
         Route::post('/update/{id}', [AtoController::class, 'update'])->name('update');
         Route::post('/destroy', [AtoController::class, 'destroy'])->name('destroy');
-        Route::get('/edit/dados-gerais/{id}', [AtoController::class, 'editDadosGerais'])->name('editDadosGerais');
-        Route::post('/update/dados-gerais/{id}', [AtoController::class, 'updateDadosGerais'])->name('updateDadosGerais');
-        Route::get('/edit/corpo-do-texto/{id}', [AtoController::class, 'editCorpoTexto'])->name('editCorpoTexto');
-        Route::post('/alterar-linha', [AtoController::class, 'alterarLinha'])->name('alterarLinha');
-        Route::get('/edit/anexos/{id}', [AtoController::class, 'editAnexos'])->name('editAnexos');
+
+        // Dados Gerais
+        Route::group(['prefix' => '/dados-gerais', 'as' => 'dados_gerais.'], function() {
+            Route::get('/edit/{id}', [AtoController::class, 'editDadosGerais'])->name('edit');
+            Route::post('/update/{id}', [AtoController::class, 'updateDadosGerais'])->name('update');
+        });
+
+        // Corpo do texto
+        Route::group(['prefix' => '/corpo-do-texto', 'as' => 'corpo_texto.'], function() {
+            Route::get('/edit/{id}', [AtoController::class, 'editCorpoTexto'])->name('edit');
+            Route::post('/alterar-linha/{id}', [AtoController::class, 'alterarLinha'])->name('alterarLinha');
+        });
+
+        // Corpo do texto
+        Route::group(['prefix' => '/anexos', 'as' => 'anexos.'], function() {
+            Route::get('/edit/{id}', [AtoController::class, 'editAnexos'])->name('edit');
+            Route::post('/destroy/{id}', [AtoController::class, 'destroyAnexo'])->name('destroy');
+        });
+
     });
 
 

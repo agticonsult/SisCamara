@@ -4,7 +4,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('ato.updateDadosGerais', $ato->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('ato.dados_gerais.update', $ato->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 

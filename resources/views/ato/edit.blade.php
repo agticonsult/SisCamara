@@ -30,13 +30,13 @@
 
             <ul class="nav nav-pills nav-justified">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('ato.editDadosGerais', $ato->id) || Route::current()->uri == 'ato/edit/dados-gerais/{id}' ? 'active' : null }}" href="{{ route('ato.editDadosGerais', $ato->id) }}">Dados Gerais</a>
+                    <a class="nav-link {{ request()->routeIs('ato.dados_gerais.edit', $ato->id) || Route::current()->uri == 'ato/dados-gerais/edit/{id}' ? 'active' : null }}" href="{{ route('ato.dados_gerais.edit', $ato->id) }}">Dados Gerais</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('ato.editCorpoTexto', $ato->id) || Route::current()->uri == 'ato/edit/corpo-do-texto/{id}' ? 'active' : null }}" href="{{ route('ato.editCorpoTexto', $ato->id) }}">Corpo do texto</a>
+                    <a class="nav-link {{ request()->routeIs('ato.edit.corpo_texto', $ato->id) || Route::current()->uri == 'ato/corpo-do-texto/edit/{id}' ? 'active' : null }}" href="{{ route('ato.corpo_texto.edit', $ato->id) }}">Corpo do texto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('ato.editAnexos', $ato->id) || Route::current()->uri == 'ato/edit/anexos/{id}' ? 'active' : null }}" href="{{ route('ato.editAnexos', $ato->id) }}">Anexos</a>
+                    <a class="nav-link {{ request()->routeIs('ato.anexos.edit', $ato->id) || Route::current()->uri == 'ato/anexos/edit/{id}' ? 'active' : null }}" href="{{ route('ato.anexos.edit', $ato->id) }}">Anexos</a>
                 </li>
                {{--
                 <li class="nav-item">
@@ -63,23 +63,23 @@
         </div>
         <div class="col-lg-12 tab-content">
 
-            @if ((request()->routeIs('ato.editDadosGerais', $ato->id) || (Route::current()->uri =='ato/edit/dados-gerais/{id}')))
-                <div class="tab-pane {{ request()->routeIs('ato.editDadosGerais', $ato->id) || Route::current()->uri == 'ato/edit/dados-gerais/{id}' ? 'active' : null }}"
-                    id="{{ route('ato.editDadosGerais', $ato->id) }}">
+            @if ((request()->routeIs('ato.dados_gerais.edit', $ato->id) || (Route::current()->uri =='ato/dados-gerais/edit/{id}')))
+                <div class="tab-pane {{ request()->routeIs('ato.dados_gerais.edit', $ato->id) || Route::current()->uri == 'ato/dados-gerais/edit/{id}' ? 'active' : null }}"
+                    id="{{ route('ato.dados_gerais.edit', $ato->id) }}">
                     @include('ato.dadosGerais')
                 </div>
             @endif
 
-            @if ((request()->routeIs('ato.editCorpoTexto', $ato->id) || (Route::current()->uri =='ato/edit/corpo-do-texto/{id}')))
-                <div class="tab-pane {{ request()->routeIs('ato.editCorpoTexto', $ato->id) || Route::current()->uri == 'ato/edit/corpo-do-texto/{id}' ? 'active' : null }}"
-                    id="{{ route('ato.editCorpoTexto', $ato->id) }}">
+            @if ((request()->routeIs('ato.corpo_texto.edit', $ato->id) || (Route::current()->uri =='ato/corpo-do-texto/edit/{id}')))
+                <div class="tab-pane {{ request()->routeIs('ato.corpo_texto.edit', $ato->id) || Route::current()->uri == 'ato/corpo-do-texto/edit/{id}' ? 'active' : null }}"
+                    id="{{ route('ato.corpo_texto.edit', $ato->id) }}">
                     @include('ato.corpoTexto')
                 </div>
             @endif
 
-            @if ((request()->routeIs('ato.editAnexos', $ato->id) || (Route::current()->uri =='ato/edit/anexos/{id}')))
-                <div class="tab-pane {{ request()->routeIs('ato.editAnexos', $ato->id) || Route::current()->uri == 'ato/edit/anexos/{id}' ? 'active' : null }}"
-                    id="{{ route('ato.editAnexos', $ato->id) }}">
+            @if ((request()->routeIs('ato.anexos.edit', $ato->id) || (Route::current()->uri =='ato/anexos/edit/{id}')))
+                <div class="tab-pane {{ request()->routeIs('ato.anexos.edit', $ato->id) || Route::current()->uri == 'ato/anexos/edit/{id}' ? 'active' : null }}"
+                    id="{{ route('ato.anexos.edit', $ato->id) }}">
                     @include('ato.editAnexos')
                 </div>
             @endif

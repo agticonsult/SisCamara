@@ -5,7 +5,7 @@
     <div class="modal fade" id="ajaxModel2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{{ route('ato.anexo.destroy', $ato->id) }}" id="form-inativar-anexo" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('ato.anexos.destroy', $ato->id) }}" id="form-inativar-anexo" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 
@@ -48,7 +48,7 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion2">
                 <div class="card-body">
                     <div class="col-md-12">
-                        <form action="{{ route('gerenciamento.processo.anexo.store', $ato->id) }}" class="form_prevent_multiple_submits" id="form-anexo" method="POST" enctype="multipart/form-data">
+                        <form action="" class="form_prevent_multiple_submits" id="form-anexo" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('POST')
 
@@ -90,6 +90,8 @@
         </div>
     </div>
 
+    <br><hr><br>
+
     <div id="accordion4">
         <div class="card">
             <div class="card-header" id="headingFour">
@@ -113,10 +115,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($ato->anexos_ativos as $anexo)
+                                        @foreach ($ato->anexos_ativos() as $anexo)
                                             <tr>
                                                 <td>
-                                                    <a href="{{ route('gerenciamento.processo.anexo.get', ['id_processo' => $ato->id, 'id_anexo' => $anexo->id]) }}">
+                                                    {{-- <a href="{{ route('gerenciamento.processo.anexo.get', ['id_processo' => $ato->id, 'id_anexo' => $anexo->id]) }}"> --}}
+                                                    <a href="">
                                                         {{ $anexo->nome_original != "" && $anexo->nome_original != null ? $anexo->nome_original : '-' }}
                                                     </a>
                                                 </td>

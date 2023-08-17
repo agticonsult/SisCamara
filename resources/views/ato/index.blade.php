@@ -69,7 +69,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
-                                    <a href="{{ route('ato.editDadosGerais', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('ato.dados_gerais.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
                                 </td>
                             </tr>
