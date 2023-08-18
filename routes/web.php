@@ -174,6 +174,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [AssuntoAtoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [AssuntoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [AssuntoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [AssuntoAtoController::class, 'destroy'])->name('destroy');
         });
 
         //Autoridades
@@ -183,6 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [AutoridadeController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [AutoridadeController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [AutoridadeController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [AutoridadeController::class, 'destroy'])->name('destroy');
         });
 
         //Tipos de Ato
@@ -192,6 +194,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [TipoAtoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [TipoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [TipoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [TipoAtoController::class, 'destroy'])->name('destroy');
         });
 
         //Publicação do Ato
@@ -201,6 +204,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [PublicacaoAtoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [PublicacaoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [PublicacaoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [PublicacaoAtoController::class, 'destroy'])->name('destroy');
         });
 
         // Finalidade dos Grupos de Usuário
