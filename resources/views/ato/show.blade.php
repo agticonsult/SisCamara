@@ -122,7 +122,7 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="{{ route('ato.export.consolidada.pdf', $ato->id) }}">PDF</a>
                                         <a class="dropdown-item" href="{{ route('ato.export.consolidada.html', $ato->id) }}">HTML</a>
-                                        <a class="dropdown-item" href="{{ route('ato.export.consolidada.texto', $ato->id) }}">TXT</a>
+                                        {{-- <a class="dropdown-item" href="{{ route('ato.export.consolidada.texto', $ato->id) }}">TXT</a> --}}
                                         <a class="dropdown-item" href="{{ route('ato.export.consolidada.doc', $ato->id) }}">DOC</a>
                                     </div>
                                 </li>
@@ -159,10 +159,10 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Exportar</a>
                                     <div class="dropdown-menu">
-                                        {{-- <a class="dropdown-item" href="{{ route('ato.export.compilado.pdf', $ato->id) }}">PDF</a>
-                                        <a class="dropdown-item" href="{{ route('ato.export.compilado.html', $ato->id) }}">HTML</a>
-                                        <a class="dropdown-item" href="{{ route('ato.export.compilado.texto', $ato->id) }}">TXT</a>
-                                        <a class="dropdown-item" href="{{ route('ato.export.compilado.doc', $ato->id) }}">DOC</a> --}}
+                                        <a class="dropdown-item" href="{{ route('ato.export.compilada.pdf', $ato->id) }}">PDF</a>
+                                        <a class="dropdown-item" href="{{ route('ato.export.compilada.html', $ato->id) }}">HTML</a>
+                                        <a class="dropdown-item" href="{{ route('ato.export.compilada.texto', $ato->id) }}">TXT</a>
+                                        <a class="dropdown-item" href="{{ route('ato.export.compilada.doc', $ato->id) }}">DOC</a>
                                     </div>
                                 </li>
                             </ul>
