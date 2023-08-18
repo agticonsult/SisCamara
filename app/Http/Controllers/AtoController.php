@@ -155,12 +155,17 @@ class AtoController extends Controller
             date_default_timezone_set('America/Campo_Grande');
 
             $arquivos = $request->file('anexo');
-            if (Count($arquivos) != 0){
-                $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
-                if ($max_filesize){
-                    if ($max_filesize->mb != null){
-                        if (is_int($max_filesize->mb)){
-                            $mb = $max_filesize->mb;
+            if ($arquivos != null){
+                if (Count($arquivos) != 0){
+                    $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
+                    if ($max_filesize){
+                        if ($max_filesize->mb != null){
+                            if (is_int($max_filesize->mb)){
+                                $mb = $max_filesize->mb;
+                            }
+                            else{
+                                $mb = 2;
+                            }
                         }
                         else{
                             $mb = 2;
@@ -169,89 +174,86 @@ class AtoController extends Controller
                     else{
                         $mb = 2;
                     }
-                }
-                else{
-                    $mb = 2;
-                }
 
-                $count = 0;
-                $resultados = array();
+                    $count = 0;
+                    $resultados = array();
 
-                foreach ($arquivos as $arquivo) {
-                    $filezinho = array();
-                    $valido = 0;
-                    $nome_original = $arquivo->getClientOriginalName();
-                    array_push($filezinho, $nome_original);
+                    foreach ($arquivos as $arquivo) {
+                        $filezinho = array();
+                        $valido = 0;
+                        $nome_original = $arquivo->getClientOriginalName();
+                        array_push($filezinho, $nome_original);
 
-                    // if ($arquivo->isValid() && (filesize($arquivo) <= 2097152)) {
-                    if ($arquivo->isValid()) {
-                        if (filesize($arquivo) <= 1048576 * $mb){
+                        // if ($arquivo->isValid() && (filesize($arquivo) <= 2097152)) {
+                        if ($arquivo->isValid()) {
+                            if (filesize($arquivo) <= 1048576 * $mb){
 
-                            $extensao = $arquivo->extension();
+                                $extensao = $arquivo->extension();
 
-                            if (
-                                $extensao == 'txt' ||
-                                $extensao == 'pdf' ||
-                                $extensao == 'xls' ||
-                                $extensao == 'xlsx' ||
-                                $extensao == 'doc' ||
-                                $extensao == 'docx' ||
-                                $extensao == 'odt' ||
-                                $extensao == 'jpg' ||
-                                $extensao == 'jpeg' ||
-                                $extensao == 'png' ||
-                                $extensao == 'mp3' ||
-                                $extensao == 'mp4' ||
-                                $extensao == 'mkv'
-                            ) {
-                                $valido = 1;
-                            }
+                                if (
+                                    $extensao == 'txt' ||
+                                    $extensao == 'pdf' ||
+                                    $extensao == 'xls' ||
+                                    $extensao == 'xlsx' ||
+                                    $extensao == 'doc' ||
+                                    $extensao == 'docx' ||
+                                    $extensao == 'odt' ||
+                                    $extensao == 'jpg' ||
+                                    $extensao == 'jpeg' ||
+                                    $extensao == 'png' ||
+                                    $extensao == 'mp3' ||
+                                    $extensao == 'mp4' ||
+                                    $extensao == 'mkv'
+                                ) {
+                                    $valido = 1;
+                                }
 
-                            if ($valido == 1) {
-                                $nome_hash = Uuid::uuid4();
-                                $nome_hash = $nome_hash . '-' . $count . '.' . $extensao;
-                                $upload = $arquivo->storeAs('public/Ato/Anexo/', $nome_hash);
+                                if ($valido == 1) {
+                                    $nome_hash = Uuid::uuid4();
+                                    $nome_hash = $nome_hash . '-' . $count . '.' . $extensao;
+                                    $upload = $arquivo->storeAs('public/Ato/Anexo/', $nome_hash);
 
-                                if ($upload) {
-                                    $file = new AnexoAto();
-                                    $file->nome_original = $nome_original;
-                                    $file->nome_hash = $nome_hash;
-                                    $file->diretorio = 'public/Ato/Anexo';
-                                    $file->id_ato = $ato->id;
-                                    $file->cadastradoPorUsuario = Auth::user()->id;
-                                    $file->ativo = 1;
-                                    $file->save();
+                                    if ($upload) {
+                                        $file = new AnexoAto();
+                                        $file->nome_original = $nome_original;
+                                        $file->nome_hash = $nome_hash;
+                                        $file->diretorio = 'public/Ato/Anexo';
+                                        $file->id_ato = $ato->id;
+                                        $file->cadastradoPorUsuario = Auth::user()->id;
+                                        $file->ativo = 1;
+                                        $file->save();
 
-                                    array_push($filezinho, 'arquivo adicionado com sucesso');
-                                    $count++;
+                                        array_push($filezinho, 'arquivo adicionado com sucesso');
+                                        $count++;
+                                    }
+                                    else {
+                                        array_push($filezinho, 'falha ao salvar o arquivo');
+                                    }
                                 }
                                 else {
-                                    array_push($filezinho, 'falha ao salvar o arquivo');
+                                    array_push($filezinho, 'extensão inválida');
                                 }
                             }
-                            else {
-                                array_push($filezinho, 'extensão inválida');
+                            else{
+                                array_push($filezinho, 'arquivo maior que ' . $mb . 'MB');
                             }
                         }
-                        else{
-                            array_push($filezinho, 'arquivo maior que ' . $mb . 'MB');
+                        else {
+                            array_push($filezinho, 'arquivo inválido');
                         }
+
+                        array_push($resultados, $filezinho);
                     }
-                    else {
-                        array_push($filezinho, 'arquivo inválido');
+
+                    $result = array();
+                    for ($i=0; $i<Count($resultados); $i++) {
+                        $selected = $resultados[$i];
+                        $resultadoTexto = $selected[0] . ": " . $selected[1];
+                        array_push($result, $resultadoTexto);
                     }
 
-                    array_push($resultados, $filezinho);
+                    return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
                 }
-
-                $result = array();
-                for ($i=0; $i<Count($resultados); $i++) {
-                    $selected = $resultados[$i];
-                    $resultadoTexto = $selected[0] . ": " . $selected[1];
-                    array_push($result, $resultadoTexto);
-                }
-
-                return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
             }
 
             return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso');
