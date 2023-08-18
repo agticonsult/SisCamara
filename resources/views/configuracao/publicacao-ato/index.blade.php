@@ -82,6 +82,7 @@
                                         <th scope="col">Nome da publicação</th>
                                         <th scope="col">Cadastrado por</th>
                                         <th scope="col">Editar</th>
+                                        <th scope="col">Excluir</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,7 +103,43 @@
                                                     class="btn btn-warning"><i
                                                         class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                             </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#exampleModalExcluir{{ $publicacao->id }}"><i
+                                                    class="align-middle me-2 fas fa-fw fa-trash"></i></button>
+                                            </td>
                                         </tr>
+                                        <div class="modal fade" id="exampleModalExcluir{{ $publicacao->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <form method="POST" class="form_prevent_multiple_submits"
+                                                        action="{{ route('configuracao.publicacao_ato.destroy', $publicacao->id) }}">
+                                                        @csrf
+                                                        @method('POST')
+                                                        <div class="modal-header btn-danger">
+                                                            <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
+                                                                <strong style="font-size: 1.2rem">Excluir
+                                                                    <i>{{ $publicacao->descricao != null ? $publicacao->descricao : 'não informado' }}</i></strong>
+                                                            </h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="motivo" class="form-label">Motivo</label>
+                                                                <input type="text" class="form-control" name="motivo">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cancelar
+                                                            </button>
+                                                            <button type="submit"
+                                                                class="button_submit btn btn-danger">Excluir</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
