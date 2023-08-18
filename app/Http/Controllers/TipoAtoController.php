@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
 use App\Models\TipoAto;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -202,8 +203,59 @@ class TipoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        try {
+            if (Auth::user()->temPermissao('TipoAto', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'motivo' => $request->motivo
+            ];
+            $rules = [
+                'motivo' => 'max:255'
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $motivo = $request->motivo;
+
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $tipo = TipoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
+
+            if (!$tipo){
+                return redirect()->back()->with('erro', 'Não é possível excluir este tipo de ato.')->withInput();
+            }
+
+            $tipo->inativadoPorUsuario = Auth::user()->id;
+            $tipo->dataInativado = Carbon::now();
+            $tipo->motivoInativado = $motivo;
+            $tipo->ativo = 0;
+            $tipo->save();
+
+            return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Exclusão realizada com sucesso.');
+        }
+        catch (ValidationException $e) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "TipoAtoController";
+            $erro->funcao = "destroy";
+            if (Auth::check()) {
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
     }
 }
