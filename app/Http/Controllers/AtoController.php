@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AnexoAto;
 use App\Models\AssuntoAto;
 use App\Models\Ato;
+use App\Models\AtoRelacionado;
 use App\Models\ErrorLog;
 use App\Models\Filesize;
 use App\Models\Grupo;
@@ -406,6 +407,13 @@ class AtoController extends Controller
             $linha_ato->cadastradoPorUsuario = Auth::user()->id;
             $linha_ato->ativo = 1;
             $linha_ato->save();
+
+            $ato_relacionado = new AtoRelacionado();
+            $ato_relacionado->id_ato_principal = $linha_antiga->id_ato_principal;
+            $ato_relacionado->id_ato_relacionado = $request->id_ato_add;
+            $ato_relacionado->cadastradoPorUsuario = Auth::user()->id;
+            $ato_relacionado->ativo = 1;
+            $ato_relacionado->save();
 
             return redirect()->route('ato.corpo_texto.edit', $linha_antiga->id_ato_principal)->with('success', 'Alteração realizada com sucesso.');
         }
