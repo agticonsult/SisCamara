@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnexoAtoController;
 use App\Http\Controllers\AssuntoAtoController;
 use App\Http\Controllers\AtoController;
+use App\Http\Controllers\AtoPublicoController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\Auth\ConfirmacaoEmailController;
 use App\Http\Controllers\Auth\LoginController;
@@ -133,8 +134,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-
-
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {
         Route::get('/index', [UserController::class, 'index'])->name('index');
@@ -253,6 +252,22 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/inativar-funcionalidade/{id}', [PerfilFuncionalidadeController::class, 'inativarFuncionalidade'])->name('inativarFuncionalidade');
     });
 
+});
+
+// Web Pública
+Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
+
+    // Ato
+    Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
+        Route::get('/index', [AtoPublicoController::class, 'index'])->name('index');
+    });
+
+    // Route::get('/index', [PerfilFuncionalidadeController::class, 'index'])->name('index');
+    // Route::get('/create', [PerfilFuncionalidadeController::class, 'create'])->name('create');
+    // Route::post('/store', [PerfilFuncionalidadeController::class, 'store'])->name('store');
+    // Route::get('/edit/{id}', [PerfilFuncionalidadeController::class, 'edit'])->name('edit');
+    // Route::post('/update/{id}', [PerfilFuncionalidadeController::class, 'update'])->name('update');
+    // Route::post('/inativar-funcionalidade/{id}', [PerfilFuncionalidadeController::class, 'inativarFuncionalidade'])->name('inativarFuncionalidade');
 });
 
 //AJAX

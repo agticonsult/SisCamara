@@ -14,10 +14,18 @@ class CreateAtoRelacionadosTable extends Migration
     public function up()
     {
         Schema::create('ato_relacionados', function (Blueprint $table) {
-            $table->id();
-            $table->integer('tipo_relacao');
-            $table->bigInteger('ato_principal');
-            $table->bigInteger('ato_relacionado');
+            $table->bigIncrements('id');
+            $table->bigInteger('id_ato_principal')->unsigned()->nullable();
+            $table->foreign('id_ato_principal')->references('id')->on('atos');
+            $table->bigInteger('id_ato_relacionado')->unsigned()->nullable();
+            $table->foreign('id_ato_relacionado')->references('id')->on('atos');
+            $table->uuid('cadastradoPorUsuario')->nullable();
+            $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
+            $table->uuid('inativadoPorUsuario')->nullable();
+            $table->foreign('inativadoPorUsuario')->references('id')->on('users');
+            $table->timestamp('dataInativado')->nullable();
+            $table->text('motivoInativado')->nullable();
+            $table->boolean('ativo')->nullable();
             $table->timestamps();
         });
     }

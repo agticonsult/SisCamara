@@ -45,16 +45,16 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-link"></i>Atos relacionados</a>
                     <div class="dropdown-menu">
-                        {{-- @if (Count($ato->atosRelacionados) != 0)
-                            @foreach ($ato->atosRelacionados as $ato_relacionado)
-                                <a class="dropdown-item" href=""
+                        @if (Count($ato->atos_relacionados_ativos()) != 0)
+                            @foreach ($ato->atos_relacionados_ativos() as $ar)
+                                <a class="dropdown-item" href="{{ route('ato.show', $ar->id_ato_relacionado) }}"
                                     target="_blank">
-                                    {{ $ato_relacionado->ato_principal->titulo }}
+                                    {{ $ar->ato_relacionado->titulo }}
                                 </a>
                             @endforeach
                         @else
                             Não possui atos relacionados
-                        @endif --}}
+                        @endif
                     </div>
                 </li>
                 <li class="nav-item dropdown">

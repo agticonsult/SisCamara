@@ -88,7 +88,7 @@
                                             </a>
                                         </div>
                                         <div class="mt-3">
-                                            <a href="#">
+                                            <a href="{{ route('web_publica.ato.index') }}">
                                                 <button type="button" class="btn btn-lg btn-primary"
                                                     style="width: 100%; margin-bottom: 0.7rem">Web Pública</button>
                                             </a>
