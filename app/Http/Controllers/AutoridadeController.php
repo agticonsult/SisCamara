@@ -92,7 +92,7 @@ class AutoridadeController extends Controller
         catch(\Exception $ex){
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AssuntoAtoController";
+            $erro->controlador = "AutoridadeController";
             $erro->funcao = "store";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
