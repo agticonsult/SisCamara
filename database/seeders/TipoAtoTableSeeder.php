@@ -15,7 +15,8 @@ class TipoAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_atos')->insert([
-            ['descricao'=>'Projeto de Lei', 'ativo'=>1]
+            ['descricao'=>'Ordinário', 'ativo'=>1],
+            ['descricao'=>'Extraordinário', 'ativo'=>1]
         ]);
     }
 }

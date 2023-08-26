@@ -42,5 +42,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AssuntoAtoTableSeeder::class);
         $this->call(AutoridadeSeeder::class);
         $this->call(PublicacaoAtoSeeder::class);
+        $this->call(PublicacaoAtoSeeder::class);
+        $this->call(FormaPublicacaoTableSeeder::class);
+        $this->call(OrgaoAtoTableSeeder::class);
     }
 }

@@ -36,13 +36,13 @@
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Título</label>
-                        <textarea name="titulo" cols="10" rows="5" class="form-control"></textarea>
+                        <input type="text" class="form-control" name="titulo">
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <label class="form-label">*Subtítulo</label>
-                        <textarea name="subtitulo" cols="10" rows="5" class="form-control"></textarea>
+                        <label class="form-label">Subtítulo</label>
+                        <input type="text" class="form-control" name="subtitulo">
                     </div>
                 </div>
                 <div class="row">
@@ -94,6 +94,30 @@
                                 <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Órgão que editou o ato</label>
+                        <select name="id_orgao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($orgaos as $orgao)
+                                <option value="{{ $orgao->id }}">{{ $orgao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Forma de Publicação</label>
+                        <select name="id_forma_publicacao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($forma_publicacaos as $forma_publicacao)
+                                <option value="{{ $forma_publicacao->id }}">{{ $forma_publicacao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Data de Publicação</label>
+                        <input type="date" class="form-control" name="data_publicacao">
                     </div>
                 </div>
                 <div class="form-check col-md-6">
@@ -162,9 +186,15 @@
 
     $("#form").validate({
         rules : {
+            // Texto
             titulo:{
                 required:true
             },
+            corpo_texto:{
+                required:true
+            },
+
+            // Dados Gerais
             ano:{
                 required:true
             },
@@ -177,17 +207,23 @@
             id_tipo_ato:{
                 required:true
             },
-            subtitulo:{
+            id_assunto:{
                 required:true
             },
-            corpo_texto:{
+            id_orgao:{
                 required:true
-            }
+            },
         },
         messages:{
+            // Texto
             titulo:{
                 required:"Campo obrigatório"
             },
+            corpo_texto:{
+                required:"Campo obrigatório"
+            },
+
+            // Dados Gerais
             ano:{
                 required:"Campo obrigatório"
             },
@@ -200,12 +236,12 @@
             id_tipo_ato:{
                 required:"Campo obrigatório"
             },
-            subtitulo:{
+            id_assunto:{
                 required:"Campo obrigatório"
             },
-            corpo_texto:{
+            id_orgao:{
                 required:"Campo obrigatório"
-            }
+            },
         }
     });
 

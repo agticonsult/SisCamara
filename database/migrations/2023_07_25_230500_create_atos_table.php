@@ -19,7 +19,12 @@ class CreateAtosTable extends Migration
             $table->integer('ano')->nullable();
             $table->string('numero')->nullable();
             $table->text('subtitulo')->nullable();
+            $table->date('data_publicacao')->nullable();
             $table->boolean('altera_dispositivo')->nullable();
+            $table->integer('id_forma_publicacao')->unsigned()->nullable();
+            $table->foreign('id_forma_publicacao')->references('id')->on('forma_publicacao_atos');
+            $table->integer('id_orgao')->unsigned()->nullable();
+            $table->foreign('id_orgao')->references('id')->on('orgao_atos');
             $table->integer('id_assunto')->unsigned()->nullable();
             $table->foreign('id_assunto')->references('id')->on('assunto_atos');
             $table->integer('id_grupo')->unsigned()->nullable();

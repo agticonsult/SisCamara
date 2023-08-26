@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\ErrorLog;
+use App\Models\FormaPublicacaoAto;
+use App\Models\OrgaoAto;
+use App\Models\TipoAto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,8 +17,12 @@ class AtoPublicoController extends Controller
     {
         try {
             $atos = Ato::where('ativo', '=', 1)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
 
-            return view('ato.publico.index', compact('atos'));
+            return view('ato.publico.index', compact('atos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

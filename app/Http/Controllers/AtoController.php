@@ -8,8 +8,10 @@ use App\Models\Ato;
 use App\Models\AtoRelacionado;
 use App\Models\ErrorLog;
 use App\Models\Filesize;
+use App\Models\FormaPublicacaoAto;
 use App\Models\Grupo;
 use App\Models\LinhaAto;
+use App\Models\OrgaoAto;
 use App\Models\TipoAto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -54,9 +56,11 @@ class AtoController extends Controller
             $grupos = Grupo::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
             $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
 
-            return view('ato.create', compact('grupos', 'tipo_atos', 'assuntos', 'filesize'));
+            return view('ato.create', compact('grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -79,25 +83,41 @@ class AtoController extends Controller
             }
 
             $input = [
+                // Texto
                 'titulo' => $request->titulo,
+                'subtitulo' => $request->subtitulo,
+                'corpo_texto' => $request->corpo_texto,
+
+                // Dados Gerais
                 'ano' => $request->ano,
                 'numero' => $request->numero,
                 'id_grupo' => $request->id_grupo,
-                'id_assunto' => $request->id_assunto,
                 'id_tipo_ato' => $request->id_tipo_ato,
-                'subtitulo' => $request->subtitulo,
-                'corpo_texto' => $request->corpo_texto,
-                'arquivo[]' => $request->arquivo,
+                'id_assunto' => $request->id_assunto,
+                'id_orgao' => $request->id_orgao,
+                'id_forma_publicacao' => $request->id_forma_publicacao,
+                'data_publicacao' => $request->data_publicacao,
+
+                // Anexos
+                'arquivo[]' => $request->arquivo
             ];
             $rules = [
+                // Texto
                 'titulo' => 'required',
+                'subtitulo' => 'nullable',
+                'corpo_texto' => 'required',
+
+                // Dados Gerais
                 'ano' => 'required|integer',
                 'numero' => 'required',
                 'id_grupo' => 'required|integer',
-                'id_assunto' => 'required|integer',
                 'id_tipo_ato' => 'required|integer',
-                'subtitulo' => 'required',
-                'corpo_texto' => 'required',
+                'id_assunto' => 'required|integer',
+                'id_orgao' => 'required|integer',
+                'id_forma_publicacao' => 'nullable|integer',
+                'data_publicacao' => 'nullable|date',
+
+                // Anexos
                 'arquivo[]' => 'nullable',
             ];
 
@@ -114,6 +134,18 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Tipo de ato inválido.');
             }
 
+            $orgao = OrgaoAto::where('id', '=', $request->id_orgao)->where('ativo', '=', 1)->first();
+            if (!$orgao){
+                return redirect()->back()->with('erro', 'Órgão que editou o ato inválido.');
+            }
+
+            if ($request->id_forma_publicacao != null){
+                $forma_publicacao = Grupo::where('id', '=', $request->id_forma_publicacao)->where('ativo', '=', 1)->first();
+                if (!$forma_publicacao){
+                    return redirect()->back()->with('erro', 'Forma de publicação do ato inválido.');
+                }
+            }
+
             $altera_dispositivo = 0;
             if (isset($request->altera_dispositivo)){
                 if ($request->altera_dispositivo == 'on'){
@@ -123,13 +155,16 @@ class AtoController extends Controller
 
             $ato = new Ato();
             $ato->titulo = $request->titulo;
+            $ato->subtitulo = $request->subtitulo;
             $ato->ano = $request->ano;
             $ato->numero = $request->numero;
-            $ato->altera_dispositivo = $altera_dispositivo;
-            $ato->id_assunto = $request->id_assunto;
             $ato->id_grupo = $request->id_grupo;
             $ato->id_tipo_ato = $request->id_tipo_ato;
-            $ato->subtitulo = $request->subtitulo;
+            $ato->id_assunto = $request->id_assunto;
+            $ato->id_orgao = $request->id_orgao;
+            $ato->id_forma_publicacao = $request->id_forma_publicacao;
+            $ato->data_publicacao = $request->data_publicacao;
+            $ato->altera_dispositivo = $altera_dispositivo;
             $ato->cadastradoPorUsuario = Auth::user()->id;
             $ato->ativo = 1;
             $ato->save();

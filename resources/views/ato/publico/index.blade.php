@@ -42,6 +42,31 @@
                     <form action="" method="post" id="form-buscar">
                         @csrf
                         @method('POST')
+
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Título</label>
+                                <input name="titulo" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Assunto</label>
+                                <select name="id_assunto" class="select2 form-control">
+                                    <option value="" selected disabled>--Selecione--</option>
+                                    @foreach ($assuntos as $assunto)
+                                        <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Tipo de Ato</label>
+                                <select name="id_tipo_ato" class="select2 form-control">
+                                    <option value="" selected disabled>--Selecione--</option>
+                                    @foreach ($tipo_atos as $tipo_ato)
+                                        <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="ano">Ano</label>
@@ -52,14 +77,6 @@
                                 <input name="numero" class="form-control">
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="titulo">Título</label>
-                                <input name="titulo" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="autor">Assunto</label>
-                                <input name="autor" class="form-control select2">
-                            </div>
-                            <div class="form-group col-md-4">
                                 <label for="altera_dispositivo">Altera dispositivo</label>
                                 <select name="altera_dispositivo" class="form-control">
                                     <option value="" selected disabled>--Selecione--</option>
@@ -67,6 +84,7 @@
                                     <option value="1">Sim</option>
                                 </select>
                             </div>
+                        </div>
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-primary float-right">
                                     <i class="fas fa-search-location"></i>
