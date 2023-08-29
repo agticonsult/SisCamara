@@ -631,8 +631,80 @@ class AtoController extends Controller
         //
     }
 
-    public function destroy()
+    public function destroy(Request $request, $id)
     {
-        //
+        try {
+            if (Auth::user()->temPermissao('Ato', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'motivo' => $request->motivo
+            ];
+            $rules = [
+                'motivo' => 'max:255'
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $motivo = $request->motivo;
+
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+
+            if (!$ato){
+                return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
+            }
+
+            // inativando o ato
+            $ato->inativadoPorUsuario = Auth::user()->id;
+            $ato->dataInativado = Carbon::now();
+            $ato->motivoInativado = $motivo;
+            $ato->ativo = 0;
+            $ato->save();
+
+            //  inativando ato relacionado
+            $atoRelacionado = AtoRelacionado::where('id_ato_relacionado', '=', $id)->where('ativo', '=', 1)->first();
+
+            if($atoRelacionado != null) {
+                $atoRelacionado->inativadoPorUsuario = Auth::user()->id;
+                $atoRelacionado->dataInativado = Carbon::now();
+                $atoRelacionado->motivoInativado = $motivo;
+                $atoRelacionado->ativo = 0;
+                $atoRelacionado->save();
+
+                //inativando linha do ato
+                $linhaAto = LinhaAto::where('id_ato_add', '=', $id)->where('ativo', '=', 1)->first();
+                $linhaAto->inativadoPorUsuario = Auth::user()->id;
+                $linhaAto->dataInativado = Carbon::now();
+                $linhaAto->motivoInativado = $motivo;
+                $linhaAto->ativo = 0;
+                $linhaAto->save();
+
+            }
+
+            return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');
+        }
+        catch (ValidationException $e) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoController";
+            $erro->funcao = "destroy";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 }

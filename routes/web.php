@@ -82,7 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/store', [AtoController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [AtoController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [AtoController::class, 'update'])->name('update');
-        Route::post('/destroy', [AtoController::class, 'destroy'])->name('destroy');
+        Route::post('/destroy/{id}', [AtoController::class, 'destroy'])->name('destroy');
 
         // Dados Gerais
         Route::group(['prefix' => '/dados-gerais', 'as' => 'dados_gerais.'], function() {
