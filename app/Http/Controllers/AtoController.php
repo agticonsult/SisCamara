@@ -687,6 +687,17 @@ class AtoController extends Controller
 
             }
 
+            $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', 1)->first();
+
+            if($anexoAto != null) {
+                $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', 1)->first();
+                $anexoAto->inativadoPorUsuario = Auth::user()->id;
+                $anexoAto->dataInativado = Carbon::now();
+                $anexoAto->motivoInativado = $motivo;
+                $anexoAto->ativo = 0;
+                $anexoAto->save();
+            }
+
             return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
