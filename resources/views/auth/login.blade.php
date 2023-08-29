@@ -43,34 +43,35 @@
                     class="align-middle mr-3" alt="" width="80px" height="60px" />
                     <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span> --}}
                 </a>
-            {{-- <div class="container">
-                <a class="sidebar-brand" href="{{ url('/') }}">
-                    <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural -
-                        Paraná</span>
-                </a>
-            </div> --}}
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-light btn-lg">Web Pública</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-success btn-lg">Votação</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
-                    </a>
-                </li>
-            </ul>
+                {{-- <div class="container">
+                        <a class="sidebar-brand" href="{{ url('/') }}">
+                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural -
+                                Paraná</span>
+                        </a>
+                    </div> --}}
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('web_publica.ato.index') }}">
+                            <button type="button" class="btn btn-outline-light btn-lg">Web Pública</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-success btn-lg">Votação</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
         <main class="content d-flex p-0">
             <div class="container d-flex flex-column">

@@ -6,6 +6,7 @@ use App\Models\AnexoAto;
 use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\AtoRelacionado;
+use App\Models\ClassificacaoAto;
 use App\Models\ErrorLog;
 use App\Models\Filesize;
 use App\Models\FormaPublicacaoAto;
@@ -53,6 +54,7 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
+            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
             $grupos = Grupo::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
@@ -60,7 +62,7 @@ class AtoController extends Controller
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
             $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
 
-            return view('ato.create', compact('grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
+            return view('ato.create', compact('classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -89,6 +91,7 @@ class AtoController extends Controller
                 'corpo_texto' => $request->corpo_texto,
 
                 // Dados Gerais
+                'id_classificacao' => $request->id_classificacao,
                 'ano' => $request->ano,
                 'numero' => $request->numero,
                 'id_grupo' => $request->id_grupo,
@@ -108,6 +111,7 @@ class AtoController extends Controller
                 'corpo_texto' => 'required',
 
                 // Dados Gerais
+                'id_classificacao' => 'required|integer',
                 'ano' => 'required|integer',
                 'numero' => 'required',
                 'id_grupo' => 'required|integer',
@@ -123,6 +127,11 @@ class AtoController extends Controller
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
+
+            $classificacao = ClassificacaoAto::where('id', '=', $request->id_classificacao)->where('ativo', '=', 1)->first();
+            if (!$classificacao){
+                return redirect()->back()->with('erro', 'Classificação inválida.');
+            }
 
             $grupo = Grupo::where('id', '=', $request->id_grupo)->where('ativo', '=', 1)->first();
             if (!$grupo){
@@ -158,6 +167,7 @@ class AtoController extends Controller
             $ato->subtitulo = $request->subtitulo;
             $ato->ano = $request->ano;
             $ato->numero = $request->numero;
+            $ato->id_classificacao = $request->id_classificacao;
             $ato->id_grupo = $request->id_grupo;
             $ato->id_tipo_ato = $request->id_tipo_ato;
             $ato->id_assunto = $request->id_assunto;
@@ -484,12 +494,15 @@ class AtoController extends Controller
             }
             $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
 
+            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
             $grupos = Grupo::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
             // dd($ato->todas_linhas_ativas());
 
-            return view('ato.edit', compact('ato', 'atos_relacionados', 'grupos', 'assuntos', 'tipo_atos'));
+            return view('ato.edit', compact('ato', 'atos_relacionados', 'classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -513,23 +526,38 @@ class AtoController extends Controller
 
             $input = [
                 'id' => $id,
+                // Dados Gerais
+                'id_classificacao' => $request->id_classificacao,
                 'ano' => $request->ano,
                 'numero' => $request->numero,
                 'id_grupo' => $request->id_grupo,
-                'id_assunto' => $request->id_assunto,
                 'id_tipo_ato' => $request->id_tipo_ato,
+                'id_assunto' => $request->id_assunto,
+                'id_orgao' => $request->id_orgao,
+                'id_forma_publicacao' => $request->id_forma_publicacao,
+                'data_publicacao' => $request->data_publicacao,
             ];
             $rules = [
                 'id' => 'required|integer',
+                // Dados Gerais
+                'id_classificacao' => 'required|integer',
                 'ano' => 'required|integer',
                 'numero' => 'required',
                 'id_grupo' => 'required|integer',
-                'id_assunto' => 'required|integer',
                 'id_tipo_ato' => 'required|integer',
+                'id_assunto' => 'required|integer',
+                'id_orgao' => 'required|integer',
+                'id_forma_publicacao' => 'nullable|integer',
+                'data_publicacao' => 'nullable|date',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
+
+            $classificacao = ClassificacaoAto::where('id', '=', $request->id_classificacao)->where('ativo', '=', 1)->first();
+            if (!$classificacao){
+                return redirect()->back()->with('erro', 'Classificação inválida.');
+            }
 
             $grupo = Grupo::where('id', '=', $request->id_grupo)->where('ativo', '=', 1)->first();
             if (!$grupo){
@@ -539,6 +567,18 @@ class AtoController extends Controller
             $tipo_ato = Grupo::where('id', '=', $request->id_tipo_ato)->where('ativo', '=', 1)->first();
             if (!$tipo_ato){
                 return redirect()->back()->with('erro', 'Tipo de ato inválido.');
+            }
+
+            $orgao = OrgaoAto::where('id', '=', $request->id_orgao)->where('ativo', '=', 1)->first();
+            if (!$orgao){
+                return redirect()->back()->with('erro', 'Órgão que editou o ato inválido.');
+            }
+
+            if ($request->id_forma_publicacao != null){
+                $forma_publicacao = Grupo::where('id', '=', $request->id_forma_publicacao)->where('ativo', '=', 1)->first();
+                if (!$forma_publicacao){
+                    return redirect()->back()->with('erro', 'Forma de publicação do ato inválido.');
+                }
             }
 
             $altera_dispositivo = 0;
@@ -555,10 +595,14 @@ class AtoController extends Controller
 
             $ato->ano = $request->ano;
             $ato->numero = $request->numero;
-            $ato->altera_dispositivo = $altera_dispositivo;
-            $ato->id_assunto = $request->id_assunto;
+            $ato->id_classificacao = $request->id_classificacao;
             $ato->id_grupo = $request->id_grupo;
             $ato->id_tipo_ato = $request->id_tipo_ato;
+            $ato->id_assunto = $request->id_assunto;
+            $ato->id_orgao = $request->id_orgao;
+            $ato->id_forma_publicacao = $request->id_forma_publicacao;
+            $ato->data_publicacao = $request->data_publicacao;
+            $ato->altera_dispositivo = $altera_dispositivo;
             $ato->save();
 
             return redirect()->route('ato.dados_gerais.edit', $ato->id)->with('success', 'Alteração realizada com sucesso');

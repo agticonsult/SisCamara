@@ -125,6 +125,7 @@
                                         <th scope="col">Ato</th>
                                         <th scope="col">Título</th>
                                         <th scope="col">Assunto</th>
+                                        <th scope="col">Dados gerais</th>
                                         <th scope="col">Altera dispositivo</th>
                                         <th scope="col">Ações</th>
                                     </tr>
@@ -143,6 +144,12 @@
                                             </td>
                                             <td>{{ $ato->titulo }}</td>
                                             <td>{{ $ato->id_assunto != null ? $ato->assunto->descricao : 'não informado' }}</td>
+                                            <td>
+                                                Tipo de Ato: <strong>{{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'não informado' }} </strong> <br>
+                                                Órgão que editou o ato: <strong>{{ $ato->id_orgao != null ? $ato->orgao->descricao : 'não informado' }} </strong> <br>
+                                                Forma de Publicação: <strong>{{ $ato->id_forma_publicacao != null ? $ato->forma_publicacao->descricao : 'não informado' }} </strong> <br>
+                                                Data de Publicação: <strong>{{ $ato->data_publicacao != null ? date('d/m/Y', strtotime($ato->data_publicacao)) : 'não informado' }}</strong>
+                                            </td>
                                             <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
                                             <td>
                                                 <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>

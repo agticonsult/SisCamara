@@ -21,6 +21,8 @@ class CreateAtosTable extends Migration
             $table->text('subtitulo')->nullable();
             $table->date('data_publicacao')->nullable();
             $table->boolean('altera_dispositivo')->nullable();
+            $table->integer('id_classificacao')->unsigned()->nullable();
+            $table->foreign('id_classificacao')->references('id')->on('classificacao_atos');
             $table->integer('id_forma_publicacao')->unsigned()->nullable();
             $table->foreign('id_forma_publicacao')->references('id')->on('forma_publicacao_atos');
             $table->integer('id_orgao')->unsigned()->nullable();

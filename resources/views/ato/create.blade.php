@@ -56,17 +56,26 @@
 
                 <h3>Dados Gerais</h3>
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Ano</label>
-                        <input type="text" class="form-control" name="ano">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Classificação do Ato</label>
+                        <select name="id_classificacao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($classificacaos as $classificacao)
+                                <option value="{{ $classificacao->id }}">{{ $classificacao->descricao }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Ano</label>
+                        <input type="text" class="form-control" name="ano" id="ano">
+                    </div>
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Número</label>
                         <input type="text" class="form-control" name="numero">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Grupo</label>
                         <select name="id_grupo" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -75,7 +84,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Tipo de Ato</label>
                         <select name="id_tipo_ato" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -84,9 +93,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Assunto</label>
                         <select name="id_assunto" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -95,7 +102,9 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Órgão que editou o ato</label>
                         <select name="id_orgao" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -104,9 +113,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">Forma de Publicação</label>
                         <select name="id_forma_publicacao" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -115,7 +122,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">Data de Publicação</label>
                         <input type="date" class="form-control" name="data_publicacao">
                     </div>
@@ -166,7 +173,7 @@
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
 
 <script>
-    $('#cep').mask('00.000-000');
+    $('#ano').mask('0000');
 
     var today = new Date();
     var dd = today.getDate();
@@ -195,6 +202,9 @@
             },
 
             // Dados Gerais
+            id_classificacao:{
+                required:true
+            },
             ano:{
                 required:true
             },
@@ -224,6 +234,9 @@
             },
 
             // Dados Gerais
+            id_classificacao:{
+                required:"Campo obrigatório"
+            },
             ano:{
                 required:"Campo obrigatório"
             },

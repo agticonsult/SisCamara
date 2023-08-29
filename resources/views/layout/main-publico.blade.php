@@ -20,6 +20,10 @@
         .error {
             color: red
         }
+        .btn-lg {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -30,8 +34,7 @@
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
                         <div class="imageContainer">
-                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}"
-                                class="img-thumbnail" width="80px" height="60px" alt="">
+                            <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
                             <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
                         </div>
                     </div>
@@ -40,33 +43,34 @@
                     <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span> --}}
                 </a>
                 {{-- <div class="container">
-                <a class="sidebar-brand" href="{{ url('/') }}">
-                    <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural -
-                        Paraná</span>
-                </a>
-            </div> --}}
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-light btn-lg">SisCamara</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-success btn-lg">Votação</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
-                    </a>
-                </li>
-            </ul>
+                        <a class="sidebar-brand" href="{{ url('/') }}">
+                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural -
+                                Paraná</span>
+                        </a>
+                    </div> --}}
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">
+                            <button type="button" class="btn btn-outline-light btn-lg">Web Pública</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-success btn-lg">Votação</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </nav>
 
         <main class="content">

@@ -12,7 +12,7 @@ class Ato extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'ano', 'numero', 'subtitulo', 'data_publicacao', 'altera_dispositivo', 'id_orgao', 'id_forma_publicacao', 'id_assunto', 'id_grupo', 'id_tipo_ato', 'cadastradoPorUsuario',
+        'titulo', 'ano', 'numero', 'subtitulo', 'data_publicacao', 'altera_dispositivo', 'id_orgao', 'id_classificacao', 'id_forma_publicacao', 'id_assunto', 'id_grupo', 'id_tipo_ato', 'cadastradoPorUsuario',
         'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
@@ -27,6 +27,10 @@ class Ato extends Model implements Auditable
     public function orgao()
     {
         return $this->belongsTo(OrgaoAto::class ,'id_orgao');
+    }
+    public function classificacao()
+    {
+        return $this->belongsTo(ClassificacaoAto::class ,'id_classificacao');
     }
     public function forma_publicacao()
     {

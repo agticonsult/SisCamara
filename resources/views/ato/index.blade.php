@@ -56,7 +56,7 @@
                                         setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
                                         date_default_timezone_set('America/Sao_Paulo');
                                     @endphp
-                                    {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
+                                    {{ $ato->id_classificacao != null ? $ato->classificacao->descricao : 'Classificação do ato não informado' }}
                                     Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
                                     de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
                                 </td>
