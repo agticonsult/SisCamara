@@ -22,6 +22,7 @@ use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\PublicacaoAtoController;
 use App\Http\Controllers\RegistrarController;
+use App\Http\Controllers\ReparticaoController;
 use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
@@ -132,6 +133,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         });
 
+    });
+
+    // Reparticao
+    Route::group(['prefix' => '/reparticao', 'as' => 'reparticao.'], function() {
+        Route::get('/index', [ReparticaoController::class, 'index'])->name('index');
+        Route::get('/create', [ReparticaoController::class, 'create'])->name('create');
+        Route::post('/store', [ReparticaoController::class, 'store'])->name('store');
     });
 
     // Usuarios/Clientes

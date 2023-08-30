@@ -81,6 +81,15 @@
                     </li>
                 @endif
 
+                @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
+                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'reparticao' ? 'active' : null }}">
+                        <a href="{{ route('reparticao.index') }}" class="sidebar-link">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <span>Repartição</span>
+                        </a>
+                    </li>
+                @endif
+
                 {{-- Configuração --}}
                 @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||
                         Auth::user()->temPermissao('FinalidadeGrupo', 'Cadastro') == 1 ||

@@ -23,7 +23,7 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'AssuntoAto', 'nomeEntidade'=>'AssuntoAto', 'ativo'=>1],
             ['descricao'=>'TipoAto', 'nomeEntidade'=>'TipoAto', 'ativo'=>1],
             ['descricao'=>'Autoridade', 'nomeEntidade'=>'Autoridade', 'ativo'=>1],
-            ['descricao'=>'PublicacaoAto', 'nomeEntidade'=>'PublicacaoAto', 'ativo'=>1],
+            ['descricao'=>'Publicação do Ato', 'nomeEntidade'=>'PublicacaoAto', 'ativo'=>1],
             ['descricao'=>'Grupo de Usuário', 'nomeEntidade'=>'Grupo', 'ativo'=>1],
             ['descricao'=>'Usuário', 'nomeEntidade'=>'User', 'ativo'=>1],
             ['descricao'=>'Perfil', 'nomeEntidade'=>'Perfil', 'ativo'=>1],
@@ -31,6 +31,7 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Finalidade Grupo de Usuário', 'nomeEntidade'=>'FinalidadeGrupo', 'ativo'=>1],
             ['descricao'=>'Filesize', 'nomeEntidade'=>'Filesize', 'ativo'=>1],
             ['descricao'=>'Anexo do Ato', 'nomeEntidade'=>'AnexoAto', 'ativo'=>1],
+            ['descricao'=>'Repartição', 'nomeEntidade'=>'Reparticao', 'ativo'=>1],
         ]);
 
         DB::table('tipo_funcionalidades')->insert([

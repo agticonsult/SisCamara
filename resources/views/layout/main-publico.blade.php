@@ -35,7 +35,7 @@
                     <div class="max-width">
                         <div class="imageContainer">
                             <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}" class="img-thumbnail" width="80px" height="60px" alt="">
-                            <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
+                            <span class="align-middle mr-3" style="font-size: .999rem;">Web Pública</span>
                         </div>
                     </div>
                     {{-- <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}"
@@ -51,7 +51,7 @@
                 <ul class="nav justify-content-end">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">
-                            <button type="button" class="btn btn-outline-light btn-lg">Web Pública</button>
+                            <button type="button" class="btn btn-outline-dark btn-lg">SisCamara</button>
                         </a>
                     </li>
                     <li class="nav-item">
