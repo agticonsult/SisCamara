@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AssuntoAto;
 use App\Models\Ato;
+use App\Models\ClassificacaoAto;
 use App\Models\ErrorLog;
 use App\Models\FormaPublicacaoAto;
 use App\Models\OrgaoAto;
@@ -17,12 +18,13 @@ class AtoPublicoController extends Controller
     {
         try {
             $atos = Ato::where('ativo', '=', 1)->get();
+            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
             $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
 
-            return view('ato.publico.index', compact('atos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+            return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
