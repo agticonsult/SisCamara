@@ -74,23 +74,23 @@
                                 </td>
                             </tr>
 
-                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
+                            <div class="modal fade" id="exampleModalExcluir{{ $ato->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.destroy', $usuario->id) }}">
+                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('ato.destroy', $ato->id) }}">
                                             @csrf
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                    <strong style="font-size: 1.2rem">Excluir <i>{{ $ato->titulo != null ? $ato->titulo : 'não informado' }}</i></strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label for="motivo" class="form-label">Motivo</label>
-                                                    <input type="text" class="form-control" name="motivo" required>
+                                                    <input type="text" class="form-control" name="motivo">
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}"
+                            {{-- <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelRecadastrar"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
