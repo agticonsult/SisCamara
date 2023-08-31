@@ -81,6 +81,15 @@
                     </li>
                 @endif
 
+                @if (Auth::user()->temPermissao('ModeloDocumento', 'Listagem') == 1)
+                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento' ? 'active' : null }}">
+                        <a href="{{ route('documento.modelo.index') }}" class="sidebar-link">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <span>Modelos</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
                     <li class="sidebar-item {{ Route::current()->getPrefix() == 'reparticao' ? 'active' : null }}">
                         <a href="{{ route('reparticao.index') }}" class="sidebar-link">

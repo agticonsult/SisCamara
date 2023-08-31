@@ -17,6 +17,7 @@ use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InicioController;
+use App\Http\Controllers\ModeloDocumentoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
@@ -140,7 +141,32 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/index', [ReparticaoController::class, 'index'])->name('index');
         Route::get('/create', [ReparticaoController::class, 'create'])->name('create');
         Route::post('/store', [ReparticaoController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [ReparticaoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ReparticaoController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
     });
+
+    // Ato
+    Route::group(['prefix' => '/documento', 'as' => 'documento.'], function() {
+        // Route::get('/index', [AtoController::class, 'index'])->name('index');
+        // Route::get('/show/{id}', [AtoController::class, 'show'])->name('show');
+        // Route::get('/create', [AtoController::class, 'create'])->name('create');
+        // Route::post('/store', [AtoController::class, 'store'])->name('store');
+        // Route::get('/edit/{id}', [AtoController::class, 'edit'])->name('edit');
+        // Route::post('/update/{id}', [AtoController::class, 'update'])->name('update');
+        // Route::post('/destroy/{id}', [AtoController::class, 'destroy'])->name('destroy');
+
+        // Dados Gerais
+        Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
+            Route::get('/index', [ModeloDocumentoController::class, 'index'])->name('index');
+            Route::get('/create', [ModeloDocumentoController::class, 'create'])->name('create');
+            Route::post('/store', [ModeloDocumentoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [ModeloDocumentoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [ModeloDocumentoController::class, 'update'])->name('update');
+        });
+
+    });
+
 
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {

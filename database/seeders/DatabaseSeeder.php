@@ -46,5 +46,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FormaPublicacaoTableSeeder::class);
         $this->call(OrgaoAtoTableSeeder::class);
         $this->call(ClassificacaoAtoTableSeeder::class);
+        $this->call(TipoReparticaoTableSeeder::class);
     }
 }

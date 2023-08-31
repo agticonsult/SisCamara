@@ -22,27 +22,27 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Cadastro de Ato</strong>
+            <strong>Alteração de Ato</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('reparticao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('reparticao.update', $reparticao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Descrição</label>
-                        <input type="text" class="form-control" name="descricao">
+                        <input type="text" class="form-control" name="descricao" value="{{ $reparticao->descricao }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Tipo de Repartição</label>
                         <select name="id_tipo_reparticao" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipo_reparticaos as $tipo_reparticao)
-                                <option value="{{ $tipo_reparticao->id }}">{{ $tipo_reparticao->descricao }}</option>
+                                <option value="{{ $tipo_reparticao->id }}" {{ $reparticao->id_tipo_reparticao == $tipo_reparticao->id ? 'selected' : '' }}>{{ $tipo_reparticao->descricao }}</option>
                             @endforeach
                         </select>
                     </div>
