@@ -3,83 +3,256 @@
 namespace App\Http\Controllers;
 
 use App\Models\Documento;
+use App\Models\ErrorLog;
+use App\Models\ModeloDocumento;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class DocumentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $documentos = Documento::where('ativo', '=', 1)->get();
+
+            return view('documento.index', compact('documentos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "DocumentoController";
+            $erro->funcao = "index";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $modelos = ModeloDocumento::where('ativo', '=', 1)->get();
+
+            return view('documento.create', compact('modelos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "DocumentoController";
+            $erro->funcao = "create";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id){
+
+    }
+
     public function store(Request $request)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'nome' => $request->nome,
+                'id_modelo' => $request->id_modelo,
+                'assunto' => $request->assunto,
+                'conteudo' => $request->conteudo,
+            ];
+            $rules = [
+                'nome' => 'required',
+                'id_modelo' => 'required|integer',
+                'assunto' => 'required',
+                'conteudo' => 'required',
+            ];
+
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
+
+            $modelo = ModeloDocumento::where('id', '=', $request->id_modelo)->where('ativo', '=', 1)->first();
+            if (!$modelo){
+                return redirect()->back()->with('erro', 'Modelo inválido.');
+            }
+
+            $documento = new Documento();
+            $documento->nome = $request->nome;
+            $documento->id_modelo = $request->id_modelo;
+            $documento->assunto = $request->assunto;
+            $documento->conteudo = $request->conteudo;
+            $documento->cadastradoPorUsuario = Auth::user()->id;
+            $documento->ativo = 1;
+            $documento->save();
+
+            return redirect()->route('documento.index')->with('success', 'Cadastro realizado com sucesso');
+        }
+        catch (ValidationException $e ) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "DocumentoController";
+            $erro->funcao = "store";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Documento  $documento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Documento $documento)
+    public function edit($id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$modelo_documento){
+                return redirect()->back()->with('erro', 'Modelo inválido.');
+            }
+
+            return view('documento.edit', compact('modelo_documento'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "DocumentoController";
+            $erro->funcao = "edit";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Documento  $documento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Documento $documento)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'id' => $id,
+                'assunto' => $request->assunto,
+                'conteudo' => $request->conteudo,
+            ];
+            $rules = [
+                'id' => 'required|integer',
+                'assunto' => 'required',
+                'conteudo' => 'required',
+            ];
+
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
+
+            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$modelo_documento){
+                return redirect()->back()->with('erro', 'Modelo inválido.');
+            }
+
+            $modelo_documento->assunto = $request->assunto;
+            $modelo_documento->conteudo = $request->conteudo;
+            $modelo_documento->save();
+
+            return redirect()->route('documento.index')->with('success', 'Alteração realizada com sucesso');
+        }
+        catch (ValidationException $e ) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "DocumentoController";
+            $erro->funcao = "update";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Documento  $documento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Documento $documento)
+    public function destroy(Request $request, $id)
     {
-        //
-    }
+        try {
+            if (Auth::user()->temPermissao('Documento', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Documento  $documento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Documento $documento)
-    {
-        //
+            $input = [
+                'motivo' => $request->motivo
+            ];
+            $rules = [
+                'motivo' => 'max:255'
+            ];
+
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
+
+            $motivo = $request->motivo;
+
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$modelo_documento){
+                return redirect()->back()->with('erro', 'Modelo inválido.');
+            }
+
+            $modelo_documento->inativadoPorUsuario = Auth::user()->id;
+            $modelo_documento->dataInativado = Carbon::now();
+            $modelo_documento->motivoInativado = $motivo;
+            $modelo_documento->ativo = 0;
+            $modelo_documento->save();
+
+            return redirect()->route('documento.index')->with('success', 'Exclusão realizada com sucesso.');
+        }
+        catch (ValidationException $e) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtividadeLazerController";
+            $erro->funcao = "destroy";
+            if (Auth::check()) {
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
 use App\Models\ModeloDocumento;
+use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class ModeloDocumentoController extends Controller
 {
+    use ApiResponser;
+
     public function index()
     {
         try {
@@ -235,6 +238,33 @@ class ModeloDocumentoController extends Controller
             }
             $erro->save();
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
+    }
+
+    public function get($id)
+    {
+        try {
+            if (Auth::user()->temPermissao('User', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $modelo_documento = ModeloDocumento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$modelo_documento){
+                return redirect()->back()->with('erro', 'Modelo inválido.');
+            }
+
+            return $this->success($modelo_documento);
+        }
+        catch(\Exception $ex){
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "ModeloDocumentoController";
+            $erro->funcao = "get";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return $this->error('Erro, contate o administrador do sistema', 500);
         }
     }
 }

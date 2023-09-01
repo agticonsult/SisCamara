@@ -16,6 +16,8 @@ class CreateDocumentosTable extends Migration
         Schema::create('documentos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nome');
+            $table->string('assunto')->nullable();
+            $table->text('conteudo')->nullable();
             $table->integer('id_localizacao')->unsigned()->nullable();
             $table->foreign('id_localizacao')->references('id')->on('localizacao_documentos');
             $table->integer('id_status')->unsigned()->nullable();
