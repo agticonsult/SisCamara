@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
@@ -148,7 +149,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Ato
     Route::group(['prefix' => '/documento', 'as' => 'documento.'], function() {
-        // Route::get('/index', [AtoController::class, 'index'])->name('index');
+        Route::get('/index', [DocumentoController::class, 'index'])->name('index');
         // Route::get('/show/{id}', [AtoController::class, 'show'])->name('show');
         // Route::get('/create', [AtoController::class, 'create'])->name('create');
         // Route::post('/store', [AtoController::class, 'store'])->name('store');
@@ -163,6 +164,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [ModeloDocumentoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [ModeloDocumentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [ModeloDocumentoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [ModeloDocumentoController::class, 'destroy'])->name('destroy');
         });
 
     });

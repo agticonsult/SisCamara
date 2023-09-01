@@ -81,14 +81,56 @@
                     </li>
                 @endif
 
-                @if (Auth::user()->temPermissao('ModeloDocumento', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento' ? 'active' : null }}">
-                        <a href="{{ route('documento.modelo.index') }}" class="sidebar-link">
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
-                            <span>Modelos</span>
-                        </a>
-                    </li>
-                @endif
+                <li class="sidebar-item">
+                    <a href="#documento" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="fas fa-chess-king"></i>Documento
+                    </a>
+                    <ul id="documento" class="sidebar-dropdown list-unstyled {{
+                            Route::current()->getPrefix() == 'documento/modelo'
+                        ? 'active' : 'collapse' }}">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/index' ? 'active' : null }}">
+                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                                Documentos
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/modelo' ? 'active' : null }}">
+                            <a href="{{ route('documento.modelo.index') }}" class="sidebar-link">
+                                Modelos
+                            </a>
+                        </li>
+                        {{-- <li class="sidebar-item">
+                            <a href="#admNewsletter" data-toggle="collapse" class="sidebar-link collapsed">
+                                Newsletter
+                            </a>
+                            <ul id="admNewsletter" class="sidebar-dropdown list-unstyled {{
+                                Route::current()->uri == 'email_newsletter/index'
+                            ? 'active' : 'collapse' }}">
+                                <li class="sidebar-item {{ Route::current()->uri == 'email_newsletter/index' ? 'active' : null }}">
+                                    <a href="{{ route('email_newsletter.index') }}" class="sidebar-link">
+                                        Lista de e-mails
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                        {{-- <li class="sidebar-item">
+                            <a href="#clienteAdm" data-toggle="collapse" class="sidebar-link collapsed">
+                                Clientes
+                            </a>
+                            <ul id="clienteAdm" class="sidebar-dropdown list-unstyled collapse" style="">
+                                <li class="sidebar-item {{ Route::current()->uri == 'assinante/create' ? 'active' : null }}">
+                                    <a class="sidebar-link" href="{{ route('assinante.create') }}">
+                                        Cadastrar
+                                    </a>
+                                </li>
+                                <li class="sidebar-item {{ Route::current()->uri == 'assinante/index' ? 'active' : null }}">
+                                    <a class="sidebar-link" href="{{ route('assinante.index') }}">
+                                        Listar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                    </ul>
+                </li>
 
                 @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
                     <li class="sidebar-item {{ Route::current()->getPrefix() == 'reparticao' ? 'active' : null }}">
