@@ -39,7 +39,7 @@
             <div id="collapse" class="collapse show" aria-labelledby="heading"
                 data-parent="#accordion">
                 <div class="card-body">
-                    <form action="" method="post" id="form-buscar">
+                    <form action="{{ route('web_publica.ato.buscar') }}" method="POST" id="form-buscar">
                         @csrf
                         @method('POST')
 

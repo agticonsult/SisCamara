@@ -296,6 +296,7 @@ Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
     // Ato
     Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
         Route::get('/index', [AtoPublicoController::class, 'index'])->name('index');
+        Route::any('/buscar', [AtoPublicoController::class, 'buscar'])->name('buscar');
     });
 
     // Route::get('/index', [PerfilFuncionalidadeController::class, 'index'])->name('index');
