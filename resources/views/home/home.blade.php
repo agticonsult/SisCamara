@@ -85,7 +85,7 @@
                         <h5>
                             @foreach (Auth::user()->permissoes_ativas as $pa)
                                 <li>
-                                    {{ $pa->perfil->descricao }} - {{ $pa->perfil->abrangencia->descricao }}
+                                    {{ $pa->perfil->descricao }}
                                 </li>
                             @endforeach
                         </h5>

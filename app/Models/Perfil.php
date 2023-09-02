@@ -12,7 +12,7 @@ class Perfil extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'descricao', 'id_abrangencia', 'id_tipo_perfil', 'cadastradoPorUsuario', 'alteradoPorUsuario',
+        'descricao', 'cadastradoPorUsuario', 'alteradoPorUsuario',
         'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
@@ -23,14 +23,6 @@ class Perfil extends Model implements Auditable
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
-    }
-    public function abrangencia()
-    {
-        return $this->belongsTo(Abrangencia::class, 'id_abrangencia');
-    }
-    public function tipo_perfil()
-    {
-        return $this->belongsTo(TipoPerfil::class, 'id_tipo_perfil');
     }
     public function funcionalidades_ativas(){
         // return PerfilFuncionalidade::where('id_perfil', '=', $this->id)->where('ativo', '=', 1)->get();

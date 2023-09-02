@@ -84,60 +84,10 @@
                             </ol>
                         </div>
                     </div>
-                    {{-- <br> --}}
-                    {{-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Cancelar
-                        </button>
-                        <button type="submit" class="btn btn-danger">Desativar</button>
-                    </div> --}}
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- <div class="modal fade" id="ajaxModel2" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="{{ route('usuario.adicionaPerfil') }}" id="form-adicionar" method="POST" class="form_prevent_multiple_submits">
-                    @csrf
-                    @method('POST')
-
-                    <div class="modal-header btn-success">
-                        <h5 class="modal-title text-center" id="exampleModalLabel2">
-                            <strong>Adicionar perfil a este usuário?</strong>
-                        </h5>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="row">
-                            <input class="form-control" type="text" name="id_user_add" id="id_user_add" value="{{ $usuario->id }}" hidden>
-                            <div class="modal-body col-md-6">
-                                <label for="usuario">Usuário</label>
-                                <input class="form-control" type="text" name="usuario" value="{{ $usuario->name }}" readonly>
-                            </div>
-                            <div class="modal-body col-md-6">
-                                <label for="id_perfil_add">Perfil</label>
-                                <select name="id_perfil_add" class="form-control select2">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($perfils as $p)
-                                        <option value="{{ $p->id }}">{{ $p->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-dismiss="modal">Cancelar
-                            </button>
-                            <button type="submit" class="btn btn-success">Adicionar perfil</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div> --}}
 
     <div class="card-body">
         <div class="col-md-12">
@@ -168,85 +118,18 @@
                         </div>
                     </div>
                 </div>
-                <br><hr><br>
-                <h5>Dados Gerais</h5>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label class="form-label">*Tipo de Perfil</label>
-                                <select name="tipo_perfil[]" id="tipo_perfil" class="form-control select2" multiple required>
-                                    @if ($ehFunc == 1)
-                                        <option value="2" selected>Funcionário</option>
-                                    @else
-                                        <option value="2">Funcionário</option>
-                                    @endif
-                                    @if ($ehClient == 1)
-                                        <option value="3" selected>Cliente</option>
-                                    @else
-                                        <option value="3">Cliente</option>
-                                    @endif
-                                    @if ($ehAdm == 1)
-                                        <option value="1" selected>Administrador</option>
-                                    @else
-                                        <option value="1">Administrador</option>
-                                    @endif
-                                </select>
-                            </div>
-                            {{-- <div class="form-group col-md-6">
-                                <label for="lotacao">*Lotação</label>
-                                <select name="lotacao" id="lotacao" class="form-control select2">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($municipios as $municipio)
-                                        <option value="{{ $municipio->id }}" {{ $usuario->lotacao == $municipio->id ? 'selected' : '' }}>{{ $municipio->descricao }}</option>
-                                        <option value="{{ $municipio->id }}" {{ $usuario->lotacao == $municipio->id ? 'selected' : '' }}>{{ $municipio->descricao }} - Região de {{ $municipio->regiao->descricao }}/{{ $municipio->regiao->mesorregiao->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
-                        </div>
-                        <div class="row">
-                            @if ($ehFunc == 1)
-                                <div class="form-group col-md-6" id="funcionario">
-                            @else
-                                <div class="d-none form-group col-md-6" id="funcionario">
-                            @endif
-                                <label class="form-label">*Perfil Funcionário</label>
-                                <select name="id_perfil_funcionario[]" class="form-control select2" multiple>
-                                    @foreach ($array_perfil_funcionarios as $pf)
-                                        <option value="{{ $pf->id }}">
-                                            {{ $pf->descricao }} -
-                                            {{ $pf->id_abrangencia != null ? $pf->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @if ($ehClient == 1)
-                                <div class="form-group col-md-6" id="cliente">
-                            @else
-                                <div class="d-none form-group col-md-6" id="cliente">
-                            @endif
-                                <label class="form-label">*Perfil Cliente</label>
-                                <select name="id_perfil_cliente[]" class="form-control select2" multiple>
-                                    @foreach ($array_perfil_clientes as $pc)
-                                        <option value="{{ $pc->id }}">
-                                            {{ $pc->descricao }} -
-                                            {{ $pc->id_abrangencia != null ? $pc->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @if ($ehAdm == 1)
-                                <div class="form-group col-md-6" id="administrador">
-                            @else
-                                <div class="d-none form-group col-md-6" id="administrador">
-                            @endif
-                                <label class="form-label">*Perfil Administrador</label>
-                                <select name="id_perfil_adm[]" class="form-control select2" multiple>
-                                    @foreach ($array_perfil_adms as $pa)
-                                        <option value="{{ $pa->id }}">
-                                            {{ $pa->descricao }} -
-                                            {{ $pa->id_abrangencia != null ? $pa->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
+                                <label class="form-label">*Perfil</label>
+                                <select name="id_perfil[]" class="form-control select2" multiple>
+                                    @foreach ($perfils as $perfil)
+                                        @foreach ($usuario->permissoes_ativas as $permissao)
+                                            @if ($permissao->id_perfil != $perfil->id)
+                                                <option value="{{ $perfil->id }}">{{ $perfil->descricao }}</option>
+                                            @endif
+                                        @endforeach
                                     @endforeach
                                 </select>
                             </div>
@@ -286,9 +169,8 @@
                                 <td class="cpf">{{ $permissao->user->cpf != null ? $permissao->user->cpf : 'não informado' }}</td>
                                 <td>{{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</td>
                                 <td>
-                                    <button  type="button" class="funcionalidades btn btn-dark" id="{{ $permissao->id_perfil }}" name="{{ $permissao->perfil->descricao }} - {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}">
-                                        {{ $permissao->perfil->descricao }} -
-                                        {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}
+                                    <button  type="button" class="funcionalidades btn btn-dark" id="{{ $permissao->id_perfil }}" name="{{ $permissao->perfil->descricao }}">
+                                        {{ $permissao->perfil->descricao }}
                                     </button>
                                 </td>
                                 <td>
@@ -298,7 +180,7 @@
                                 <td>
                                     @switch($permissao->ativo)
                                         @case(1)
-                                            <button type="button" class="desativar btn btn-success" name="{{ $permissao->id }}" id="{{ $permissao->perfil->descricao }} - {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}">
+                                            <button type="button" class="desativar btn btn-success" name="{{ $permissao->id }}" id="{{ $permissao->perfil->descricao }}">
                                                 Ativo
                                             </button>
                                             @break
@@ -318,69 +200,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="card">
-        <div class="card-header">
-            <h3>Alterar Perfil</h3>
-        </div>
-        <div class="card-body">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Usuário</th>
-                                <th scope="col">CPF</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Perfil</th>
-                                <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão do Status)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($usuario->permissoes as $permissao)
-                                <tr>
-                                    <td>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nomeCompleto : 'não informado' }}</td>
-                                    <td class="cpf">{{ $permissao->user->cpf != null ? $permissao->user->cpf : 'não informado' }}</td>
-                                    <td>{{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</td>
-                                    <td>
-                                        {{ $permissao->perfil->descricao }} -
-                                        {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}
-                                    </td>
-                                    <td>
-                                        @switch($permissao->ativo)
-                                            @case(1)
-                                                <button type="button" class="desativar btn btn-success" name="{{ $permissao->id }}" id="{{ $permissao->perfil->descricao }} - {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}">
-                                                    <i><strong>Inserido</strong></i>
-                                                    por <strong>{{ $permissao->cadastradoPorUsuario != null ? $permissao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                    em <strong>{{ $permissao->created_at->format('d/m/Y H:i:s') }}</strong>
-                                                </button>
-                                                @break
-                                            @default
-                                                <button type="button" class="btn btn-danger">
-                                                    <strong>Inserido</strong> por <strong>{{ $permissao->cadastradoPorUsuario != null ? $permissao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                    em <strong>{{ $permissao->created_at->format('d/m/Y H:i:s') }}</strong><hr>
-                                                    <i><strong>Desativado</strong></i>
-                                                    por <strong>{{ $permissao->inativadoPorUsuario != null ? $permissao->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                    em <strong>{{ date('d/m/Y H:i:s', strtotime($permissao->dataInativado)) }}</strong>
-                                                </button>
-                                                @break
-                                        @endswitch
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer">
-            <div class="container">
-                <div class="form-group col-md-12">
-                    <button class="adicionar btn btn-primary mr-5" style="width: 100%">Adicionar perfil</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

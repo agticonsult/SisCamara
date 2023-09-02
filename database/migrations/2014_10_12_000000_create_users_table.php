@@ -37,10 +37,6 @@ class CreateUsersTable extends Migration
             $table->boolean('importado')->nullable();
             $table->bigInteger('id_importacao')->nullable();
 
-            // Tipo de perfil do usuário
-            $table->integer('id_tipo_perfil')->unsigned()->nullable();
-            $table->foreign('id_tipo_perfil')->references('id')->on('tipo_perfils');
-
             // tentativa de login
             $table->integer('tentativa_senha')->nullable()->default(0); // realiza a contagem de tentativa de senha
             $table->boolean('bloqueadoPorTentativa')->nullable(); //caso passe de 3 tentativas invalidas

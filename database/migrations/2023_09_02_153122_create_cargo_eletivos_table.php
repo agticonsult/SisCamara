@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAbrangenciasTable extends Migration
+class CreateCargoEletivosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateAbrangenciasTable extends Migration
      */
     public function up()
     {
-        Schema::create('abrangencias', function (Blueprint $table) {
+        Schema::create('cargo_eletivos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descricao')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
+            $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
+            $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
             $table->boolean('ativo')->nullable();
@@ -32,6 +34,6 @@ class CreateAbrangenciasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('abrangencias');
+        Schema::dropIfExists('cargo_eletivos');
     }
 }

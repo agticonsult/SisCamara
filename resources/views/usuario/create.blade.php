@@ -32,7 +32,6 @@
                 @csrf
                 @method('POST')
 
-                <h5>Dados Pessoais</h5>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
@@ -67,50 +66,15 @@
                         </div>
                     </div>
                 </div>
-                <br><hr><br>
-                <h5>Dados Gerais</h5>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label class="form-label">*Tipo de Perfil</label>
-                                <select name="tipo_perfil[]" id="tipo_perfil" class="form-control select2" multiple required>
-                                    <option value="2">Funcionário</option>
-                                    <option value="3">Cliente</option>
-                                    <option value="1">Administrador</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="d-none form-group col-md-6" id="funcionario">
-                                <label class="form-label">*Perfil Funcionário</label>
-                                <select name="id_perfil_funcionario[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_funcionarios as $pf)
+                                <label class="form-label">*Perfil</label>
+                                <select name="id_perfil[]" class="form-control select2" multiple>
+                                    @foreach ($perfils as $pf)
                                         <option value="{{ $pf->id }}">
-                                            {{ $pf->descricao }} -
-                                            {{ $pf->id_abrangencia != null ? $pf->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="d-none form-group col-md-6" id="cliente">
-                                <label class="form-label">*Perfil Cliente</label>
-                                <select name="id_perfil_cliente[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_clientes as $pc)
-                                        <option value="{{ $pc->id }}">
-                                            {{ $pc->descricao }} -
-                                            {{ $pc->id_abrangencia != null ? $pc->abrangencia->descricao : 'abrangência não informada' }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="d-none form-group col-md-6" id="administrador">
-                                <label class="form-label">*Perfil Administrador</label>
-                                <select name="id_perfil_adm[]" class="form-control select2" multiple>
-                                    @foreach ($perfil_adms as $pa)
-                                        <option value="{{ $pa->id }}">
-                                            {{ $pa->descricao }} -
-                                            {{ $pa->id_abrangencia != null ? $pa->abrangencia->descricao : 'abrangência não informada' }}
+                                            {{ $pf->descricao }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -179,10 +143,7 @@
                 minlength:6,
                 maxlength:35
             },
-            lotacao:{
-                required:true
-            },
-            tipo_perfil:{
+            perfil:{
                 required:true
             }
         },
@@ -211,10 +172,7 @@
                 minlength:"Minímo 6 caracteres",
                 maxlength:"Máximo 35 caracteres"
             },
-            lotacao:{
-                required:"Campo obrigatório"
-            },
-            tipo_perfil:{
+            perfil:{
                 required:"Campo obrigatório"
             },
         }
@@ -231,76 +189,6 @@
             closeOnSelect: true,
             width: '100%',
         });
-
-        $('#tipo_perfil').on('change', function(){
-            var valores = $('#tipo_perfil').val();
-
-            switch (valores.length) {
-
-                case 1:
-                    selected = valores[0];
-                    switch (selected) {
-                        case '1':
-                            $('#administrador').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '2':
-                            $('#funcionario').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '3':
-                            $('#cliente').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            break;
-
-                        default:
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                    }
-                    break;
-
-                case 2:
-                    console.log(valores);
-                    if ((valores[0] == 1 && valores[1] == 2) || (valores[0] == 2 && valores[1] == 1)){
-                        $('#administrador').removeClass('d-none');
-                        $('#funcionario').removeClass('d-none');
-                        $('#cliente').addClass('d-none');
-                    }
-                    else{
-                        if ((valores[0] == 1 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 1)){
-                            $('#administrador').removeClass('d-none');
-                            $('#cliente').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                        }
-                        else{
-                            if ((valores[0] == 2 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 2)){
-                                $('#funcionario').removeClass('d-none');
-                                $('#cliente').removeClass('d-none');
-                                $('#administrador').addClass('d-none');
-                            }
-                        }
-                    }
-                    break;
-
-                case 3:
-                    console.log(valores);
-                    $('#administrador').removeClass('d-none');
-                    $('#funcionario').removeClass('d-none');
-                    $('#cliente').removeClass('d-none');
-                    break;
-
-                default:
-                    break;
-            }
-        });
-
-
-
     });
 
 </script>
