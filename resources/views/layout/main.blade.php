@@ -86,9 +86,10 @@
                         <i class="fas fa-chess-king"></i>Documento
                     </a>
                     <ul id="documento" class="sidebar-dropdown list-unstyled {{
+                            Route::current()->getPrefix() == '/documento' ||
                             Route::current()->getPrefix() == 'documento/modelo'
                         ? 'active' : 'collapse' }}">
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/index' ? 'active' : null }}">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
                             <a href="{{ route('documento.index') }}" class="sidebar-link">
                                 Documentos
                             </a>

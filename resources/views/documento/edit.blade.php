@@ -22,31 +22,63 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Modelo</strong>
+            <strong>Alteração de Documento</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('documento.modelo.update', $modelo_documento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('documento.update', $documento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="assunto">Assunto</label>
-                        <input type="text" class="form-control" name="assunto" value="{{ $modelo_documento->assunto }}" required>
+                        <label class="form-label" for="nome">*Nome</label>
+                        <input type="text" class="form-control" name="nome" value="{{ $documento->nome }}" required>
                     </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label" for="body">Conteúdo</label>
-                        <textarea name="conteudo" class="form-control" cols="30" rows="15">{{ $modelo_documento->conteudo }}</textarea>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Modelo</label>
+                        <select name="id_modelo" id="id_modelo" class="select2 form-control">
+                            <option value="{{ $documento->id_modelo }}" selected>{{ $documento->modelo->assunto }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" id="assunto_conteudo">
+                    <div class="col-md-12">
+                        <div class="tab tab-primary">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#colored-icon-3" id="selecionar_assunto" data-toggle="tab" role="tab">
+                                        Assunto
+                                    </a>
+                                </li>
+                                <li class="nav-item" id="conteudo_clicado">
+                                    <a class="nav-link" href="#colored-icon-4" id="selecionar_conteudo" data-toggle="tab" role="tab">
+                                        Conteúdo
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
+                                    <div class="">
+                                        <div class="col-md-6 mb-3">
+                                            <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $documento->assunto }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="colored-icon-4" role="tabpanel">
+                                    <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $documento->conteudo }}</textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('documento.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <a href="{{ route('documento.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -65,7 +97,13 @@
 <script>
     $("#form").validate({
         rules : {
-            titulo:{
+            nome:{
+                required:true
+            },
+            id_modelo:{
+                required:true
+            },
+            assunto:{
                 required:true
             },
             conteudo:{
@@ -73,7 +111,13 @@
             },
         },
         messages:{
-            titulo:{
+            nome:{
+                required:"Campo obrigatório"
+            },
+            id_modelo:{
+                required:"Campo obrigatório"
+            },
+            assunto:{
                 required:"Campo obrigatório"
             },
             conteudo:{

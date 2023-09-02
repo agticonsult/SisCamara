@@ -24,6 +24,10 @@ class Documento extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function modelo()
+    {
+        return $this->belongsTo(ModeloDocumento::class, 'id_modelo');
+    }
     public function localizacao()
     {
         return $this->belongsTo(LocalizacaoDocumento::class, 'id_localizacao');

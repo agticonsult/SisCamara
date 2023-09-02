@@ -130,12 +130,14 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$documento){
+                return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            return view('documento.edit', compact('modelo_documento'));
+            $modelos = ModeloDocumento::where('ativo', '=', 1)->get();
+
+            return view('documento.edit', compact('documento', 'modelos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -159,11 +161,13 @@ class DocumentoController extends Controller
 
             $input = [
                 'id' => $id,
+                'nome' => $request->nome,
                 'assunto' => $request->assunto,
                 'conteudo' => $request->conteudo,
             ];
             $rules = [
                 'id' => 'required|integer',
+                'nome' => 'required',
                 'assunto' => 'required',
                 'conteudo' => 'required',
             ];
@@ -171,14 +175,15 @@ class DocumentoController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$documento){
+                return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            $modelo_documento->assunto = $request->assunto;
-            $modelo_documento->conteudo = $request->conteudo;
-            $modelo_documento->save();
+            $documento->nome = $request->nome;
+            $documento->assunto = $request->assunto;
+            $documento->conteudo = $request->conteudo;
+            $documento->save();
 
             return redirect()->route('documento.index')->with('success', 'Alteração realizada com sucesso');
         }
@@ -224,16 +229,16 @@ class DocumentoController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $modelo_documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$documento){
+                return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            $modelo_documento->inativadoPorUsuario = Auth::user()->id;
-            $modelo_documento->dataInativado = Carbon::now();
-            $modelo_documento->motivoInativado = $motivo;
-            $modelo_documento->ativo = 0;
-            $modelo_documento->save();
+            $documento->inativadoPorUsuario = Auth::user()->id;
+            $documento->dataInativado = Carbon::now();
+            $documento->motivoInativado = $motivo;
+            $documento->ativo = 0;
+            $documento->save();
 
             return redirect()->route('documento.index')->with('success', 'Exclusão realizada com sucesso.');
         }
