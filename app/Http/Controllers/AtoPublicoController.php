@@ -39,6 +39,27 @@ class AtoPublicoController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            // dd($ato->todas_linhas_ativas());
+
+            return view('ato.publico.show', compact('ato'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoController";
+            $erro->funcao = "show";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
     public function buscar(Request $request, Ato $ato)
     {
         try {
