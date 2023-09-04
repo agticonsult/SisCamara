@@ -44,6 +44,16 @@
                         @method('POST')
 
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label">Pesquisar por palavras</label>
+                                <input type="text" class="form-control" name="palavra" id="palavra">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label">Exclusão de palavras</label>
+                                <input type="text" class="form-control" name="exclusao" id="exclusao">
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-4">
                                 <label class="form-label">Classificação do Ato</label>
                                 <select name="id_classificacao" class="select2 form-control">
