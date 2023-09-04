@@ -57,8 +57,7 @@
                                         <ol>
                                             @foreach ($usuario->permissoes_ativas as $permissao)
                                                 <li>
-                                                    {{ $permissao->perfil->descricao }} -
-                                                    {{ $permissao->perfil->id_abrangencia != null ? $permissao->perfil->abrangencia->descricao : 'abrangência não informada' }}
+                                                    {{ $permissao->perfil->descricao }}
                                                 </li>
                                             @endforeach
                                         </ol>

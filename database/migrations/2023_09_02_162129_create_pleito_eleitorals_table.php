@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocumentosTable extends Migration
+class CreatePleitoEleitoralsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,12 @@ class CreateDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('documentos', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('nome');
-            $table->string('assunto')->nullable();
-            $table->text('conteudo')->nullable();
-            $table->integer('id_localizacao')->unsigned()->nullable();
-            $table->foreign('id_localizacao')->references('id')->on('localizacao_documentos');
-            $table->integer('id_status')->unsigned()->nullable();
-            $table->foreign('id_status')->references('id')->on('status_documentos');
-            $table->bigInteger('id_modelo')->unsigned()->nullable();
-            $table->foreign('id_modelo')->references('id')->on('modelo_documentos');
+        Schema::create('pleito_eleitorals', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('ano')->nullable();
+            $table->boolean('pleitoEspecial')->nullable()->default(0);
+            $table->date('dataPrimeiroTurno')->nullable();
+            $table->date('dataSegundoTurno')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
@@ -42,6 +37,6 @@ class CreateDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documentos');
+        Schema::dropIfExists('pleito_eleitorals');
     }
 }

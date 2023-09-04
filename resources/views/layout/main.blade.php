@@ -83,14 +83,35 @@
 
                 <li class="sidebar-item">
                     <a href="#documento" data-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="fas fa-chess-king"></i>Documento
+                        <i class="fas fa-chess-king"></i>Processo Legislativo
                     </a>
                     <ul id="documento" class="sidebar-dropdown list-unstyled {{
+                            Route::current()->getPrefix() == '/documento' ||
                             Route::current()->getPrefix() == 'documento/modelo'
                         ? 'active' : 'collapse' }}">
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/index' ? 'active' : null }}">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
                             <a href="{{ route('documento.index') }}" class="sidebar-link">
                                 Documentos
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
+                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                                Protocolo
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
+                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                                Secretaria
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
+                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                                Relatores
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
+                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                                Votação
                             </a>
                         </li>
                         <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/modelo' ? 'active' : null }}">

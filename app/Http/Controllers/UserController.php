@@ -61,11 +61,9 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $perfil_funcionarios = Perfil::where('id_tipo_perfil', '=', 2)->where('ativo', '=', 1)->get(); // perfil de funcionário
-            $perfil_clientes = Perfil::where('id_tipo_perfil', '=', 3)->where('ativo', '=', 1)->get(); // perfil de cliente
-            $perfil_adms = Perfil::where('id_tipo_perfil', '=', 1)->where('ativo', '=', 1)->get(); // perfil de adm
+            $perfils = Perfil::where('ativo', '=', 1)->get();
 
-            return view('usuario.create', compact('perfil_funcionarios', 'perfil_clientes', 'perfil_adms'));
+            return view('usuario.create', compact('perfils'));
         }
         catch(\Exception $ex){
             $erro = new ErrorLog();
@@ -95,7 +93,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $request->password,
                 'confirmacao' => $request->confirmacao,
-                'tipo_perfil' => $request->tipo_perfil,
+                'id_perfil' => $request->id_perfil,
             ];
             $rules = [
                 'nomeCompleto' => 'required|max:255',
@@ -104,7 +102,7 @@ class UserController extends Controller
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'password' => 'required|min:6|max:35',
                 'confirmacao' => 'required|min:6|max:35',
-                'tipo_perfil' => 'required',
+                'id_perfil' => 'required',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
@@ -138,52 +136,6 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
             }
 
-            $tipo_perfis = $request->tipo_perfil;
-            foreach($tipo_perfis as $tipo_perfil){
-
-                switch ($tipo_perfil) {
-                    case '1':
-                        $inputAdm = [
-                            'id_perfil_adm' => $request->id_perfil_adm
-                        ];
-                        $rulesAdm = [
-                            'id_perfil_adm' => 'required'
-                        ];
-
-                        $validarAdm = Validator::make($inputAdm, $rulesAdm);
-                        $validarAdm->validate();
-                        break;
-
-                    case '2':
-                        $inputFunc = [
-                            'id_perfil_funcionario' => $request->id_perfil_funcionario
-                        ];
-                        $rulesFunc = [
-                            'id_perfil_funcionario' => 'required'
-                        ];
-
-                        $validarFunc = Validator::make($inputFunc, $rulesFunc);
-                        $validarFunc->validate();
-                        break;
-
-                    case '3':
-                        $inputCliente = [
-                            'id_perfil_cliente' => $request->id_perfil_cliente
-                        ];
-                        $rulesCliente = [
-                            'id_perfil_cliente' => 'required'
-                        ];
-
-                        $validarCliente = Validator::make($inputCliente, $rulesCliente);
-                        $validarCliente->validate();
-                        break;
-
-                    default:
-                        return redirect()->back()->with('erro', 'Tipo de Perfil Inválido.')->withInput();
-                        break;
-                }
-            }
-
             //nova Pessoa
             $novaPessoa = new Pessoa();
             $novaPessoa->nomeCompleto = $request->nomeCompleto;
@@ -205,64 +157,17 @@ class UserController extends Controller
             $novoUsuario->ativo = 1;
             $novoUsuario->save();
 
-            foreach($tipo_perfis as $tipo_perfil){
+            $id_perfils = $request->id_perfil;
+            foreach($id_perfils as $id_perf){
 
-                switch ($tipo_perfil) {
-                    case '1':
-                        $perfil_user_adm = new PerfilUser();
-                        $perfil_user_adm->id_user = $novoUsuario->id;
-                        $perfil_user_adm->id_tipo_perfil = 1;
-                        $perfil_user_adm->cadastradoPorUsuario = Auth::user()->id;
-                        $perfil_user_adm->ativo = 1;
-                        $perfil_user_adm->save();
-
-                        $id_perfil_adms = $request->id_perfil_adm;
-                        foreach ($id_perfil_adms as $ipa) {
-                            $permissao_adm = new Permissao();
-                            $permissao_adm->id_user = $novoUsuario->id;
-                            $permissao_adm->id_perfil = $ipa;
-                            $permissao_adm->cadastradoPorUsuario = Auth::user()->id;
-                            $permissao_adm->ativo = 1;
-                            $permissao_adm->save();
-                        }
-                        break;
-
-                    case '2':
-                        $perfil_user_func = new PerfilUser();
-                        $perfil_user_func->id_user = $novoUsuario->id;
-                        $perfil_user_func->id_tipo_perfil = 2;
-                        $perfil_user_func->cadastradoPorUsuario = Auth::user()->id;
-                        $perfil_user_func->ativo = 1;
-                        $perfil_user_func->save();
-
-                        $id_perfil_funcionarios = $request->id_perfil_funcionario;
-                        foreach ($id_perfil_funcionarios as $ipf) {
-                            $permissao_func = new Permissao();
-                            $permissao_func->id_user = $novoUsuario->id;
-                            $permissao_func->id_perfil = $ipf;
-                            $permissao_func->cadastradoPorUsuario = Auth::user()->id;
-                            $permissao_func->ativo = 1;
-                            $permissao_func->save();
-                        }
-                        break;
-                    case '3':
-                        $perfil_user_cliente = new PerfilUser();
-                        $perfil_user_cliente->id_user = $novoUsuario->id;
-                        $perfil_user_cliente->id_tipo_perfil = 3;
-                        $perfil_user_cliente->cadastradoPorUsuario = Auth::user()->id;
-                        $perfil_user_cliente->ativo = 1;
-                        $perfil_user_cliente->save();
-
-                        $id_perfil_clientes = $request->id_perfil_cliente;
-                        foreach ($id_perfil_clientes as $ipc) {
-                            $permissao_cliente = new Permissao();
-                            $permissao_cliente->id_user = $novoUsuario->id;
-                            $permissao_cliente->id_perfil = $ipc;
-                            $permissao_cliente->cadastradoPorUsuario = Auth::user()->id;
-                            $permissao_cliente->ativo = 1;
-                            $permissao_cliente->save();
-                        }
-                        break;
+                $perfil = Perfil::where('id', '=', $id_perf)->where('ativo', '=', 1)->first();
+                if ($perfil){
+                    $permissao = new Permissao();
+                    $permissao->id_user = $novoUsuario->id;
+                    $permissao->id_perfil = $perfil->id;
+                    $permissao->cadastradoPorUsuario = Auth::user()->id;
+                    $permissao->ativo = 1;
+                    $permissao->save();
                 }
             }
 
@@ -304,84 +209,9 @@ class UserController extends Controller
                 return redirect()->route('usuario.index')->with('erro', 'Não é possível alterar este usuário.');
             }
 
-            // $municipios = Municipio::where('id_estado', '=', '16')->orderBy('descricao', 'asc')->where('ativo', '=', 1)->get();
-            $tipo_perfis_ativos = $usuario->tipo_perfis_ativos;
+            $perfils = Perfil::where('ativo', '=', 1)->get();
 
-            $ehAdm = 0;
-            $ehFunc = 0;
-            $ehClient = 0;
-            $perfil_adms = array();
-            $perfil_funcionarios = array();
-            $perfil_clientes = array();
-            $array_perfil_adms = array();
-            $array_perfil_funcionarios = array();
-            $array_perfil_clientes = array();
-
-            foreach ($tipo_perfis_ativos as $tpa){
-
-                switch ($tpa->id_tipo_perfil) {
-                    case '1':
-                        $ehAdm = 1; // se for adm
-                        break;
-
-                    case '2':
-                        $ehFunc = 1; // se for funcionario, troca para perfil de funcionário
-                        break;
-
-                    case '3':
-                        $ehClient = 1; // se for cliente, troca para perfil de cliente
-                        break;
-
-                    default:
-                        # code...
-                        break;
-                }
-
-            }
-
-            if ($ehAdm == 0){
-                $array_perfil_adms = Perfil::where('id_tipo_perfil', '=', 1)->where('ativo', '=', 1)->get();
-            }
-            else{
-                $perfil_adms = Perfil::where('id_tipo_perfil', '=', 1)->where('ativo', '=', 1)->get();
-
-                foreach($perfil_adms as $pa){
-                    if ($usuario->temPerfil($pa->id) != 1){
-                        array_push($array_perfil_adms, $pa);
-                    }
-                }
-            }
-
-            if ($ehFunc == 0){
-                $array_perfil_funcionarios = Perfil::where('id_tipo_perfil', '=', 2)->where('ativo', '=', 1)->get();
-            }
-            else{
-                $perfil_funcionarios = Perfil::where('id_tipo_perfil', '=', 2)->where('ativo', '=', 1)->get();
-
-                foreach($perfil_funcionarios as $pf){
-                    if ($usuario->temPerfil($pf->id) != 1){
-                        array_push($array_perfil_funcionarios, $pf);
-                    }
-                }
-            }
-
-            if ($ehClient == 0){
-                $array_perfil_clientes = Perfil::where('id_tipo_perfil', '=', 3)->where('ativo', '=', 1)->get();
-            }
-            else{
-                $perfil_clientes = Perfil::where('id_tipo_perfil', '=', 3)->where('ativo', '=', 1)->get();
-
-                foreach($perfil_clientes as $pc){
-                    if ($usuario->temPerfil($pc->id) != 1){
-                        array_push($array_perfil_clientes, $pc);
-                    }
-                }
-            }
-
-            return view('usuario.edit', compact(
-                'usuario', 'array_perfil_adms', 'array_perfil_funcionarios', 'array_perfil_clientes', 'tipo_perfis_ativos',
-                'ehAdm', 'ehFunc', 'ehClient'
-            ));
+            return view('usuario.edit', compact('usuario', 'perfils'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -452,25 +282,9 @@ class UserController extends Controller
                 }
             }
 
-            // if ($usuario->ehFuncionario() == 1){
-
-            //     $input2 = [
-            //         'lotacao' => $request->lotacao
-            //     ];
-            //     $rules2 = [
-            //         'lotacao' => 'required|max:255'
-            //     ];
-
-            //     $validarLotacao = Validator::make($input2, $rules2);
-            //     $validarLotacao->validate();
-
-            //     $usuario->lotacao = $request->lotacao;
-            // }
-
             $usuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
             $usuario->email = $request->email;
             $usuario->ativo = 1;
-            // dd($us);
             $usuario->save();
 
             // pessoa
@@ -480,136 +294,29 @@ class UserController extends Controller
             $pessoa->ativo = 1;
             $pessoa->save();
 
-            $tipo_perfis = $request->tipo_perfil;
-            foreach($tipo_perfis as $tipo_perfil){
+            $id_perfils = $request->id_perfil;
+            foreach ($id_perfils as $id_perf){
 
-                switch ($tipo_perfil) {
-                    case '1':
-                        if (isset($request->id_perfil_adm)){
+                // verificar se o perfil já foi adicionado para não repetir
+                $tem_este_perfil = Permissao::where('id_user', '=', $id)
+                    ->where('id_perfil', '=', $id_perf)
+                    ->where('ativo', '=', 1)
+                    ->first();
 
-                            $perfil_adms = $request->id_perfil_adm;
-                            if (Count($perfil_adms) != 0){
-
-                                if ($usuario->ehAdm() != 1){
-                                    $perfil_user_adm = new PerfilUser();
-                                    $perfil_user_adm->id_user = $id;
-                                    $perfil_user_adm->id_tipo_perfil = 1;
-                                    $perfil_user_adm->cadastradoPorUsuario = Auth::user()->id;
-                                    $perfil_user_adm->ativo = 1;
-                                    $perfil_user_adm->save();
-                                }
-
-                                foreach ($perfil_adms as $perfil_adm){
-
-                                    // verificar se o perfil já foi adicionado para não repetir
-                                    $tem_este_perfil = Permissao::where('id_user', '=', $id)
-                                        ->where('id_perfil', '=', $perfil_adm)
-                                        ->where('ativo', '=', 1)
-                                        ->first();
-
-                                    if (!$tem_este_perfil){
-
-                                        $perf = Perfil::find($perfil_adm);
-
-                                        if ($perf->id_tipo_perfil == 1){
-                                            $permissao = new Permissao();
-                                            $permissao->id_user = $id;
-                                            $permissao->id_perfil = $perfil_adm;
-                                            $permissao->cadastradoPorUsuario = Auth::user()->id;
-                                            $permissao->ativo = 1;
-                                            $permissao->save();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
-                    case '2':
-                        if (isset($request->id_perfil_funcionario)){
-
-                            $perfil_funcs = $request->id_perfil_funcionario;
-                            if (Count($perfil_funcs) != 0){
-
-                                if ($usuario->ehFuncionario() != 1){
-                                    $perfil_user_func = new PerfilUser();
-                                    $perfil_user_func->id_user = $id;
-                                    $perfil_user_func->id_tipo_perfil = 2;
-                                    $perfil_user_func->cadastradoPorUsuario = Auth::user()->id;
-                                    $perfil_user_func->ativo = 1;
-                                    $perfil_user_func->save();
-                                }
-
-                                foreach ($perfil_funcs as $perfil_func){
-
-                                    // verificar se o perfil já foi adicionado para não repetir
-                                    $tem_este_perfil = Permissao::where('id_user', '=', $id)
-                                        ->where('id_perfil', '=', $perfil_func)
-                                        ->where('ativo', '=', 1)
-                                        ->first();
-
-                                    if (!$tem_este_perfil){
-
-                                        $perf = Perfil::find($perfil_func);
-
-                                        if ($perf->id_tipo_perfil == 2){
-                                            $permissao = new Permissao();
-                                            $permissao->id_user = $id;
-                                            $permissao->id_perfil = $perfil_func;
-                                            $permissao->cadastradoPorUsuario = Auth::user()->id;
-                                            $permissao->ativo = 1;
-                                            $permissao->save();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
-                    case '3':
-                        if (isset($request->id_perfil_cliente)){
-
-                            $perfil_clientes = $request->id_perfil_cliente;
-                            if (Count($perfil_clientes) != 0){
-
-                                if ($usuario->ehCliente() != 1){
-                                    $perfil_user_cliente = new PerfilUser();
-                                    $perfil_user_cliente->id_user = $id;
-                                    $perfil_user_cliente->id_tipo_perfil = 3;
-                                    $perfil_user_cliente->cadastradoPorUsuario = Auth::user()->id;
-                                    $perfil_user_cliente->ativo = 1;
-                                    $perfil_user_cliente->save();
-                                }
-
-                                foreach ($perfil_clientes as $perfil_cliente){
-
-                                    // verificar se o perfil já foi adicionado para não repetir
-                                    $tem_este_perfil = Permissao::where('id_user', '=', $id)
-                                        ->where('id_perfil', '=', $perfil_cliente)
-                                        ->where('ativo', '=', 1)
-                                        ->first();
-
-                                    if (!$tem_este_perfil){
-
-                                        $perf = Perfil::find($perfil_cliente);
-
-                                        if ($perf->id_tipo_perfil == 3){
-                                            $permissao = new Permissao();
-                                            $permissao->id_user = $id;
-                                            $permissao->id_perfil = $perfil_cliente;
-                                            $permissao->cadastradoPorUsuario = Auth::user()->id;
-                                            $permissao->ativo = 1;
-                                            $permissao->save();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    break;
+                if (!$tem_este_perfil){
+                    $perf = Perfil::find($id_perf);
+                    if ($perf){
+                        $permissao = new Permissao();
+                        $permissao->id_user = $id;
+                        $permissao->id_perfil = $id_perf;
+                        $permissao->cadastradoPorUsuario = Auth::user()->id;
+                        $permissao->ativo = 1;
+                        $permissao->save();
+                    }
                 }
             }
 
-            return redirect()->route('usuario.index')->with('success', 'Cadastro realizado com sucesso.');
+            return redirect()->route('usuario.index')->with('success', 'Alteração realizada com sucesso.');
 
         }
         catch (ValidationException $e ) {
@@ -841,36 +548,7 @@ class UserController extends Controller
                 $permissao->ativo = 0;
                 $permissao->save();
 
-                //Quantos perfis do tipo sobrou?
                 $id_user = $permissao->id_user;
-                $id_tipo_perfil = $permissao->perfil->id_tipo_perfil;
-
-                $count_perfis_ativos = Permissao::leftJoin('perfils', 'perfils.id', '=', 'permissaos.id_perfil')
-                    ->where('permissaos.id_user', '=', $id_user)
-                    ->where('perfils.id_tipo_perfil', '=', $id_tipo_perfil)
-                    ->where('permissaos.ativo', '=', 1)
-                    ->count();
-
-                if ($count_perfis_ativos == 0){
-                    $perfil_user = PerfilUser::where('id_user', '=', $id_user)
-                        ->where('id_tipo_perfil', '=', $id_tipo_perfil)
-                        ->where('ativo', '=', 1)
-                        ->first();
-
-                    $perfil_user->inativadoPorUsuario = auth()->user()->id;
-                    $perfil_user->dataInativado = Carbon::now();
-                    $perfil_user->motivoInativado = $request->motivo;
-                    $perfil_user->ativo = 0;
-                    $perfil_user->save();
-                }
-
-                $primeiroTipoPerfilAtivo = PerfilUser::where('id_user', '=', $id_user)->where('ativo', '=', 1)->first();
-                if ($primeiroTipoPerfilAtivo){
-                    $user = User::find($id_user);
-                    $user->id_tipo_perfil = $primeiroTipoPerfilAtivo->id;
-                    $user->save();
-                }
-
                 if ($id_user == Auth::user()->id && Auth::user()->temPermissao('User', 'Alteração') != 1){
                     return redirect()->route('home')->with('success', 'Perfil desativado com sucesso.');
                 }

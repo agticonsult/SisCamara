@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PerfilFuncionalidadeTableSeeder::class);
         $this->call(TipoAnexoTableSeeder::class);
         $this->call(FilesizeTableSeeder::class);
-        $this->call(SeederTeste::class);
+        // $this->call(SeederTeste::class);
         $this->call(TipoAtoTableSeeder::class);
         $this->call(TipoLinhaAtoTableSeeder::class);
         $this->call(AssuntoAtoTableSeeder::class);

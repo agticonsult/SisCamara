@@ -150,12 +150,12 @@ Route::group(['middleware' => 'auth'], function () {
     // Ato
     Route::group(['prefix' => '/documento', 'as' => 'documento.'], function() {
         Route::get('/index', [DocumentoController::class, 'index'])->name('index');
-        // Route::get('/show/{id}', [AtoController::class, 'show'])->name('show');
-        // Route::get('/create', [AtoController::class, 'create'])->name('create');
-        // Route::post('/store', [AtoController::class, 'store'])->name('store');
-        // Route::get('/edit/{id}', [AtoController::class, 'edit'])->name('edit');
-        // Route::post('/update/{id}', [AtoController::class, 'update'])->name('update');
-        // Route::post('/destroy/{id}', [AtoController::class, 'destroy'])->name('destroy');
+        Route::get('/show/{id}', [DocumentoController::class, 'show'])->name('show');
+        Route::get('/create', [DocumentoController::class, 'create'])->name('create');
+        Route::post('/store', [DocumentoController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [DocumentoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [DocumentoController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [DocumentoController::class, 'destroy'])->name('destroy');
 
         // Dados Gerais
         Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}', [ModeloDocumentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [ModeloDocumentoController::class, 'update'])->name('update');
             Route::post('/destroy/{id}', [ModeloDocumentoController::class, 'destroy'])->name('destroy');
+            Route::get('/get/{id}', [ModeloDocumentoController::class, 'get'])->name('get');
         });
 
     });
