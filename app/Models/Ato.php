@@ -88,6 +88,14 @@ class Ato extends Model implements Auditable
                 $query->get();
             }
 
+            if(isset($filtro['palavra'])){
+                $query->where('titulo', 'ILIKE', '%' . $filtro['palavra'] . '%');
+            }
+
+            if(isset($filtro['exclusao'])){
+                $query->where('titulo', 'NOT ILIKE', '%' . $filtro['exclusao'] . '%');
+            }
+
             if(isset($filtro['id_classificacao'])){
                 $query->where('id_classificacao', '=', $filtro['id_classificacao']);
             }

@@ -320,6 +320,7 @@ Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
     // Ato
     Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
         Route::get('/index', [AtoPublicoController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [AtoPublicoController::class, 'show'])->name('show');
         Route::any('/buscar', [AtoPublicoController::class, 'buscar'])->name('buscar');
     });
 

@@ -44,6 +44,16 @@
                         @method('POST')
 
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label">Pesquisar por palavras</label>
+                                <input type="text" class="form-control" name="palavra" id="palavra">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label">Exclusão de palavras</label>
+                                <input type="text" class="form-control" name="exclusao" id="exclusao">
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-4">
                                 <label class="form-label">Classificação do Ato</label>
                                 <select name="id_classificacao" class="select2 form-control">
@@ -223,7 +233,7 @@
                                             </td>
                                             <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
                                             <td>
-                                                <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
+                                                <a href="{{ route('web_publica.ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
                                                 {{-- <a href="{{ route('ato.dados_gerais.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
                                                 <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button> --}}
                                             </td>
