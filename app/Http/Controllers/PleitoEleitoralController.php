@@ -2,84 +2,252 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ErrorLog;
 use App\Models\PleitoEleitoral;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PleitoEleitoralController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $pleitos = PleitoEleitoral::where('ativo', '=', 1)->get();
+
+            return view('configuracao.pleito-eleitoral.index', compact('pleitos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "PleitoEleitoralController";
+            $erro->funcao = "index";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+
+            return view('configuracao.pleito-eleitoral.create', compact('tipo_reparticaos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "PleitoEleitoralController";
+            $erro->funcao = "create";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'descricao' => $request->descricao,
+                'id_tipo_reparticao' => $request->id_tipo_reparticao,
+            ];
+            $rules = [
+                'descricao' => 'required',
+                'id_tipo_reparticao' => 'required|integer',
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $tipo_reparticao = TipoReparticao::where('id', '=', $request->id_tipo_reparticao)->where('ativo', '=', 1)->first();
+            if (!$tipo_reparticao){
+                return redirect()->back()->with('erro', 'Tipo de repartição inválida.');
+            }
+
+            $reparticao = new Reparticao();
+            $reparticao->descricao = $request->descricao;
+            $reparticao->id_tipo_reparticao = $request->id_tipo_reparticao;
+            $reparticao->cadastradoPorUsuario = Auth::user()->id;
+            $reparticao->ativo = 1;
+            $reparticao->save();
+
+            return redirect()->route('reparticao.index')->with('success', 'Cadastro realizado com sucesso');
+        }
+        catch (ValidationException $e ) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "PleitoEleitoralController";
+            $erro->funcao = "store";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PleitoEleitoral  $pleitoEleitoral
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PleitoEleitoral $pleitoEleitoral)
+    public function edit($id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$reparticao){
+                return redirect()->back()->with('erro', 'Repartição inválida.');
+            }
+
+            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+
+            return view('configuracao.pleito-eleitoral.edit', compact('PleitoEleitoral', 'tipo_reparticaos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "PleitoEleitoralController";
+            $erro->funcao = "create";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PleitoEleitoral  $pleitoEleitoral
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PleitoEleitoral $pleitoEleitoral)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'id' => $id,
+                'descricao' => $request->descricao,
+                'id_tipo_reparticao' => $request->id_tipo_reparticao,
+            ];
+            $rules = [
+                'id' => 'required|integer',
+                'descricao' => 'required',
+                'id_tipo_reparticao' => 'required|integer',
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$reparticao){
+                return redirect()->back()->with('erro', 'Repartição inválida.');
+            }
+
+            $tipo_reparticao = TipoReparticao::where('id', '=', $request->id_tipo_reparticao)->where('ativo', '=', 1)->first();
+            if (!$tipo_reparticao){
+                return redirect()->back()->with('erro', 'Tipo de repartição inválida.');
+            }
+
+            $reparticao->descricao = $request->descricao;
+            $reparticao->id_tipo_reparticao = $request->id_tipo_reparticao;
+            $reparticao->save();
+
+            return redirect()->route('reparticao.index')->with('success', 'Alteração realizada com sucesso');
+        }
+        catch (ValidationException $e ) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "PleitoEleitoralController";
+            $erro->funcao = "store";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PleitoEleitoral  $pleitoEleitoral
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PleitoEleitoral $pleitoEleitoral)
+    public function destroy(Request $request, $id)
     {
-        //
-    }
+        try {
+            if (Auth::user()->temPermissao('PleitoEleitoral', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PleitoEleitoral  $pleitoEleitoral
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PleitoEleitoral $pleitoEleitoral)
-    {
-        //
+            $input = [
+                'motivo' => $request->motivo
+            ];
+            $rules = [
+                'motivo' => 'max:255'
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $motivo = $request->motivo;
+
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$reparticao){
+                return redirect()->back()->with('erro', 'Repartição inválida.');
+            }
+
+            $reparticao->inativadoPorUsuario = Auth::user()->id;
+            $reparticao->dataInativado = Carbon::now();
+            $reparticao->motivoInativado = $motivo;
+            $reparticao->ativo = 0;
+            $reparticao->save();
+
+            return redirect()->route('reparticao.index')->with('success', 'Exclusão realizada com sucesso.');
+        }
+        catch (ValidationException $e) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtividadeLazerController";
+            $erro->funcao = "destroy";
+            if (Auth::check()) {
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
     }
 }

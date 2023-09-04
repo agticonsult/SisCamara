@@ -153,6 +153,15 @@
                     </ul>
                 </li>
 
+                @if (Auth::user()->temPermissao('Vereador', 'Listagem') == 1)
+                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'vereador' ? 'active' : null }}">
+                        <a href="{{ route('vereador.index') }}" class="sidebar-link">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <span>Vereadores</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
                     <li class="sidebar-item {{ Route::current()->getPrefix() == 'reparticao' ? 'active' : null }}">
                         <a href="{{ route('reparticao.index') }}" class="sidebar-link">
@@ -164,17 +173,9 @@
 
                 {{-- Configuração --}}
                 @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||
-                        Auth::user()->temPermissao('FinalidadeGrupo', 'Cadastro') == 1 ||
-                        Auth::user()->temPermissao('FinalidadeGrupo', 'Alteração') == 1 ||
-                        Auth::user()->temPermissao('FinalidadeGrupo', 'Relatório') == 1 ||
                         Auth::user()->temPermissao('Filesize', 'Listagem') == 1 ||
-                        Auth::user()->temPermissao('Filesize', 'Cadastro') == 1 ||
-                        Auth::user()->temPermissao('Filesize', 'Alteração') == 1 ||
-                        Auth::user()->temPermissao('Filesize', 'Relatório') == 1 ||
                         Auth::user()->temPermissao('TipoEvento', 'Listagem') == 1 ||
-                        Auth::user()->temPermissao('TipoEvento', 'Cadastro') == 1 ||
-                        Auth::user()->temPermissao('TipoEvento', 'Alteração') == 1 ||
-                        Auth::user()->temPermissao('TipoEvento', 'Relatório') == 1)
+                        Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') == 1)
                     <li class="sidebar-item">
                         <a href="#configuracao" data-toggle="collapse" class="sidebar-link collapsed">
                             <i class="fas fa-cog"></i>
@@ -190,28 +191,28 @@
                                 ? 'active'
                                 : 'collapse' }}">
                             <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/assunto-ato' // mudar as rotas e criar a pagina
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/assunto-ato'
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.assunto_ato.index') }}">Assuntos
                                 </a>
                             </li>
                             <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/autoridade' // mudar as rotas e criar a pagina
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/autoridade'
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.autoridade.index') }}">Autoridades
                                 </a>
                             </li>
                             <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-ato' // mudar as rotas e criar a pagina
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-ato'
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.tipo_ato.index') }}">Tipos de Ato
                                 </a>
                             </li>
                             <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/publicacao-ato' // mudar as rotas e criar a pagina
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/publicacao-ato'
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.publicacao_ato.index') }}">Publicações
@@ -224,11 +225,17 @@
                                     Grupos de Usuário</a>
                             </li>
                             <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tamanho-anexo' // mudar as rotas e criar a pagina
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tamanho-anexo'
                                     ? 'active'
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.tamanho_anexo.index') }}">Tamanho
                                     dos Anexos</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/pleito-eleitoral'
+                                    ? 'active'
+                                    : null }}">
+                                <a class="sidebar-link " href="{{ route('configuracao.pleito_eleitoral.index') }}">Pleitos Eleitorais</a>
                             </li>
                         </ul>
                     </li>

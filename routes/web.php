@@ -22,12 +22,14 @@ use App\Http\Controllers\ModeloDocumentoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\PleitoEleitoralController;
 use App\Http\Controllers\PublicacaoAtoController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\ReparticaoController;
 use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VereadorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -170,6 +172,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
+    // Vereador
+    Route::group(['prefix' => '/vereador', 'as' => 'vereador.'], function() {
+        Route::get('/index', [VereadorController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [VereadorController::class, 'show'])->name('show');
+        Route::get('/create', [VereadorController::class, 'create'])->name('create');
+        Route::post('/store', [VereadorController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [VereadorController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [VereadorController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [VereadorController::class, 'destroy'])->name('destroy');
+    });
 
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {
@@ -252,10 +264,21 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}', [FinalidadeGrupoController::class, 'update'])->name('update');
         });
 
-         // tamanho dos anexos
-         Route::group(['prefix' => '/tamanho-anexo', 'as' => 'tamanho_anexo.'], function() {
+        // tamanho dos anexos
+        Route::group(['prefix' => '/tamanho-anexo', 'as' => 'tamanho_anexo.'], function() {
             Route::get('/index', [FilesizeController::class, 'index'])->name('index');
             Route::post('/update', [FileSizeController::class, 'update'])->name('update');
+        });
+
+        // Pleito Eleitoral
+        Route::group(['prefix' => '/pleito-eleitoral', 'as' => 'pleito_eleitoral.'], function() {
+            Route::get('/index', [PleitoEleitoralController::class, 'index'])->name('index');
+            Route::get('/create', [PleitoEleitoralController::class, 'create'])->name('create');
+            Route::post('/store', [PleitoEleitoralController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [PleitoEleitoralController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [PleitoEleitoralController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [PleitoEleitoralController::class, 'destroy'])->name('destroy');
+            Route::get('/get/{id}', [PleitoEleitoralController::class, 'get'])->name('get');
         });
 
     });

@@ -15,7 +15,9 @@ class CreatePleitoEleitoralsTable extends Migration
     {
         Schema::create('pleito_eleitorals', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ano')->nullable();
+            $table->integer('ano_pleito')->nullable();
+            $table->integer('inicio_mandato')->nullable();
+            $table->integer('fim_mandato')->nullable();
             $table->boolean('pleitoEspecial')->nullable()->default(0);
             $table->date('dataPrimeiroTurno')->nullable();
             $table->date('dataSegundoTurno')->nullable();

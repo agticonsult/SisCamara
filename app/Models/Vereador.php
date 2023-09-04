@@ -12,15 +12,25 @@ class Vereador extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'descricao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'inicio_mandato', 'fim_mandato', 'id_pleito', 'id_cargo', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
     protected $table = 'vereadors';
 
+    public function pleito()
+    {
+        return $this->belongsTo(PleitoEleitoral::class, 'id_pleito');
+    }
+    public function cargo()
+    {
+        return $this->belongsTo(CargoEletivo::class, 'id_cargo');
+    }
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
 }
+
+

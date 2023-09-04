@@ -15,9 +15,12 @@ class CreateVereadorsTable extends Migration
     {
         Schema::create('vereadors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            //qnd comecou e qnd terminou
-            $table->integer('id_mandato')->unsigned()->nullable();
-            $table->foreign('id_mandato')->references('id')->on('mandatos');
+            $table->date('inicio_mandato')->nullable();
+            $table->date('fim_mandato')->nullable();
+            $table->integer('id_cargo')->unsigned()->nullable();
+            $table->foreign('id_cargo')->references('id')->on('cargo_eletivos');
+            $table->integer('id_pleito')->unsigned()->nullable();
+            $table->foreign('id_pleito')->references('id')->on('pleito_eleitorals');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();

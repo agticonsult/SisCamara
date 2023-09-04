@@ -49,5 +49,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoReparticaoTableSeeder::class);
         $this->call(LocalizacaoDocumentoTableSeeder::class);
         $this->call(StatusDocumentoTableSeeder::class);
+        $this->call(CargoEletivoTableSeeder::class);
+        $this->call(PleitoEleitoralTableSeeder::class);
     }
 }
