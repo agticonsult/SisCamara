@@ -25,14 +25,14 @@ class PleitoEleitoralTableSeeder extends Seeder
         DB::table('pleito_cargos')->insert([
 
             //Pleito de 2022
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 4, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 5, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 6, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 7, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 8, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 9, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 10, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito' => 1, 'id_cargo_eletivo' => 11, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 4, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 5, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 6, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 7, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 8, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 9, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 10, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 11, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
         ]);
 
     }

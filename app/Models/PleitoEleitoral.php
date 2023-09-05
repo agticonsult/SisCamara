@@ -24,6 +24,16 @@ class PleitoEleitoral extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function cargos_eletivos_ativos()
+    {
+        $cargos_eletivos = PleitoCargo::where('id_pleito_eleitoral', '=', $this->id)->where('ativo', '=', 1)->get();
+        return $cargos_eletivos;
+    }
+    public function cargos_eletivos()
+    {
+        $cargos_eletivos = PleitoCargo::where('id_pleito_eleitoral', '=', $this->id)->get();
+        return $cargos_eletivos;
+    }
 }
 
 

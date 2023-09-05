@@ -38,6 +38,7 @@
                             <th scope="col">Ano Pleito</th>
                             <th scope="col">Mandato</th>
                             <th scope="col">Turnos</th>
+                            <th scope="col">Cargos Eletivos</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Ações</th>
                             {{-- <th scope="col">Descrição</th>
@@ -49,14 +50,39 @@
                     <tbody>
                         @foreach ($pleitos as $pleito)
                             <tr>
-                                <td>{{ $pleito->ano_pleito != null ? $pleito->ano_pleito : 'não informado' }}</td>
+                                <td><strong>{{ $pleito->ano_pleito != null ? $pleito->ano_pleito : 'não informado' }}</strong></td>
+                                <td>Início: <strong>{{ $pleito->inicio_mandato }}</strong> - Fim: <strong>{{ $pleito->fim_mandato }}</strong></td>
+                                <td>
+                                    Primeiro turno: <strong>{{ $pleito->dataPrimeiroTurno != null ? date('d/m/Y', strtotime($pleito->dataPrimeiroTurno)) : 'não informado' }} </strong><br>
+                                    Segundo turno: <strong>{{ $pleito->dataSegundoTurno != null ? date('d/m/Y', strtotime($pleito->dataSegundoTurno)) : 'não informado' }} </strong>
+                                </td>
+                                <td>
+                                    @if (Count($pleito->cargos_eletivos_ativos()) != 0)
+                                        <ol>
+                                            @foreach ($pleito->cargos_eletivos_ativos() as $pleito_cargo)
+                                                <li>{{ $pleito_cargo->cargo_eletivo->descricao }}</li>
+                                            @endforeach
+                                        </ol>
+                                    @else
+                                        Nenhum cargo eletivo cadastrado
+                                    @endif
+                                </td>
+                                <td>
+                                    <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                </td>
+                                <td>
+                                    <a href="{{ route('configuracao.pleito_eleitoral.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}">Excluir</button>
+                                </td>
+                                {{-- Início: {{ date('d/m/Y', strtotime($pleito->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($pleito->fim_mandato)) }} --}}
                                 {{-- <td>{{ $pleito->id_tipo_pleito != null ? $pleito->tipo_pleito->descricao : 'não informado' }}</td>
                                 <td>
                                     <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('pleito.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('configuracao.pleito.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}">Excluir</button>
                                 </td> --}}
                             </tr>
@@ -120,7 +146,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('configuracao.pleito_eleitoral.create') }}" class="btn btn-primary">Cadastrar Repartição</a>
+        <a href="{{ route('configuracao.pleito_eleitoral.create') }}" class="btn btn-primary">Cadastrar Pleito Eleitoral</a>
     </div>
 
 </div>

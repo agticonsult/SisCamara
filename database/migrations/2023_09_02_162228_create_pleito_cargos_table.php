@@ -15,8 +15,8 @@ class CreatePleitoCargosTable extends Migration
     {
         Schema::create('pleito_cargos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_pleito')->unsigned()->nullable();
-            $table->foreign('id_pleito')->references('id')->on('pleito_eleitorals');
+            $table->integer('id_pleito_eleitoral')->unsigned()->nullable();
+            $table->foreign('id_pleito_eleitoral')->references('id')->on('pleito_eleitorals');
             $table->integer('id_cargo_eletivo')->unsigned()->nullable();
             $table->foreign('id_cargo_eletivo')->references('id')->on('cargo_eletivos');
             $table->uuid('cadastradoPorUsuario')->nullable();

@@ -22,27 +22,60 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Ato</strong>
+            <strong>Alteração de Pleito Eleitoral</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('reparticao.update', $reparticao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('configuracao.pleito_eleitoral.update', $pleito_eleitoral->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Descrição</label>
-                        <input type="text" class="form-control" name="descricao" value="{{ $reparticao->descricao }}">
+                        <label class="form-label">*Ano do Pleito Eleitoral</label>
+                        <input type="text" class="ano form-control" name="ano_pleito" value="{{ $pleito_eleitoral->ano_pleito }}">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Tipo de Repartição</label>
-                        <select name="id_tipo_reparticao" class="select2 form-control">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($tipo_reparticaos as $tipo_reparticao)
-                                <option value="{{ $tipo_reparticao->id }}" {{ $reparticao->id_tipo_reparticao == $tipo_reparticao->id ? 'selected' : '' }}>{{ $tipo_reparticao->descricao }}</option>
+                        <label class="form-label">Pleito Especial</label>
+                        <select name="pleitoEspecial" class="form-control">
+                            @if ($pleito_eleitoral->pleitoEspecial == 1)
+                                <option value="0">Não</option>
+                                <option value="1" selected>Sim</option>
+                            @else
+                                <option value="0" selected>Não</option>
+                                <option value="1">Sim</option>
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Início do mandato</label>
+                        <input type="text" class="ano form-control" name="inicio_mandato" value="{{ $pleito_eleitoral->inicio_mandato }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Fim do mandato</label>
+                        <input type="text" class="ano form-control" name="fim_mandato" value="{{ $pleito_eleitoral->fim_mandato }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data do primeiro turno</label>
+                        <input type="date" class="form-control" name="dataPrimeiroTurno" value="{{ $pleito_eleitoral->dataPrimeiroTurno }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data do segundo turno</label>
+                        <input type="date" class="form-control" name="dataSegundoTurno" value="{{ $pleito_eleitoral->dataSegundoTurno }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Cargos eletivos</label>
+                        <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
+                            @foreach ($cargo_eletivos as $cargo_eletivo)
+                                <option value="{{ $cargo_eletivo->id }}">{{ $cargo_eletivo->descricao }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -57,6 +90,52 @@
         </div>
     </div>
 
+    <div class="card-body">
+        <div class="col-md-12">
+            <hr><br>
+            <h5>Listagem de Cargos Eletivos do Pleito</h5>
+            <br>
+            <div class="table-responsive">
+                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Cargo Eletivo</th>
+                            <th scope="col">Cadastrado por</th>
+                            <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão "Ativo")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pleito_eleitoral->cargos_eletivos() as $pleito_cargo)
+                            <tr>
+                                <td>{{ $pleito_cargo->cargo_eletivo->descricao }}</td>
+                                <td>
+                                    <strong>{{ $pleito_cargo->cargo_eletivo->cadastradoPorUsuario != null ? $pleito_cargo->cargo_eletivo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $pleito_cargo->cargo_eletivo->created_at != null ? $pleito_cargo->cargo_eletivo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                </td>
+                                <td>
+                                    @switch($pleito_cargo->cargo_eletivo->ativo)
+                                        @case(1)
+                                            <button type="button" class="desativar btn btn-success" name="{{ $pleito_cargo->cargo_eletivo->id }}" id="{{ $pleito_cargo->cargo_eletivo->descricao }}">
+                                                Ativo
+                                            </button>
+                                            @break
+                                        @default
+                                            <button type="button" class="btn btn-info">
+                                                Desativado
+                                                por <strong>{{ $pleito_cargo->cargo_eletivo->inativadoPorUsuario != null ? $pleito_cargo->cargo_eletivo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($pleito_cargo->cargo_eletivo->dataInativado)) }}</strong>
+                                            </button>
+                                            @break
+                                    @endswitch
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -66,22 +145,42 @@
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
 
 <script>
+    $('.ano').mask('0000');
+
     $("#form").validate({
         rules : {
-            descricao:{
+            ano_pleito:{
                 required:true
             },
-            id_tipo_reparticao:{
+            inicio_mandato:{
                 required:true
             },
+            fim_mandato:{
+                required:true
+            },
+            dataPrimeiroTurno:{
+                required:true
+            },
+            dataSegundoTurno:{
+                required:true
+            }
         },
         messages:{
-            descricao:{
+            ano_pleito:{
                 required:"Campo obrigatório"
             },
-            id_tipo_reparticao:{
+            inicio_mandato:{
                 required:"Campo obrigatório"
             },
+            fim_mandato:{
+                required:"Campo obrigatório"
+            },
+            dataPrimeiroTurno:{
+                required:"Campo obrigatório"
+            },
+            dataSegundoTurno:{
+                required:"Campo obrigatório"
+            }
         }
     });
 
@@ -95,6 +194,23 @@
             },
             closeOnSelect: true,
             width: '100%',
+        });
+
+        $('#datatables-reponsive').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                "sSearch": "Pesquisar: ",
+                "oPaginate": {
+                    "sFirst": "Início",
+                    "sPrevious": "Anterior",
+                    "sNext": "Próximo",
+                    "sLast": "Último"
+                }
+            },
         });
 
     });

@@ -22,27 +22,55 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Cadastro de Ato</strong>
+            <strong>Cadastro de Pleito Eleitoral</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('reparticao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('configuracao.pleito_eleitoral.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Descrição</label>
-                        <input type="text" class="form-control" name="descricao">
+                        <label class="form-label">*Ano do Pleito Eleitoral</label>
+                        <input type="text" class="ano form-control" name="ano_pleito">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Tipo de Repartição</label>
-                        <select name="id_tipo_reparticao" class="select2 form-control">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($tipo_reparticaos as $tipo_reparticao)
-                                <option value="{{ $tipo_reparticao->id }}">{{ $tipo_reparticao->descricao }}</option>
+                        <label class="form-label">Pleito Especial</label>
+                        <select name="pleitoEspecial" class="form-control">
+                            <option value="0">Não</option>
+                            <option value="1">Sim</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Início do mandato</label>
+                        <input type="text" class="ano form-control" name="inicio_mandato">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Fim do mandato</label>
+                        <input type="text" class="ano form-control" name="fim_mandato">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data do primeiro turno</label>
+                        <input type="date" class="form-control" name="dataPrimeiroTurno">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data do segundo turno</label>
+                        <input type="date" class="form-control" name="dataSegundoTurno">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Cargos eletivos</label>
+                        <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
+                            @foreach ($cargo_eletivos as $cargo_eletivo)
+                                <option value="{{ $cargo_eletivo->id }}">{{ $cargo_eletivo->descricao }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -66,20 +94,46 @@
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
 
 <script>
+    $('.ano').mask('0000');
+
     $("#form").validate({
         rules : {
-            descricao:{
+            ano_pleito:{
                 required:true
             },
-            id_tipo_reparticao:{
+            inicio_mandato:{
+                required:true
+            },
+            fim_mandato:{
+                required:true
+            },
+            dataPrimeiroTurno:{
+                required:true
+            },
+            dataSegundoTurno:{
+                required:true
+            },
+            "id_cargo_eletivo[]":{
                 required:true
             },
         },
         messages:{
-            descricao:{
+            ano_pleito:{
                 required:"Campo obrigatório"
             },
-            id_tipo_reparticao:{
+            inicio_mandato:{
+                required:"Campo obrigatório"
+            },
+            fim_mandato:{
+                required:"Campo obrigatório"
+            },
+            dataPrimeiroTurno:{
+                required:"Campo obrigatório"
+            },
+            dataSegundoTurno:{
+                required:"Campo obrigatório"
+            },
+            "id_cargo_eletivo[]":{
                 required:"Campo obrigatório"
             },
         }

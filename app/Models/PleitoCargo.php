@@ -12,20 +12,20 @@ class PleitoCargo extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'id_pleito', 'id_cargo_eletivo', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'id_pleito_eleitoral', 'id_cargo_eletivo', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
     protected $table = 'pleito_cargos';
 
-    public function pleito()
+    public function pleito_eleitoral()
     {
-        return $this->belongsTo(PleitoEleitoral::class, 'id_pleito');
+        return $this->belongsTo(PleitoEleitoral::class, 'id_pleito_eleitoral');
     }
-    public function cargo()
+    public function cargo_eletivo()
     {
-        return $this->belongsTo(CargoEletivo::class, 'id_cargo');
+        return $this->belongsTo(CargoEletivo::class, 'id_cargo_eletivo');
     }
     public function cad_usuario()
     {

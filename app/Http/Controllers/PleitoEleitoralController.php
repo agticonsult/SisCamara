@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
+use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,9 +44,9 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+            $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.create', compact('tipo_reparticaos'));
+            return view('configuracao.pleito-eleitoral.create', compact('cargo_eletivos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -67,30 +69,56 @@ class PleitoEleitoralController extends Controller
             }
 
             $input = [
-                'descricao' => $request->descricao,
-                'id_tipo_reparticao' => $request->id_tipo_reparticao,
+                'ano_pleito' => $request->ano_pleito,
+                'inicio_mandato' => $request->inicio_mandato,
+                'fim_mandato' => $request->fim_mandato,
+                'pleitoEspecial' => $request->pleitoEspecial,
+                'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
+                'dataSegundoTurno' => $request->dataSegundoTurno,
+                'id_cargo_eletivo' => $request->id_cargo_eletivo
             ];
             $rules = [
-                'descricao' => 'required',
-                'id_tipo_reparticao' => 'required|integer',
+                'ano_pleito' => 'required',
+                'inicio_mandato' => 'required',
+                'fim_mandato' => 'required',
+                'pleitoEspecial' => 'nullable',
+                'dataPrimeiroTurno' => 'required|date',
+                'dataSegundoTurno' => 'required|date',
+                'id_cargo_eletivo' => 'required'
             ];
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $tipo_reparticao = TipoReparticao::where('id', '=', $request->id_tipo_reparticao)->where('ativo', '=', 1)->first();
-            if (!$tipo_reparticao){
-                return redirect()->back()->with('erro', 'Tipo de repartição inválida.');
+            if ($request->pleitoEspecial != 0 && $request->pleitoEspecial != 1){
+                return redirect()->back()->with('erro', 'Pleito especial inválido.');
             }
 
-            $reparticao = new Reparticao();
-            $reparticao->descricao = $request->descricao;
-            $reparticao->id_tipo_reparticao = $request->id_tipo_reparticao;
-            $reparticao->cadastradoPorUsuario = Auth::user()->id;
-            $reparticao->ativo = 1;
-            $reparticao->save();
+            $pleito_eleitoral = new PleitoEleitoral();
+            $pleito_eleitoral->ano_pleito = $request->ano_pleito;
+            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
+            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
+            $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
+            $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
+            $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
+            $pleito_eleitoral->cadastradoPorUsuario = Auth::user()->id;
+            $pleito_eleitoral->ativo = 1;
+            $pleito_eleitoral->save();
 
-            return redirect()->route('reparticao.index')->with('success', 'Cadastro realizado com sucesso');
+            $id_cargo_eletivos = $request->id_cargo_eletivo;
+            foreach ($id_cargo_eletivos as $id_cargo_eletivo){
+                $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
+                if ($cargo_eletivo){
+                    $pleito_cargo = new PleitoCargo();
+                    $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
+                    $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
+                    $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
+                    $pleito_cargo->ativo = 1;
+                    $pleito_cargo->save();
+                }
+            }
+
+            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -118,14 +146,14 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$pleito_eleitoral){
+                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
             }
 
-            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+            $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.edit', compact('PleitoEleitoral', 'tipo_reparticaos'));
+            return view('configuracao.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -147,35 +175,64 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'id' => $id,
-                'descricao' => $request->descricao,
-                'id_tipo_reparticao' => $request->id_tipo_reparticao,
+            $$input = [
+                'id' => $request->id,
+                'ano_pleito' => $request->ano_pleito,
+                'inicio_mandato' => $request->inicio_mandato,
+                'fim_mandato' => $request->fim_mandato,
+                'pleitoEspecial' => $request->pleitoEspecial,
+                'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
+                'dataSegundoTurno' => $request->dataSegundoTurno,
             ];
             $rules = [
                 'id' => 'required|integer',
-                'descricao' => 'required',
-                'id_tipo_reparticao' => 'required|integer',
+                'ano_pleito' => 'required',
+                'inicio_mandato' => 'required',
+                'fim_mandato' => 'required',
+                'pleitoEspecial' => 'nullable',
+                'dataPrimeiroTurno' => 'required|date',
+                'dataSegundoTurno' => 'required|date',
             ];
 
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$pleito_eleitoral){
+                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
             }
 
-            $tipo_reparticao = TipoReparticao::where('id', '=', $request->id_tipo_reparticao)->where('ativo', '=', 1)->first();
-            if (!$tipo_reparticao){
-                return redirect()->back()->with('erro', 'Tipo de repartição inválida.');
+            $pleito_eleitoral->ano_pleito = $request->ano_pleito;
+            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
+            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
+            $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
+            $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
+            $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
+            $pleito_eleitoral->save();
+
+            $id_cargo_eletivos = $request->id_cargo_eletivo;
+            foreach ($id_cargo_eletivos as $id_cargo_eletivo){
+                $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
+                if ($cargo_eletivo){
+
+                    $possuiCargo = PleitoCargo::where('id_pleito_eleitoral', '=', $id)
+                        ->where('id_cargo_eletivo', '=', $id_cargo_eletivo)
+                        ->where('ativo', '=', 1)
+                        ->first();
+
+                    if (!$possuiCargo){
+                        $pleito_cargo = new PleitoCargo();
+                        $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
+                        $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
+                        $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
+                        $pleito_cargo->ativo = 1;
+                        $pleito_cargo->save();
+                    }
+
+                }
             }
 
-            $reparticao->descricao = $request->descricao;
-            $reparticao->id_tipo_reparticao = $request->id_tipo_reparticao;
-            $reparticao->save();
-
-            return redirect()->route('reparticao.index')->with('success', 'Alteração realizada com sucesso');
+            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
