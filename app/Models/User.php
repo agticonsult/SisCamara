@@ -128,71 +128,15 @@ class User extends Authenticatable
         return false;
     }
 
-    public function agricultor()
+    public function ehVereador()
     {
-        return $this->hasOne(Agricultor::class, 'id_user', 'id');
+        $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+
+        if (!$eh){
+            return false;
+        }
+        return true;
     }
-    public function temPermissaoAbrangencia($entidade, $tipoFuncionalidade)
-    {
-        $resposta = array();
-
-        $e = Entidade::where('nomeEntidade', '=', $entidade)->first();
-        $tp = TipoFuncionalidade::where('descricao', '=', $tipoFuncionalidade)->first();
-
-        if (!$e || !$tp){
-            array_push($resposta, false);
-            array_push($resposta, 0);
-        }
-
-        $funcionalidade = Funcionalidade::where('id_entidade', '=', $e->id)->where('id_tipo_funcionalidade', '=', $tp->id)->where('ativo', '=', 1)->first();
-
-        if (!$funcionalidade){
-            array_push($resposta, false);
-            array_push($resposta, 0);
-        }
-
-        $permissoes = Permissao::where('id_user', '=', $this->id)->where('ativo', '=', 1)->get();
-
-        $temAcesso = 0;
-        $menorIdAbrangencia = 0;
-
-        foreach ($permissoes as $permissao){
-
-            $tem = $permissao->perfil->temFuncionalidade($funcionalidade);
-
-            if ($tem[0] == true){
-                $temAcesso = 1;
-                if ($menorIdAbrangencia == 0){
-                    $menorIdAbrangencia = $tem[1];
-                }
-                else{
-                    if ($tem[1] < $menorIdAbrangencia){
-                        $menorIdAbrangencia = $tem[1];
-                    }
-                }
-            }
-        }
-
-        if ($temAcesso == 1){
-            array_push($resposta, true);
-            array_push($resposta, $menorIdAbrangencia);
-            return $resposta;
-        }
-
-        array_push($resposta, false);
-        array_push($resposta, 0);
-        return $resposta;
-
-    }
-
-    // public function estaInscrito($id_evento)
-    // {
-    //     $estaInscrito = InscricaoEvento::where('id_cliente', '=', $this->id)->where('id_evento', '=', $id_evento)->where('ativo', '=', 1)->first();
-    //     if ($estaInscrito){
-    //         return true;
-    //     }
-    //     return false;
-    // }
 
     public function foto()
     {

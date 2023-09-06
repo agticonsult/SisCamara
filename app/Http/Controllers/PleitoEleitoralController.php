@@ -6,6 +6,8 @@ use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
 use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
+use App\Traits\ApiResponser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +15,8 @@ use Illuminate\Validation\ValidationException;
 
 class PleitoEleitoralController extends Controller
 {
+    use ApiResponser;
+
     public function index()
     {
         try {
@@ -87,8 +91,8 @@ class PleitoEleitoralController extends Controller
                 'id_cargo_eletivo' => 'required'
             ];
 
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
 
             if ($request->pleitoEspecial != 0 && $request->pleitoEspecial != 1){
                 return redirect()->back()->with('erro', 'Pleito especial inválido.');
@@ -175,7 +179,7 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $$input = [
+            $input = [
                 'id' => $request->id,
                 'ano_pleito' => $request->ano_pleito,
                 'inicio_mandato' => $request->inicio_mandato,
@@ -276,18 +280,26 @@ class PleitoEleitoralController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$pleito_eleitoral){
+                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
             }
 
-            $reparticao->inativadoPorUsuario = Auth::user()->id;
-            $reparticao->dataInativado = Carbon::now();
-            $reparticao->motivoInativado = $motivo;
-            $reparticao->ativo = 0;
-            $reparticao->save();
+            $pleito_eleitoral->inativadoPorUsuario = Auth::user()->id;
+            $pleito_eleitoral->dataInativado = Carbon::now();
+            $pleito_eleitoral->motivoInativado = $motivo;
+            $pleito_eleitoral->ativo = 0;
+            $pleito_eleitoral->save();
 
-            return redirect()->route('reparticao.index')->with('success', 'Exclusão realizada com sucesso.');
+            foreach ($pleito_eleitoral->cargos_eletivos_ativos() as $pleito_cargo_ativo){
+                $pleito_cargo_ativo->inativadoPorUsuario = Auth::user()->id;
+                $pleito_cargo_ativo->dataInativado = Carbon::now();
+                $pleito_cargo_ativo->motivoInativado = $motivo;
+                $pleito_cargo_ativo->ativo = 0;
+                $pleito_cargo_ativo->save();
+            }
+
+            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
             $message = $e->errors();
@@ -305,6 +317,43 @@ class PleitoEleitoralController extends Controller
             }
             $erro->save();
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
+    }
+
+    public function get($id)
+    {
+        try {
+            if (Auth::user()->temPermissao('User', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$pleito_eleitoral){
+                return $this->error('Pleito eleitoral inválido. Contate o administrador do sistema!', 403);
+            }
+
+            $pleito_cargos = $pleito_eleitoral->cargos_eletivos_ativos();
+            $cargos_eletivos = [];
+            foreach ($pleito_cargos as $pleito_cargo) {
+                $cargo_eletivo = [
+                    'id' => $pleito_cargo->id_cargo_eletivo,
+                    'descricao' => $pleito_cargo->cargo_eletivo->descricao
+                ];
+                array_push($cargos_eletivos, $cargo_eletivo);
+            }
+
+            return $this->success($cargos_eletivos);
+        }
+        catch(\Exception $ex){
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "ModeloDocumentoController";
+            $erro->funcao = "get";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return $this->error('Erro, contate o administrador do sistema', 500);
         }
     }
 }
