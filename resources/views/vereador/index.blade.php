@@ -34,23 +34,35 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            {{-- 'ano_pleito', 'inicio_mandato', 'fim_mandato', 'pleitoEspecial', 'dataPrimeiroTurno', 'dataSegundoTurno', --}}
-                            <th scope="col">ID</th>
-                            {{-- <th scope="col">Mandato</th>
-                            <th scope="col">Turnos</th>
-                            <th scope="col">Cargos Eletivos</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Mandato</th>
+                            <th scope="col">Cargo</th>
                             <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th> --}}
-                            {{-- <th scope="col">Descrição</th>
-                            <th scope="col">Tipo de Repartição</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th> --}}
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($vereadores as $vereador)
                             <tr>
-                                <td><strong>{{ $vereador->id }}</strong></td>
+                                <td><strong>{{ $vereador->id_user != null ? $vereador->usuario->pessoa->nomeCompleto : 'não informado' }}</strong></td>
+                                <td>
+                                    Primeiro turno: <strong>{{ $vereador->dataInicioMandato != null ? date('d/m/Y', strtotime($vereador->dataInicioMandato)) : 'não informado' }} </strong><br>
+                                    Segundo turno: <strong>{{ $vereador->dataFimMandato != null ? date('d/m/Y', strtotime($vereador->dataFimMandato)) : 'não informado' }} </strong>
+                                </td>
+                                <td><strong>{{ $vereador->cargo_eletivo->descricao }}</strong></td>
+                                <td>
+                                    <strong>{{ $vereador->cadastradoPorUsuario != null ? $vereador->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $vereador->created_at != null ? $vereador->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                </td>
+                                <td>
+                                    <a href="{{ route('vereador.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button>
+                                </td>
+                                {{-- $table->date('')->nullable();
+                                $table->date('')->nullable();
+                                $table->integer('id_cargo_eletivo')->unsigned()->nullable();
+                                $table->integer('id_pleito_eleitoral')->unsigned()->nullable();
+                                $table->uuid('id_user')->nullable(); --}}
                                 {{-- <td><strong>{{ $vereador->ano_pleito != null ? $vereador->ano_pleito : 'não informado' }}</strong></td>
                                 <td>Início: <strong>{{ $vereador->inicio_mandato }}</strong> - Fim: <strong>{{ $vereador->fim_mandato }}</strong></td>
                                 <td>

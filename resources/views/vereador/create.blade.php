@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Pleito Eleitoral</label>
-                        <select name="id_pleito_eleitoral" id="id_pleito_eleitoral" class="select2 form-control">
+                        <select name="id_pleito_eleitoral" id="id_pleito_eleitoral" class="select2 form-control" required>
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($pleito_eleitorals as $pleito_eleitoral)
                                 <option value="{{ $pleito_eleitoral->id }}">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Cargo Eletivo</label>
-                        <select name="id_cargo_eletivo" id="id_cargo_eletivo" class="select2 form-control">
+                        <select name="id_cargo_eletivo" id="id_cargo_eletivo" class="select2 form-control" required>
                             <option value="" selected disabled>--Selecione--</option>
                         </select>
                     </div>
@@ -55,11 +55,11 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data início mandato</label>
-                        <input type="date" name="dataInicioMandato" class="form-control">
+                        <input type="date" name="dataInicioMandato" class="form-control" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data fim mandato</label>
-                        <input type="date" name="dataFimMandato" class="form-control">
+                        <input type="date" name="dataFimMandato" class="form-control" required>
                     </div>
                 </div>
                 <div class="row">
@@ -167,49 +167,6 @@
                         <br>
                     </div>
                 </div>
-                {{-- <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Ano do Pleito Eleitoral</label>
-                        <input type="text" class="ano form-control" name="ano_pleito">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">Pleito Especial</label>
-                        <select name="pleitoEspecial" class="form-control">
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Início do mandato</label>
-                        <input type="text" class="ano form-control" name="inicio_mandato">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Fim do mandato</label>
-                        <input type="text" class="ano form-control" name="fim_mandato">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data do primeiro turno</label>
-                        <input type="date" class="form-control" name="dataPrimeiroTurno">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data do segundo turno</label>
-                        <input type="date" class="form-control" name="dataSegundoTurno">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="form-label">*Cargos eletivos</label>
-                        <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
-                            @foreach ($cargo_eletivos as $cargo_eletivo)
-                                <option value="{{ $cargo_eletivo->id }}">{{ $cargo_eletivo->descricao }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> --}}
 
                 <br>
                 <div class="col-md-12">
@@ -230,6 +187,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8-beta.17/inputmask.js" integrity="sha512-XvlcvEjR+D9tC5f13RZvNMvRrbKLyie+LRLlYz1TvTUwR1ff19aIQ0+JwK4E6DCbXm715DQiGbpNSkAAPGpd5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
+    $('#cpf').mask('000.000.000-00');
     $('.ano').mask('0000');
 
     function maskInputs() {
@@ -242,49 +200,6 @@
         im.mask(input)
     }
     maskInputs();
-
-    $("#form").validate({
-        rules : {
-            ano_pleito:{
-                required:true
-            },
-            inicio_mandato:{
-                required:true
-            },
-            fim_mandato:{
-                required:true
-            },
-            dataPrimeiroTurno:{
-                required:true
-            },
-            dataSegundoTurno:{
-                required:true
-            },
-            "id_cargo_eletivo[]":{
-                required:true
-            },
-        },
-        messages:{
-            ano_pleito:{
-                required:"Campo obrigatório"
-            },
-            inicio_mandato:{
-                required:"Campo obrigatório"
-            },
-            fim_mandato:{
-                required:"Campo obrigatório"
-            },
-            dataPrimeiroTurno:{
-                required:"Campo obrigatório"
-            },
-            dataSegundoTurno:{
-                required:"Campo obrigatório"
-            },
-            "id_cargo_eletivo[]":{
-                required:"Campo obrigatório"
-            },
-        }
-    });
 
     $('#cep').on('change', function(){
         var cep = $(this).val().replace(/[.-]/g,"");
@@ -326,7 +241,6 @@
                     else{
                         $("#endereco").focus();
                     }
-                    alterarMunicipio(resposta.ibge);
                 },
                 error: function(resposta){
                     //Agora basta definir os valores que você deseja preencher
@@ -392,12 +306,6 @@
 
         $('#optionSelect').on('change', function(){
             var selected = $(this).val();
-
-            /* Caso seja selecionado opção 1
-            /  Apresenta os campos para preencher o cadastro
-            /  E oculta o campo select para selecionar os usuários
-            */
-
             switch (selected) {
                 case '1':
                     $('#cadUser').removeClass('d-none');
@@ -436,23 +344,6 @@
                     $('#selectUser').addClass('d-none');
                     break;
             }
-            // if(selected == 1){
-            //     $('#cadUser').removeClass('d-none');
-            //     $('#selectUser').addClass('d-none');
-            // }
-            // else{
-            //     /* Caso seja selecionado a opção Vincular ao Usuário
-            //     /  Apresenta o campo para seleção de Usuário
-            //     */
-            //     if(selected == 2){
-            //         $('#cadUser').addClass('d-none');
-            //         $('#selectUser').removeClass('d-none');
-            //     }
-            //     else{
-            //         $('#cadUser').addClass('d-none');
-            //         $('#selectUser').addClass('d-none');
-            //     }
-            // }
         });
 
     });

@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
+use App\Models\Permissao;
+use App\Models\Pessoa;
+use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Models\User;
 use App\Models\Vereador;
+use App\Services\ValidadorCPFService;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class VereadorController extends Controller
 {
@@ -84,56 +93,167 @@ class VereadorController extends Controller
             }
 
             $input = [
-                'ano_pleito' => $request->ano_pleito,
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
-                'pleitoEspecial' => $request->pleitoEspecial,
-                'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
-                'dataSegundoTurno' => $request->dataSegundoTurno,
-                'id_cargo_eletivo' => $request->id_cargo_eletivo
+                'id_pleito_eleitoral' => $request->id_pleito_eleitoral,
+                'id_cargo_eletivo' => $request->id_cargo_eletivo,
+                'dataInicioMandato' => $request->dataInicioMandato,
+                'dataFimMandato' => $request->dataFimMandato,
+                'selecionar_opcao' => $request->selecionar_opcao
             ];
             $rules = [
-                'ano_pleito' => 'required',
-                'inicio_mandato' => 'required',
-                'fim_mandato' => 'required',
-                'pleitoEspecial' => 'nullable',
-                'dataPrimeiroTurno' => 'required|date',
-                'dataSegundoTurno' => 'required|date',
-                'id_cargo_eletivo' => 'required'
+                'id_pleito_eleitoral' =>  'required|integer',
+                'id_cargo_eletivo' => 'required|integer',
+                'dataInicioMandato' => 'required|date',
+                'dataFimMandato' => 'required|date',
+                'selecionar_opcao' => 'required|max:255'
             ];
 
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
 
-            if ($request->pleitoEspecial != 0 && $request->pleitoEspecial != 1){
-                return redirect()->back()->with('erro', 'Pleito especial inválido.');
+            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
+                ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
+                ->where('ativo', '=', 1)
+                ->first();
+            if (!$pleito_cargo){
+                return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
             }
 
-            $pleito_eleitoral = new PleitoEleitoral();
-            $pleito_eleitoral->ano_pleito = $request->ano_pleito;
-            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
-            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
-            $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
-            $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
-            $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
-            $pleito_eleitoral->cadastradoPorUsuario = Auth::user()->id;
-            $pleito_eleitoral->ativo = 1;
-            $pleito_eleitoral->save();
+            switch ($request->selecionar_opcao) {
+                case '1':
+                    $input_cad = [
+                        'nomeCompleto' => $request->nomeCompleto,
+                        'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
+                        'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
+                        'email' => $request->email,
+                        'password' => $request->password,
+                        'confirmacao' => $request->confirmacao,
+                        'telefone_celular' => preg_replace('/[^0-9]/', '', $request->telefone_celular),
+                        'telefone_celular2' => preg_replace('/[^0-9]/', '', $request->telefone_celular2)
+                    ];
+                    $rules_cad = [
+                        'nomeCompleto' => 'required|max:255',
+                        'cpf' => 'required|min:11|max:11',
+                        'email' => 'required|email',
+                        'dt_nascimento_fundacao' => 'required|max:10',
+                        'password' => 'required|min:6|max:35',
+                        'confirmacao' => 'required|min:6|max:35',
+                        'telefone_celular' => 'max:11',
+                        'telefone_celular2' => 'max:11'
+                    ];
 
-            $id_cargo_eletivos = $request->id_cargo_eletivo;
-            foreach ($id_cargo_eletivos as $id_cargo_eletivo){
-                $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
-                if ($cargo_eletivo){
-                    $pleito_cargo = new PleitoCargo();
-                    $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
-                    $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
-                    $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
-                    $pleito_cargo->ativo = 1;
-                    $pleito_cargo->save();
-                }
+                    $validar_cad = Validator::make($input_cad, $rules_cad);
+                    $validar_cad->validate();
+
+                    //verifica se a confirmação de senha estão ok
+                    if($request->password != $request->confirmacao){
+                        return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
+                    }
+
+                    //valida cpf
+                    if(!ValidadorCPFService::ehValido($request->cpf)) {
+                        return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
+                    }
+
+                    //varifica se já existe um email ativo cadaastrado no BD
+                    // $verifica_user = User::where('email', '=', $request->email)
+                    //     ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
+                    //     ->select('email', 'cpf')
+                    //     ->first();
+
+                    $verifica_user = User::where(function (Builder $query) use ($request) {
+                        return
+                            $query->where('email', '=', $request->email)
+                                ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf));
+                            })
+                        ->select('id', 'email', 'cpf')
+                        ->first();
+
+                    //existe um email cadastrado?
+                    if($verifica_user){
+                        return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.')->withInput();
+                    }
+
+                    //Pessoa
+                    $novaPessoa = new Pessoa();
+                    $novaPessoa->pessoaJuridica = 0;
+                    $novaPessoa->nomeCompleto = $request->nomeCompleto;
+                    $novaPessoa->apelidoFantasia = $request->apelidoFantasia;
+                    $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
+                    $novaPessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
+                    $novaPessoa->endereco = $request->endereco;
+                    $novaPessoa->bairro = $request->bairro;
+                    $novaPessoa->numero = $request->numero;
+                    $novaPessoa->complemento = $request->complemento;
+                    $novaPessoa->ponto_referencia = $request->ponto_referencia;
+                    $novaPessoa->ativo = 1;
+                    $novaPessoa->save();
+
+                    //Usuário
+                    $novoUsuario = new User();
+                    $novoUsuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
+                    $novoUsuario->email = $request->email;
+                    $novoUsuario->telefone_celular = preg_replace('/[^0-9]/', '', $request->telefone_celular);
+                    $novoUsuario->telefone_celular2 = preg_replace('/[^0-9]/', '', $request->telefone_celular2);
+                    $novoUsuario->password = Hash::make($request->password);
+                    $novoUsuario->bloqueadoPorTentativa = 0;
+                    $novoUsuario->ativo = 1;
+                    $novoUsuario->id_pessoa = $novaPessoa->id;
+                    $novoUsuario->confirmacao_email = 1;
+                    $novoUsuario->validado = 1;
+                    $novoUsuario->validadoPorUsuario = Auth::user()->id;
+                    $novoUsuario->validadoEm = Carbon::now();
+                    $novoUsuario->save();
+
+                    $permissao = new Permissao();
+                    $permissao->id_user = $novoUsuario->id;
+                    $permissao->id_perfil = 2;
+                    $permissao->cadastradoPorUsuario = Auth::user()->id;
+                    $permissao->ativo = 1;
+                    $permissao->save();
+
+                    $id_userzinho = $novoUsuario->id;
+                    break;
+
+                case '2':
+                    $input_vinc = [
+                        'id_usuario' => $request->id_usuario
+                    ];
+                    $rules_vinc = [
+                        'id_usuario' => 'required|max:255'
+                    ];
+
+                    $validar_vinc = Validator::make($input_vinc, $rules_vinc);
+                    $validar_vinc->validate();
+
+                    $temUsuario = User::where('id', '=', $request->id_usuario)
+                        ->where('ativo', '=', 1)
+                        ->select('id')
+                        ->first();
+
+                    if (!$temUsuario){
+                        return redirect()->back()->with('erro', 'Usuário não encontrado.')->withInput();
+                    }
+
+                    $id_userzinho = $temUsuario->id;
+                    break;
+
+                default:
+                    return redirect()->back()->with('erro', 'Cadastrar usuário ou vincular a um usuário já existente? Informe no formulário!')->withInput();
+                    break;
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
+            // Vereador
+            $novoVereador = new Vereador();
+            $novoVereador->dataInicioMandato = $request->dataInicioMandato;
+            $novoVereador->dataFimMandato = $request->dataFimMandato;
+            $novoVereador->id_cargo_eletivo = $request->id_cargo_eletivo;
+            $novoVereador->id_pleito_eleitoral = $request->id_pleito_eleitoral;
+            $novoVereador->id_user = $id_userzinho;
+            $novoVereador->cadastradoPorUsuario = Auth::user()->id;
+            $novoVereador->ativo = 1;
+            $novoVereador->save();
+
+            return redirect()->route('vereador.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
