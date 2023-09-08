@@ -170,7 +170,8 @@
 
                 <br>
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                    <a href="{{ route('vereador.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -189,6 +190,7 @@
 <script>
     $('#cpf').mask('000.000.000-00');
     $('.ano').mask('0000');
+    $('#cep').mask('00.000-000');
 
     function maskInputs() {
         var input = document.getElementsByClassName('telefone')

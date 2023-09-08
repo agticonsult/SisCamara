@@ -22,117 +22,125 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Pleito Eleitoral</strong>
+            <strong>Alteração de Vereador</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('configuracao.pleito_eleitoral.update', $pleito_eleitoral->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('vereador.update', $vereador->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Ano do Pleito Eleitoral</label>
-                        <input type="text" class="ano form-control" name="ano_pleito" value="{{ $pleito_eleitoral->ano_pleito }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">Pleito Especial</label>
-                        <select name="pleitoEspecial" class="form-control">
-                            @if ($pleito_eleitoral->pleitoEspecial == 1)
-                                <option value="0">Não</option>
-                                <option value="1" selected>Sim</option>
-                            @else
-                                <option value="0" selected>Não</option>
-                                <option value="1">Sim</option>
-                            @endif
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Início do mandato</label>
-                        <input type="text" class="ano form-control" name="inicio_mandato" value="{{ $pleito_eleitoral->inicio_mandato }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Fim do mandato</label>
-                        <input type="text" class="ano form-control" name="fim_mandato" value="{{ $pleito_eleitoral->fim_mandato }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data do primeiro turno</label>
-                        <input type="date" class="form-control" name="dataPrimeiroTurno" value="{{ $pleito_eleitoral->dataPrimeiroTurno }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data do segundo turno</label>
-                        <input type="date" class="form-control" name="dataSegundoTurno" value="{{ $pleito_eleitoral->dataSegundoTurno }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="form-label">Cargos eletivos</label>
-                        <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
-                            @foreach ($cargo_eletivos as $cargo_eletivo)
-                                <option value="{{ $cargo_eletivo->id }}">{{ $cargo_eletivo->descricao }}</option>
+                        <label class="form-label">*Pleito Eleitoral</label>
+                        <select name="id_pleito_eleitoral" id="id_pleito_eleitoral" class="select2 form-control" required>
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($pleito_eleitorals as $pleito_eleitoral)
+                                <option value="{{ $pleito_eleitoral->id }}" {{ $vereador->id_pleito_eleitoral == $pleito_eleitoral->id ? 'selected' : ''}}>
+                                    {{ $pleito_eleitoral->ano_pleito }} -
+                                    Mandato <strong>{{ $pleito_eleitoral->inicio_mandato }}</strong>-<strong>{{ $pleito_eleitoral->fim_mandato }}</strong>
+                                </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Cargo Eletivo</label>
+                        <select name="id_cargo_eletivo" id="id_cargo_eletivo" class="select2 form-control" required>
+                            <option value="" selected disabled>--Selecione--</option>
+                            @for ($i=0; $i<Count($cargos_eletivos); $i++)
+                                <option value="{{ $cargos_eletivos[$i]['id'] }}" {{ $vereador->id_cargo_eletivo == $cargos_eletivos[$i]['id'] ? 'selected' : ''}}>
+                                    {{ $cargos_eletivos[$i]['descricao'] }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data início mandato</label>
+                        <input type="date" name="dataInicioMandato" class="form-control" value="{{ $vereador->dataInicioMandato }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data fim mandato</label>
+                        <input type="date" name="dataFimMandato" class="form-control" value="{{ $vereador->dataFimMandato }}" required>
+                    </div>
+                </div>
+                <br><hr>
+                <h5>Dados Pessoais</h5>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">*Nome</label>
+                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ $vereador->usuario->pessoa->nomeCompleto }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Apelido</label>
+                        <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ $vereador->usuario->pessoa->apelidoFantasia }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*CPF</label>
+                        <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ $vereador->usuario->cpf }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Data de Nascimento</label>
+                        <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min='1899-01-01' max='2000-13-13' value="{{ $vereador->usuario->pessoa->dt_nascimento_fundacao }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Email</label>
+                        <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ $vereador->usuario->email }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Celular/Telefone</label>
+                        <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ $vereador->usuario->telefone_celular }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Celular/Telefone Recado</label>
+                        <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ $vereador->usuario->telefone_celular2 }}">
+                    </div>
+                </div>
+                <br><hr>
+                <h5>Endereço</h5>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="cep">CEP</label>
+                        <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ $vereador->usuario->pessoa->cep }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="endereco">Endereço (Rua/Avenida)</label>
+                        <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ $vereador->usuario->pessoa->endereco }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="numero">Número</label>
+                        <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ $vereador->usuario->pessoa->numero }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ $vereador->usuario->pessoa->bairro }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ $vereador->usuario->pessoa->complemento }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ponto_referencia">Ponto de Referência</label>
+                        <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ $vereador->usuario->pessoa->ponto_referencia }}">
                     </div>
                 </div>
 
                 <br>
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                    <a href="{{ route('vereador.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="col-md-12">
-            <hr><br>
-            <h5>Listagem de Cargos Eletivos do Pleito</h5>
-            <br>
-            <div class="table-responsive">
-                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Cargo Eletivo</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão "Ativo")</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pleito_eleitoral->cargos_eletivos() as $pleito_cargo)
-                            <tr>
-                                <td>{{ $pleito_cargo->cargo_eletivo->descricao }}</td>
-                                <td>
-                                    <strong>{{ $pleito_cargo->cargo_eletivo->cadastradoPorUsuario != null ? $pleito_cargo->cargo_eletivo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $pleito_cargo->cargo_eletivo->created_at != null ? $pleito_cargo->cargo_eletivo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                </td>
-                                <td>
-                                    @switch($pleito_cargo->cargo_eletivo->ativo)
-                                        @case(1)
-                                            <button type="button" class="desativar btn btn-success" name="{{ $pleito_cargo->cargo_eletivo->id }}" id="{{ $pleito_cargo->cargo_eletivo->descricao }}">
-                                                Ativo
-                                            </button>
-                                            @break
-                                        @default
-                                            <button type="button" class="btn btn-info">
-                                                Desativado
-                                                por <strong>{{ $pleito_cargo->cargo_eletivo->inativadoPorUsuario != null ? $pleito_cargo->cargo_eletivo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($pleito_cargo->cargo_eletivo->dataInativado)) }}</strong>
-                                            </button>
-                                            @break
-                                    @endswitch
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
@@ -143,45 +151,136 @@
 <script src="{{ asset('js/datatables.js') }}"></script>
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8-beta.17/inputmask.js" integrity="sha512-XvlcvEjR+D9tC5f13RZvNMvRrbKLyie+LRLlYz1TvTUwR1ff19aIQ0+JwK4E6DCbXm715DQiGbpNSkAAPGpd5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
+    $('#cpf').mask('000.000.000-00');
     $('.ano').mask('0000');
+    $('#cep').mask('00.000-000');
+
+    function maskInputs() {
+        var input = document.getElementsByClassName('telefone')
+        var im = new Inputmask(
+            {
+                mask: ['(99)9999-9999', '(99)99999-9999'],  keepStatic: true
+            }
+        )
+        im.mask(input)
+    }
+    maskInputs();
 
     $("#form").validate({
         rules : {
-            ano_pleito:{
+            id_pleito_eleitoral:{
                 required:true
             },
-            inicio_mandato:{
+            id_cargo_eletivo:{
                 required:true
             },
-            fim_mandato:{
+            dataInicioMandato:{
                 required:true
             },
-            dataPrimeiroTurno:{
+            dataFimMandato:{
                 required:true
             },
-            dataSegundoTurno:{
+            nomeCompleto:{
                 required:true
-            }
+            },
+            cpf:{
+                required:true
+            },
+            dt_nascimento_fundacao:{
+                required:true
+            },
+            email:{
+                required:true
+            },
         },
         messages:{
-            ano_pleito:{
+            id_pleito_eleitoral:{
                 required:"Campo obrigatório"
             },
-            inicio_mandato:{
+            id_cargo_eletivo:{
                 required:"Campo obrigatório"
             },
-            fim_mandato:{
+            dataInicioMandato:{
                 required:"Campo obrigatório"
             },
-            dataPrimeiroTurno:{
+            dataFimMandato:{
                 required:"Campo obrigatório"
             },
-            dataSegundoTurno:{
+            nomeCompleto:{
                 required:"Campo obrigatório"
-            }
+            },
+            cpf:{
+                required:"Campo obrigatório"
+            },
+            dt_nascimento_fundacao:{
+                required:"Campo obrigatório"
+            },
+            email:{
+                required:"Campo obrigatório"
+            },
         }
+    });
+
+    $('#cep').on('change', function(){
+        var cep = $(this).val().replace(/[.-]/g,"");
+        // console.log('CEP: ', cep);
+        // console.log('Quantidade de caracteres: ', cep.length);
+        if (cep.length != 8){
+            $("#endereco").val('');
+            $("#complemento").val('');
+            $("#bairro").val('');
+            // $("#cidade").val('');
+            // $("#uf").val('');
+            alert('CEP INVÁLIDO!');
+        }
+        else{
+            $.ajax({
+                //O campo URL diz o caminho de onde virá os dados
+                //É importante concatenar o valor digitado no CEP
+                url: 'https://viacep.com.br/ws/'+cep+'/json/',
+                //Aqui você deve preencher o tipo de dados que será lido,
+                //no caso, estamos lendo JSON.
+                dataType: 'json',
+                //SUCESS é referente a função que será executada caso
+                //ele consiga ler a fonte de dados com sucesso.
+                //O parâmetro dentro da função se refere ao nome da variável
+                //que você vai dar para ler esse objeto.
+                success: function(resposta){
+                    //Agora basta definir os valores que você deseja preencher
+                    //automaticamente nos campos acima.
+                    $("#endereco").val(resposta.logradouro);
+                    $("#complemento").val(resposta.complemento);
+                    $("#bairro").val(resposta.bairro);
+                    // $("#cidade").val(resposta.localidade);
+                    // $("#uf").val(resposta.uf);
+                    //Vamos incluir para que o Número seja focado automaticamente
+                    //melhorando a experiência do usuário
+                    if (resposta.logradouro != null && resposta.logradouro != ""){
+                        $("#numero").focus();
+                    }
+                    else{
+                        $("#endereco").focus();
+                    }
+                },
+                error: function(resposta){
+                    //Agora basta definir os valores que você deseja preencher
+                    //automaticamente nos campos acima.
+                    alert("Erro, CEP inválido");
+                    $("#endereco").val('');
+                    $("#complemento").val('');
+                    $("#bairro").val('');
+                    // $("#cidade").val('');
+                    // $("#uf").val('');
+                    //Vamos incluir para que o Número seja focado automaticamente
+                    //melhorando a experiência do usuário
+                    $("#cep").focus();
+                },
+            });
+        }
+
     });
 
     $(document).ready(function() {

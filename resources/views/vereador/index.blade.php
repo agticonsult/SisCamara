@@ -56,7 +56,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('vereador.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button>
+                                    {{-- <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button> --}}
                                 </td>
                                 {{-- $table->date('')->nullable();
                                 $table->date('')->nullable();
@@ -100,7 +100,7 @@
                                 </td> --}}
                             </tr>
 
-                            <div class="modal fade" id="exampleModalExcluir{{ $vereador->id }}"
+                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $vereador->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -127,7 +127,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             {{-- <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelRecadastrar"

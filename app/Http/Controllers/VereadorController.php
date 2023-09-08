@@ -281,14 +281,38 @@ class VereadorController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$vereador){
+                return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
-            $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
+            $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', 1)->get();
+            $pleito_cargos = $vereador->pleito_eleitoral->cargos_eletivos_ativos();
+            $cargos_eletivos = [];
+            foreach ($pleito_cargos as $pleito_cargo) {
+                $cargo_eletivo = [
+                    'id' => $pleito_cargo->id_cargo_eletivo,
+                    'descricao' => $pleito_cargo->cargo_eletivo->descricao
+                ];
+                array_push($cargos_eletivos, $cargo_eletivo);
+            }
+            $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
+                ->where('users.ativo', '=', 1)
+                ->select('users.id', 'users.id_pessoa')
+                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->get();
 
-            return view('vereador.edit', compact('pleito_eleitoral', 'cargo_eletivos'));
+            $usuarios = array();
+
+            foreach ($users as $user) {
+
+                if ($user->ehVereador() == 0){
+                    array_push($usuarios, $user);
+                }
+
+            }
+
+            return view('vereador.edit', compact('vereador', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -310,64 +334,127 @@ class VereadorController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $$input = [
+            $input = [
                 'id' => $request->id,
-                'ano_pleito' => $request->ano_pleito,
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
-                'pleitoEspecial' => $request->pleitoEspecial,
-                'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
-                'dataSegundoTurno' => $request->dataSegundoTurno,
+
+                // Dados do vereador
+                'id_pleito_eleitoral' => $request->id_pleito_eleitoral,
+                'id_cargo_eletivo' => $request->id_cargo_eletivo,
+                'dataInicioMandato' => $request->dataInicioMandato,
+                'dataFimMandato' => $request->dataFimMandato,
+
+                // Dados pessoais obrigatórios
+                'nomeCompleto' => $request->nomeCompleto,
+                'cpf' => preg_replace('/[^0-9]/', '',$request->cpf),
+                'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
+                'email' => $request->email,
+
+                // Dados pessoais não obrigatórios
+                'apelidoFantasia' => $request->apelidoFantasia,
+                'telefone_celular' => preg_replace('/[^0-9]/', '',$request->telefone_celular),
+                'telefone_celular2' => preg_replace('/[^0-9]/', '',$request->telefone_celular2),
+                'cep' => preg_replace('/[^0-9]/', '',$request->cep),
+                'endereco' => $request->endereco,
+                'numero' => $request->numero,
+                'bairro' => $request->bairro,
+                'complemento' => $request->complemento,
+                'ponto_referencia' => $request->ponto_referencia,
             ];
             $rules = [
                 'id' => 'required|integer',
-                'ano_pleito' => 'required',
-                'inicio_mandato' => 'required',
-                'fim_mandato' => 'required',
-                'pleitoEspecial' => 'nullable',
-                'dataPrimeiroTurno' => 'required|date',
-                'dataSegundoTurno' => 'required|date',
+
+                // Dados do vereador
+                'id_pleito_eleitoral' => 'required|integer',
+                'id_cargo_eletivo' => 'required|integer',
+                'dataInicioMandato' => 'required|date',
+                'dataFimMandato' => 'required|date',
+
+                // Dados pessoais não obrigatórios
+                'nomeCompleto' => 'required|max:255',
+                'cpf' => 'required|min:11|max:11',
+                'email' => 'required|email',
+                'dt_nascimento_fundacao' => 'required|max:10',
+
+                // Dados pessoais não obrigatórios
+                'apelidoFantasia' => 'nullable|max:255',
+                'telefone_celular' => 'nullable',
+                'telefone_celular2' => 'nullable',
+                'cep' => 'nullable',
+                'endereco' => 'nullable|max:255',
+                'numero' => 'nullable|max:255',
+                'bairro' => 'nullable|max:255',
+                'complemento' => 'nullable|max:255',
+                'ponto_referencia' => 'nullable|max:255'
             ];
 
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
+            $validar = Validator::make($input, $rules);
+            $validar->validate();
 
-            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$vereador){
+                return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
-            $pleito_eleitoral->ano_pleito = $request->ano_pleito;
-            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
-            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
-            $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
-            $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
-            $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
-            $pleito_eleitoral->save();
+            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
+                ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
+                ->where('ativo', '=', 1)
+                ->first();
+            if (!$pleito_cargo){
+                return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
+            }
 
-            $id_cargo_eletivos = $request->id_cargo_eletivo;
-            foreach ($id_cargo_eletivos as $id_cargo_eletivo){
-                $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
-                if ($cargo_eletivo){
+            //valida cpf
+            if(!ValidadorCPFService::ehValido($request->cpf)) {
+                return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
+            }
 
-                    $possuiCargo = PleitoCargo::where('id_pleito_eleitoral', '=', $id)
-                        ->where('id_cargo_eletivo', '=', $id_cargo_eletivo)
-                        ->where('ativo', '=', 1)
-                        ->first();
+            $verifica_user = User::where(function (Builder $query) use ($request) {
+                return
+                    $query->where('email', '=', $request->email)
+                        ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf));
+                    })
+                ->select('id', 'email', 'cpf')
+                ->first();
 
-                    if (!$possuiCargo){
-                        $pleito_cargo = new PleitoCargo();
-                        $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
-                        $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
-                        $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
-                        $pleito_cargo->ativo = 1;
-                        $pleito_cargo->save();
-                    }
+            //existe um email cadastrado?
+            if($verifica_user){
 
+                if ($verifica_user->id != $vereador->id_user) {
+                    //caso exista um cpf ou e-mail cadastrado, retorne a mensagem abaixo
+                    return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.')->withInput();
+                }
+                else{
+                    //Pessoa
+                    $pessoa = Pessoa::find($vereador->usuario->id_pessoa);
+                    $pessoa->nomeCompleto = $request->nomeCompleto;
+                    $pessoa->apelidoFantasia = $request->apelidoFantasia;
+                    $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
+                    $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
+                    $pessoa->endereco = $request->endereco;
+                    $pessoa->bairro = $request->bairro;
+                    $pessoa->numero = $request->numero;
+                    $pessoa->complemento = $request->complemento;
+                    $pessoa->ponto_referencia = $request->ponto_referencia;
+                    $pessoa->save();
+
+                    //Usuário
+                    $usuario = User::find($vereador->id_user);
+                    $usuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
+                    $usuario->email = $request->email;
+                    $usuario->telefone_celular = preg_replace('/[^0-9]/', '', $request->telefone_celular);
+                    $usuario->telefone_celular2 = preg_replace('/[^0-9]/', '', $request->telefone_celular2);
+                    $usuario->save();
                 }
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
+            // Vereador
+            $vereador->dataInicioMandato = $request->dataInicioMandato;
+            $vereador->dataFimMandato = $request->dataFimMandato;
+            $vereador->id_cargo_eletivo = $request->id_cargo_eletivo;
+            $vereador->id_pleito_eleitoral = $request->id_pleito_eleitoral;
+            $vereador->save();
+
+            return redirect()->route('vereador.index')->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -379,7 +466,7 @@ class VereadorController extends Controller
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "VereadorController";
-            $erro->funcao = "store";
+            $erro->funcao = "update";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
             }
@@ -441,7 +528,7 @@ class VereadorController extends Controller
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtividadeLazerController";
+            $erro->controlador = "VereadorController";
             $erro->funcao = "destroy";
             if (Auth::check()) {
                 $erro->cadastradoPorUsuario = auth()->user()->id;
