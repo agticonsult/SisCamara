@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusDocumentosTable extends Migration
+class CreateLocalizacaoProposicaosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateStatusDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_documentos', function (Blueprint $table) {
+        Schema::create('localizacao_proposicaos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descricao')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
@@ -34,6 +34,6 @@ class CreateStatusDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_documentos');
+        Schema::dropIfExists('localizacao_proposicaos');
     }
 }

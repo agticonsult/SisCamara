@@ -32,8 +32,8 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Filesize', 'nomeEntidade'=>'Filesize', 'ativo'=>1],
             ['descricao'=>'Anexo do Ato', 'nomeEntidade'=>'AnexoAto', 'ativo'=>1],
             ['descricao'=>'Repartição', 'nomeEntidade'=>'Reparticao', 'ativo'=>1],
-            ['descricao'=>'Documento', 'nomeEntidade'=>'Documento', 'ativo'=>1],
-            ['descricao'=>'Modelo de Documento', 'nomeEntidade'=>'ModeloDocumento', 'ativo'=>1],
+            ['descricao'=>'Proposição', 'nomeEntidade'=>'Proposicao', 'ativo'=>1],
+            ['descricao'=>'Modelo de Proposição', 'nomeEntidade'=>'ModeloProposicao', 'ativo'=>1],
             ['descricao'=>'Vereador', 'nomeEntidade'=>'Vereador', 'ativo'=>1],
             ['descricao'=>'Pleito Eleitoral', 'nomeEntidade'=>'PleitoEleitoral', 'ativo'=>1],
         ]);

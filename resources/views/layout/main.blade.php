@@ -82,40 +82,40 @@
                 @endif
 
                 <li class="sidebar-item">
-                    <a href="#documento" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a href="#proposicao" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="fas fa-chess-king"></i>Processo Legislativo
                     </a>
-                    <ul id="documento" class="sidebar-dropdown list-unstyled {{
-                            Route::current()->getPrefix() == '/documento' ||
-                            Route::current()->getPrefix() == 'documento/modelo'
+                    <ul id="proposicao" class="sidebar-dropdown list-unstyled {{
+                            Route::current()->getPrefix() == '/proposicao' ||
+                            Route::current()->getPrefix() == 'proposicao/modelo'
                         ? 'active' : 'collapse' }}">
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
-                            <a href="{{ route('documento.index') }}" class="sidebar-link">
-                                Documentos
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.index') }}" class="sidebar-link">
+                                Proposição
                             </a>
                         </li>
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
-                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                        {{-- <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Protocolo
                             </a>
                         </li>
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
-                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Secretaria
                             </a>
                         </li>
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
-                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Relatores
                             </a>
                         </li>
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/documento' ? 'active' : null }}">
-                            <a href="{{ route('documento.index') }}" class="sidebar-link">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Votação
                             </a>
-                        </li>
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'documento/modelo' ? 'active' : null }}">
-                            <a href="{{ route('documento.modelo.index') }}" class="sidebar-link">
+                        </li> --}}
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'proposicao/modelo' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.modelo.index') }}" class="sidebar-link">
                                 Modelos
                             </a>
                         </li>

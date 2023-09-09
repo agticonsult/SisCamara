@@ -22,13 +22,13 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Cadastro de Modelo</strong>
+            <strong>Cadastro de Proposição</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('documento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('proposicao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -81,7 +81,7 @@
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('documento.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <a href="{{ route('proposicao.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -150,7 +150,7 @@
             // $(this).html('Enviando..');
 
             $.ajax({
-                url: "{{ route('documento.modelo.get', '') }}"  + "/" + id_modelo,
+                url: "{{ route('proposicao.modelo.get', '') }}"  + "/" + id_modelo,
                 type: "GET",
                 dataType: 'json',
                 success: function (resposta) {

@@ -20,12 +20,12 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Listagem de Modelos de Documento</strong>
+            <strong>Listagem de Proposição</strong>
         </h2>
     </div>
 
     <div class="card-body">
-        @if (Count($modelos) == 0)
+        @if (Count($proposicaos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -34,36 +34,36 @@
             <table id="datatables-responsive" class="table" style="width: 100%;">
                 <thead>
                     <tr>
-                        <th scope="col">Assunto</th>
+                        <th scope="col">Nome</th>
                         <th scope="col">Cadastrado por</th>
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($modelos as $modelo)
+                    @foreach ($proposicaos as $proposicao)
                         <tr>
-                            <td>{{ $modelo->assunto }}</td>
+                            <td>{{ $proposicao->nome }}</td>
                             <td>
-                                <strong>{{ $modelo->cadastradoPorUsuario != null ? $modelo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                em <strong>{{ $modelo->created_at != null ? $modelo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                <strong>{{ $proposicao->cadastradoPorUsuario != null ? $proposicao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                em <strong>{{ $proposicao->created_at != null ? $proposicao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                             </td>
                             <td>
-                                <a href="{{ route('documento.modelo.edit', $modelo->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $modelo->id }}">Excluir</button>
+                                <a href="{{ route('proposicao.edit', $proposicao->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $proposicao->id }}">Excluir</button>
                             </td>
                         </tr>
 
-                        <div class="modal fade" id="exampleModalExcluir{{ $modelo->id }}"
+                        <div class="modal fade" id="exampleModalExcluir{{ $proposicao->id }}"
                             tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                             aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
-                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('documento.modelo.destroy', $modelo->id) }}">
+                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('proposicao.destroy', $proposicao->id) }}">
                                         @csrf
                                         @method('POST')
                                         <div class="modal-header btn-danger">
                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                <strong style="font-size: 1.2rem">Excluir <i> ID: {{ $modelo->id }} - Assunto: {{ $modelo->assunto != null ? $modelo->assunto : 'não informado' }}</i></strong>
+                                                <strong style="font-size: 1.2rem">Excluir <i> ID: {{ $proposicao->id }} - Assunto: {{ $proposicao->assunto != null ? $proposicao->assunto : 'não informado' }}</i></strong>
                                             </h5>
                                         </div>
                                         <div class="modal-body">
@@ -89,7 +89,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('documento.modelo.create') }}" class="btn btn-primary">Cadastrar Modelo</a>
+        <a href="{{ route('proposicao.create') }}" class="btn btn-primary">Cadastrar Proposicão</a>
     </div>
 
 </div>

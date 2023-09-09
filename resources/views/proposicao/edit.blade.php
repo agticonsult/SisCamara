@@ -22,25 +22,25 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Documento</strong>
+            <strong>Alteração de Proposição</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('documento.update', $documento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('proposicao.update', $proposicao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="nome">*Nome</label>
-                        <input type="text" class="form-control" name="nome" value="{{ $documento->nome }}" required>
+                        <input type="text" class="form-control" name="nome" value="{{ $proposicao->nome }}" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Modelo</label>
                         <select name="id_modelo" id="id_modelo" class="select2 form-control">
-                            <option value="{{ $documento->id_modelo }}" selected>{{ $documento->modelo->assunto }}</option>
+                            <option value="{{ $proposicao->id_modelo }}" selected>{{ $proposicao->modelo->assunto }}</option>
                         </select>
                     </div>
                 </div>
@@ -63,12 +63,12 @@
                                 <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
                                     <div class="">
                                         <div class="col-md-6 mb-3">
-                                            <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $documento->assunto }}">
+                                            <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $proposicao->assunto }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="colored-icon-4" role="tabpanel">
-                                    <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $documento->conteudo }}</textarea>
+                                    <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $proposicao->conteudo }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('documento.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <a href="{{ route('proposicao.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocalizacaoDocumentosTable extends Migration
+class CreateProposicaosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,17 @@ class CreateLocalizacaoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('localizacao_documentos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('descricao')->nullable();
+        Schema::create('proposicaos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('nome');
+            $table->string('assunto')->nullable();
+            $table->text('conteudo')->nullable();
+            $table->integer('id_localizacao')->unsigned()->nullable();
+            $table->foreign('id_localizacao')->references('id')->on('localizacao_proposicaos');
+            $table->integer('id_status')->unsigned()->nullable();
+            $table->foreign('id_status')->references('id')->on('status_proposicaos');
+            $table->bigInteger('id_modelo')->unsigned()->nullable();
+            $table->foreign('id_modelo')->references('id')->on('modelo_proposicaos');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
@@ -34,6 +42,6 @@ class CreateLocalizacaoDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('localizacao_documentos');
+        Schema::dropIfExists('proposicaos');
     }
 }

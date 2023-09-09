@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class StatusDocumento extends Model implements Auditable
+class LocalizacaoProposicao extends Model implements Auditable
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class StatusDocumento extends Model implements Auditable
     ];
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'status_documentos';
+    protected $table = 'localizacao_proposicaos';
 
     public function cad_usuario()
     {

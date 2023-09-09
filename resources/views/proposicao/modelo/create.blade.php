@@ -22,31 +22,31 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Modelo</strong>
+            <strong>Cadastro de Modelo</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('documento.modelo.update', $modelo_documento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('proposicao.modelo.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="assunto">Assunto</label>
-                        <input type="text" class="form-control" name="assunto" value="{{ $modelo_documento->assunto }}" required>
+                        <input type="text" class="form-control" name="assunto" value="{{ old("assunto") }}" required>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="body">Conteúdo</label>
-                        <textarea name="conteudo" class="form-control" cols="30" rows="15">{{ $modelo_documento->conteudo }}</textarea>
+                        <textarea name="conteudo" class="form-control" cols="30" rows="15">{{ old("conteudo") }}</textarea>
                     </div>
                 </div>
 
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('documento.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <a href="{{ route('proposicao.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
