@@ -15,6 +15,7 @@ class StatusProposicaoTableSeeder extends Seeder
     public function run()
     {
         DB::table('status_proposicaos')->insert([
+            ['descricao'=>'Pendente', 'ativo'=>1],
             ['descricao'=>'Em votação', 'ativo'=>1],
             ['descricao'=>'Negado', 'ativo'=>1],
             ['descricao'=>'Aprovado', 'ativo'=>1],

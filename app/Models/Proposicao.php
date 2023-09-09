@@ -12,7 +12,7 @@ class Proposicao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome', 'assunto', 'conteudo', 'id_localizacao', 'id_status', 'id_modelo', 'cadastradoPorUsuario',
+        'titulo', 'assunto', 'conteudo', 'id_localizacao', 'id_status', 'id_modelo', 'cadastradoPorUsuario',
         'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 

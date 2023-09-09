@@ -34,7 +34,9 @@
             <table id="datatables-responsive" class="table" style="width: 100%;">
                 <thead>
                     <tr>
-                        <th scope="col">Nome</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Localização</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Cadastrado por</th>
                         <th scope="col">Ações</th>
                     </tr>
@@ -42,7 +44,9 @@
                 <tbody>
                     @foreach ($proposicaos as $proposicao)
                         <tr>
-                            <td>{{ $proposicao->nome }}</td>
+                            <td>{{ $proposicao->titulo }}</td>
+                            <td>{{ $proposicao->id_localizacao != null ? $proposicao->localizacao->descricao : 'não informado' }}</td>
+                            <td>{{ $proposicao->id_status != null ? $proposicao->status->descricao : 'não informado' }}</td>
                             <td>
                                 <strong>{{ $proposicao->cadastradoPorUsuario != null ? $proposicao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                 em <strong>{{ $proposicao->created_at != null ? $proposicao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>

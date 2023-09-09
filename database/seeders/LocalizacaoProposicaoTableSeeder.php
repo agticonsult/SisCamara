@@ -15,10 +15,16 @@ class LocalizacaoProposicaoTableSeeder extends Seeder
     public function run()
     {
         DB::table('localizacao_proposicaos')->insert([
-            ['descricao'=>'Localização 1', 'ativo'=>1],
-            ['descricao'=>'Localização 2', 'ativo'=>1],
-            ['descricao'=>'Localização 3', 'ativo'=>1],
-            ['descricao'=>'Localização 4', 'ativo'=>1]
+            ['descricao'=>'Protocolo', 'ativo'=>1],
+            ['descricao'=>'Secretaria', 'ativo'=>1],
+            ['descricao'=>'Relator', 'ativo'=>1],
+            ['descricao'=>'Comissão', 'ativo'=>1],
+            ['descricao'=>'Plenário', 'ativo'=>1]
         ]);
     }
 }
+
+
+
+
+

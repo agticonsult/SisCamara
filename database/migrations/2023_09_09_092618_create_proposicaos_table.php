@@ -15,7 +15,7 @@ class CreateProposicaosTable extends Migration
     {
         Schema::create('proposicaos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nome');
+            $table->string('titulo')->nullable();
             $table->string('assunto')->nullable();
             $table->text('conteudo')->nullable();
             $table->integer('id_localizacao')->unsigned()->nullable();

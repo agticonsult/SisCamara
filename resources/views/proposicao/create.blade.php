@@ -34,8 +34,8 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" for="nome">*Nome</label>
-                        <input type="text" class="form-control" name="nome" value="{{ old("nome") }}" required>
+                        <label class="form-label" for="titulo">*Título</label>
+                        <input type="text" class="form-control" name="titulo" value="{{ old("titulo") }}" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Modelo</label>
@@ -100,7 +100,7 @@
 <script>
     $("#form").validate({
         rules : {
-            nome:{
+            titulo:{
                 required:true
             },
             id_modelo:{
@@ -114,7 +114,7 @@
             },
         },
         messages:{
-            nome:{
+            titulo:{
                 required:"Campo obrigatório"
             },
             id_modelo:{

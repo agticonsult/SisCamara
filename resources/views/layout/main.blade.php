@@ -89,6 +89,11 @@
                             Route::current()->getPrefix() == '/proposicao' ||
                             Route::current()->getPrefix() == 'proposicao/modelo'
                         ? 'active' : 'collapse' }}">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'proposicao/modelo' ? 'active' : null }}">
+                            <a href="{{ route('proposicao.modelo.index') }}" class="sidebar-link">
+                                Modelos
+                            </a>
+                        </li>
                         <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
                             <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Proposição
@@ -114,11 +119,6 @@
                                 Votação
                             </a>
                         </li> --}}
-                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'proposicao/modelo' ? 'active' : null }}">
-                            <a href="{{ route('proposicao.modelo.index') }}" class="sidebar-link">
-                                Modelos
-                            </a>
-                        </li>
                         {{-- <li class="sidebar-item">
                             <a href="#admNewsletter" data-toggle="collapse" class="sidebar-link collapsed">
                                 Newsletter

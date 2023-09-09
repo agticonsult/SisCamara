@@ -73,13 +73,13 @@ class ProposicaoController extends Controller
             }
 
             $input = [
-                'nome' => $request->nome,
+                'titulo' => $request->titulo,
                 'id_modelo' => $request->id_modelo,
                 'assunto' => $request->assunto,
                 'conteudo' => $request->conteudo,
             ];
             $rules = [
-                'nome' => 'required',
+                'titulo' => 'required',
                 'id_modelo' => 'required|integer',
                 'assunto' => 'required',
                 'conteudo' => 'required',
@@ -94,10 +94,12 @@ class ProposicaoController extends Controller
             }
 
             $proposicao = new Proposicao();
-            $proposicao->nome = $request->nome;
+            $proposicao->titulo = $request->titulo;
             $proposicao->id_modelo = $request->id_modelo;
             $proposicao->assunto = $request->assunto;
             $proposicao->conteudo = $request->conteudo;
+            $proposicao->id_status = 1;
+            $proposicao->id_localizacao = 1;
             $proposicao->cadastradoPorUsuario = Auth::user()->id;
             $proposicao->ativo = 1;
             $proposicao->save();
@@ -161,13 +163,13 @@ class ProposicaoController extends Controller
 
             $input = [
                 'id' => $id,
-                'nome' => $request->nome,
+                'titulo' => $request->titulo,
                 'assunto' => $request->assunto,
                 'conteudo' => $request->conteudo,
             ];
             $rules = [
                 'id' => 'required|integer',
-                'nome' => 'required',
+                'titulo' => 'required',
                 'assunto' => 'required',
                 'conteudo' => 'required',
             ];
@@ -180,7 +182,7 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
-            $proposicao->nome = $request->nome;
+            $proposicao->titulo = $request->titulo;
             $proposicao->assunto = $request->assunto;
             $proposicao->conteudo = $request->conteudo;
             $proposicao->save();
