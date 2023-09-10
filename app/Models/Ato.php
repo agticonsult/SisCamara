@@ -79,65 +79,65 @@ class Ato extends Model implements Auditable
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
 
+    public function linha_atos()
+    {
+        return $this->hasMany(LinhaAto::class, 'id_ato_principal', 'id');
+    }
+
     public function buscar($filtro = null)
     {
 
-        $resultados = $this->where(function($query) use($filtro){
+        return $this->select('atos.*', 'linha_atos.texto')
+        ->from('atos')
+        ->leftJoin('linha_atos', 'atos.id', '=', 'linha_atos.id_ato_principal')
+        ->when(isset($filtro['palavra']) ?? false, function($query) use($filtro){
+            $query->where('titulo', 'ILIKE', '%' . $filtro['palavra'] . '%')
+                ->orWhere('texto', 'ILIKE', '%' . $filtro['palavra'] . '%');
+        })
+        ->where(function($query) use($filtro){
 
-            if(empty(collect($filtro)->except('_token', '_method') === null)){
-                $query->get();
-            }
-
-            if(isset($filtro['palavra'])){
-                $query->where('titulo', 'ILIKE', '%' . $filtro['palavra'] . '%');
-            }
-
-            if(isset($filtro['exclusao'])){
+            if(isset($filtro['exclusao']) ?? false){
                 $query->where('titulo', 'NOT ILIKE', '%' . $filtro['exclusao'] . '%');
             }
 
-            if(isset($filtro['id_classificacao'])){
+            if(isset($filtro['id_classificacao']) ?? false){
                 $query->where('id_classificacao', '=', $filtro['id_classificacao']);
             }
 
-            if(isset($filtro['ano'])){
-                $query->where('ano', 'ILIKE', '%' . $filtro['ano'] . '%');
+            if(isset($filtro['ano']) ?? false){
+                $query->where('ano', '=', $filtro['ano']);
             }
 
-            if(isset($filtro['numero'])){
+            if(isset($filtro['numero']) ?? false){
                 $query->where('numero', 'ILIKE', '%' . $filtro['numero'] . '%');
             }
 
-            if(isset($filtro['id_tipo_ato'])){
+            if(isset($filtro['id_tipo_ato']) ?? false){
                 $query->where('id_tipo_ato', '=', $filtro['id_tipo_ato']);
             }
 
-            if(isset($filtro['id_assunto'])){
+            if(isset($filtro['id_assunto']) ?? false){
                 $query->where('id_assunto', '=', $filtro['id_assunto']);
             }
 
-            if(isset($filtro['altera_dispositivo'])){
+            if(isset($filtro['altera_dispositivo']) ?? false){
                 $query->where('altera_dispositivo', '=', $filtro['altera_dispositivo']);
             }
 
-            if(isset($filtro['id_orgao'])){
+            if(isset($filtro['id_orgao']) ?? false){
                 $query->where('id_orgao', '=', $filtro['id_orgao']);
             }
 
-            if(isset($filtro['id_forma_publicacao'])){
+            if(isset($filtro['id_forma_publicacao']) ?? false){
                 $query->where('id_forma_publicacao', '=', $filtro['id_forma_publicacao']);
             }
 
-        })->where(function($subquery) use($filtro){
-
-            if(isset($filtro['data_publicacao'])){
-                $subquery->where('data_publicacao', 'ILIKE', $filtro['data_publicacao'] . '%');
-            }
-
+        })->when(isset($filtro['data_publicacao']) ?? false, function($query) use ($filtro){
+            $query->whereDate('data_publicacao', $filtro['data_publicacao']);
         })
         ->paginate(20);
 
-        return $resultados;
+
     }
 }
 

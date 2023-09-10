@@ -46,7 +46,10 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">Pesquisar por palavras</label>
-                                <input type="text" class="form-control" name="palavra" id="palavra">
+                                <input type="text" placeholder="Pesquisar por palavras" class="form-control" name="palavra" id="palavra" value="{{ $filtros['palavra'] ?? '' }}">
+                                @if(isset($filtros['palavra']))
+                                <span class="badge bg-warning">Filtro aplicado</span>
+                                @endif
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">Exclusão de palavras</label>

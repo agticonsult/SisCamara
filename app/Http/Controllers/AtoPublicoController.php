@@ -63,16 +63,18 @@ class AtoPublicoController extends Controller
     public function buscar(Request $request, Ato $ato)
     {
         try {
-            $atos = $ato->buscar($request->all());
+            $filtros = $request->except('_method', '_token');
+            $atos = $ato->buscar($filtros);
             $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
             $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
             $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
 
-            return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+            return view('ato.publico.index', compact('atos', 'filtros', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
+            dd($ex->getMessage());
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "AtoPublicoController";
