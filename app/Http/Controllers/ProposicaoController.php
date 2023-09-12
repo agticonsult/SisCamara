@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Proposicao;
 use App\Models\ErrorLog;
+use App\Models\LocalizacaoProposicao;
 use App\Models\ModeloProposicao;
+use App\Models\StatusProposicao;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -138,8 +140,10 @@ class ProposicaoController extends Controller
             }
 
             $modelos = ModeloProposicao::where('ativo', '=', 1)->get();
+            $localizacaos = LocalizacaoProposicao::where('ativo', '=', 1)->get();
+            $statuses = StatusProposicao::where('ativo', '=', 1)->get();
 
-            return view('proposicao.edit', compact('proposicao', 'modelos'));
+            return view('proposicao.edit', compact('proposicao', 'localizacaos', 'statuses'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -166,12 +170,16 @@ class ProposicaoController extends Controller
                 'titulo' => $request->titulo,
                 'assunto' => $request->assunto,
                 'conteudo' => $request->conteudo,
+                'id_localizacao' => $request->id_localizacao,
+                'id_status' => $request->id_status,
             ];
             $rules = [
                 'id' => 'required|integer',
                 'titulo' => 'required',
                 'assunto' => 'required',
                 'conteudo' => 'required',
+                'id_localizacao' => 'required|integer',
+                'id_status' => 'required|integer',
             ];
 
             $validar = Validator::make($input, $rules);
@@ -182,9 +190,21 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
+            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$localizacao){
+                return redirect()->back()->with('erro', 'Localização inválida.');
+            }
+
+            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$localizacao){
+                return redirect()->back()->with('erro', 'Status inválido.');
+            }
+
             $proposicao->titulo = $request->titulo;
             $proposicao->assunto = $request->assunto;
             $proposicao->conteudo = $request->conteudo;
+            $proposicao->id_localizacao = $request->id_localizacao;
+            $proposicao->id_status = $request->id_status;
             $proposicao->save();
 
             return redirect()->route('proposicao.index')->with('success', 'Alteração realizada com sucesso');

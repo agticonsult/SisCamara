@@ -44,6 +44,24 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" for="id_localizacao">*Localização</label>
+                        <select name="id_localizacao" id="id_localizacao" class="select2 form-control">
+                            @foreach ($localizacaos as $localizacao)
+                                <option value="{{ $localizacao->id }}" {{ $localizacao->id == $proposicao->id_localizacao ? 'selected' : '' }}>{{ $localizacao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Status</label>
+                        <select name="id_status" id="id_status" class="select2 form-control">
+                            @foreach ($statuses as $status)
+                                <option value="{{ $status->id }}" {{ $status->id == $proposicao->id_status ? 'selected' : '' }}>{{ $status->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 <div class="row" id="assunto_conteudo">
                     <div class="col-md-12">
                         <div class="tab tab-primary">
@@ -109,6 +127,12 @@
             conteudo:{
                 required:true
             },
+            id_localizacao:{
+                required:true
+            },
+            id_status:{
+                required:true
+            },
         },
         messages:{
             titulo:{
@@ -121,6 +145,12 @@
                 required:"Campo obrigatório"
             },
             conteudo:{
+                required:"Campo obrigatório"
+            },
+            id_localizacao:{
+                required:"Campo obrigatório"
+            },
+            id_status:{
                 required:"Campo obrigatório"
             },
         }
