@@ -30,6 +30,7 @@ use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VereadorController;
+use App\Http\Controllers\VotacaoEletronicaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -147,6 +148,29 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [ReparticaoController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [ReparticaoController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
+    });
+
+    // Votação Eletrônica
+    Route::group(['prefix' => '/votacao-eletronica', 'as' => 'votacao_eletronica.'], function() {
+        Route::get('/index', [VotacaoEletronicaController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [VotacaoEletronicaController::class, 'show'])->name('show');
+        Route::get('/create', [VotacaoEletronicaController::class, 'create'])->name('create');
+        Route::post('/store', [VotacaoEletronicaController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [VotacaoEletronicaController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [VotacaoEletronicaController::class, 'destroy'])->name('destroy');
+
+        // // Dados Gerais
+        // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
+        //     Route::get('/index', [ModeloProposicaoController::class, 'index'])->name('index');
+        //     Route::get('/create', [ModeloProposicaoController::class, 'create'])->name('create');
+        //     Route::post('/store', [ModeloProposicaoController::class, 'store'])->name('store');
+        //     Route::get('/edit/{id}', [ModeloProposicaoController::class, 'edit'])->name('edit');
+        //     Route::post('/update/{id}', [ModeloProposicaoController::class, 'update'])->name('update');
+        //     Route::post('/destroy/{id}', [ModeloProposicaoController::class, 'destroy'])->name('destroy');
+        //     Route::get('/get/{id}', [ModeloProposicaoController::class, 'get'])->name('get');
+        // });
+
     });
 
     // Proposição

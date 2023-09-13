@@ -82,6 +82,21 @@
                 @endif
 
                 <li class="sidebar-item">
+                    <a href="#votacaoEletronica" data-toggle="collapse" class="sidebar-link collapsed">
+                        <i class="fas fa-chess-king"></i>Votação Eletrônica
+                    </a>
+                    <ul id="votacaoEletronica" class="sidebar-dropdown list-unstyled {{
+                            Route::current()->getPrefix() == '/votacao-eletronica'
+                        ? 'active' : 'collapse' }}">
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'votacao-eletronica' ? 'active' : null }}">
+                            <a href="{{ route('votacao_eletronica.index') }}" class="sidebar-link">
+                                Listagem
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
                     <a href="#proposicao" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="fas fa-chess-king"></i>Processo Legislativo
                     </a>

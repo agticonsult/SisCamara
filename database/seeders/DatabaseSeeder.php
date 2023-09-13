@@ -51,5 +51,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusProposicaoTableSeeder::class);
         $this->call(CargoEletivoTableSeeder::class);
         $this->call(PleitoEleitoralTableSeeder::class);
+        $this->call(StatusVotacaoTableSeeder::class);
+        $this->call(TipoVotacaoTableSeeder::class);
     }
 }

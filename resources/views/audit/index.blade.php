@@ -90,6 +90,7 @@
                                     <th scope="col">Evento</th>
                                     <th scope="col">Tabela alterada</th>
                                     <th scope="col">ID alterado</th>
+                                    <th scope="col">IP</th>
                                     {{-- <th scope="col">Valores Antigos</th>
                                     <th scope="col">Valores Novos</th> --}}
                                     <th scope="col">Alterações</th>
@@ -102,6 +103,7 @@
                                         <td>{{ $audit->event != null ? $audit->event : '-' }}</td>
                                         <td>{{ $audit->auditable_type != null ? $audit->auditable_type : '-' }}</td>
                                         <td>{{ $audit->auditable_id != null ? $audit->auditable_id : '-' }}</td>
+                                        <td>{{ $audit->ip_address != null ? $audit->ip_address : '-' }}</td>
                                         <td>{{ $audit->getModified(true) }}</td>
                                         {{-- <td >{{ json_encode($audit->old_values) }}</td>
                                         <td >{{ json_encode($audit->new_values) }}</td> --}}
