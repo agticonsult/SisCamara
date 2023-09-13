@@ -12,13 +12,13 @@ class TextoProposicao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'ordem', 'sub_ordem', 'texto', 'alterado', 'id_proposicao', 'id_ato_add', 'id_tipo_linha',
+        'ordem', 'sub_ordem', 'texto', 'alterado', 'id_proposicao',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'linha_atos';
+    protected $table = 'texto_proposicaos';
 
     public function cad_usuario()
     {

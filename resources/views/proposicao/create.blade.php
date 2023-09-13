@@ -28,7 +28,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('proposicao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('proposicao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Modelo</label>
-                        <select name="id_modelo" id="id_modelo" class="select2 form-control">
+                        <select name="id_modelo" id="id_modelo" class="select2 form-control" required>
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($modelos as $modelo)
                                 <option value="{{ $modelo->id }}">{{ $modelo->assunto }}</option>
@@ -66,21 +66,22 @@
                                 <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
                                     <div class="">
                                         <div class="col-md-6 mb-3">
-                                            <input type="text" class="form-control" name="assunto" id="assunto">
+                                            <input type="text" class="form-control" name="assunto" id="assunto" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="colored-icon-4" role="tabpanel">
-                                    <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10"></textarea>
+                                    <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10" required></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <input type="text" class="form-control" name="texto_proposicao" id="texto_proposicao" value="{{ old("texto_proposicao") }}" hidden>
 
                 <br>
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-primary m-1" id="salvar">Salvar</button>
                     <a href="{{ route('proposicao.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
@@ -129,6 +130,7 @@
         }
     });
 
+
     tinymce.init({
         selector: 'textarea',
         plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
@@ -142,6 +144,11 @@
     });
 
     $(document).ready(function() {
+
+        $('#salvar').on('click', function(){
+            var plainText = tinymce.activeEditor.getBody().textContent;
+            $('#texto_proposicao').val(plainText);
+        });
 
         $('#id_modelo').on('change', function(e){
             var id_modelo = $(this).val();

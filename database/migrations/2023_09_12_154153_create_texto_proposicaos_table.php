@@ -20,7 +20,7 @@ class CreateTextoProposicaosTable extends Migration
             $table->text('texto')->nullable();
             $table->boolean('alterado')->nullable();
             $table->bigInteger('id_proposicao')->unsigned()->nullable();
-            $table->foreign('id_proposicao')->references('id')->on('atos');
+            $table->foreign('id_proposicao')->references('id')->on('proposicaos');
             // $table->bigInteger('id_ato_add')->unsigned()->nullable();
             // $table->foreign('id_ato_add')->references('id')->on('atos');
             // $table->integer('id_tipo_linha')->unsigned()->nullable();

@@ -7,6 +7,7 @@ use App\Models\ErrorLog;
 use App\Models\LocalizacaoProposicao;
 use App\Models\ModeloProposicao;
 use App\Models\StatusProposicao;
+use App\Models\TextoProposicao;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,6 +106,23 @@ class ProposicaoController extends Controller
             $proposicao->cadastradoPorUsuario = Auth::user()->id;
             $proposicao->ativo = 1;
             $proposicao->save();
+
+            $texto_proposicao = $request->texto_proposicao;
+            $texto_proposicao_alterado = preg_replace('/\r/', '', $texto_proposicao);
+            $array_texto_proposicao = explode("\n", $texto_proposicao_alterado);
+
+            for ($i = 0; $i < Count($array_texto_proposicao); $i++){
+                if ($array_texto_proposicao[$i] != ""){
+                    $texto_proposicao = new TextoProposicao();
+                    $texto_proposicao->ordem = $i + 1;
+                    $texto_proposicao->texto = $array_texto_proposicao[$i];
+                    $texto_proposicao->alterado = 0;
+                    $texto_proposicao->id_proposicao = $proposicao->id;
+                    $texto_proposicao->cadastradoPorUsuario = Auth::user()->id;
+                    $texto_proposicao->ativo = 1;
+                    $texto_proposicao->save();
+                }
+            }
 
             return redirect()->route('proposicao.index')->with('success', 'Cadastro realizado com sucesso');
         }
