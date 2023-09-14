@@ -60,7 +60,42 @@ class AtoPublicoController extends Controller
         }
     }
 
-    public function buscar(Request $request, Ato $ato)
+    public function buscaLivre(Request $request, Ato $ato)
+    {
+        try {
+
+            if ($request->palavra == null && $request->exclusao == null){
+                return redirect()->route('web_publica.ato.index');
+            }
+            if ($request->palavra != null && $request->exclusao != null){
+                dd('Tem os 2', $request->all());
+            }
+            dd($request->all());
+            $filtros = $request->except('_method', '_token');
+            $atos = $ato->buscar($filtros);
+            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
+
+            return view('ato.publico.index', compact('atos', 'filtros', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+        }
+        catch (\Exception $ex) {
+            dd($ex->getMessage());
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtoPublicoController";
+            $erro->funcao = "buscar";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function buscaEspecifica(Request $request, Ato $ato)
     {
         try {
             $filtros = $request->except('_method', '_token');

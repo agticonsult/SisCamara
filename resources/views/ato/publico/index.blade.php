@@ -39,16 +39,17 @@
             <div id="collapse" class="collapse show" aria-labelledby="heading"
                 data-parent="#accordion">
                 <div class="card-body">
-                    <form action="{{ route('web_publica.ato.buscar') }}" method="POST" id="form-buscar">
+                    <form action="{{ route('web_publica.ato.busca.livre') }}" method="POST" id="form-buscar">
                         @csrf
                         @method('POST')
 
+                        <h4 style="text-align: center" class="m-3">Filtro por Busca Livre</h4>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">Pesquisar por palavras</label>
                                 <input type="text" placeholder="Pesquisar por palavras" class="form-control" name="palavra" id="palavra" value="{{ $filtros['palavra'] ?? '' }}">
                                 @if(isset($filtros['palavra']))
-                                <span class="badge bg-warning">Filtro aplicado</span>
+                                    <span class="badge bg-warning">Filtro aplicado</span>
                                 @endif
                             </div>
                             <div class="form-group col-md-6">
@@ -56,6 +57,23 @@
                                 <input type="text" class="form-control" name="exclusao" id="exclusao">
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <i class="fas fa-search-location"></i>
+                                    &nbspPesquisar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <br><hr><br>
+
+                    <form action="{{ route('web_publica.ato.busca.especifica') }}" method="POST" id="form-buscar">
+                        @csrf
+                        @method('POST')
+
+                        <h4 style="text-align: center" class="m-3">Filtro Específico</h4>
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label class="form-label">Classificação do Ato</label>

@@ -345,7 +345,11 @@ Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
     Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
         Route::get('/index', [AtoPublicoController::class, 'index'])->name('index');
         Route::get('/show/{id}', [AtoPublicoController::class, 'show'])->name('show');
-        Route::any('/buscar', [AtoPublicoController::class, 'buscar'])->name('buscar');
+
+        Route::group(['prefix' => '/busca', 'as' => 'busca.'], function() {
+            Route::any('/livre', [AtoPublicoController::class, 'buscaLivre'])->name('livre');
+            Route::any('/especifica', [AtoPublicoController::class, 'buscaEspecifica'])->name('especifica');
+        });
     });
 
     // Route::get('/index', [PerfilFuncionalidadeController::class, 'index'])->name('index');
