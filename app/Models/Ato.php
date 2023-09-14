@@ -97,7 +97,9 @@ class Ato extends Model implements Auditable
         ->where(function($query) use($filtro){
 
             if(isset($filtro['exclusao']) ?? false){
-                $query->where('titulo', 'NOT ILIKE', '%' . $filtro['exclusao'] . '%');
+
+                $query->where('titulo', 'NOT ILIKE', '%' . $filtro['exclusao'] . '%')
+                    ->orWhere('texto', 'NOT ILIKE', '%' . $filtro['exclusao'] . '%');
             }
 
             if(isset($filtro['id_classificacao']) ?? false){
