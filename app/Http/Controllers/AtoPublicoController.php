@@ -7,8 +7,10 @@ use App\Models\Ato;
 use App\Models\ClassificacaoAto;
 use App\Models\ErrorLog;
 use App\Models\FormaPublicacaoAto;
+use App\Models\LinhaAto;
 use App\Models\OrgaoAto;
 use App\Models\TipoAto;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,6 +70,35 @@ class AtoPublicoController extends Controller
                 return redirect()->route('web_publica.ato.index');
             }
             if ($request->palavra != null && $request->exclusao != null){
+
+                // atos com título
+                $atos_titulo = Ato::where('titulo', 'LIKE', '%'.$request->palavra.'%')->where('ativo', '=', 1)->get();
+
+                // linhas com texto
+                $linhas_texto = LinhaAto::where('texto', 'LIKE', '%'.$request->palavra.'%')
+                    ->where('ativo', '=', 1)
+                    // ->select('id_ato_principal as id')
+                    ->get();
+
+                $array_atos_titulo_texto = [];
+                foreach ($linhas_texto as $linha_texto) {
+                    foreach ($atos_titulo as $ato_titulo) {
+                        if ($linha_texto->id_ato_principal == $ato_titulo->id){
+
+                        }
+                    }
+
+                }
+
+                dd($atos_titulo, $linhas_texto);
+
+                // $ato_palavras = Ato::leftJoin('linha_atos', 'linha_atos.id_ato_principal', '=', 'atos.id')
+                //     ->where(function (Builder $query) use ($request) {
+                //         return
+                //             $query->where('atos.titulo', 'LIKE', $request->palavra)
+                //                 ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf));
+                //             })
+                //     ->
                 dd('Tem os 2', $request->all());
             }
             dd($request->all());
