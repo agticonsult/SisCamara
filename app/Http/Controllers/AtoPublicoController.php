@@ -72,7 +72,9 @@ class AtoPublicoController extends Controller
             if ($request->palavra != null && $request->exclusao != null){
 
                 // atos com título
-                $atos_titulo = Ato::where('titulo', 'LIKE', '%'.$request->palavra.'%')->where('ativo', '=', 1)->get();
+                $atos_titulo = Ato::where('titulo', 'LIKE', '%'.$request->palavra.'%')
+                    ->where('ativo', '=', 1)
+                    ->get();
 
                 // linhas com texto
                 $linhas_texto = LinhaAto::where('texto', 'LIKE', '%'.$request->palavra.'%')
@@ -80,17 +82,34 @@ class AtoPublicoController extends Controller
                     // ->select('id_ato_principal as id')
                     ->get();
 
-                $array_atos_titulo_texto = [];
+                // atos com as palavras no texto ou no título
+                $array_atos_palavra = $atos_titulo->toArray();
                 foreach ($linhas_texto as $linha_texto) {
-                    foreach ($atos_titulo as $ato_titulo) {
-                        if ($linha_texto->id_ato_principal == $ato_titulo->id){
-
+                    $tem = 0;
+                    for ($i=0; $i<Count($array_atos_palavra); $i++){
+                        if ($array_atos_palavra[$i]['id'] == $linha_texto->id_ato_principal){
+                            $tem = 1;
+                            break;
                         }
                     }
-
+                    if ($tem == 0){
+                        array_push($array_atos_palavra, $linha_texto->ato_principal->toArray());
+                    }
                 }
 
-                dd($atos_titulo, $linhas_texto);
+                // excluindo atos com título
+                $atos_titulo = Ato::where('titulo', 'NOT LIKE', '%'.$request->exclusao.'%')
+                    ->where('ativo', '=', 1)
+                    ->get();
+
+                // excluindo atos com texto
+                $linhas_texto = LinhaAto::where('texto', 'NOT LIKE', '%'.$request->exclusao.'%')
+                    ->where('ativo', '=', 1)
+                    // ->select('id_ato_principal as id')
+                    ->get();
+
+
+                dd($atos_titulo, $linhas_texto, $array_atos_palavra);
 
                 // $ato_palavras = Ato::leftJoin('linha_atos', 'linha_atos.id_ato_principal', '=', 'atos.id')
                 //     ->where(function (Builder $query) use ($request) {
