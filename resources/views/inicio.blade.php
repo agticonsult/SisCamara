@@ -106,9 +106,9 @@
                                             </a>
                                         </div>
                                         <div class="mt-3">
-                                            <a href="#">
+                                            <a href="{{ route('web_publica.proposicao.index') }}">
                                                 <button type="button" class="btn btn-lg btn-danger"
-                                                    style="width: 100%; margin-bottom: 0.7rem">E-SIC</button>
+                                                    style="width: 100%; margin-bottom: 0.7rem">Transparência</button>
                                             </a>
                                         </div>
                                     </div>

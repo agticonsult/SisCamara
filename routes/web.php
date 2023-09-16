@@ -23,6 +23,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\PleitoEleitoralController;
+use App\Http\Controllers\ProposicaoPublicoController;
 use App\Http\Controllers\PublicacaoAtoController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\ReparticaoController;
@@ -350,6 +351,17 @@ Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
             Route::any('/livre', [AtoPublicoController::class, 'buscaLivre'])->name('livre');
             Route::any('/especifica', [AtoPublicoController::class, 'buscaEspecifica'])->name('especifica');
         });
+    });
+
+    //Proposicao
+    Route::group(['prefix' => '/proposicao', 'as' => 'proposicao.'], function() {
+        Route::get('/index', [ProposicaoPublicoController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [ProposicaoPublicoController::class, 'show'])->name('show');
+
+        // Route::group(['prefix' => '/busca', 'as' => 'busca.'], function() {
+        //     Route::any('/livre', [AtoPublicoController::class, 'buscaLivre'])->name('livre');
+        //     Route::any('/especifica', [AtoPublicoController::class, 'buscaEspecifica'])->name('especifica');
+        // });
     });
 
     // Route::get('/index', [PerfilFuncionalidadeController::class, 'index'])->name('index');
