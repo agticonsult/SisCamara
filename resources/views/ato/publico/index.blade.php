@@ -198,16 +198,16 @@
                                             <td>
                                                 {{ $ato['tipo_ato'] }}
                                                 Nº {{ $ato['numero'] }},
-                                                de {{$ato['formated_created_at'] }}
+                                                de {{ $ato['created_at'] != null ? strftime('%d de %B de %Y', strtotime($ato['created_at'])) : 'não informado' }}
                                             </td>
-                                            <td>{{ $ato['titulo'] }}</td>
-                                            <td>{{ $ato['assunto'] }}</td>
+                                            <td>{{ $ato['titulo'] != null ? $ato['titulo'] : 'não informado' }}</td>
+                                            <td>{{ $ato['assunto'] != null ? $ato['assunto'] : 'não informado'  }}</td>
                                             <td>
                                                 Órgão que editou o ato: <strong>{{ $ato['orgao'] }} </strong> <br>
-                                                Forma de Publicação: <strong>{{ $ato['forma_publicacao'] }} </strong> <br>
-                                                Data de Publicação: <strong>{{ $ato['data_publicacao'] }}</strong>
+                                                Forma de Publicação: <strong>{{ $ato['forma_publicacao'] != null ? $ato['forma_publicacao'] : 'não informado'  }} </strong> <br>
+                                                Data de Publicação: <strong>{{ $ato['data_publicacao'] != null ? $ato['data_publicacao'] : 'não informado'  }}</strong>
                                             </td>
-                                            <td>{{ $ato['altera_dispositivo'] }}</td>
+                                            <td>{{ $ato['altera_dispositivo'] == 1 ? 'Sim' : 'Não' }}</td>
                                             <td>
                                                 <a href="{{ route('web_publica.ato.show', $ato['id']) }}" class="btn btn-secondary m-1">Visualizar</a>
                                             </td>
