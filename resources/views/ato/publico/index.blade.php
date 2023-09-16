@@ -54,7 +54,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">Exclusão de palavras</label>
-                                <input type="text" class="form-control" name="exclusao" id="exclusao">
+                                <input type="text" placeholder="Palavras a serem excluídas" class="form-control" name="exclusao" id="exclusao">
                             </div>
                         </div>
                         <div class="row">
@@ -145,48 +145,8 @@
                                 <input type="date" class="form-control" name="data_publicacao">
                             </div>
                         </div>
-                        {{-- <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Título</label>
-                                <input name="titulo" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Assunto</label>
-                                <select name="id_assunto" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($assuntos as $assunto)
-                                        <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Tipo de Ato</label>
-                                <select name="id_tipo_ato" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($tipo_atos as $tipo_ato)
-                                        <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="ano">Ano</label>
-                                <input name="ano" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="numero">Número</label>
-                                <input name="numero" class="form-control">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="altera_dispositivo">Altera dispositivo</label>
-                                <select name="altera_dispositivo" class="form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
-                            </div>
-                        </div> --}}
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-primary float-right">
                                     <i class="fas fa-search-location"></i>
@@ -236,27 +196,20 @@
                                     @foreach ($atos as $ato)
                                         <tr>
                                             <td>
-                                                @php
-                                                    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-                                                    date_default_timezone_set('America/Sao_Paulo');
-                                                @endphp
-                                                {{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'Tipo de ato não informado' }}
-                                                Nº {{ $ato->numero != null ? $ato->numero : 'não informado' }},
-                                                de {{ strftime('%d de %B de %Y', strtotime($ato->created_at)) }}
+                                                {{ $ato['tipo_ato'] }}
+                                                Nº {{ $ato['numero'] }},
+                                                de {{$ato['formated_created_at'] }}
                                             </td>
-                                            <td>{{ $ato->titulo }}</td>
-                                            <td>{{ $ato->id_assunto != null ? $ato->assunto->descricao : 'não informado' }}</td>
+                                            <td>{{ $ato['titulo'] }}</td>
+                                            <td>{{ $ato['assunto'] }}</td>
                                             <td>
-                                                Tipo de Ato: <strong>{{ $ato->id_tipo_ato != null ? $ato->tipo_ato->descricao : 'não informado' }} </strong> <br>
-                                                Órgão que editou o ato: <strong>{{ $ato->id_orgao != null ? $ato->orgao->descricao : 'não informado' }} </strong> <br>
-                                                Forma de Publicação: <strong>{{ $ato->id_forma_publicacao != null ? $ato->forma_publicacao->descricao : 'não informado' }} </strong> <br>
-                                                Data de Publicação: <strong>{{ $ato->data_publicacao != null ? date('d/m/Y', strtotime($ato->data_publicacao)) : 'não informado' }}</strong>
+                                                Órgão que editou o ato: <strong>{{ $ato['orgao'] }} </strong> <br>
+                                                Forma de Publicação: <strong>{{ $ato['forma_publicacao'] }} </strong> <br>
+                                                Data de Publicação: <strong>{{ $ato['data_publicacao'] }}</strong>
                                             </td>
-                                            <td>{{ $ato->altera_dispositivo == 1 ? 'Sim' : 'Não' }}</td>
+                                            <td>{{ $ato['altera_dispositivo'] }}</td>
                                             <td>
-                                                <a href="{{ route('web_publica.ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
-                                                {{-- <a href="{{ route('ato.dados_gerais.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button> --}}
+                                                <a href="{{ route('web_publica.ato.show', $ato['id']) }}" class="btn btn-secondary m-1">Visualizar</a>
                                             </td>
                                         </tr>
 
