@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" type="text/css"
         href="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.css" />
+    <script src="{{ asset('js/jquery.js') }}"></script>
 
     <style>
         .error {
@@ -95,13 +96,23 @@
 
     {{-- Scripts --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+    integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('jquery-mask/dist/jquery.mask.min.js') }}"></script>
+    <script src="{{ url('js/fontawesome.js') }}"></script>
+    <script src="{{ url('js/bootstrap.js') }}"></script>
+    <script src="{{ url('js/functions.js') }}"></script>
+    <script src="{{ url('js/prevent_multiple_submits.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
+    <script src="{{ asset('select2-4.1.0/dist/js/select2.min.js') }}"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
         integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ url('js/bootstrap.js') }}"></script>
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
     <script>
         $('#cpf').mask('000.000.000-00');
-    </script>
+    </script> --}}
 
 </body>
 

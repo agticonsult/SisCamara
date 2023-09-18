@@ -14,6 +14,11 @@
 @include('errors.alerts')
 @include('errors.errors')
 
+@php
+    setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+    date_default_timezone_set('America/Campo_Grande');
+@endphp
+
 <div class="card" style="background-color:white">
 
     <div class="card-header" style="background-color:white">
@@ -283,6 +288,7 @@
 
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
 
 <script>
 

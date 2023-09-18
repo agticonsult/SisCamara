@@ -147,13 +147,16 @@ class AtoPublicoController extends Controller
                     }
                 }
 
+                $i = 0;
                 // excluindo atos com texto = $request->exclusao
                 foreach ($linhas_texto_excluidos as $linha_texto_excluido) {
-                    for ($i=0; $i<Count($atos); $i++){
+
+                    foreach ($atos as $ato) {
                         if ($atos[$i]['id'] == $linha_texto_excluido->id_ato_principal){
                             unset($atos[$i]);
                             break;
                         }
+                        $i++;
                     }
                 }
             }
@@ -209,6 +212,8 @@ class AtoPublicoController extends Controller
 
                 if ($request->exclusao != null){
 
+                    $i = 0;
+
                     $todos_atos = Ato::leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
                         ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
                         ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
@@ -239,23 +244,27 @@ class AtoPublicoController extends Controller
                         ->where('ativo', '=', 1)
                         ->get();
 
+                    $i = 0;
                     // excluindo atos com titulo = $request->exclusao
                     foreach ($atos_titulo_excluidos as $ato_titulo_excluido) {
-                        for ($i=0; $i<Count($atos); $i++){
+                        foreach ($atos as $ato) {
                             if ($atos[$i]['id'] == $ato_titulo_excluido->id){
                                 unset($atos[$i]);
                                 break;
                             }
+                            $i++;
                         }
                     }
 
+                    $i = 0;
                     // excluindo atos com texto = $request->exclusao
-                    foreach ($linhas_texto_excluidos as $linha_texto_excluido) {dd($atos);
-                        for ($i=0; $i<Count($atos); $i++){
-                            if ($atos[$i]['id'] == $linha_texto_excluido->id_ato_principal){
+                    foreach ($linhas_texto_excluidos as $linha_texto_excluido) {
+                        foreach ($atos as $ato) {
+                            if ($ato['id'] == $linha_texto_excluido->id_ato_principal){
                                 unset($atos[$i]);
                                 break;
                             }
+                            $i++;
                         }
                     }
                 }

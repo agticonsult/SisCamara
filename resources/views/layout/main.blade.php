@@ -390,8 +390,7 @@
 <script src="{{ url('js/bootstrap.js') }}"></script>
 <script src="{{ url('js/functions.js') }}"></script>
 <script src="{{ url('js/prevent_multiple_submits.js') }}"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js">
-</script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.js"></script>
 <script src="{{ asset('select2-4.1.0/dist/js/select2.min.js') }}"></script>
 
 <script>
