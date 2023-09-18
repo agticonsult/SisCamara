@@ -24,4 +24,12 @@ class VotacaoEletronica extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function tipo_votacao()
+    {
+        return $this->belongsTo(TipoVotacao::class, 'id_tipo_votacao');
+    }
+    public function proposicao()
+    {
+        return $this->belongsTo(Proposicao::class, 'id_proposicao');
+    }
 }

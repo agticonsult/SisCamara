@@ -340,7 +340,6 @@ class AtoPublicoController extends Controller
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
-            dd($ex->getMessage());
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "AtoPublicoController";
@@ -367,7 +366,6 @@ class AtoPublicoController extends Controller
             return view('ato.publico.index', compact('atos', 'filtros', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
-            dd($ex->getMessage());
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "AtoPublicoController";
