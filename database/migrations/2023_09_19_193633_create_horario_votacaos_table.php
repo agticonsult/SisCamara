@@ -17,7 +17,7 @@ class CreateHorarioVotacaosTable extends Migration
             $table->bigIncrements('id');
             $table->timestamp('horario')->nullable();
             $table->integer('id_tipo_horario')->unsigned()->nullable();
-            $table->foreign('id_tipo_horario')->references('id')->on('tipo_horarios');
+            $table->foreign('id_tipo_horario')->references('id')->on('tipo_horario_votacaos');
             $table->bigInteger('id_votacao')->unsigned()->nullable();
             $table->foreign('id_votacao')->references('id')->on('votacao_eletronicas');
             $table->uuid('cadastradoPorUsuario')->nullable();

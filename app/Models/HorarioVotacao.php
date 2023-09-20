@@ -12,7 +12,7 @@ class HorarioVotacao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'descricao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'horario', 'id_tipo_horario', 'id_votacao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -23,4 +23,13 @@ class HorarioVotacao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function tipo_horario()
+    {
+        return $this->belongsTo(TipoHorarioVotacao::class, 'id_tipo_horario');
+    }
+    public function votacao()
+    {
+        return $this->belongsTo(VotacaoEletronica::class, 'id_votacao');
+    }
 }
+

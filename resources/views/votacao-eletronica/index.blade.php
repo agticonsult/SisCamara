@@ -39,6 +39,7 @@
                             <th scope="col">Tipo de Votação</th>
                             <th scope="col">Proposição</th>
                             <th scope="col">Cadastrado por</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -52,6 +53,9 @@
                                 <td>
                                     <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                </td>
+                                <td>
+                                    <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-info m-1">Iniciar Votação</a>
                                 </td>
                                 <td>
                                     <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>

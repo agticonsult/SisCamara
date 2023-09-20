@@ -16,6 +16,8 @@ class CreateVotacaoEletronicasTable extends Migration
         Schema::create('votacao_eletronicas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('data')->nullable();
+            $table->integer('interrupcoes')->nullable();
+            $table->boolean('votacaoIniciada')->nullable();
             $table->timestamp('dataHoraInicio')->nullable();
             $table->timestamp('dataHoraFim')->nullable();
             $table->integer('id_tipo_votacao')->unsigned()->nullable();

@@ -12,7 +12,7 @@ class VotacaoEletronica extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'data', 'dataHoraInicio', 'dataHoraFim', 'id_tipo_votacao', 'id_proposicao', 'id_status_votacao',
+        'data', 'interrupcoes', 'votacaoIniciada', 'dataHoraInicio', 'dataHoraFim', 'id_tipo_votacao', 'id_proposicao', 'id_status_votacao',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
@@ -31,5 +31,10 @@ class VotacaoEletronica extends Model implements Auditable
     public function proposicao()
     {
         return $this->belongsTo(Proposicao::class, 'id_proposicao');
+    }
+    public function horarios_ativos()
+    {
+        $horarios = HorarioVotacao::where('id_votacao', '=', $this->id)->where('ativo', '=', 1)->get();
+        return $horarios;
     }
 }

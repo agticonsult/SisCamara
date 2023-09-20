@@ -160,6 +160,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [VotacaoEletronicaController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [VotacaoEletronicaController::class, 'destroy'])->name('destroy');
+        Route::get('/iniciar-votacao/{id}', [VotacaoEletronicaController::class, 'iniciarVotacao'])->name('iniciarVotacao');
 
         // // Dados Gerais
         // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
