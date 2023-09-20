@@ -136,7 +136,6 @@ class AtoPublicoController extends Controller
                     ->where('ativo', '=', 1)
                     ->get();
 
-
                 // excluindo atos com titulo = $request->exclusao
                 foreach ($atos_titulo_excluidos as $ato_titulo_excluido) {
                     for ($i=0; $i<Count($atos); $i++){
@@ -269,67 +268,6 @@ class AtoPublicoController extends Controller
                     }
                 }
             }
-
-            // dd($atos_not_formated);
-            // $atos = [];
-            // for ($f=0; $f<Count($atos_not_formated); $f++){
-            //     $ato_search = $atos_not_formated[$f];
-
-            //     $assunto = 'não informado';
-            //     if ($ato_search['id_assunto'] != null){
-            //         $assunto = $ato_search['assunto']->descricao;
-            //     }
-
-            //     $tipo_ato = 'Tipo de ato não informado';
-            //     if ($ato_search['id_tipo_ato'] != null){
-            //         $tipo_ato = $ato_search['tipo_ato']->descricao;
-            //     }
-
-            //     $numero = 'não informado';
-            //     if ($ato_search['numero'] != null){
-            //         $numero = $ato_search['numero'];
-            //     }
-
-            //     $orgao = 'não informado';
-            //     if ($ato_search['id_orgao'] != null){
-            //         $orgao = $ato_search['orgao']->descricao;
-            //     }
-
-            //     $forma_publicacao = 'não informado';
-            //     if ($ato_search['id_forma_publicacao'] != null){
-            //         $forma_publicacao = $ato_search['forma_publicacao']->descricao;
-            //     }
-
-            //     $data_publicacao = 'não informado';
-            //     if ($ato_search['data_publicacao'] != null){
-            //         $data_publicacao = date('d/m/Y', strtotime($ato_search['data_publicacao']));
-            //     }
-
-            //     $formated_created_at = 'não informado';
-            //     if ($ato_search['created_at'] != null){
-            //         $formated_created_at = strftime('%d de %B de %Y', strtotime($ato_search['created_at']));
-            //     }
-
-            //     $altera_dispositivo = 'Não';
-            //     if ($ato_search['altera_dispositivo'] == 1){
-            //         $altera_dispositivo = 'Sim';
-            //     }
-
-            //     $ato_search = [
-            //         'id' => $ato_search['id'],
-            //         'titulo' => $ato_search['titulo'],
-            //         'assunto' => $assunto,
-            //         'tipo_ato' => $tipo_ato,
-            //         'numero' => $numero,
-            //         'orgao' => $orgao,
-            //         'forma_publicacao' => $forma_publicacao,
-            //         'data_publicacao' => $data_publicacao,
-            //         'altera_dispositivo' => $altera_dispositivo,
-            //         'formated_created_at' => $formated_created_at,
-            //     ];
-
-            //     array_push($atos, $ato_search);
-            // }
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
             $assuntos = AssuntoAto::where('ativo', '=', 1)->get();

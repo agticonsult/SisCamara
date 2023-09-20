@@ -34,6 +34,7 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
+                            <th scope="col">ID</th>
                             <th scope="col">Data</th>
                             <th scope="col">Tipo de Votação</th>
                             <th scope="col">Proposição</th>
@@ -44,6 +45,7 @@
                     <tbody>
                         @foreach ($votacaos as $votacao)
                             <tr>
+                                <td>{{ $votacao->id }}</td>
                                 <td>{{ $votacao->data != null ? date('d/m/Y', strtotime($votacao->data)) : 'não informado' }}</td>
                                 <td>{{ $votacao->id_tipo_votacao != null ? $votacao->tipo_votacao->descricao : 'não informado' }}</td>
                                 <td>{{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }}</td>
@@ -56,7 +58,7 @@
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
                                 </td>
                             </tr>
-{{--
+
                             <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
@@ -67,7 +69,7 @@
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir <i>{{ $votacao->descricao != null ? $votacao->descricao : 'não informado' }}</i></strong>
+                                                    <strong style="font-size: 1.2rem">Excluir Votação de ID <i>{{ $votacao->id }}</i></strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
@@ -84,7 +86,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         @endforeach
                     </tbody>
                 </table>

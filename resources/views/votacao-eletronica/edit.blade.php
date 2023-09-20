@@ -22,27 +22,38 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Alteração de Ato</strong>
+            <strong>Alteração de Votação Eletrônica</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('reparticao.update', $reparticao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('votacao_eletronica.update', $votacao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Descrição</label>
-                        <input type="text" class="form-control" name="descricao" value="{{ $reparticao->descricao }}">
+                        <label class="form-label">*Data</label>
+                        <input type="date" class="form-control" name="data" value="{{ $votacao->data }}">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Tipo de Repartição</label>
-                        <select name="id_tipo_reparticao" class="select2 form-control">
+                        <label class="form-label">*Tipo de Votação</label>
+                        <select name="id_tipo_votacao" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($tipo_reparticaos as $tipo_reparticao)
-                                <option value="{{ $tipo_reparticao->id }}" {{ $reparticao->id_tipo_reparticao == $tipo_reparticao->id ? 'selected' : '' }}>{{ $tipo_reparticao->descricao }}</option>
+                            @foreach ($tipo_votacaos as $tipo_votacao)
+                                <option value="{{ $tipo_votacao->id }}" {{ $tipo_votacao->id == $votacao->id_tipo_votacao ? 'selected' : '' }}>{{ $tipo_votacao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Proposição</label>
+                        <select name="id_proposicao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($proposicaos as $proposicao)
+                                <option value="{{ $proposicao->id }}" {{ $proposicao->id == $votacao->id_proposicao ? 'selected' : '' }}>{{ $proposicao->titulo }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -68,18 +79,24 @@
 <script>
     $("#form").validate({
         rules : {
-            descricao:{
+            data:{
                 required:true
             },
-            id_tipo_reparticao:{
+            id_tipo_votacao:{
+                required:true
+            },
+            id_proposicao:{
                 required:true
             },
         },
         messages:{
-            descricao:{
+            data:{
                 required:"Campo obrigatório"
             },
-            id_tipo_reparticao:{
+            id_tipo_votacao:{
+                required:"Campo obrigatório"
+            },
+            id_proposicao:{
                 required:"Campo obrigatório"
             },
         }
