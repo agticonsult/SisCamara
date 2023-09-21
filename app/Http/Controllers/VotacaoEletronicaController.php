@@ -272,7 +272,7 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-    public function iniciarVotacao($id)
+    public function gerenciar($id)
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
@@ -284,11 +284,13 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
-            $votacao->votacao_iniciada = 1;
-            $votacao->dataHoraInicio = Carbon::now();
-            $votacao->save();
+            if ($votacao->votacaoIniciada != 1){
+                $votacao->votacaoIniciada = 1;
+                $votacao->dataHoraInicio = Carbon::now();
+                $votacao->save();
+            }
 
-            return view('votacao-eletronica.edit', compact('votacao', 'proposicaos', 'tipo_votacaos'));
+            return view('votacao-eletronica.votacao', compact('votacao'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
