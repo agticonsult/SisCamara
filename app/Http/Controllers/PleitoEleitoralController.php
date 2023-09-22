@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
+use App\Models\Legislatura;
 use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Traits\ApiResponser;
@@ -49,8 +50,9 @@ class PleitoEleitoralController extends Controller
             }
 
             $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
+            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.create', compact('cargo_eletivos'));
+            return view('configuracao.pleito-eleitoral.create', compact('cargo_eletivos', 'legislaturas'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -74,8 +76,7 @@ class PleitoEleitoralController extends Controller
 
             $input = [
                 'ano_pleito' => $request->ano_pleito,
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
+                'id_legislatura' => $request->id_legislatura,
                 'pleitoEspecial' => $request->pleitoEspecial,
                 'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
                 'dataSegundoTurno' => $request->dataSegundoTurno,
@@ -83,12 +84,11 @@ class PleitoEleitoralController extends Controller
             ];
             $rules = [
                 'ano_pleito' => 'required',
-                'inicio_mandato' => 'required',
-                'fim_mandato' => 'required',
+                'id_legislatura' => 'required|integer',
                 'pleitoEspecial' => 'nullable',
                 'dataPrimeiroTurno' => 'required|date',
                 'dataSegundoTurno' => 'required|date',
-                'id_cargo_eletivo' => 'required'
+                'id_cargo_eletivo' => 'required|integer'
             ];
 
             $validar = Validator::make($input, $rules);
@@ -98,10 +98,14 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Pleito especial inválido.');
             }
 
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            if (!$legislatura){
+                return redirect()->back()->with('erro', 'Legislatura inválida.');
+            }
+
             $pleito_eleitoral = new PleitoEleitoral();
             $pleito_eleitoral->ano_pleito = $request->ano_pleito;
-            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
-            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
+            $pleito_eleitoral->id_legislatura = $request->id_legislatura;
             $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
             $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
             $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
@@ -182,8 +186,7 @@ class PleitoEleitoralController extends Controller
             $input = [
                 'id' => $request->id,
                 'ano_pleito' => $request->ano_pleito,
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
+                'id_legislatura' => $request->id_legislatura,
                 'pleitoEspecial' => $request->pleitoEspecial,
                 'dataPrimeiroTurno' => $request->dataPrimeiroTurno,
                 'dataSegundoTurno' => $request->dataSegundoTurno,
@@ -191,6 +194,7 @@ class PleitoEleitoralController extends Controller
             $rules = [
                 'id' => 'required|integer',
                 'ano_pleito' => 'required',
+                'id_legislatura' => 'required|integer',
                 'inicio_mandato' => 'required',
                 'fim_mandato' => 'required',
                 'pleitoEspecial' => 'nullable',
@@ -206,9 +210,13 @@ class PleitoEleitoralController extends Controller
                 return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
             }
 
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            if (!$legislatura){
+                return redirect()->back()->with('erro', 'Legislatura inválida.');
+            }
+
             $pleito_eleitoral->ano_pleito = $request->ano_pleito;
-            $pleito_eleitoral->inicio_mandato = $request->inicio_mandato;
-            $pleito_eleitoral->fim_mandato = $request->fim_mandato;
+            $pleito_eleitoral->id_legislatura = $request->id_legislatura;
             $pleito_eleitoral->pleitoEspecial = $request->pleitoEspecial;
             $pleito_eleitoral->dataPrimeiroTurno = $request->dataPrimeiroTurno;
             $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;

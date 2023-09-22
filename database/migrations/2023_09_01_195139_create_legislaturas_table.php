@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePleitoEleitoralsTable extends Migration
+class CreateLegislaturasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreatePleitoEleitoralsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pleito_eleitorals', function (Blueprint $table) {
+        Schema::create('legislaturas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ano_pleito')->nullable();
-            $table->boolean('pleitoEspecial')->nullable()->default(0);
-            $table->date('dataPrimeiroTurno')->nullable();
-            $table->date('dataSegundoTurno')->nullable();
-            $table->integer('id_legislatura')->unsigned()->nullable();
-            $table->foreign('id_legislatura')->references('id')->on('legislaturas');
+            $table->integer('inicio_mandato')->nullable();
+            $table->integer('fim_mandato')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
@@ -39,6 +35,6 @@ class CreatePleitoEleitoralsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pleito_eleitorals');
+        Schema::dropIfExists('legislaturas');
     }
 }

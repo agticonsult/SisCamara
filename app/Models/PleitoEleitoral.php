@@ -12,7 +12,7 @@ class PleitoEleitoral extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'ano_pleito', 'inicio_mandato', 'fim_mandato', 'pleitoEspecial', 'dataPrimeiroTurno', 'dataSegundoTurno',
+        'ano_pleito', 'pleitoEspecial', 'dataPrimeiroTurno', 'dataSegundoTurno', 'id_legislatura',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
@@ -23,6 +23,10 @@ class PleitoEleitoral extends Model implements Auditable
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
+    }
+    public function legislatura()
+    {
+        return $this->belongsTo(Legislatura::class, 'id_legislatura');
     }
     public function cargos_eletivos_ativos()
     {

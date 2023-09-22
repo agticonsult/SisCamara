@@ -45,7 +45,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Início do mandato</label>
                         <input type="text" class="ano form-control" name="inicio_mandato">
@@ -54,7 +54,7 @@
                         <label class="form-label">*Fim do mandato</label>
                         <input type="text" class="ano form-control" name="fim_mandato">
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data do primeiro turno</label>

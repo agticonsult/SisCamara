@@ -17,8 +17,12 @@ class PleitoEleitoralTableSeeder extends Seeder
     {
         $agile = Permissao::where('id_perfil', '=', 1)->first();
 
+        DB::table('legislaturas')->insert([
+            ['id' => 1, 'inicio_mandato' => 2023, 'fim_mandato' => 2026, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+        ]);
+
         DB::table('pleito_eleitorals')->insert([
-            ['ano_pleito' => 2022, 'inicio_mandato' => 2023, 'fim_mandato' => 2026, 'pleitoEspecial' => false, 'dataPrimeiroTurno' => '2022-10-02',
+            ['ano_pleito' => 2022, 'id_legislatura' => 1, 'pleitoEspecial' => false, 'dataPrimeiroTurno' => '2022-10-02',
                 'dataSegundoTurno' => '2022-10-30', 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
         ]);
 
