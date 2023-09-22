@@ -95,7 +95,7 @@
                                     em <strong>{{ $vereador->created_at != null ? $vereador->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('configuracao.pleito.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('processo_legislativo.pleito.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button>
                                 </td> --}}
                             </tr>

@@ -279,7 +279,7 @@
 
             var id_pleito_eleitoral = $('#id_pleito_eleitoral').select2("val");
             $.ajax({
-                url: "{{ route('configuracao.pleito_eleitoral.get', '') }}"  + "/" + id_pleito_eleitoral,
+                url: "{{ route('processo_legislativo.pleito_eleitoral.get', '') }}"  + "/" + id_pleito_eleitoral,
                 type: "GET",
                 dataType: 'json',
                 success: function (resposta) {

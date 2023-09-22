@@ -28,7 +28,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('configuracao.pleito_eleitoral.update', $pleito_eleitoral->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('processo_legislativo.pleito_eleitoral.update', $pleito_eleitoral->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 

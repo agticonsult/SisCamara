@@ -97,22 +97,33 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a href="#proposicao" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a href="#processoLegislativo" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="fas fa-chess-king"></i>Processo Legislativo
                     </a>
-                    <ul id="proposicao" class="sidebar-dropdown list-unstyled {{
+                    <ul id="processoLegislativo" class="sidebar-dropdown list-unstyled {{
                             Route::current()->getPrefix() == '/proposicao' ||
-                            Route::current()->getPrefix() == 'proposicao/modelo'
+                            Route::current()->getPrefix() == 'proposicao/modelo' ||
+                            Route::current()->getPrefix() == 'processo-legislativo/legislatura'
                         ? 'active' : 'collapse' }}">
                         <li class="sidebar-item {{ Route::current()->getPrefix() == 'proposicao/modelo' ? 'active' : null }}">
                             <a href="{{ route('proposicao.modelo.index') }}" class="sidebar-link">
-                                Modelos
+                                Modelos de Proposição
                             </a>
                         </li>
                         <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
                             <a href="{{ route('proposicao.index') }}" class="sidebar-link">
                                 Proposição
                             </a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'processo-legislativo/legislatura'
+                                ? 'active'
+                                : null }}">
+                            <a class="sidebar-link " href="{{ route('processo_legislativo.legislatura.index') }}">Legislaturas</a>
+                        </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'processo-legislativo/pleito-eleitoral'
+                                ? 'active'
+                                : null }}">
+                            <a class="sidebar-link " href="{{ route('processo_legislativo.pleito_eleitoral.index') }}">Pleitos Eleitorais</a>
                         </li>
                         {{-- <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
                             <a href="{{ route('proposicao.index') }}" class="sidebar-link">
@@ -245,12 +256,6 @@
                                     : null }}">
                                 <a class="sidebar-link " href="{{ route('configuracao.tamanho_anexo.index') }}">Tamanho
                                     dos Anexos</a>
-                            </li>
-                            <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/pleito-eleitoral'
-                                    ? 'active'
-                                    : null }}">
-                                <a class="sidebar-link " href="{{ route('configuracao.pleito_eleitoral.index') }}">Pleitos Eleitorais</a>
                             </li>
                         </ul>
                     </li>

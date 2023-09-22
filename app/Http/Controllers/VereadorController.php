@@ -517,7 +517,7 @@ class VereadorController extends Controller
                 $pleito_cargo_ativo->save();
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
+            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
             $message = $e->errors();

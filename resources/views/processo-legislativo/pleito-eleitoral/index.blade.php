@@ -72,7 +72,7 @@
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('configuracao.pleito_eleitoral.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('processo_legislativo.pleito_eleitoral.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}">Excluir</button>
                                 </td>
                                 {{-- Início: {{ date('d/m/Y', strtotime($pleito->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($pleito->fim_mandato)) }} --}}
@@ -82,7 +82,7 @@
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('configuracao.pleito.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <a href="{{ route('processo_legislativo.pleito.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}">Excluir</button>
                                 </td> --}}
                             </tr>
@@ -92,7 +92,7 @@
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('configuracao.pleito_eleitoral.destroy', $pleito->id) }}">
+                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('processo_legislativo.pleito_eleitoral.destroy', $pleito->id) }}">
                                             @csrf
                                             @method('POST')
                                             <div class="modal-header btn-danger">
@@ -146,7 +146,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('configuracao.pleito_eleitoral.create') }}" class="btn btn-primary">Cadastrar Pleito Eleitoral</a>
+        <a href="{{ route('processo_legislativo.pleito_eleitoral.create') }}" class="btn btn-primary">Cadastrar Pleito Eleitoral</a>
     </div>
 
 </div>

@@ -27,7 +27,7 @@ class PleitoEleitoralController extends Controller
 
             $pleitos = PleitoEleitoral::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.index', compact('pleitos'));
+            return view('processo-legislativo.pleito-eleitoral.index', compact('pleitos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -52,7 +52,7 @@ class PleitoEleitoralController extends Controller
             $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
             $legislaturas = Legislatura::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.create', compact('cargo_eletivos', 'legislaturas'));
+            return view('processo-legislativo.pleito-eleitoral.create', compact('cargo_eletivos', 'legislaturas'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -126,7 +126,7 @@ class PleitoEleitoralController extends Controller
                 }
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
+            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -161,7 +161,7 @@ class PleitoEleitoralController extends Controller
 
             $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
 
-            return view('configuracao.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos'));
+            return view('processo-legislativo.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -244,7 +244,7 @@ class PleitoEleitoralController extends Controller
                 }
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
+            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -307,7 +307,7 @@ class PleitoEleitoralController extends Controller
                 $pleito_cargo_ativo->save();
             }
 
-            return redirect()->route('configuracao.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
+            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
             $message = $e->errors();

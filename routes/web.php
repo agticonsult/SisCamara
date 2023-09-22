@@ -18,6 +18,7 @@ use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InicioController;
+use App\Http\Controllers\LegislaturaController;
 use App\Http\Controllers\ModeloProposicaoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
@@ -141,6 +142,57 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
+
+
+    // Processo Legilativo
+    Route::group(['prefix' => '/processo-legislativo', 'as' => 'processo_legislativo.'], function() {
+
+        // Pleito Eleitoral
+        Route::group(['prefix' => '/legislatura', 'as' => 'legislatura.'], function() {
+            Route::get('/index', [LegislaturaController::class, 'index'])->name('index');
+            Route::post('/store', [LegislaturaController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [LegislaturaController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [LegislaturaController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [LegislaturaController::class, 'destroy'])->name('destroy');
+            Route::get('/get/{id}', [LegislaturaController::class, 'get'])->name('get');
+        });
+
+        // Pleito Eleitoral
+        Route::group(['prefix' => '/pleito-eleitoral', 'as' => 'pleito_eleitoral.'], function() {
+            Route::get('/index', [PleitoEleitoralController::class, 'index'])->name('index');
+            Route::get('/create', [PleitoEleitoralController::class, 'create'])->name('create');
+            Route::post('/store', [PleitoEleitoralController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [PleitoEleitoralController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [PleitoEleitoralController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [PleitoEleitoralController::class, 'destroy'])->name('destroy');
+            Route::get('/get/{id}', [PleitoEleitoralController::class, 'get'])->name('get');
+        });
+
+    });
+
+    // Proposição
+    Route::group(['prefix' => '/proposicao', 'as' => 'proposicao.'], function() {
+        Route::get('/index', [ProposicaoController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [ProposicaoController::class, 'show'])->name('show');
+        Route::get('/create', [ProposicaoController::class, 'create'])->name('create');
+        Route::post('/store', [ProposicaoController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [ProposicaoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ProposicaoController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [ProposicaoController::class, 'destroy'])->name('destroy');
+
+        // Dados Gerais
+        Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
+            Route::get('/index', [ModeloProposicaoController::class, 'index'])->name('index');
+            Route::get('/create', [ModeloProposicaoController::class, 'create'])->name('create');
+            Route::post('/store', [ModeloProposicaoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [ModeloProposicaoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [ModeloProposicaoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [ModeloProposicaoController::class, 'destroy'])->name('destroy');
+            Route::get('/get/{id}', [ModeloProposicaoController::class, 'get'])->name('get');
+        });
+
+    });
+
     // Reparticao
     Route::group(['prefix' => '/reparticao', 'as' => 'reparticao.'], function() {
         Route::get('/index', [ReparticaoController::class, 'index'])->name('index');
@@ -172,29 +224,6 @@ Route::group(['middleware' => 'auth'], function () {
         //     Route::post('/destroy/{id}', [ModeloProposicaoController::class, 'destroy'])->name('destroy');
         //     Route::get('/get/{id}', [ModeloProposicaoController::class, 'get'])->name('get');
         // });
-
-    });
-
-    // Proposição
-    Route::group(['prefix' => '/proposicao', 'as' => 'proposicao.'], function() {
-        Route::get('/index', [ProposicaoController::class, 'index'])->name('index');
-        Route::get('/show/{id}', [ProposicaoController::class, 'show'])->name('show');
-        Route::get('/create', [ProposicaoController::class, 'create'])->name('create');
-        Route::post('/store', [ProposicaoController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [ProposicaoController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [ProposicaoController::class, 'update'])->name('update');
-        Route::post('/destroy/{id}', [ProposicaoController::class, 'destroy'])->name('destroy');
-
-        // Dados Gerais
-        Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
-            Route::get('/index', [ModeloProposicaoController::class, 'index'])->name('index');
-            Route::get('/create', [ModeloProposicaoController::class, 'create'])->name('create');
-            Route::post('/store', [ModeloProposicaoController::class, 'store'])->name('store');
-            Route::get('/edit/{id}', [ModeloProposicaoController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}', [ModeloProposicaoController::class, 'update'])->name('update');
-            Route::post('/destroy/{id}', [ModeloProposicaoController::class, 'destroy'])->name('destroy');
-            Route::get('/get/{id}', [ModeloProposicaoController::class, 'get'])->name('get');
-        });
 
     });
 
@@ -294,17 +323,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => '/tamanho-anexo', 'as' => 'tamanho_anexo.'], function() {
             Route::get('/index', [FilesizeController::class, 'index'])->name('index');
             Route::post('/update', [FileSizeController::class, 'update'])->name('update');
-        });
-
-        // Pleito Eleitoral
-        Route::group(['prefix' => '/pleito-eleitoral', 'as' => 'pleito_eleitoral.'], function() {
-            Route::get('/index', [PleitoEleitoralController::class, 'index'])->name('index');
-            Route::get('/create', [PleitoEleitoralController::class, 'create'])->name('create');
-            Route::post('/store', [PleitoEleitoralController::class, 'store'])->name('store');
-            Route::get('/edit/{id}', [PleitoEleitoralController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}', [PleitoEleitoralController::class, 'update'])->name('update');
-            Route::post('/destroy/{id}', [PleitoEleitoralController::class, 'destroy'])->name('destroy');
-            Route::get('/get/{id}', [PleitoEleitoralController::class, 'get'])->name('get');
         });
 
     });
