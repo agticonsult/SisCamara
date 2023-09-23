@@ -31,6 +31,10 @@ class PleitoCargo extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function inativadoPor()
+    {
+        return $this->belongsTo(User::class, 'inativadoPorUsuario');
+    }
 }
 
 

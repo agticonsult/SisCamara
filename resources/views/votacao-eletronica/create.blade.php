@@ -49,6 +49,18 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <label class="form-label">*Legislatura</label>
+                        <select name="id_legislatura" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($legislaturas as $legislatura)
+                                <option value="{{ $legislatura->id }}">
+                                    Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
+                                    Fim: <strong>{{ $legislatura->fim_mandato }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label class="form-label">*Proposição</label>
                         <select name="id_proposicao" class="select2 form-control">
                             <option value="" selected disabled>--Selecione--</option>
@@ -61,7 +73,8 @@
 
                 <br>
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                    <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -88,6 +101,9 @@
             id_proposicao:{
                 required:true
             },
+            id_legislatura:{
+                required:true
+            },
         },
         messages:{
             data:{
@@ -97,6 +113,9 @@
                 required:"Campo obrigatório"
             },
             id_proposicao:{
+                required:"Campo obrigatório"
+            },
+            id_legislatura:{
                 required:"Campo obrigatório"
             },
         }

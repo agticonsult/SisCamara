@@ -34,10 +34,10 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
                             <th scope="col">Data</th>
                             <th scope="col">Tipo de Votação</th>
                             <th scope="col">Proposição</th>
+                            <th scope="col">Legislatura</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status</th>
                             <th scope="col">Ações</th>
@@ -46,10 +46,10 @@
                     <tbody>
                         @foreach ($votacaos as $votacao)
                             <tr>
-                                <td>{{ $votacao->id }}</td>
                                 <td>{{ $votacao->data != null ? date('d/m/Y', strtotime($votacao->data)) : 'não informado' }}</td>
                                 <td>{{ $votacao->id_tipo_votacao != null ? $votacao->tipo_votacao->descricao : 'não informado' }}</td>
                                 <td>{{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }}</td>
+                                <td>Início: <strong>{{ $votacao->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $votacao->legislatura->fim_mandato }}</strong></td>
                                 <td>
                                     <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
                                     em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>

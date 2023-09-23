@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
+use App\Models\Legislatura;
 use App\Models\Proposicao;
 use App\Models\TipoVotacao;
 use App\Models\VotacaoEletronica;
@@ -47,8 +48,9 @@ class VotacaoEletronicaController extends Controller
 
             $proposicaos = Proposicao::where('ativo', '=', 1)->get();
             $tipo_votacaos = TipoVotacao::where('ativo', '=', 1)->get();
+            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
 
-            return view('votacao-eletronica.create', compact('proposicaos', 'tipo_votacaos'));
+            return view('votacao-eletronica.create', compact('proposicaos', 'tipo_votacaos', 'legislaturas'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -73,12 +75,14 @@ class VotacaoEletronicaController extends Controller
             $input = [
                 'data' => $request->data,
                 'id_tipo_votacao' => $request->id_tipo_votacao,
-                'id_proposicao' => $request->id_proposicao
+                'id_proposicao' => $request->id_proposicao,
+                'id_legislatura' => $request->id_legislatura
             ];
             $rules = [
                 'data' => 'required|date',
                 'id_tipo_votacao' => 'required|integer',
                 'id_proposicao' => 'required|integer',
+                'id_legislatura' => 'required|integer'
             ];
 
             $validar = Validator::make($input, $rules);
@@ -94,10 +98,16 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Proposição inválida!');
             }
 
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            if (!$legislatura){
+                return redirect()->back()->with('erro', 'Legislatura inválida.');
+            }
+
             $votacao = new VotacaoEletronica();
             $votacao->data = $request->data;
             $votacao->id_tipo_votacao = $request->id_tipo_votacao;
             $votacao->id_proposicao = $request->id_proposicao;
+            $votacao->id_legislatura = $request->id_legislatura;
             $votacao->cadastradoPorUsuario = Auth::user()->id;
             $votacao->ativo = 1;
             $votacao->save();
@@ -164,13 +174,15 @@ class VotacaoEletronicaController extends Controller
                 'id' => $id,
                 'data' => $request->data,
                 'id_tipo_votacao' => $request->id_tipo_votacao,
-                'id_proposicao' => $request->id_proposicao
+                'id_proposicao' => $request->id_proposicao,
+                'id_legislatura' => $request->id_legislatura
             ];
             $rules = [
                 'id' => 'required|integer',
                 'data' => 'required|date',
                 'id_tipo_votacao' => 'required|integer',
                 'id_proposicao' => 'required|integer',
+                'id_legislatura' => 'required|integer'
             ];
 
             $validar = Validator::make($input, $rules);
@@ -191,9 +203,15 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Proposição inválida!');
             }
 
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            if (!$legislatura){
+                return redirect()->back()->with('erro', 'Legislatura inválida.');
+            }
+
             $votacao->data = $request->data;
             $votacao->id_tipo_votacao = $request->id_tipo_votacao;
             $votacao->id_proposicao = $request->id_proposicao;
+            $votacao->id_legislatura = $request->id_legislatura;
             $votacao->save();
 
             return redirect()->route('votacao_eletronica.index')->with('success', 'Alteração realizada com sucesso');

@@ -60,11 +60,14 @@
                 </div> --}}
 
                 <br>
-                <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                </div>
                 <br>
             </form>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="col-md-12">
+            <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
         </div>
     </div>
 

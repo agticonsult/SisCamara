@@ -90,7 +90,7 @@
                         ? 'active' : 'collapse' }}">
                         <li class="sidebar-item {{ Route::current()->getPrefix() == 'votacao-eletronica' ? 'active' : null }}">
                             <a href="{{ route('votacao_eletronica.index') }}" class="sidebar-link">
-                                Listagem
+                                Votações
                             </a>
                         </li>
                     </ul>
@@ -103,7 +103,8 @@
                     <ul id="processoLegislativo" class="sidebar-dropdown list-unstyled {{
                             Route::current()->getPrefix() == '/proposicao' ||
                             Route::current()->getPrefix() == 'proposicao/modelo' ||
-                            Route::current()->getPrefix() == 'processo-legislativo/legislatura'
+                            Route::current()->getPrefix() == 'processo-legislativo/legislatura' ||
+                            Route::current()->getPrefix() == 'processo-legislativo/pleito-eleitoral'
                         ? 'active' : 'collapse' }}">
                         <li class="sidebar-item {{ Route::current()->getPrefix() == 'proposicao/modelo' ? 'active' : null }}">
                             <a href="{{ route('proposicao.modelo.index') }}" class="sidebar-link">

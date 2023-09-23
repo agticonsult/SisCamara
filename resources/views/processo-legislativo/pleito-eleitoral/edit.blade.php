@@ -52,16 +52,6 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="form-label">*Início do mandato</label>
-                        <input type="text" class="ano form-control" name="inicio_mandato" value="{{ $pleito_eleitoral->inicio_mandato }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Fim do mandato</label>
-                        <input type="text" class="ano form-control" name="fim_mandato" value="{{ $pleito_eleitoral->fim_mandato }}">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
                         <label class="form-label">*Data do primeiro turno</label>
                         <input type="date" class="form-control" name="dataPrimeiroTurno" value="{{ $pleito_eleitoral->dataPrimeiroTurno }}">
                     </div>
@@ -71,7 +61,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Legislatura</label>
+                        <select name="id_legislatura" class="select2 form-control">
+                            @foreach ($legislaturas as $legislatura)
+                                <option value="{{ $legislatura->id }}" {{ $legislatura->id == $pleito_eleitoral->id_legislatura ? 'selected' : '' }}>
+                                    Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
+                                    Fim: <strong>{{ $legislatura->fim_mandato }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label class="form-label">Cargos eletivos</label>
                         <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
                             @foreach ($cargo_eletivos as $cargo_eletivo)
@@ -99,6 +100,7 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
+                            <th scope="col">ID</th>
                             <th scope="col">Cargo Eletivo</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão "Ativo")</th>
@@ -107,28 +109,58 @@
                     <tbody>
                         @foreach ($pleito_eleitoral->cargos_eletivos() as $pleito_cargo)
                             <tr>
+                                <td>{{ $pleito_cargo->id }}</td>
                                 <td>{{ $pleito_cargo->cargo_eletivo->descricao }}</td>
                                 <td>
-                                    <strong>{{ $pleito_cargo->cargo_eletivo->cadastradoPorUsuario != null ? $pleito_cargo->cargo_eletivo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $pleito_cargo->cargo_eletivo->created_at != null ? $pleito_cargo->cargo_eletivo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $pleito_cargo->cadastradoPorUsuario != null ? $pleito_cargo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $pleito_cargo->created_at != null ? $pleito_cargo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    @switch($pleito_cargo->cargo_eletivo->ativo)
-                                        @case(1)
-                                            <button type="button" class="desativar btn btn-success" name="{{ $pleito_cargo->cargo_eletivo->id }}" id="{{ $pleito_cargo->cargo_eletivo->descricao }}">
-                                                Ativo
-                                            </button>
-                                            @break
-                                        @default
-                                            <button type="button" class="btn btn-info">
-                                                Desativado
-                                                por <strong>{{ $pleito_cargo->cargo_eletivo->inativadoPorUsuario != null ? $pleito_cargo->cargo_eletivo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($pleito_cargo->cargo_eletivo->dataInativado)) }}</strong>
-                                            </button>
-                                            @break
-                                    @endswitch
+                                    @if ($pleito_cargo->ativo == 1)
+                                        <button type="button" class="btn btn-success m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito_cargo->id }}">
+                                            Ativo
+                                        </button>
+                                    @else
+                                        <button type="button" class="btn btn-info">
+                                            Desativado
+                                            por <strong>{{ $pleito_cargo->inativadoPorUsuario != null ? $pleito_cargo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                            em <strong>{{ date('d/m/Y H:i:s', strtotime($pleito_cargo->dataInativado)) }}</strong>
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
+
+                            <div class="modal fade" id="exampleModalExcluir{{ $pleito_cargo->id }}"
+                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('processo_legislativo.pleito_eleitoral.cargo_eletivo.destroy', $pleito_cargo->id) }}">
+                                            @csrf
+                                            @method('POST')
+                                            <div class="modal-header btn-danger">
+                                                <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
+                                                    <strong style="font-size: 1.2rem">
+                                                        Excluir o Cargo de <i>{{ $pleito_cargo->cargo_eletivo->descricao }}</i>
+                                                        deste Pleito Eleitoral
+                                                    </strong>
+                                                </h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="motivo" class="form-label">Motivo</label>
+                                                    <input type="text" class="form-control" name="motivo">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                                </button>
+                                                <button type="submit" class="button_submit btn btn-danger">Excluir</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -152,10 +184,7 @@
             ano_pleito:{
                 required:true
             },
-            inicio_mandato:{
-                required:true
-            },
-            fim_mandato:{
+            id_legislatura:{
                 required:true
             },
             dataPrimeiroTurno:{
@@ -169,10 +198,7 @@
             ano_pleito:{
                 required:"Campo obrigatório"
             },
-            inicio_mandato:{
-                required:"Campo obrigatório"
-            },
-            fim_mandato:{
+            id_legislatura:{
                 required:"Campo obrigatório"
             },
             dataPrimeiroTurno:{

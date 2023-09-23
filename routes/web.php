@@ -166,6 +166,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update/{id}', [PleitoEleitoralController::class, 'update'])->name('update');
             Route::post('/destroy/{id}', [PleitoEleitoralController::class, 'destroy'])->name('destroy');
             Route::get('/get/{id}', [PleitoEleitoralController::class, 'get'])->name('get');
+
+            // Cargo Eletivo
+            Route::group(['prefix' => '/cargo-eletivo', 'as' => 'cargo_eletivo.'], function() {
+                Route::post('/destroy/{id}', [PleitoEleitoralController::class, 'destroyCargoEletivo'])->name('destroy');
+            });
         });
 
     });

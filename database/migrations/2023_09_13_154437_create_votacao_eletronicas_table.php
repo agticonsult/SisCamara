@@ -24,6 +24,8 @@ class CreateVotacaoEletronicasTable extends Migration
             $table->foreign('id_tipo_votacao')->references('id')->on('tipo_votacaos');
             $table->bigInteger('id_proposicao')->unsigned()->nullable();
             $table->foreign('id_proposicao')->references('id')->on('proposicaos');
+            $table->integer('id_legislatura')->unsigned()->nullable();
+            $table->foreign('id_legislatura')->references('id')->on('legislaturas');
             $table->integer('id_status_votacao')->unsigned()->nullable();
             $table->foreign('id_status_votacao')->references('id')->on('status_votacaos');
             $table->uuid('cadastradoPorUsuario')->nullable();

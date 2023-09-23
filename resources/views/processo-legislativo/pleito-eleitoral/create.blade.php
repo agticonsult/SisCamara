@@ -45,16 +45,6 @@
                         </select>
                     </div>
                 </div>
-                {{-- <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Início do mandato</label>
-                        <input type="text" class="ano form-control" name="inicio_mandato">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Fim do mandato</label>
-                        <input type="text" class="ano form-control" name="fim_mandato">
-                    </div>
-                </div> --}}
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data do primeiro turno</label>
@@ -66,7 +56,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">*Legislatura</label>
+                        <select name="id_legislatura" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($legislaturas as $legislatura)
+                                <option value="{{ $legislatura->id }}">
+                                    Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
+                                    Fim: <strong>{{ $legislatura->fim_mandato }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label class="form-label">*Cargos eletivos</label>
                         <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
                             @foreach ($cargo_eletivos as $cargo_eletivo)
@@ -78,7 +80,8 @@
 
                 <br>
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                    <a href="{{ route('processo_legislativo.pleito_eleitoral.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -101,10 +104,7 @@
             ano_pleito:{
                 required:true
             },
-            inicio_mandato:{
-                required:true
-            },
-            fim_mandato:{
+            id_legislatura:{
                 required:true
             },
             dataPrimeiroTurno:{
@@ -121,10 +121,7 @@
             ano_pleito:{
                 required:"Campo obrigatório"
             },
-            inicio_mandato:{
-                required:"Campo obrigatório"
-            },
-            fim_mandato:{
+            id_legislatura:{
                 required:"Campo obrigatório"
             },
             dataPrimeiroTurno:{

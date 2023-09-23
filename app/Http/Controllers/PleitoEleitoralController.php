@@ -88,7 +88,7 @@ class PleitoEleitoralController extends Controller
                 'pleitoEspecial' => 'nullable',
                 'dataPrimeiroTurno' => 'required|date',
                 'dataSegundoTurno' => 'required|date',
-                'id_cargo_eletivo' => 'required|integer'
+                'id_cargo_eletivo' => 'required'
             ];
 
             $validar = Validator::make($input, $rules);
@@ -126,7 +126,7 @@ class PleitoEleitoralController extends Controller
                 }
             }
 
-            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -160,14 +160,15 @@ class PleitoEleitoralController extends Controller
             }
 
             $cargo_eletivos = CargoEletivo::where('ativo', '=', 1)->get();
+            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
 
-            return view('processo-legislativo.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos'));
+            return view('processo-legislativo.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos', 'legislaturas'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "PleitoEleitoralController";
-            $erro->funcao = "create";
+            $erro->funcao = "edit";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
             }
@@ -195,8 +196,6 @@ class PleitoEleitoralController extends Controller
                 'id' => 'required|integer',
                 'ano_pleito' => 'required',
                 'id_legislatura' => 'required|integer',
-                'inicio_mandato' => 'required',
-                'fim_mandato' => 'required',
                 'pleitoEspecial' => 'nullable',
                 'dataPrimeiroTurno' => 'required|date',
                 'dataSegundoTurno' => 'required|date',
@@ -222,29 +221,31 @@ class PleitoEleitoralController extends Controller
             $pleito_eleitoral->dataSegundoTurno = $request->dataSegundoTurno;
             $pleito_eleitoral->save();
 
-            $id_cargo_eletivos = $request->id_cargo_eletivo;
-            foreach ($id_cargo_eletivos as $id_cargo_eletivo){
-                $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
-                if ($cargo_eletivo){
+            if ($request->id_cargo_eletivo != null){
+                $id_cargo_eletivos = $request->id_cargo_eletivo;
+                foreach ($id_cargo_eletivos as $id_cargo_eletivo){
+                    $cargo_eletivo = CargoEletivo::where('id', '=', $id_cargo_eletivo)->where('ativo', '=', 1)->first();
+                    if ($cargo_eletivo){
 
-                    $possuiCargo = PleitoCargo::where('id_pleito_eleitoral', '=', $id)
-                        ->where('id_cargo_eletivo', '=', $id_cargo_eletivo)
-                        ->where('ativo', '=', 1)
-                        ->first();
+                        $possuiCargo = PleitoCargo::where('id_pleito_eleitoral', '=', $id)
+                            ->where('id_cargo_eletivo', '=', $id_cargo_eletivo)
+                            ->where('ativo', '=', 1)
+                            ->first();
 
-                    if (!$possuiCargo){
-                        $pleito_cargo = new PleitoCargo();
-                        $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
-                        $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
-                        $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
-                        $pleito_cargo->ativo = 1;
-                        $pleito_cargo->save();
+                        if (!$possuiCargo){
+                            $pleito_cargo = new PleitoCargo();
+                            $pleito_cargo->id_pleito_eleitoral = $pleito_eleitoral->id;
+                            $pleito_cargo->id_cargo_eletivo = $id_cargo_eletivo;
+                            $pleito_cargo->cadastradoPorUsuario = Auth::user()->id;
+                            $pleito_cargo->ativo = 1;
+                            $pleito_cargo->save();
+                        }
+
                     }
-
                 }
             }
 
-            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.index')->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -256,7 +257,7 @@ class PleitoEleitoralController extends Controller
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "PleitoEleitoralController";
-            $erro->funcao = "store";
+            $erro->funcao = "update";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
             }
@@ -307,7 +308,7 @@ class PleitoEleitoralController extends Controller
                 $pleito_cargo_ativo->save();
             }
 
-            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
             $message = $e->errors();
@@ -362,6 +363,61 @@ class PleitoEleitoralController extends Controller
             }
             $erro->save();
             return $this->error('Erro, contate o administrador do sistema', 500);
+        }
+    }
+
+    public function destroyCargoEletivo(Request $request, $id)
+    {
+        try {
+            if (Auth::user()->temPermissao('PleitoEleitoral', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'motivo' => $request->motivo
+            ];
+            $rules = [
+                'motivo' => 'max:255'
+            ];
+
+            $validarUsuario = Validator::make($input, $rules);
+            $validarUsuario->validate();
+
+            $motivo = $request->motivo;
+
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $pleito_cargo = PleitoCargo::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$pleito_cargo){
+                return redirect()->back()->with('erro', 'Cargo eletivo inválido.');
+            }
+
+            $pleito_cargo->inativadoPorUsuario = Auth::user()->id;
+            $pleito_cargo->dataInativado = Carbon::now();
+            $pleito_cargo->motivoInativado = $motivo;
+            $pleito_cargo->ativo = 0;
+            $pleito_cargo->save();
+
+            return redirect()->route('processo_legislativo.pleito_eleitoral.edit', $pleito_cargo->id_pleito_eleitoral)->with('success', 'Exclusão realizada com sucesso.');
+        }
+        catch (ValidationException $e) {
+            $message = $e->errors();
+            return redirect()->back()
+                ->withErrors($message)
+                ->withInput();
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "AtividadeLazerController";
+            $erro->funcao = "destroy";
+            if (Auth::check()) {
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
 }

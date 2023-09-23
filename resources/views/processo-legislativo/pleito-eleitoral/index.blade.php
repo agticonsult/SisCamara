@@ -34,24 +34,19 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            {{-- 'ano_pleito', 'inicio_mandato', 'fim_mandato', 'pleitoEspecial', 'dataPrimeiroTurno', 'dataSegundoTurno', --}}
                             <th scope="col">Ano Pleito</th>
-                            <th scope="col">Mandato</th>
+                            <th scope="col">Legislatura</th>
                             <th scope="col">Turnos</th>
                             <th scope="col">Cargos Eletivos</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Ações</th>
-                            {{-- <th scope="col">Descrição</th>
-                            <th scope="col">Tipo de Repartição</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($pleitos as $pleito)
                             <tr>
                                 <td><strong>{{ $pleito->ano_pleito != null ? $pleito->ano_pleito : 'não informado' }}</strong></td>
-                                <td>Início: <strong>{{ $pleito->inicio_mandato }}</strong> - Fim: <strong>{{ $pleito->fim_mandato }}</strong></td>
+                                <td>Início: <strong>{{ $pleito->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $pleito->legislatura->fim_mandato }}</strong></td>
                                 <td>
                                     Primeiro turno: <strong>{{ $pleito->dataPrimeiroTurno != null ? date('d/m/Y', strtotime($pleito->dataPrimeiroTurno)) : 'não informado' }} </strong><br>
                                     Segundo turno: <strong>{{ $pleito->dataSegundoTurno != null ? date('d/m/Y', strtotime($pleito->dataSegundoTurno)) : 'não informado' }} </strong>
