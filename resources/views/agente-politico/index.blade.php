@@ -20,12 +20,12 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Listagem de Vereadores</strong>
+            <strong>Listagem de Agentes Políticos</strong>
         </h2>
     </div>
 
     <div class="card-body">
-        @if (Count($vereadores) == 0)
+        @if (Count($agente_politicos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -42,38 +42,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($vereadores as $vereador)
+                        @foreach ($agente_politicos as $agente)
                             <tr>
-                                <td><strong>{{ $vereador->id_user != null ? $vereador->usuario->pessoa->nomeCompleto : 'não informado' }}</strong></td>
+                                <td><strong>{{ $agente->id_user != null ? $agente->usuario->pessoa->nomeCompleto : 'não informado' }}</strong></td>
                                 <td>
-                                    Primeiro turno: <strong>{{ $vereador->dataInicioMandato != null ? date('d/m/Y', strtotime($vereador->dataInicioMandato)) : 'não informado' }} </strong><br>
-                                    Segundo turno: <strong>{{ $vereador->dataFimMandato != null ? date('d/m/Y', strtotime($vereador->dataFimMandato)) : 'não informado' }} </strong>
+                                    Início: <strong>{{ $agente->dataInicioMandato != null ? date('d/m/Y', strtotime($agente->dataInicioMandato)) : 'não informado' }} </strong><br>
+                                    Fim: <strong>{{ $agente->dataFimMandato != null ? date('d/m/Y', strtotime($agente->dataFimMandato)) : 'não informado' }} </strong>
                                 </td>
-                                <td><strong>{{ $vereador->cargo_eletivo->descricao }}</strong></td>
+                                <td><strong>{{ $agente->cargo_eletivo->descricao }}</strong></td>
                                 <td>
-                                    <strong>{{ $vereador->cadastradoPorUsuario != null ? $vereador->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $vereador->created_at != null ? $vereador->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('vereador.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    {{-- <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button> --}}
+                                    <a href="{{ route('agente_politico.edit', $agente->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    {{-- <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $agente->id }}">Excluir</button> --}}
                                 </td>
                                 {{-- $table->date('')->nullable();
                                 $table->date('')->nullable();
                                 $table->integer('id_cargo_eletivo')->unsigned()->nullable();
                                 $table->integer('id_pleito_eleitoral')->unsigned()->nullable();
                                 $table->uuid('id_user')->nullable(); --}}
-                                {{-- <td><strong>{{ $vereador->ano_pleito != null ? $vereador->ano_pleito : 'não informado' }}</strong></td>
-                                <td>Início: <strong>{{ $vereador->inicio_mandato }}</strong> - Fim: <strong>{{ $vereador->fim_mandato }}</strong></td>
+                                {{-- <td><strong>{{ $agente->ano_pleito != null ? $agente->ano_pleito : 'não informado' }}</strong></td>
+                                <td>Início: <strong>{{ $agente->inicio_mandato }}</strong> - Fim: <strong>{{ $agente->fim_mandato }}</strong></td>
                                 <td>
-                                    Primeiro turno: <strong>{{ $vereador->dataPrimeiroTurno != null ? date('d/m/Y', strtotime($vereador->dataPrimeiroTurno)) : 'não informado' }} </strong><br>
-                                    Segundo turno: <strong>{{ $vereador->dataSegundoTurno != null ? date('d/m/Y', strtotime($vereador->dataSegundoTurno)) : 'não informado' }} </strong>
+                                    Primeiro turno: <strong>{{ $agente->dataPrimeiroTurno != null ? date('d/m/Y', strtotime($agente->dataPrimeiroTurno)) : 'não informado' }} </strong><br>
+                                    Segundo turno: <strong>{{ $agente->dataSegundoTurno != null ? date('d/m/Y', strtotime($agente->dataSegundoTurno)) : 'não informado' }} </strong>
                                 </td>
                                 <td>
-                                    @if (Count($vereador->cargos_eletivos_ativos()) != 0)
+                                    @if (Count($agente->cargos_eletivos_ativos()) != 0)
                                         <ol>
-                                            @foreach ($vereador->cargos_eletivos_ativos() as $vereador_cargo)
-                                                <li>{{ $vereador_cargo->cargo_eletivo->descricao }}</li>
+                                            @foreach ($agente->cargos_eletivos_ativos() as $agente)
+                                                <li>{{ $agente->cargo_eletivo->descricao }}</li>
                                             @endforeach
                                         </ol>
                                     @else
@@ -81,36 +81,36 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <strong>{{ $vereador->cadastradoPorUsuario != null ? $vereador->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $vereador->created_at != null ? $vereador->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('vereador.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button>
+                                    <a href="{{ route('agente_politico.edit', $agente->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $agente->id }}">Excluir</button>
                                 </td> --}}
-                                {{-- Início: {{ date('d/m/Y', strtotime($vereador->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($vereador->fim_mandato)) }} --}}
-                                {{-- <td>{{ $vereador->id_tipo_pleito != null ? $vereador->tipo_pleito->descricao : 'não informado' }}</td>
+                                {{-- Início: {{ date('d/m/Y', strtotime($agente->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($agente->fim_mandato)) }} --}}
+                                {{-- <td>{{ $agente->id_tipo_pleito != null ? $agente->tipo_pleito->descricao : 'não informado' }}</td>
                                 <td>
-                                    <strong>{{ $vereador->cadastradoPorUsuario != null ? $vereador->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $vereador->created_at != null ? $vereador->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('processo_legislativo.pleito.edit', $vereador->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $vereador->id }}">Excluir</button>
+                                    <a href="{{ route('processo_legislativo.pleito.edit', $agente->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $agente->id }}">Excluir</button>
                                 </td> --}}
                             </tr>
 
-                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $vereador->id }}"
+                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $agente->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('vereador.destroy', $vereador->id) }}">
+                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('agente_politico.destroy', $agente->id) }}">
                                             @csrf
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir Pleito de <i>{{ $vereador->ano_pleito != null ? $vereador->ano_pleito : 'não informado' }}</i></strong>
+                                                    <strong style="font-size: 1.2rem">Excluir Pleito de <i>{{ $agente->ano_pleito != null ? $agente->ano_pleito : 'não informado' }}</i></strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
@@ -159,7 +159,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('vereador.create') }}" class="btn btn-primary">Cadastrar Vereador</a>
+        <a href="{{ route('agente_politico.create') }}" class="btn btn-primary">Cadastrar Agente Político</a>
     </div>
 
 </div>

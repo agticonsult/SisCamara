@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CargoEletivo;
+use App\Models\AgentePolitico;
 use App\Models\ErrorLog;
 use App\Models\Permissao;
 use App\Models\Pessoa;
 use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Models\User;
-use App\Models\Vereador;
 use App\Services\ValidadorCPFService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,23 +18,23 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class VereadorController extends Controller
+class AgentePoliticoController extends Controller
 {
     public function index()
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $vereadores = Vereador::where('ativo', '=', 1)->get();
+            $agente_politicos = AgentePolitico::where('ativo', '=', 1)->get();
 
-            return view('vereador.index', compact('vereadores'));
+            return view('agente-politico.index', compact('agente_politicos'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "index";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -48,7 +47,7 @@ class VereadorController extends Controller
     public function create()
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -70,12 +69,12 @@ class VereadorController extends Controller
             }
 
 
-            return view('vereador.create', compact('pleito_eleitorals', 'usuarios'));
+            return view('agente-politico.create', compact('pleito_eleitorals', 'usuarios'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "create";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -88,20 +87,20 @@ class VereadorController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
             $input = [
                 'id_pleito_eleitoral' => $request->id_pleito_eleitoral,
-                // 'id_cargo_eletivo' => $request->id_cargo_eletivo,
+                'id_cargo_eletivo' => $request->id_cargo_eletivo,
                 'dataInicioMandato' => $request->dataInicioMandato,
                 'dataFimMandato' => $request->dataFimMandato,
                 'selecionar_opcao' => $request->selecionar_opcao
             ];
             $rules = [
                 'id_pleito_eleitoral' =>  'required|integer',
-                // 'id_cargo_eletivo' => 'required|integer',
+                'id_cargo_eletivo' => 'required|integer',
                 'dataInicioMandato' => 'required|date',
                 'dataFimMandato' => 'required|date',
                 'selecionar_opcao' => 'required|max:255'
@@ -110,7 +109,7 @@ class VereadorController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', 1)
+            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', 1)
                 ->first();
@@ -204,12 +203,14 @@ class VereadorController extends Controller
                     $novoUsuario->validadoEm = Carbon::now();
                     $novoUsuario->save();
 
-                    $permissao = new Permissao();
-                    $permissao->id_user = $novoUsuario->id;
-                    $permissao->id_perfil = 2;
-                    $permissao->cadastradoPorUsuario = Auth::user()->id;
-                    $permissao->ativo = 1;
-                    $permissao->save();
+                    if ($request->id_cargo_eletivo == 1){
+                        $permissao = new Permissao();
+                        $permissao->id_user = $novoUsuario->id;
+                        $permissao->id_perfil = 2;
+                        $permissao->cadastradoPorUsuario = Auth::user()->id;
+                        $permissao->ativo = 1;
+                        $permissao->save();
+                    }
 
                     $id_userzinho = $novoUsuario->id;
                     break;
@@ -243,17 +244,18 @@ class VereadorController extends Controller
             }
 
             // Vereador
-            $novoVereador = new Vereador();
-            $novoVereador->dataInicioMandato = $request->dataInicioMandato;
-            $novoVereador->dataFimMandato = $request->dataFimMandato;
-            // $novoVereador->id_cargo_eletivo = $request->id_cargo_eletivo;
-            $novoVereador->id_pleito_eleitoral = $request->id_pleito_eleitoral;
-            $novoVereador->id_user = $id_userzinho;
-            $novoVereador->cadastradoPorUsuario = Auth::user()->id;
-            $novoVereador->ativo = 1;
-            $novoVereador->save();
+            $agente_politico = new AgentePolitico();
+            $agente_politico->dataInicioMandato = $request->dataInicioMandato;
+            $agente_politico->dataFimMandato = $request->dataFimMandato;
+            $agente_politico->id_legislatura = $pleito_cargo->pleito_eleitoral->id_legislatura;
+            $agente_politico->id_cargo_eletivo = $request->id_cargo_eletivo;
+            $agente_politico->id_pleito_eleitoral = $request->id_pleito_eleitoral;
+            $agente_politico->id_user = $id_userzinho;
+            $agente_politico->cadastradoPorUsuario = Auth::user()->id;
+            $agente_politico->ativo = 1;
+            $agente_politico->save();
 
-            return redirect()->route('vereador.index')->with('success', 'Cadastro realizado com sucesso');
+            return redirect()->route('agente_politico.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -264,7 +266,7 @@ class VereadorController extends Controller
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "store";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -277,17 +279,17 @@ class VereadorController extends Controller
     public function edit($id)
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$vereador){
+            $agente_politico = AgentePolitico::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$agente_politico){
                 return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
             $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', 1)->get();
-            $pleito_cargos = $vereador->pleito_eleitoral->cargos_eletivos_ativos();
+            $pleito_cargos = $agente_politico->pleito_eleitoral->cargos_eletivos_ativos();
             $cargos_eletivos = [];
             foreach ($pleito_cargos as $pleito_cargo) {
                 $cargo_eletivo = [
@@ -312,12 +314,12 @@ class VereadorController extends Controller
 
             }
 
-            return view('vereador.edit', compact('vereador', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios'));
+            return view('agente-politico.edit', compact('agente_politico', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "create";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -330,16 +332,16 @@ class VereadorController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
             $input = [
                 'id' => $request->id,
 
-                // Dados do vereador
+                // Dados do agente político
                 'id_pleito_eleitoral' => $request->id_pleito_eleitoral,
-                // 'id_cargo_eletivo' => $request->id_cargo_eletivo,
+                'id_cargo_eletivo' => $request->id_cargo_eletivo,
                 'dataInicioMandato' => $request->dataInicioMandato,
                 'dataFimMandato' => $request->dataFimMandato,
 
@@ -363,9 +365,9 @@ class VereadorController extends Controller
             $rules = [
                 'id' => 'required|integer',
 
-                // Dados do vereador
+                // Dados do agente político
                 'id_pleito_eleitoral' => 'required|integer',
-                // 'id_cargo_eletivo' => 'required|integer',
+                'id_cargo_eletivo' => 'required|integer',
                 'dataInicioMandato' => 'required|date',
                 'dataFimMandato' => 'required|date',
 
@@ -390,12 +392,12 @@ class VereadorController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            if (!$vereador){
-                return redirect()->back()->with('erro', 'Vereador inválido.');
+            $agente_politico = AgentePolitico::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$agente_politico){
+                return redirect()->back()->with('erro', 'Agente Político inválido.');
             }
 
-            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', 1)
+            $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', 1)
                 ->first();
@@ -419,13 +421,13 @@ class VereadorController extends Controller
             //existe um email cadastrado?
             if($verifica_user){
 
-                if ($verifica_user->id != $vereador->id_user) {
+                if ($verifica_user->id != $agente_politico->id_user) {
                     //caso exista um cpf ou e-mail cadastrado, retorne a mensagem abaixo
                     return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.')->withInput();
                 }
                 else{
                     //Pessoa
-                    $pessoa = Pessoa::find($vereador->usuario->id_pessoa);
+                    $pessoa = Pessoa::find($agente_politico->usuario->id_pessoa);
                     $pessoa->nomeCompleto = $request->nomeCompleto;
                     $pessoa->apelidoFantasia = $request->apelidoFantasia;
                     $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
@@ -438,7 +440,7 @@ class VereadorController extends Controller
                     $pessoa->save();
 
                     //Usuário
-                    $usuario = User::find($vereador->id_user);
+                    $usuario = User::find($agente_politico->id_user);
                     $usuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
                     $usuario->email = $request->email;
                     $usuario->telefone_celular = preg_replace('/[^0-9]/', '', $request->telefone_celular);
@@ -448,13 +450,14 @@ class VereadorController extends Controller
             }
 
             // Vereador
-            $vereador->dataInicioMandato = $request->dataInicioMandato;
-            $vereador->dataFimMandato = $request->dataFimMandato;
-            // $vereador->id_cargo_eletivo = $request->id_cargo_eletivo;
-            $vereador->id_pleito_eleitoral = $request->id_pleito_eleitoral;
-            $vereador->save();
+            $agente_politico->dataInicioMandato = $request->dataInicioMandato;
+            $agente_politico->dataFimMandato = $request->dataFimMandato;
+            $agente_politico->id_legislatura = $pleito_cargo->pleito_eleitoral->id_legislatura;
+            $agente_politico->id_cargo_eletivo = $request->id_cargo_eletivo;
+            $agente_politico->id_pleito_eleitoral = $request->id_pleito_eleitoral;
+            $agente_politico->save();
 
-            return redirect()->route('vereador.index')->with('success', 'Alteração realizada com sucesso');
+            return redirect()->route('agente_politico.index')->with('success', 'Alteração realizada com sucesso');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -465,7 +468,7 @@ class VereadorController extends Controller
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "update";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
@@ -478,7 +481,7 @@ class VereadorController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            if (Auth::user()->temPermissao('Vereador', 'Exclusão') != 1) {
+            if (Auth::user()->temPermissao('AgentePolitico', 'Exclusão') != 1) {
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -517,7 +520,7 @@ class VereadorController extends Controller
                 $pleito_cargo_ativo->save();
             }
 
-            return redirect()->route('processo-legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
+            return redirect()->route('agente_politico.index')->with('success', 'Exclusão realizada com sucesso.');
         }
         catch (ValidationException $e) {
             $message = $e->errors();
@@ -528,7 +531,7 @@ class VereadorController extends Controller
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
+            $erro->controlador = "AgentePoliticoController";
             $erro->funcao = "destroy";
             if (Auth::check()) {
                 $erro->cadastradoPorUsuario = auth()->user()->id;

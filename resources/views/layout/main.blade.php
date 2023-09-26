@@ -180,11 +180,11 @@
                     </ul>
                 </li>
 
-                @if (Auth::user()->temPermissao('Vereador', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'vereador' ? 'active' : null }}">
-                        <a href="{{ route('vereador.index') }}" class="sidebar-link">
+                @if (Auth::user()->temPermissao('AgentePolitico', 'Listagem') == 1)
+                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'agente-politico' ? 'active' : null }}">
+                        <a href="{{ route('agente_politico.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
-                            <span>Vereadores</span>
+                            <span>Agentes Políticos</span>
                         </a>
                     </li>
                 @endif

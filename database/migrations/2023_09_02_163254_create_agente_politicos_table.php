@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVereadorsTable extends Migration
+class CreateAgentePoliticosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateVereadorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vereadors', function (Blueprint $table) {
+        Schema::create('agente_politicos', function (Blueprint $table) {
             $table->increments('id');
             $table->date('dataInicioMandato')->nullable();
             $table->date('dataFimMandato')->nullable();
-            // $table->integer('id_cargo_eletivo')->unsigned()->nullable();
-            // $table->foreign('id_cargo_eletivo')->references('id')->on('cargo_eletivos');
+            $table->integer('id_legislatura')->unsigned()->nullable();
+            $table->foreign('id_legislatura')->references('id')->on('legislaturas');
+            $table->integer('id_cargo_eletivo')->unsigned()->nullable();
+            $table->foreign('id_cargo_eletivo')->references('id')->on('cargo_eletivos');
             $table->integer('id_pleito_eleitoral')->unsigned()->nullable();
             $table->foreign('id_pleito_eleitoral')->references('id')->on('pleito_eleitorals');
             $table->uuid('id_user')->nullable();
@@ -41,6 +43,6 @@ class CreateVereadorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vereadors');
+        Schema::dropIfExists('agente_politicos');
     }
 }

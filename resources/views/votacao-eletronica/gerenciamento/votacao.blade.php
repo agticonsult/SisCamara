@@ -3,6 +3,8 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
+<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -15,17 +17,27 @@
 
 <div class="card" style="background-color:white">
 
-    <div class="card-header" style="background-color:white">
+    <div class="card-header">
         <h2 class="text-center">
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Listagem de Votações Eletrônicas</strong>
+            <strong>Gerenciamento da Votação Eletrônica</strong>
         </h2>
     </div>
 
     <div class="card-body">
-        @if (Count($votacaos) == 0)
+        <div class="text-center">
+            <button class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Iniciar Votação</button>
+        </div>
+    </div>
+
+
+    <div class="card-body">
+
+
+
+        @if (Count($vereadores) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -34,36 +46,35 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">Data</th>
-                            <th scope="col">Tipo de Votação</th>
+                            <th scope="col">Vereador</th>
+                            {{-- <th scope="col">Status Votação</th> --}}
+                            {{-- <th scope="col">Tipo de Votação</th>
                             <th scope="col">Proposição</th>
                             <th scope="col">Legislatura</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Ações</th>
+                            <th scope="col">Ações</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($votacaos as $votacao)
+                        @foreach ($vereadores as $vereador)
                             <tr>
-                                <td>{{ $votacao->data != null ? date('d/m/Y', strtotime($votacao->data)) : 'não informado' }}</td>
-                                <td>{{ $votacao->id_tipo_votacao != null ? $votacao->tipo_votacao->descricao : 'não informado' }}</td>
-                                <td>{{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }}</td>
-                                <td>Início: <strong>{{ $votacao->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $votacao->legislatura->fim_mandato }}</strong></td>
-                                <td>
-                                    <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                </td>
-                                <td>
-                                    <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                                <td>{{ $vereador->usuario->pessoa->nomeCompleto }}</td>
+                                {{-- @if ()
+
+                                @else
+
+                                @endif --}}
+                                {{-- <td>
+                                    <a href="{{ route('votacao_eletronica.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
                                 </td>
                                 <td>
                                     <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
-                                </td>
+                                </td> --}}
                             </tr>
 
-                            <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
+                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -90,7 +101,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         @endforeach
                     </tbody>
                 </table>
@@ -98,37 +109,60 @@
         @endif
     </div>
 
+
+
     <div class="card-footer">
-        <a href="{{ route('votacao_eletronica.create') }}" class="btn btn-primary">Cadastrar Votação Eletrônica</a>
+        <div class="col-md-12">
+            <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
+        </div>
     </div>
 
 </div>
 
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="{{asset('js/jquery.validate.js')}}"></script>
+<script src="{{ asset('js/datatables.js') }}"></script>
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
 
 <script>
-
-    $('.cpf').mask('000.000.000-00');
+    $("#form").validate({
+        rules : {
+            data:{
+                required:true
+            },
+            id_tipo_votacao:{
+                required:true
+            },
+            id_proposicao:{
+                required:true
+            },
+        },
+        messages:{
+            data:{
+                required:"Campo obrigatório"
+            },
+            id_tipo_votacao:{
+                required:"Campo obrigatório"
+            },
+            id_proposicao:{
+                required:"Campo obrigatório"
+            },
+        }
+    });
 
     $(document).ready(function() {
 
-        $('#datatables-reponsive').dataTable({
-            "oLanguage": {
-                "sLengthMenu": "Mostrar _MENU_ registros por página",
-                "sZeroRecords": "Nenhum registro encontrado",
-                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
-                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
-                "sInfoFiltered": "(filtrado de _MAX_ registros)",
-                "sSearch": "Pesquisar: ",
-                "oPaginate": {
-                    "sFirst": "Início",
-                    "sPrevious": "Anterior",
-                    "sNext": "Próximo",
-                    "sLast": "Último"
+        $('.select2').select2({
+            language: {
+                noResults: function() {
+                    return "Nenhum resultado encontrado";
                 }
             },
+            closeOnSelect: true,
+            width: '100%',
         });
+
     });
 
 </script>
