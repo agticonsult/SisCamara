@@ -22,13 +22,13 @@
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
-            <strong>Cadastro de Vereador</strong>
+            <strong>Cadastro de Agente Político</strong>
         </h2>
     </div>
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('vereador.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('agente_politico.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -39,8 +39,8 @@
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($pleito_eleitorals as $pleito_eleitoral)
                                 <option value="{{ $pleito_eleitoral->id }}">
-                                    {{ $pleito_eleitoral->ano_pleito }} -
-                                    Mandato <strong>{{ $pleito_eleitoral->inicio_mandato }}</strong>-<strong>{{ $pleito_eleitoral->fim_mandato }}</strong>
+                                    Primeiro Turno: <strong>{{ date('d/m/Y', strtotime($pleito_eleitoral->dataPrimeiroTurno)) }}</strong> -
+                                    Segundo Turno: <strong>{{ date('d/m/Y', strtotime($pleito_eleitoral->dataPrimeiroTurno)) }}</strong>
                                 </option>
                             @endforeach
                         </select>
@@ -171,7 +171,7 @@
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('vereador.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgentePolitico;
+use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
 use App\Models\Legislatura;
 use App\Models\Proposicao;
 use App\Models\TipoVotacao;
+use App\Models\Vereador;
+use App\Models\VereadorVotacao;
 use App\Models\VotacaoEletronica;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -88,6 +92,16 @@ class VotacaoEletronicaController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
+            $vereadores = AgentePolitico::leftJoin('pleito_eleitorals', 'pleito_eleitorals.id', '=', 'agente_politicos.id_pleito_eleitoral')
+                ->where('pleito_eleitorals.id_legislatura', '=', $request->id_legislatura)
+                ->where('agente_politicos.ativo', '=', 1)
+                ->select('agente_politicos.*')
+                ->get();
+
+            if (Count($vereadores) == 0){
+                return redirect()->back()->with('erro', 'Não há vereadores cadastrador para realizar a votação!');
+            }
+
             $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', 1)->first();
             if (!$tipo_votacao){
                 return redirect()->back()->with('erro', 'Tipo de votação inválido!');
@@ -111,6 +125,15 @@ class VotacaoEletronicaController extends Controller
             $votacao->cadastradoPorUsuario = Auth::user()->id;
             $votacao->ativo = 1;
             $votacao->save();
+
+            foreach ($vereadores as $vereador){
+                $vereador_votacao = new VereadorVotacao();
+                $vereador_votacao->id_vereador = $vereador->id;
+                $vereador_votacao->id_votacao = $votacao->id;
+                $vereador_votacao->cadastradoPorUsuario = Auth::user()->id;
+                $vereador_votacao->ativo = 1;
+                $vereador_votacao->save();
+            }
 
             return redirect()->route('votacao_eletronica.index')->with('success', 'Cadastro realizado com sucesso');
         }
@@ -347,8 +370,6 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-    public function votar(Request $request) {
-        dd($request->all());
-    }
+
 
 }

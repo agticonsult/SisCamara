@@ -128,7 +128,7 @@ class User extends Authenticatable
         return false;
     }
 
-    public function ehVereador()
+    public function ehAgentePolitico()
     {
         $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
 

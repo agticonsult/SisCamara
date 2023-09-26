@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentePoliticoController;
 use App\Http\Controllers\AnexoAtoController;
 use App\Http\Controllers\AssuntoAtoController;
 use App\Http\Controllers\AtoController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
+use App\Http\Controllers\GerenciamentoVotacaoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\LegislaturaController;
@@ -218,8 +220,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [VotacaoEletronicaController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [VotacaoEletronicaController::class, 'destroy'])->name('destroy');
-        Route::get('/gerenciar/{id}', [VotacaoEletronicaController::class, 'gerenciar'])->name('gerenciar');
 
+        Route::group(['prefix' => '/gerenciamento', 'as' => 'gerenciamento.'], function() {
+            Route::get('/gerenciar/{id}', [GerenciamentoVotacaoController::class, 'gerenciar'])->name('gerenciar');
+        });
         // // Dados Gerais
         // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
         //     Route::get('/index', [ModeloProposicaoController::class, 'index'])->name('index');
@@ -233,15 +237,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-    // Vereador
-    Route::group(['prefix' => '/vereador', 'as' => 'vereador.'], function() {
-        Route::get('/index', [VereadorController::class, 'index'])->name('index');
-        Route::get('/show/{id}', [VereadorController::class, 'show'])->name('show');
-        Route::get('/create', [VereadorController::class, 'create'])->name('create');
-        Route::post('/store', [VereadorController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [VereadorController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [VereadorController::class, 'update'])->name('update');
-        Route::post('/destroy/{id}', [VereadorController::class, 'destroy'])->name('destroy');
+    // Agente político
+    Route::group(['prefix' => '/agente-politico', 'as' => 'agente_politico.'], function() {
+        Route::get('/index', [AgentePoliticoController::class, 'index'])->name('index');
+        Route::get('/show/{id}', [AgentePoliticoController::class, 'show'])->name('show');
+        Route::get('/create', [AgentePoliticoController::class, 'create'])->name('create');
+        Route::post('/store', [AgentePoliticoController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [AgentePoliticoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [AgentePoliticoController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [AgentePoliticoController::class, 'destroy'])->name('destroy');
     });
 
     // Usuarios/Clientes

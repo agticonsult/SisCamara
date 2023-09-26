@@ -34,7 +34,7 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Repartição', 'nomeEntidade'=>'Reparticao', 'ativo'=>1],
             ['descricao'=>'Proposição', 'nomeEntidade'=>'Proposicao', 'ativo'=>1],
             ['descricao'=>'Modelo de Proposição', 'nomeEntidade'=>'ModeloProposicao', 'ativo'=>1],
-            ['descricao'=>'Vereador', 'nomeEntidade'=>'Vereador', 'ativo'=>1],
+            ['descricao'=>'Agente Político', 'nomeEntidade'=>'AgentePolitico', 'ativo'=>1],
             ['descricao'=>'Legislatura', 'nomeEntidade'=>'Legislatura', 'ativo'=>1],
             ['descricao'=>'Pleito Eleitoral', 'nomeEntidade'=>'PleitoEleitoral', 'ativo'=>1],
             ['descricao'=>'Votação Eletrônica', 'nomeEntidade'=>'VotacaoEletronica', 'ativo'=>1],

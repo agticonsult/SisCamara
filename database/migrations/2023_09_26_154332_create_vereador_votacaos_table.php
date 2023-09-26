@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVereadorsTable extends Migration
+class CreateVereadorVotacaosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,22 @@ class CreateVereadorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vereadors', function (Blueprint $table) {
-            $table->increments('id');
-            $table->date('dataInicioMandato')->nullable();
-            $table->date('dataFimMandato')->nullable();
-            // $table->integer('id_cargo_eletivo')->unsigned()->nullable();
-            // $table->foreign('id_cargo_eletivo')->references('id')->on('cargo_eletivos');
-            $table->integer('id_pleito_eleitoral')->unsigned()->nullable();
-            $table->foreign('id_pleito_eleitoral')->references('id')->on('pleito_eleitorals');
-            $table->uuid('id_user')->nullable();
-            $table->foreign('id_user')->references('id')->on('users');
+        Schema::create('vereador_votacaos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->integer('ordem')->nullable();
+
+            $table->boolean('votou')->nullable();
+            $table->timestamp('votouEm')->nullable();
+
+            // Vereador
+            $table->integer('id_vereador')->unsigned()->nullable();
+            $table->foreign('id_vereador')->references('id')->on('agente_politicos');
+
+            // Votação
+            $table->integer('id_votacao')->unsigned()->nullable();
+            $table->foreign('id_votacao')->references('id')->on('votacao_eletronicas');
+
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
@@ -41,6 +47,6 @@ class CreateVereadorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vereadors');
+        Schema::dropIfExists('vereador_votacaos');
     }
 }
