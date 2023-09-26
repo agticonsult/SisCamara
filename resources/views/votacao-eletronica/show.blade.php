@@ -63,9 +63,9 @@
                     <div class="tab-pane fade" id="consolidada" role="tabpanel" aria-labelledby="consolidada-tab">
                         <div class="card mt-2">
                             <div class="card-body">
-                                <p>SIM 0</p>
-                                <p>NÃO 0</p>
-                                <p>ABSTENÇÃO 0</p>
+                                <p class="voto-sim">SIM 0</p>
+                                <p class="voto-nao">NÃO 0</p>
+                                <p class="voto-abstencao">ABSTENÇÃO 0</p>
                             </div>
                         </div>
                     </div>
