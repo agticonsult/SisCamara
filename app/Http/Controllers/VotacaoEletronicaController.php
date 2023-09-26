@@ -93,7 +93,7 @@ class VotacaoEletronicaController extends Controller
             $validar->validate();
 
             $vereadores = AgentePolitico::leftJoin('pleito_eleitorals', 'pleito_eleitorals.id', '=', 'agente_politicos.id_pleito_eleitoral')
-                ->where('pleito_eleitorals.id_legislatura', '=', $votacao->id_legislatura)
+                ->where('pleito_eleitorals.id_legislatura', '=', $request->id_legislatura)
                 ->where('agente_politicos.ativo', '=', 1)
                 ->select('agente_politicos.*')
                 ->get();
