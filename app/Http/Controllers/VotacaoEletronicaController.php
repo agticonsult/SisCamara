@@ -46,7 +46,7 @@ class VotacaoEletronicaController extends Controller
     public function create()
     {
         try {
-            if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('VotacaoEletronica', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -72,7 +72,7 @@ class VotacaoEletronicaController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('VotacaoEletronica', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -148,6 +148,30 @@ class VotacaoEletronicaController extends Controller
             $erro->erro = $ex->getMessage();
             $erro->controlador = "VotacaoEletronicaController";
             $erro->funcao = "store";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+
+            return view('votacao-eletronica.show', compact('votacao'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VotacaoEletronicaController";
+            $erro->funcao = "show";
             if (Auth::check()){
                 $erro->cadastradoPorUsuario = auth()->user()->id;
             }

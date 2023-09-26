@@ -55,7 +55,9 @@
                                     em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
+
                                     <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                                    {{-- <a href="{{ route('votacao_eletronica.show', $votacao->id) }}" class="btn btn-info m-1">Votar</a> --}}
                                 </td>
                                 <td>
                                     <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
