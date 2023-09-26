@@ -347,4 +347,8 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
+    public function votar(Request $request) {
+        dd($request->all());
+    }
+
 }
