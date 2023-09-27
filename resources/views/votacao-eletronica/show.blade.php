@@ -73,23 +73,102 @@
                     <div class="tab-pane fade" id="compilado" role="tabpanel" aria-labelledby="compilado-tab">
                         <div class="card mt-2">
                             <div class="card-body">
-                                <form action="{{ route('votacao_eletronica.votar', $votacao->id) }}" method="POST" class="form_prevent_multiple_submits">
+                                <p>Qual o seu voto?</p>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-lg btn-success"
+                                    data-toggle="modal" data-target="#exampleModalVotoSim{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Sim</button>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-lg btn-danger"
+                                    data-toggle="modal" data-target="#exampleModalVotoNao{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Não</button>
+                                </div>
+                                <div class="mt-3">
+                                    <button type="button" class="btn btn-lg btn-warning"
+                                    data-toggle="modal" data-target="#exampleModalVotoAbstencao{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Abstenção</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModalVotoSim{{ $votacao->id }}"
+                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoSim"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
-                                    <p>Qual o seu voto?</p>
-                                    <div class="mt-3">
-                                        <button type="submit" class="btn btn-lg btn-success"
-                                            style="width: 15%; margin-bottom: 0.7rem">Sim</button>
+                                    <div class="modal-header btn-success">
+                                        <h5 class="modal-title text-center" id="exampleModalLabelVotoSim">
+                                            <strong style="font-size: 1.2rem">Você vota: Sim </i></strong>
+                                        </h5>
                                     </div>
-                                    <div class="mt-3">
-                                        <button type="submit" class="btn btn-lg btn-danger"
-                                            style="width: 15%; margin-bottom: 0.7rem">Não</button>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="voto" id="voto" value="Sim" hidden>
+                                            <p>Confirma seu voto?</p>
+                                        </div>
                                     </div>
-                                    <div class="mt-3">
-                                        <button type="submit" class="btn btn-lg btn-warning"
-                                            style="width: 15%; margin-bottom: 0.7rem">Abstenção</button>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                        </button>
+                                        <button type="submit" class="button_submit btn btn-success">Confirmar</button>
                                     </div>
-
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModalVotoNao{{ $votacao->id }}"
+                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoNao"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
+                                    @csrf
+                                    @method('POST')
+                                    <div class="modal-header btn-danger">
+                                        <h5 class="modal-title text-center" id="exampleModalLabelVotoNao">
+                                            <strong style="font-size: 1.2rem">Você vota: Não</i></strong>
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="voto" id="voto" value="Não" hidden>
+                                            <p>Confirma seu voto?</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                        </button>
+                                        <button type="submit" class="button_submit btn btn-success">Confirmar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModalVotoAbstencao{{ $votacao->id }}"
+                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoAbstencao"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
+                                    @csrf
+                                    @method('POST')
+                                    <div class="modal-header btn-warning">
+                                        <h5 class="modal-title text-center" id="exampleModalLabelVotoAbstencao">
+                                            <strong style="font-size: 1.2rem">Você vota: Abstenção</i></strong>
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="voto" id="voto" value="Abstenção" hidden>
+                                            <p>Confirma seu voto?</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                        </button>
+                                        <button type="submit" class="button_submit btn btn-success">Confirmar</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>

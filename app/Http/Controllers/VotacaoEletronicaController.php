@@ -370,6 +370,8 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-
+    public function registrar(Request $request) {
+        dd($request->all());
+    }
 
 }

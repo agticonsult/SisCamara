@@ -214,7 +214,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => '/votacao-eletronica', 'as' => 'votacao_eletronica.'], function() {
         Route::get('/index', [VotacaoEletronicaController::class, 'index'])->name('index');
         Route::get('/show/{id}', [VotacaoEletronicaController::class, 'show'])->name('show');
-        Route::post('/votar/{id}', [VotacaoEletronicaController::class, 'votar'])->name('votar');
+        Route::post('/registrar/{id}', [VotacaoEletronicaController::class, 'registrar'])->name('registrar');
         Route::get('/create', [VotacaoEletronicaController::class, 'create'])->name('create');
         Route::post('/store', [VotacaoEletronicaController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
