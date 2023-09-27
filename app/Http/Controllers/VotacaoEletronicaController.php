@@ -337,4 +337,41 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
+    public function gerenciar($id)
+    {
+        try {
+            if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$votacao){
+                return redirect()->back()->with('erro', 'Votação inválida.');
+            }
+
+            if ($votacao->votacaoIniciada != 1){
+                $votacao->votacaoIniciada = 1;
+                $votacao->dataHoraInicio = Carbon::now();
+                $votacao->save();
+            }
+
+            return view('votacao-eletronica.votacao', compact('votacao'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VotacaoEletronicaController";
+            $erro->funcao = "edit";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function registrar(Request $request) {
+        dd($request->all());
+    }
+
 }

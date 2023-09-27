@@ -68,6 +68,20 @@ h4 {
     background-color: #1e70b8 !important;
 }
 
+.voto-sim {
+    color: green;
+}
+
+.voto-nao {
+    color: red;
+}
+
+.voto-abstencao {
+    color: 	#FFD700;
+}
+
+.voto-nao
+
 .d-none{
     display: none;
 }
