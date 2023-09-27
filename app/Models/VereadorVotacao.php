@@ -17,7 +17,7 @@ class VereadorVotacao extends Model implements Auditable
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'tipo_reparticaos';
+    protected $table = 'vereador_votacaos';
 
     public function cad_usuario()
     {

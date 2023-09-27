@@ -27,86 +27,92 @@
     </div>
 
     <div class="card-body">
-        <div class="text-center">
-            <button class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Iniciar Votação</button>
+        <div class="table-responsive">
+            <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th scope="col">Vereador</th>
+                        <th scope="col">Status Votação</th>
+                        {{-- <th scope="col">Tipo de Votação</th>
+                        <th scope="col">Proposição</th>
+                        <th scope="col">Legislatura</th>
+                        <th scope="col">Cadastrado por</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Ações</th> --}}
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($votacao->vereadores_ativos() as $vereador_votacao)
+                        <tr>
+                            <td>{{ $vereador_votacao->vereador->usuario->pessoa->nomeCompleto }}</td>
+                            <td>
+                                @if ($votacao->votacaoIniciada != 1)
+                                    <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                @else
+                                    @if ($vereador_votacao->votou != 1)
+                                        <button class="btn btn-info">Votar</button>
+                                    @else
+                                        <button class="btn btn-success">
+                                            Votação realizada em
+                                            <strong>{{ date('d/m/Y H:i:s', strtotime($votacao->votouEm)) }}</strong>
+                                        </button>
+                                    @endif
+                                @endif
+                            </td>
+
+
+                            {{-- <td>
+                                <a href="{{ route('votacao_eletronica.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                            </td>
+                            <td>
+                                <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
+                            </td> --}}
+                        </tr>
+
+                        {{-- <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
+                            tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
+                            aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.destroy', $votacao->id) }}">
+                                        @csrf
+                                        @method('POST')
+                                        <div class="modal-header btn-danger">
+                                            <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
+                                                <strong style="font-size: 1.2rem">Excluir Votação de ID <i>{{ $votacao->id }}</i></strong>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="motivo" class="form-label">Motivo</label>
+                                                <input type="text" class="form-control" name="motivo">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                            </button>
+                                            <button type="submit" class="button_submit btn btn-danger">Excluir</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> --}}
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
-
     <div class="card-body">
-
-
-
-        @if (Count($vereadores) == 0)
-            <div>
-                <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
-            </div>
-        @else
-            <div class="table-responsive">
-                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Vereador</th>
-                            {{-- <th scope="col">Status Votação</th> --}}
-                            {{-- <th scope="col">Tipo de Votação</th>
-                            <th scope="col">Proposição</th>
-                            <th scope="col">Legislatura</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Ações</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($vereadores as $vereador)
-                            <tr>
-                                <td>{{ $vereador->usuario->pessoa->nomeCompleto }}</td>
-                                {{-- @if ()
-
-                                @else
-
-                                @endif --}}
-                                {{-- <td>
-                                    <a href="{{ route('votacao_eletronica.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
-                                </td>
-                                <td>
-                                    <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
-                                </td> --}}
-                            </tr>
-
-                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
-                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.destroy', $votacao->id) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <div class="modal-header btn-danger">
-                                                <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir Votação de ID <i>{{ $votacao->id }}</i></strong>
-                                                </h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="motivo" class="form-label">Motivo</label>
-                                                    <input type="text" class="form-control" name="motivo">
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                </button>
-                                                <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div> --}}
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+        <div class="text-center">
+            @if ($votacao->votacaoIniciada != 1)
+                <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Iniciar Votação</a>
+            @else
+                <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-warning mt-4" style="width: 100%; font-size: 1.3rem;">Pausar Votação</a>
+                <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-danger mt-4" style="width: 100%; font-size: 1.3rem;">Encerrar Votação</a>
+            @endif
+        </div>
     </div>
 
 

@@ -222,6 +222,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => '/gerenciamento', 'as' => 'gerenciamento.'], function() {
             Route::get('/gerenciar/{id}', [GerenciamentoVotacaoController::class, 'gerenciar'])->name('gerenciar');
+            Route::get('/iniciar-votacao/{id}', [GerenciamentoVotacaoController::class, 'iniciarVotacao'])->name('iniciarVotacao');
         });
         // // Dados Gerais
         // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {
