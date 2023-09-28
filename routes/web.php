@@ -34,6 +34,7 @@ use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VereadorController;
+use App\Http\Controllers\VereadorVotacaoController;
 use App\Http\Controllers\VotacaoEletronicaController;
 use Illuminate\Support\Facades\Route;
 
@@ -224,6 +225,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => '/gerenciamento', 'as' => 'gerenciamento.'], function() {
             Route::get('/gerenciar/{id}', [GerenciamentoVotacaoController::class, 'gerenciar'])->name('gerenciar');
             Route::get('/iniciar-votacao/{id}', [GerenciamentoVotacaoController::class, 'iniciarVotacao'])->name('iniciarVotacao');
+            Route::get('/pausar-votacao/{id}', [GerenciamentoVotacaoController::class, 'pausarVotacao'])->name('pausarVotacao');
+            Route::get('/encerrar-votacao/{id}', [GerenciamentoVotacaoController::class, 'encerrarVotacao'])->name('encerrarVotacao');
+        });
+
+        Route::group(['prefix' => '/vereador', 'as' => 'vereador.'], function() {
+            Route::get('/liberar-votacao/{id}', [VereadorVotacaoController::class, 'liberarVotacao'])->name('liberarVotacao');
         });
         // // Dados Gerais
         // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {

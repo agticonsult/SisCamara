@@ -56,9 +56,9 @@
                                 </td>
                                 <td>
                                     @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
-                                    <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                                        <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
                                     @endif
-                                    <a href="{{ route('votacao_eletronica.show', $votacao->id) }}" class="btn btn-info m-1">Votação</a>
+                                    {{-- <a href="{{ route('votacao_eletronica.show', $votacao->id) }}" class="btn btn-info m-1">Votação</a> --}}
                                     {{-- <a href="{{ route('votacao_eletronica.show', $votacao->id) }}" class="btn btn-info m-1">Votar</a> --}}
                                 </td>
                                 <td>
