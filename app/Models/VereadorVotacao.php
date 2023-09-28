@@ -12,7 +12,9 @@ class VereadorVotacao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'ordem', 'votou', 'votouEm', 'id_vereador', 'id_votacao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'ordem', 'votou', 'votouEm', 'id_vereador', 'id_votacao',
+        'votacaoAutorizada', 'autorizadaPorUsuario', 'autorizadaEm',
+        'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -23,6 +25,10 @@ class VereadorVotacao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function autorizadaPor()
+    {
+        return $this->belongsTo(User::class, 'autorizadaPorUsuario');
+    }
     public function vereador()
     {
         return $this->belongsTo(AgentePolitico::class, 'id_vereador');
@@ -31,5 +37,6 @@ class VereadorVotacao extends Model implements Auditable
     {
         return $this->belongsTo(VotacaoEletronica::class, 'id_votacao');
     }
+
 }
 

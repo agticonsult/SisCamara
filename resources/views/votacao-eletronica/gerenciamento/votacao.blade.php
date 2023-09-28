@@ -27,6 +27,12 @@
     </div>
 
     <div class="card-body">
+        <div class="text-center">
+            <h1 style="text-decoration: underline">LIBERAÇÃO DOS VEREADORES PARA VOTAÇÃO</h1>
+        </div>
+    </div>
+
+    <div class="card-body">
         <div class="table-responsive">
             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                 <thead>
@@ -50,11 +56,20 @@
                                     <button class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @else
                                     @if ($vereador_votacao->votou != 1)
-                                        <a href="{{ route('votacao_eletronica.vereador.liberarVotacao', $vereador_votacao->id) }}" class="btn btn-info">Votar</a>
+                                        @if ($vereador_votacao->votacaoAutorizada != 1)
+                                            <a href="{{ route('votacao_eletronica.vereador.liberarVotacao', $vereador_votacao->id) }}" class="btn btn-info">Votar</a>
+                                        @else
+                                            <button class="btn btn-light">
+                                                Votação autorizada
+                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->autorizadaEm)) }}</strong>
+                                                por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nomeCompleto }}</strong> <br>
+                                                <strong>--AGUARDANDO VOTO--</strong>
+                                            </button>
+                                        @endif
                                     @else
                                         <button class="btn btn-success">
                                             Votação realizada em
-                                            <strong>{{ date('d/m/Y H:i:s', strtotime($votacao->votouEm)) }}</strong>
+                                            <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->votouEm)) }}</strong>
                                         </button>
                                     @endif
                                 @endif
@@ -101,6 +116,12 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="text-center">
+            <h1 style="text-decoration: underline">PAUSAR OU ENCERRAR VOTAÇÃO</h1>
         </div>
     </div>
 
@@ -167,6 +188,23 @@
             },
             closeOnSelect: true,
             width: '100%',
+        });
+
+        $('#datatables-reponsive').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                "sSearch": "Pesquisar: ",
+                "oPaginate": {
+                    "sFirst": "Início",
+                    "sPrevious": "Anterior",
+                    "sNext": "Próximo",
+                    "sLast": "Último"
+                }
+            },
         });
 
     });

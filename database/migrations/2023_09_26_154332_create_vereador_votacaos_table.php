@@ -29,6 +29,12 @@ class CreateVereadorVotacaosTable extends Migration
             $table->integer('id_votacao')->unsigned()->nullable();
             $table->foreign('id_votacao')->references('id')->on('votacao_eletronicas');
 
+            // Votação autorizada
+            $table->boolean('votacaoAutorizada')->nullable();
+            $table->uuid('autorizadaPorUsuario')->nullable();
+            $table->foreign('autorizadaPorUsuario')->references('id')->on('users');
+            $table->timestamp('autorizadaEm')->nullable();
+
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();

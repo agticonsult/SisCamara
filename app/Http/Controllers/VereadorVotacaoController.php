@@ -14,8 +14,7 @@ class VereadorVotacaoController extends Controller
     public function liberarVotacao($id)
     {
         try {
-            if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-            // if(Auth::user()->temPermissao('VereadorVotacao', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('VereadorVotacao', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
@@ -24,12 +23,12 @@ class VereadorVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Dados inválidos.');
             }
 
-            // if ($vereadorVotacao->votacaoIniciada != 1){
-            //     $vereadorVotacao->votacaoIniciada = 1;
-            //     $vereadorVotacao->dataHoraInicio = Carbon::now();
-            //     $vereadorVotacao->id_status_votacao = 2;
-            //     $vereadorVotacao->save();
-            // }
+            if ($vereadorVotacao->votacaoIniciada != 1){
+                $vereadorVotacao->votacaoAutorizada = 1;
+                $vereadorVotacao->autorizadaPorUsuario = Auth::user()->id;
+                $vereadorVotacao->autorizadaEm = Carbon::now();
+                $vereadorVotacao->save();
+            }
 
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $vereadorVotacao->id_votacao)->with('success', 'Votação do vereador iniciada com sucesso!');
         }

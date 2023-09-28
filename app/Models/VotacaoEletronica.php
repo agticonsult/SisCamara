@@ -37,6 +37,10 @@ class VotacaoEletronica extends Model implements Auditable
     {
         return $this->belongsTo(Legislatura::class, 'id_legislatura');
     }
+    public function status()
+    {
+        return $this->belongsTo(StatusVotacao::class, 'id_status_votacao');
+    }
     public function horarios_ativos()
     {
         $horarios = HorarioVotacao::where('id_votacao', '=', $this->id)->where('ativo', '=', 1)->get();
