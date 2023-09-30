@@ -136,8 +136,6 @@
         </div>
     </div>
 
-
-
     <div class="card-footer">
         <div class="col-md-12">
             <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
