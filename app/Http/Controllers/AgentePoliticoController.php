@@ -406,9 +406,9 @@ class AgentePoliticoController extends Controller
             }
 
             //valida cpf
-            if(!ValidadorCPFService::ehValido($request->cpf)) {
-                return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
-            }
+            // if(!ValidadorCPFService::ehValido($request->cpf)) {
+            //     return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
+            // }
 
             $verifica_user = User::where(function (Builder $query) use ($request) {
                 return
@@ -417,6 +417,12 @@ class AgentePoliticoController extends Controller
                     })
                 ->select('id', 'email', 'cpf')
                 ->first();
+
+            if ($verifica_user->cpf != preg_replace('/[^0-9]/', '', $request->cpf)) {
+                if(!ValidadorCPFService::ehValido($request->cpf)) {
+                    return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
+                }
+            }
 
             //existe um email cadastrado?
             if($verifica_user){

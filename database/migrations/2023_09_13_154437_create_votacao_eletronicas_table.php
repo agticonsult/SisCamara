@@ -18,6 +18,8 @@ class CreateVotacaoEletronicasTable extends Migration
             $table->date('data')->nullable();
             $table->integer('interrupcoes')->nullable();
             $table->boolean('votacaoIniciada')->nullable();
+            $table->boolean('votacaoPausada')->nullable();
+            $table->boolean('votacaoEncerrada')->nullable();
             $table->timestamp('dataHoraInicio')->nullable();
             $table->timestamp('dataHoraFim')->nullable();
             $table->integer('id_tipo_votacao')->unsigned()->nullable();

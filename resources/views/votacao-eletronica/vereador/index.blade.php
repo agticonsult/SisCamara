@@ -69,7 +69,7 @@
                                                 <a href="{{ route('votacao_eletronica.vereador.votacao', $vereador_votacao->id) }}"
                                                     class="btn btn-info m-1">Votar</a>
                                             @else
-                                                <button type="button" class="btn btn-dark">Votado</button>
+                                                <button type="button" class="btn btn-dark">Votado em {{ date('d/m/Y H:i:s', strtotime($vereador_votacao->votouEm)) }}</button>
                                             @endif
                                         @else
                                             {{ $vereador_votacao->votacao->id_status_votacao != null ? $vereador_votacao->votacao->status->descricao : 'não iniciada' }}

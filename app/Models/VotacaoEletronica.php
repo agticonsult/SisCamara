@@ -12,7 +12,7 @@ class VotacaoEletronica extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'data', 'interrupcoes', 'votacaoIniciada', 'dataHoraInicio', 'dataHoraFim', 'id_tipo_votacao', 'id_proposicao',
+        'data', 'interrupcoes', 'votacaoIniciada', 'votacaoPausada', 'votacaoEncerrada', 'dataHoraInicio', 'dataHoraFim', 'id_tipo_votacao', 'id_proposicao',
         'id_legislatura', 'id_status_votacao',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];

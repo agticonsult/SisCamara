@@ -192,10 +192,11 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
+            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
             $proposicaos = Proposicao::where('ativo', '=', 1)->get();
             $tipo_votacaos = TipoVotacao::where('ativo', '=', 1)->get();
 
-            return view('votacao-eletronica.edit', compact('votacao', 'proposicaos', 'tipo_votacaos'));
+            return view('votacao-eletronica.edit', compact('votacao', 'proposicaos', 'tipo_votacaos', 'legislaturas'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -370,6 +371,6 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-    
+
 
 }

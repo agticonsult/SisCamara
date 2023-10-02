@@ -28,7 +28,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('agente_politico.update', $vereador->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('agente_politico.update', $agente_politico->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -38,9 +38,9 @@
                         <select name="id_pleito_eleitoral" id="id_pleito_eleitoral" class="select2 form-control" required>
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($pleito_eleitorals as $pleito_eleitoral)
-                                <option value="{{ $pleito_eleitoral->id }}" {{ $vereador->id_pleito_eleitoral == $pleito_eleitoral->id ? 'selected' : ''}}>
+                                <option value="{{ $pleito_eleitoral->id }}" {{ $agente_politico->id_pleito_eleitoral == $pleito_eleitoral->id ? 'selected' : ''}}>
                                     {{ $pleito_eleitoral->ano_pleito }} -
-                                    Mandato <strong>{{ $pleito_eleitoral->inicio_mandato }}</strong>-<strong>{{ $pleito_eleitoral->fim_mandato }}</strong>
+                                    Mandato <strong>{{ date('d/m/Y', strtotime($agente_politico->dataInicioMandato)) }}</strong> - <strong>{{ date('d/m/Y', strtotime($agente_politico->dataFimMandato))}}</strong>
                                 </option>
                             @endforeach
                         </select>
@@ -50,7 +50,7 @@
                         <select name="id_cargo_eletivo" id="id_cargo_eletivo" class="select2 form-control" required>
                             <option value="" selected disabled>--Selecione--</option>
                             @for ($i=0; $i<Count($cargos_eletivos); $i++)
-                                <option value="{{ $cargos_eletivos[$i]['id'] }}" {{ $vereador->id_cargo_eletivo == $cargos_eletivos[$i]['id'] ? 'selected' : ''}}>
+                                <option value="{{ $cargos_eletivos[$i]['id'] }}" {{ $agente_politico->id_cargo_eletivo == $cargos_eletivos[$i]['id'] ? 'selected' : ''}}>
                                     {{ $cargos_eletivos[$i]['descricao'] }}
                                 </option>
                             @endfor
@@ -60,11 +60,11 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data início mandato</label>
-                        <input type="date" name="dataInicioMandato" class="form-control" value="{{ $vereador->dataInicioMandato }}" required>
+                        <input type="date" name="dataInicioMandato" class="form-control" value="{{ $agente_politico->dataInicioMandato }}" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data fim mandato</label>
-                        <input type="date" name="dataFimMandato" class="form-control" value="{{ $vereador->dataFimMandato }}" required>
+                        <input type="date" name="dataFimMandato" class="form-control" value="{{ $agente_politico->dataFimMandato }}" required>
                     </div>
                 </div>
                 <br><hr>
@@ -72,37 +72,38 @@
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Nome</label>
-                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ $vereador->usuario->pessoa->nomeCompleto }}">
+                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ $agente_politico->usuario->pessoa->nomeCompleto }}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">Apelido</label>
-                        <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ $vereador->usuario->pessoa->apelidoFantasia }}">
+                        <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ $agente_politico->usuario->pessoa->apelidoFantasia }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*CPF</label>
-                        <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ $vereador->usuario->cpf }}">
+                        <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ $agente_politico->usuario->cpf }}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data de Nascimento</label>
-                        <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min='1899-01-01' max='2000-13-13' value="{{ $vereador->usuario->pessoa->dt_nascimento_fundacao }}">
+                        <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ $agente_politico->usuario->pessoa->dt_nascimento_fundacao }}">
+                        {{-- <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min='1899-01-01' max='2000-13-13' value="{{ $agente_politico->usuario->pessoa->dt_nascimento_fundacao }}"> --}}
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Email</label>
-                        <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ $vereador->usuario->email }}">
+                        <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ $agente_politico->usuario->email }}">
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">Celular/Telefone</label>
-                        <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ $vereador->usuario->telefone_celular }}">
+                        <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ $agente_politico->usuario->telefone_celular }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">Celular/Telefone Recado</label>
-                        <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ $vereador->usuario->telefone_celular2 }}">
+                        <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ $agente_politico->usuario->telefone_celular2 }}">
                     </div>
                 </div>
                 <br><hr>
@@ -110,27 +111,27 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="cep">CEP</label>
-                        <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ $vereador->usuario->pessoa->cep }}">
+                        <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ $agente_politico->usuario->pessoa->cep }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="endereco">Endereço (Rua/Avenida)</label>
-                        <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ $vereador->usuario->pessoa->endereco }}">
+                        <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ $agente_politico->usuario->pessoa->endereco }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="numero">Número</label>
-                        <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ $vereador->usuario->pessoa->numero }}">
+                        <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ $agente_politico->usuario->pessoa->numero }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="bairro">Bairro</label>
-                        <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ $vereador->usuario->pessoa->bairro }}">
+                        <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ $agente_politico->usuario->pessoa->bairro }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="complemento">Complemento</label>
-                        <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ $vereador->usuario->pessoa->complemento }}">
+                        <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ $agente_politico->usuario->pessoa->complemento }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="ponto_referencia">Ponto de Referência</label>
-                        <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ $vereador->usuario->pessoa->ponto_referencia }}">
+                        <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ $agente_politico->usuario->pessoa->ponto_referencia }}">
                     </div>
                 </div>
 

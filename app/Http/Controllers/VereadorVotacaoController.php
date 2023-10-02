@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Auth;
 class VereadorVotacaoController extends Controller
 {
 
-    public function index() {
-
+    public function index()
+    {
         try {
             $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
             if (!$vereador){
@@ -25,7 +25,8 @@ class VereadorVotacaoController extends Controller
 
             return view('votacao-eletronica.vereador.index', compact('vereador_votacaos'));
 
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "VereadorVotacaoController";
@@ -92,10 +93,10 @@ class VereadorVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Votação não autorizada.');
             }
 
-
             return view('votacao-eletronica.vereador.votacao', compact('votacao'));
 
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "VereadorVotacaoController";
@@ -108,8 +109,8 @@ class VereadorVotacaoController extends Controller
         }
     }
 
-    public function votar(Request $request, $id) {
-
+    public function votar(Request $request, $id)
+    {
         try {
             $vereador_votacao = VereadorVotacao::find($id);
             $vereador_votacao->votou = 1;
@@ -117,7 +118,8 @@ class VereadorVotacaoController extends Controller
             $vereador_votacao->save();
 
             return redirect()->route('votacao_eletronica.vereador.index')->with('success', 'Sua votação foi registrada com sucesso!');
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
             $erro->controlador = "VereadorVotacaoController";

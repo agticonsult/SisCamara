@@ -84,14 +84,17 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
-            if ($votacao->votacaoIniciada != 1){
-                $votacao->votacaoIniciada = 1;
+            if ($votacao->votacaoPausada != 1){
+                $qtdInterrupcao = $votacao->interrupcoes + 1;
+
+                $votacao->votacaoPausada = 1;
+                $votacao->interrupcoes = $qtdInterrupcao;
                 $votacao->dataHoraInicio = Carbon::now();
                 $votacao->id_status_votacao = 2;
                 $votacao->save();
             }
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação iniciada com sucesso!');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação pausada com sucesso!');
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -125,7 +128,7 @@ class GerenciamentoVotacaoController extends Controller
                 $votacao->save();
             }
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação iniciada com sucesso!');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação encerrada com sucesso!');
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
