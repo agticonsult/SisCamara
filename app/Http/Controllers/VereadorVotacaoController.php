@@ -16,6 +16,10 @@ class VereadorVotacaoController extends Controller
     public function index() {
 
         $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
+        if (!$vereador){
+            return redirect()->back()->with('erro', 'Vereador não cadastrado.');
+        }
+
         $vereador_votacaos = VereadorVotacao::where('id_vereador', $vereador->id)->where('ativo', 1)->get();
 
         // dd($votacaos);
