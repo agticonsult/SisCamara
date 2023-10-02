@@ -93,6 +93,11 @@
                                 Votações
                             </a>
                         </li>
+                        <li class="sidebar-item {{ Route::current()->getPrefix() == 'votacao-eletronica' ? 'active' : null }}">
+                            <a href="{{ route('votacao_eletronica.vereador.index') }}" class="sidebar-link">
+                                Vereador
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

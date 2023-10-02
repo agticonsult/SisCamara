@@ -214,8 +214,6 @@ Route::group(['middleware' => 'auth'], function () {
     // Votação Eletrônica
     Route::group(['prefix' => '/votacao-eletronica', 'as' => 'votacao_eletronica.'], function() {
         Route::get('/index', [VotacaoEletronicaController::class, 'index'])->name('index');
-        Route::get('/show/{id}', [VotacaoEletronicaController::class, 'show'])->name('show');
-        Route::post('/registrar/{id}', [VotacaoEletronicaController::class, 'registrar'])->name('registrar');
         Route::get('/create', [VotacaoEletronicaController::class, 'create'])->name('create');
         Route::post('/store', [VotacaoEletronicaController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
@@ -230,7 +228,11 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => '/vereador', 'as' => 'vereador.'], function() {
+            Route::get('/index', [VereadorVotacaoController::class, 'index'])->name('index');
+            Route::get('/votacao/{id}', [VereadorVotacaoController::class, 'votacao'])->name('votacao');
             Route::get('/liberar-votacao/{id}', [VereadorVotacaoController::class, 'liberarVotacao'])->name('liberarVotacao');
+            Route::post('/votar/{id}', [VereadorVotacaoController::class, 'votar'])->name('votar');
+
         });
         // // Dados Gerais
         // Route::group(['prefix' => '/modelo', 'as' => 'modelo.'], function() {

@@ -94,7 +94,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-success">
@@ -122,7 +122,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-danger">
@@ -150,7 +150,7 @@
                         aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.registrar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-warning">
