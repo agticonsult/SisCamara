@@ -15,16 +15,29 @@ class VereadorVotacaoController extends Controller
 
     public function index() {
 
-        $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
-        if (!$vereador){
-            return redirect()->back()->with('erro', 'Vereador não cadastrado.');
+        try {
+            $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
+            if (!$vereador){
+                return redirect()->back()->with('erro', 'Vereador não cadastrado.');
+            }
+
+            $vereador_votacaos = VereadorVotacao::where('id_vereador', $vereador->id)->where('ativo', 1)->get();
+
+            return view('votacao-eletronica.vereador.index', compact('vereador_votacaos'));
+
+        } catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VereadorVotacaoController";
+            $erro->funcao = "index";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
 
-        $vereador_votacaos = VereadorVotacao::where('id_vereador', $vereador->id)->where('ativo', 1)->get();
 
-        // dd($votacaos);
-
-        return view('votacao-eletronica.vereador.index', compact('vereador_votacaos'));
     }
 
     public function liberarVotacao($id)
@@ -63,28 +76,57 @@ class VereadorVotacaoController extends Controller
 
     public function votacao($id) {
 
-        $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
-        $votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', 1)->first();
+        try {
+            $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
+            $votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', 1)->first();
 
-        if (!$votacao){
-            return redirect()->back()->with('erro', 'Dados inválidos.');
+            if (!$votacao){
+                return redirect()->back()->with('erro', 'Dados inválidos.');
+            }
+
+            if($votacao->votou == 1) {
+                return redirect()->back()->with('erro', 'Você já votou.');
+            }
+
+            if($votacao->votacaoAutorizada != 1) {
+                return redirect()->back()->with('erro', 'Votação não autorizada.');
+            }
+
+
+            return view('votacao-eletronica.vereador.votacao', compact('votacao'));
+
+        } catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VereadorVotacaoController";
+            $erro->funcao = "votacao";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
-
-        if($votacao->votacaoAutorizada != 1) {
-            return redirect()->back()->with('erro', 'Votação não autorizada.');
-        }
-
-
-        return view('votacao-eletronica.vereador.votacao', compact('votacao'));
-
-
     }
 
     public function votar(Request $request, $id) {
 
-        $vereador_votacao = VereadorVotacao::find($id);
-        $vereador_votacao->votou = 1;
-        $vereador_votacao->votouEm = Carbon::now();
-        $vereador_votacao->save();
+        try {
+            $vereador_votacao = VereadorVotacao::find($id);
+            $vereador_votacao->votou = 1;
+            $vereador_votacao->votouEm = Carbon::now();
+            $vereador_votacao->save();
+
+            return redirect()->route('votacao_eletronica.vereador.index')->with('success', 'Sua votação foi registrada com sucesso!');
+        } catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VereadorVotacaoController";
+            $erro->funcao = "votar";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 }
