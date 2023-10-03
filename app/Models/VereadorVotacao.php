@@ -12,7 +12,7 @@ class VereadorVotacao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'ordem', 'votou', 'votouEm', 'id_vereador', 'id_votacao',
+        'ordem', 'votou', 'voto', 'votouEm', 'id_vereador', 'id_votacao',
         'votacaoAutorizada', 'autorizadaPorUsuario', 'autorizadaEm',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];

@@ -114,6 +114,7 @@ class VereadorVotacaoController extends Controller
         try {
             $vereador_votacao = VereadorVotacao::find($id);
             $vereador_votacao->votou = 1;
+            $vereador_votacao->voto = $request->voto;
             $vereador_votacao->votouEm = Carbon::now();
             $vereador_votacao->save();
 

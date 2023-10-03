@@ -19,6 +19,7 @@ class CreateVereadorVotacaosTable extends Migration
             $table->integer('ordem')->nullable();
 
             $table->boolean('votou')->nullable();
+            $table->string('voto')->nullable();
             $table->timestamp('votouEm')->nullable();
 
             // Vereador
