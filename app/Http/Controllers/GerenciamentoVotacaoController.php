@@ -57,6 +57,13 @@ class GerenciamentoVotacaoController extends Controller
                 $votacao->save();
             }
 
+            //se a votação estiver pausada
+            if ($votacao->votacaoPausada == 1) {
+                $votacao->votacaoPausada = 0;
+                $votacao->id_status_votacao = 2;
+                $votacao->save();
+            }
+
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação iniciada com sucesso!');
         }
         catch (\Exception $ex) {
@@ -90,7 +97,7 @@ class GerenciamentoVotacaoController extends Controller
                 $votacao->votacaoPausada = 1;
                 $votacao->interrupcoes = $qtdInterrupcao;
                 $votacao->dataHoraInicio = Carbon::now();
-                $votacao->id_status_votacao = 2;
+                $votacao->id_status_votacao = 5;
                 $votacao->save();
             }
 
@@ -121,12 +128,13 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
-            if ($votacao->votacaoIniciada != 1){
-                $votacao->votacaoIniciada = 1;
-                $votacao->dataHoraInicio = Carbon::now();
-                $votacao->id_status_votacao = 2;
-                $votacao->save();
-            }
+            $votacao->votacaoIniciada = 0;
+            $votacao->votacaoEncerrada = 1;
+            $votacao->dataHoraFim = Carbon::now();
+            $votacao->inativadoPorUsuario = Auth::user()->id;
+            $votacao->id_status_votacao = 4;
+            $votacao->ativo = 0;
+            $votacao->save();
 
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação encerrada com sucesso!');
         }

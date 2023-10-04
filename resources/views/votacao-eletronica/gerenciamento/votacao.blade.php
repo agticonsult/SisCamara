@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Vereador</th>
-                        <th scope="col">Status Votação</th>
+                        <th scope="col">Votação liberada</th>
                         {{-- <th scope="col">Tipo de Votação</th>
                         <th scope="col">Proposição</th>
                         <th scope="col">Legislatura</th>
@@ -52,6 +52,44 @@
                         <tr>
                             <td>{{ $vereador_votacao->vereador->usuario->pessoa->nomeCompleto }}</td>
                             <td>
+                                @if ($votacao->votacaoEncerrada != 1)
+                                    @if ($votacao->votacaoIniciada != 1)
+                                        <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    @else
+                                        @if ($votacao->votacaoPausada != 1)
+                                            @if ($vereador_votacao->votou != 1)
+                                                @if ($vereador_votacao->votacaoAutorizada != 1)
+                                                    <a href="{{ route('votacao_eletronica.vereador.liberarVotacao', $vereador_votacao->id) }}" class="btn btn-info">Liberar votação</a>
+                                                @else
+                                                    <button class="btn btn-light">
+                                                        Votação autorizada
+                                                        em <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->autorizadaEm)) }}</strong>
+                                                        por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nomeCompleto }}</strong> <br>
+                                                        <strong>--AGUARDANDO VOTO--</strong>
+                                                    </button>
+                                                @endif
+                                            @else
+                                                <button class="btn btn-success">
+                                                    Votação realizada em
+                                                    <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->votouEm)) }}</strong>
+                                                </button>
+                                            @endif
+                                        @else
+                                            <button class="btn btn-warning">
+                                                <strong>--VOTAÇÃO PAUSADA--</strong>
+                                            </button>
+                                        @endif
+                                    @endif
+                                @else
+                                    <button class="btn btn-danger">
+                                        Votação encerrada
+                                        em <strong>{{ date('d/m/Y H:i:s', strtotime($votacao->dataHoraFim)) }}</strong><br>
+                                        <strong>--VOTAÇÃO ENCERRADA--</strong>
+                                    </button>
+                                @endif
+
+                            </td>
+                            {{-- <td>
                                 @if ($votacao->votacaoIniciada != 1)
                                     <button class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @else
@@ -73,8 +111,7 @@
                                         </button>
                                     @endif
                                 @endif
-                            </td>
-
+                            </td> --}}
 
                             {{-- <td>
                                 <a href="{{ route('votacao_eletronica.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
@@ -121,18 +158,37 @@
 
     <div class="card-body">
         <div class="text-center">
-            <h1 style="text-decoration: underline">PAUSAR OU ENCERRAR VOTAÇÃO</h1>
+            <h1 style="text-decoration: underline">INICIAR, PAUSAR OU ENCERRAR VOTAÇÃO</h1>
         </div>
     </div>
 
     <div class="card-body">
         <div class="text-center">
-            @if ($votacao->votacaoIniciada != 1)
+            {{-- @if ($votacao->votacaoIniciada != 1)
                 <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Iniciar Votação</a>
             @else
                 <a href="{{ route('votacao_eletronica.gerenciamento.pausarVotacao', $votacao->id) }}" class="btn btn-warning mt-4" style="width: 100%; font-size: 1.3rem;">Pausar Votação</a>
                 <a href="{{ route('votacao_eletronica.gerenciamento.encerrarVotacao', $votacao->id) }}" class="btn btn-danger mt-4" style="width: 100%; font-size: 1.3rem;">Encerrar Votação</a>
-            @endif
+            @endif --}}
+
+            @switch($votacao->id_status_votacao)
+                @case('2')
+                    <a href="{{ route('votacao_eletronica.gerenciamento.pausarVotacao', $votacao->id) }}" class="btn btn-warning mt-4" style="width: 100%; font-size: 1.3rem;">Pausar Votação</a>
+                    <a href="{{ route('votacao_eletronica.gerenciamento.encerrarVotacao', $votacao->id) }}" class="btn btn-danger mt-4" style="width: 100%; font-size: 1.3rem;">Encerrar Votação</a>
+                @break
+
+                @case('5')
+                    <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Retomar Votação</a>
+                @break
+
+                @case('4')
+                    <a href="#" class="btn btn-danger mt-4" style="width: 100%; font-size: 1.3rem;">Votação Encerrada</a>
+                @break
+
+                @default
+                    <a href="{{ route('votacao_eletronica.gerenciamento.iniciarVotacao', $votacao->id) }}" class="btn btn-success mt-2" style="width: 100%; font-size: 1.3rem;">Iniciar Votação</a>
+                @break
+            @endswitch
         </div>
     </div>
 

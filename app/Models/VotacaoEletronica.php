@@ -13,8 +13,7 @@ class VotacaoEletronica extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
         'data', 'interrupcoes', 'votacaoIniciada', 'votacaoPausada', 'votacaoEncerrada', 'dataHoraInicio', 'dataHoraFim', 'id_tipo_votacao', 'id_proposicao',
-        'id_legislatura', 'id_status_votacao',
-        'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'id_legislatura', 'id_status_votacao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -24,6 +23,10 @@ class VotacaoEletronica extends Model implements Auditable
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
+    }
+    public function inativado_usuario()
+    {
+        return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
     public function tipo_votacao()
     {

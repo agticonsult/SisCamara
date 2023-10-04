@@ -15,9 +15,11 @@ class StatusVotacaoTableSeeder extends Seeder
     public function run()
     {
         DB::table('status_votacaos')->insert([
-            ['descricao'=>'Pendente', 'ativo'=>1],
-            ['descricao'=>'Em votação', 'ativo'=>1],
-            ['descricao'=>'Votado', 'ativo'=>1],
+            ['descricao'=>'Pendente', 'ativo' => 1],
+            ['descricao'=>'Em votação', 'ativo' => 1],
+            ['descricao'=>'Votado', 'ativo' => 1],
+            ['descricao'=>'Encerrado', 'ativo' => 1],
+            ['descricao'=>'Pausado', 'ativo' => 1],
         ]);
     }
 }
