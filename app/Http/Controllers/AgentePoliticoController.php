@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AgentePolitico;
 use App\Models\ErrorLog;
+use App\Models\Filesize;
+use App\Models\FotoPerfil;
 use App\Models\Permissao;
 use App\Models\Pessoa;
 use App\Models\PleitoCargo;
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -288,6 +291,18 @@ class AgentePoliticoController extends Controller
                 return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
+            $foto_perfil = FotoPerfil::where('id_user', '=', $agente_politico->id_user)->where('ativo', '=', 1)->first();
+            $temFoto = 0;
+
+            if ($foto_perfil){
+                $existe = Storage::disk('public')->exists('foto-perfil/' . $foto_perfil->nome_hash);
+
+                if ($existe){
+                    $temFoto = 1;
+                }
+            }
+            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
+
             $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', 1)->get();
             $pleito_cargos = $agente_politico->pleito_eleitoral->cargos_eletivos_ativos();
             $cargos_eletivos = [];
@@ -314,7 +329,7 @@ class AgentePoliticoController extends Controller
 
             }
 
-            return view('agente-politico.edit', compact('agente_politico', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios'));
+            return view('agente-politico.edit', compact('agente_politico', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios', 'foto_perfil', 'temFoto', 'filesize'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

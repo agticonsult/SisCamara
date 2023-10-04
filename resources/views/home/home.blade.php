@@ -118,15 +118,15 @@
                                         <label class="form-label">*Nome</label>
                                         <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ $user->pessoa->nomeCompleto != null ? $user->pessoa->nomeCompleto : old('nomeCompleto') }}">
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         <label class="form-label">Apelido</label>
                                         <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ $user->pessoa->apelidoFantasia != null ? $user->pessoa->apelidoFantasia : old('apelidoFantasia') }}">
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         <label class="form-label">*CPF</label>
                                         <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ $user->cpf != null ? $user->cpf: old('cpf') }}">
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
                                         <label class="form-label">*Data de Nascimento</label>
                                         <input class="dataFormat form-control" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ $user->pessoa->dt_nascimento_fundacao != null ? $user->pessoa->dt_nascimento_fundacao : old('dt_nascimento_fundacao') }}">
                                     </div>
@@ -147,19 +147,19 @@
                             <div class="col-md-6">
                                 <h5>Endereço</h5>
                                 <div class="row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-12">
                                         <label for="cep">CEP</label>
                                         <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ $user->pessoa->cep != null ? $user->pessoa->cep : old('cep') }}">
                                     </div>
-                                    <div class="form-group col-md-8">
+                                    <div class="form-group col-md-12">
                                         <label for="endereco">Endereço (Rua/Avenida)</label>
                                         <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ $user->pessoa->endereco != null ? $user->pessoa->endereco : old('endereco') }}">
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-12">
                                         <label for="numero">Número</label>
                                         <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ $user->pessoa->numero != null ? $user->pessoa->numero : old('numero') }}">
                                     </div>
-                                    <div class="form-group col-md-8">
+                                    <div class="form-group col-md-12">
                                         <label for="bairro">Bairro / Comunidade</label>
                                         <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ $user->pessoa->bairro != null ? $user->pessoa->bairro : old('bairro') }}">
                                     </div>

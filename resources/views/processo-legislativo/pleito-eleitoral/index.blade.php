@@ -67,8 +67,8 @@
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('processo_legislativo.pleito_eleitoral.edit', $pleito->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}">Excluir</button>
+                                    <a href="{{ route('processo_legislativo.pleito_eleitoral.edit', $pleito->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $pleito->id }}"><i class="fas fa-trash"></i></button>
                                 </td>
                                 {{-- Início: {{ date('d/m/Y', strtotime($pleito->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($pleito->fim_mandato)) }} --}}
                                 {{-- <td>{{ $pleito->id_tipo_pleito != null ? $pleito->tipo_pleito->descricao : 'não informado' }}</td>

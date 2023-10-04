@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class AgentePolitico extends Model implements Auditable
@@ -39,4 +40,32 @@ class AgentePolitico extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    // public function foto()
+    // {
+    //     $resposta = array();
+    //     $foto = FotoPerfil::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+    //     if ($foto){
+    //         $existe = Storage::disk('public')->exists('foto-perfil/'.$foto->nome_hash);
+
+    //         if ($existe){
+    //             $resposta = [
+    //                 'tem' => 1,
+    //                 'foto' => $foto
+    //             ];
+    //         }
+    //         else{
+    //             $resposta = [
+    //                 'tem' => 0,
+    //                 'foto' => null
+    //             ];
+    //         }
+    //     }
+    //     else{
+    //         $resposta = [
+    //             'tem' => 0,
+    //             'foto' => null
+    //         ];
+    //     }
+    //     return $resposta;
+    // }
 }

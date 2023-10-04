@@ -79,10 +79,10 @@
                                     <td>
                                         @if ($usuario->ativo == 1)
                                             <a href="{{ route('usuario.edit', $usuario->id) }}"
-                                                class="btn btn-warning">Alterar</a>
+                                                class="btn btn-warning"><i class="fas fa-pen"></i></a>
                                             @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
                                                 <button type="button" class="btn btn-danger m-1" data-toggle="modal"
-                                                    data-target="#exampleModalExcluir{{ $usuario->id }}">Excluir</button>
+                                                    data-target="#exampleModalExcluir{{ $usuario->id }}"><i class="fas fa-trash"></i></button>
                                             @endif
                                         @else
                                             <button type="button" class="btn btn-danger m-1">

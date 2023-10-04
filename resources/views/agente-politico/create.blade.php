@@ -11,6 +11,28 @@
     .error{
         color:red
     }
+    input[type='file'] {
+        display: none;
+    }
+    /* .max-width {
+        max-width: 500px;
+        width: 100%;
+    } */
+    #imgPhoto {
+        margin-top: 10%;
+        /* width: 100%;
+        height: 100%; */
+        /* padding:10px; */
+        background-color: #eee;
+        border: 5px solid #ccc;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background .3s;
+    }
+    #imgPhoto:hover{
+        background-color: rgb(180, 180, 180);
+        border: 5px solid #111;
+    }
 </style>
 @include('errors.alerts')
 @include('errors.errors')
@@ -83,7 +105,125 @@
                 </div>
 
                 <div class="d-none row" id="cadUser">
-                    <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 mr-3">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h4 class="mb-3">Foto de Perfil</h4>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="max-width">
+                                        <div class="imageContainer">
+                                            <img src="{{ asset('img/user-avatar2.png') }}" class="img-fluid rounded-circle mb-2" width="60%" height="60%" alt="Selecione uma imagem" id="imgPhoto">
+                                            <input type="file" id="flImage" name="fImage" accept="image/jpg, image/jpeg, image/png" value="{{'fImage'}}">
+                                        </div>
+                                        <span>Clique na ícone para selecionar a foto de perfil</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="text-left mb-0 mt-2">Atualizar dados</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-0">
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5>Dados Pessoais</h5>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">*Nome</label>
+                                                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ old('nomeCompleto') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">Apelido</label>
+                                                        <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ old('apelidoFantasia') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">*CPF</label>
+                                                        <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ old('cpf') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">*Data de Nascimento</label>
+                                                        <input class="dataFormat form-control" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ old('dt_nascimento_fundacao') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">*Email</label>
+                                                        <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">Celular/Telefone</label>
+                                                        <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ old('telefone_celular') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">Celular/Telefone Recado</label>
+                                                        <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ old('telefone_celular2') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5>Endereço</h5>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="cep">CEP</label>
+                                                        <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ old('cep') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="endereco">Endereço (Rua/Avenida)</label>
+                                                        <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ old('endereco') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="numero">Número</label>
+                                                        <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ old('numero') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="bairro">Bairro / Comunidade</label>
+                                                        <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ old('bairro') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="complemento">Complemento</label>
+                                                        <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ old('complemento') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label for="ponto_referencia">Ponto de Referência</label>
+                                                        <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ old('ponto_referencia') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="my-0"><br>
+                                            <div class="col-md-12">
+                                                <h5>Senha de acesso ao sistema</h5>
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
+                                                        <input class="form-control" type="password" name="password" placeholder="Informe uma senha" value="{{ old('password') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-12">
+                                                        <label class="form-label">Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
+                                                        <input class="form-control" type="password" name="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="col-md-12">
+                                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                                            <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="col-md-12">
                         <hr>
                         <div class="col-md-12">
                             <h5>Dados Pessoais</h5>
@@ -165,15 +305,13 @@
                             </div>
                         </div>
                         <br>
-                    </div>
+                    </div> --}}
                 </div>
-
-                <br>
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
                     <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
-                <br>
+                <br> --}}
             </form>
         </div>
     </div>
@@ -202,6 +340,29 @@
         im.mask(input)
     }
     maskInputs();
+
+    //código referente a foto de perfil
+    let photo = document.getElementById('imgPhoto');
+    let file = document.getElementById('flImage');
+
+    photo.addEventListener('click', () => {
+        file.click();
+    });
+
+    file.addEventListener('change', () => {
+
+        if (file.files.length <= 0) {
+            return;
+        }
+
+        let reader = new FileReader();
+
+        reader.onload = () => {
+            photo.src = reader.result;
+        }
+
+        reader.readAsDataURL(file.files[0]);
+    });
 
     $('#cep').on('change', function(){
         var cep = $(this).val().replace(/[.-]/g,"");

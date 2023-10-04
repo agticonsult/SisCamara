@@ -37,6 +37,7 @@
             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                 <thead>
                     <tr>
+                        <th scope="col">Foto perfil</th>
                         <th scope="col">Vereador</th>
                         <th scope="col">Votação liberada</th>
                         {{-- <th scope="col">Tipo de Votação</th>
@@ -50,6 +51,9 @@
                 <tbody>
                     @foreach ($votacao->vereadores_ativos() as $vereador_votacao)
                         <tr>
+                            <td>
+    
+                            </td>
                             <td>{{ $vereador_votacao->vereador->usuario->pessoa->nomeCompleto }}</td>
                             <td>
                                 @if ($votacao->votacaoEncerrada != 1)

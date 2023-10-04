@@ -97,8 +97,8 @@
                                                 em <strong>{{ $legislatura->created_at != null ? $legislatura->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                             </td>
                                             <td>
-                                                <a href="{{ route('processo_legislativo.legislatura.edit', $legislatura->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $legislatura->id }}">Excluir</button>
+                                                <a href="{{ route('processo_legislativo.legislatura.edit', $legislatura->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
+                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $legislatura->id }}"><i class="fas fa-trash"></i></button>
                                             </td>
                                         </tr>
 
