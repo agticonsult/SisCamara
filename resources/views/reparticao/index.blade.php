@@ -50,8 +50,8 @@
                                     em <strong>{{ $reparticao->created_at != null ? $reparticao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('reparticao.edit', $reparticao->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $reparticao->id }}">Excluir</button>
+                                    <a href="{{ route('reparticao.edit', $reparticao->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $reparticao->id }}"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
 

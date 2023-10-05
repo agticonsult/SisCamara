@@ -40,32 +40,32 @@ class AgentePolitico extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
-    // public function foto()
-    // {
-    //     $resposta = array();
-    //     $foto = FotoPerfil::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
-    //     if ($foto){
-    //         $existe = Storage::disk('public')->exists('foto-perfil/'.$foto->nome_hash);
+    public function imagem()
+    {
+        $resposta = array();
+        $imagem = FotoPerfil::where('id_user', '=', $this->id_user)->where('ativo', '=', 1)->first();
+        if ($imagem){
+            $existe = Storage::disk('public')->exists('foto-perfil/' . $imagem->nome_hash);
+            if ($existe){
+                $resposta = [
+                    'tem' => 1,
+                    'imagem' => $imagem
+                ];
+            }
+            else{
+                $resposta = [
+                    'tem' => 0,
+                    'imagem' => null
+                ];
+            }
+        }
+        else{
+            $resposta = [
+                'tem' => 0,
+                'imagem' => null
+            ];
+        }
+        return $resposta;
+    }
 
-    //         if ($existe){
-    //             $resposta = [
-    //                 'tem' => 1,
-    //                 'foto' => $foto
-    //             ];
-    //         }
-    //         else{
-    //             $resposta = [
-    //                 'tem' => 0,
-    //                 'foto' => null
-    //             ];
-    //         }
-    //     }
-    //     else{
-    //         $resposta = [
-    //             'tem' => 0,
-    //             'foto' => null
-    //         ];
-    //     }
-    //     return $resposta;
-    // }
 }

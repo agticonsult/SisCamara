@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Ramsey\Uuid\Uuid;
 
 class FotoPerfilController extends Controller
 {
@@ -50,8 +51,12 @@ class FotoPerfilController extends Controller
                         return redirect()->back()->with('erro', 'Extensão de imagem inválida. Extensões permitidas .png, .jpg e .jpeg')->withInput();
                     }
 
-                    $nome_hash = Carbon::now()->timestamp;
-                    $nome_hash = $nome_hash.'.'.$extensao;
+                    // $nome_hash = Carbon::now()->timestamp;
+                    // $nome_hash = $nome_hash.'.'.$extensao;
+
+                    $nome_hash = Uuid::uuid4();
+                    $datahora = Carbon::now()->timestamp;
+                    $nome_hash = $nome_hash . '-' . $datahora . '.' . $extensao;
                     //diretório onde estará as fotos de perfil
 
                     $upload = $request->fImage->storeAs('public/foto-perfil/', $nome_hash);

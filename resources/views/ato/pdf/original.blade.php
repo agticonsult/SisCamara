@@ -13,7 +13,7 @@
         }
     </style>
 
-    <title>Documento</title>
+    <title>{{ $ato->titulo }}</title>
 </head>
 <body>
 <h2 class="titulo"> Câmara Municipal de XXXXXX</h2>

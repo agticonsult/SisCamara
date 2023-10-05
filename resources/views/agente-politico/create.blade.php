@@ -50,7 +50,7 @@
 
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('agente_politico.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('agente_politico.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -212,12 +212,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
+                                        {{-- <hr>
                                         <div class="col-md-12">
                                             <button type="submit" class="button_submit btn btn-primary">Salvar</button>
                                             <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
                                         </div>
-                                        <br>
+                                        <br> --}}
                                     </div>
                                 </div>
                             </div>
@@ -307,11 +307,11 @@
                         <br>
                     </div> --}}
                 </div>
-                {{-- <div class="col-md-12">
+                <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
                     <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
-                <br> --}}
+                <br>
             </form>
         </div>
     </div>

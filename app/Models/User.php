@@ -130,7 +130,8 @@ class User extends Authenticatable
 
     public function ehAgentePolitico()
     {
-        $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+        // $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+        $eh = AgentePolitico::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
 
         if (!$eh){
             return false;

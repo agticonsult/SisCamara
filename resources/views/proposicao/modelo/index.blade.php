@@ -31,7 +31,7 @@
             </div>
         @else
         <div class="table-responsive">
-            <table id="datatables-responsive" class="table" style="width: 100%;">
+            <table id="datatables-reponsive" class="table" style="width: 100%;">
                 <thead>
                     <tr>
                         <th scope="col">Assunto</th>
