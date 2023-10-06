@@ -21,6 +21,7 @@ class GerenciamentoVotacaoController extends Controller
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            // $votacao = VotacaoEletronica::where('id', '=', $id)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
@@ -135,7 +136,7 @@ class GerenciamentoVotacaoController extends Controller
             $votacao->dataHoraFim = Carbon::now();
             $votacao->inativadoPorUsuario = Auth::user()->id;
             $votacao->id_status_votacao = 4;
-            $votacao->ativo = 0;
+            // $votacao->ativo = 0;
             $votacao->save();
 
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação encerrada com sucesso!');

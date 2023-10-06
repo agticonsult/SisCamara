@@ -27,6 +27,7 @@ class VotacaoEletronicaController extends Controller
             }
 
             $votacaos = VotacaoEletronica::where('ativo', '=', 1)->get();
+            // $votacaos = VotacaoEletronica::get();
 
             return view('votacao-eletronica.index', compact('votacaos'));
         }

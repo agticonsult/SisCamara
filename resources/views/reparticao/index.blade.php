@@ -65,7 +65,7 @@
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir <i>{{ $reparticao->descricao != null ? $reparticao->descricao : 'não informado' }}</i></strong>
+                                                    Excluir <strong>{{ $reparticao->descricao != null ? $reparticao->descricao : 'não informado' }} - {{ $reparticao->id_tipo_reparticao != null ? $reparticao->tipo_reparticao->descricao : 'não informado' }}</strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">

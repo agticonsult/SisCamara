@@ -119,8 +119,7 @@
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                <strong style="font-size: 1.2rem">Excluir
-                                                                    <i>{{ $autoridade->descricao != null ? $autoridade->descricao : 'não informado' }}</i></strong>
+                                                                Excluir <strong>{{ $autoridade->descricao != null ? $autoridade->descricao : 'não informado' }}</strong>?
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">

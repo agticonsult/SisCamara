@@ -92,7 +92,8 @@
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir <i>{{ $pleito->descricao != null ? $pleito->descricao : 'não informado' }}</i></strong>
+                                                    Excluir Pleito Ano: <strong>{{ $pleito->ano_pleito != null ? $pleito->ano_pleito : 'não informado' }}</strong>
+                                                    Início: <strong>{{ $pleito->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $pleito->legislatura->fim_mandato }}</strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">

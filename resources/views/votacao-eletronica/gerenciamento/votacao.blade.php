@@ -112,7 +112,7 @@
                                     </button>
                                 @endif
                             </td>
-                            <td style="text-align: center">{{ $votacao->ativo == 1 ? 'Sim' : 'Não'  }}</td>
+                            <td style="text-align: center">{{ $vereador_votacao->ativo == 1 ? 'Sim' : 'Não'  }}</td>
                             {{-- <td>
                                 @if ($votacao->votacaoIniciada != 1)
                                     <button class="btn btn-danger"><i class="fas fa-times"></i></button>

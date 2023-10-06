@@ -112,14 +112,13 @@
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                <strong style="font-size: 1.2rem">
-                                                                    Excluir Legislatura ID
-                                                                    <i>{{ $legislatura->id != null ? $legislatura->id : 'não informado' }}</i>
+                                                                    Excluir Legislatura -
+                                                                    <strong>
                                                                     Início:
-                                                                    <i>{{ $legislatura->inicio_mandato }}</i>
+                                                                    {{ $legislatura->inicio_mandato }}
                                                                     - Fim:
-                                                                    <i>{{ $legislatura->fim_mandato }}</i>
-                                                                </strong>
+                                                                    {{ $legislatura->fim_mandato }}
+                                                                    </strong>
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">

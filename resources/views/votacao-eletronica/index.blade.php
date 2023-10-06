@@ -56,10 +56,16 @@
                                 </td>
                                 <td>{{ $votacao->id_status_votacao != null ? $votacao->status->descricao : 'não iniciada' }}</td>
                                 <td>
-                                    <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
-                                    @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
-                                        <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                                    @if ($votacao->votacaoEncerrada != 1)
+                                        <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
+                                        <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
+                                        @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
+                                            <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
+                                        @endif
+                                    @else
+                                        @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
+                                            <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-secondary m-1" style="width: 100%">Visualizar</a>
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
@@ -74,7 +80,7 @@
                                             @method('POST')
                                             <div class="modal-header btn-danger">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir Votação de ID <i>{{ $votacao->id }}</i></strong>
+                                                    Excluir Votação: <strong>{{ date('d/m/Y', strtotime($votacao->data)) }} - {{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }} - Início: <strong>{{ $votacao->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $votacao->legislatura->fim_mandato }}</strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-body">
