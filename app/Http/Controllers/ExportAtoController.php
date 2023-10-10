@@ -82,10 +82,11 @@ class ExportAtoController extends Controller
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
 
-            // $path = storage_path('app/public/Ato/Export/temp');
+            // $path = storage_path('app/public/Ato-Export/');
+
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -169,11 +170,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -218,7 +219,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -273,11 +274,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export/');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -322,7 +323,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -406,11 +407,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -512,7 +513,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -623,11 +624,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -810,7 +811,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -921,11 +922,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -1027,7 +1028,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -1133,11 +1134,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -1182,7 +1183,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -1260,11 +1261,11 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
                 // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
@@ -1309,7 +1310,7 @@ class ExportAtoController extends Controller
             // $path = storage_path('app/public/Ato/Export/temp');
             // Verificando se existe o diretório /anexos
             // Caso não exista, crie
-            $dir_anexo = storage_path('app/public/Ato/Export/temp');
+            $dir_anexo = storage_path('app/public/Ato-Export/');
             $existe_dir_anexo = File::isDirectory($dir_anexo);
 
             if (!$existe_dir_anexo){
@@ -1415,11 +1416,10 @@ class ExportAtoController extends Controller
                 fclose($arquivo);
 
                 // Pode baixar se criou corretamente
-                $existe = Storage::disk('public')->exists('Ato/Export/temp/');
+                $existe = Storage::disk('public')->exists('Ato-Export');
 
-                // dd($existe);
                 if ($existe){
-                    $path = storage_path('app/public/Ato/Export/temp/'.$nome_original);
+                    $path = storage_path('app/public/Ato-Export/'.$nome_original);
 
                     header('Content-Description: File Transfer');
                     header('Content-Type: application/force-download');
