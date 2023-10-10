@@ -217,6 +217,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', [VotacaoEletronicaController::class, 'create'])->name('create');
         Route::post('/store', [VotacaoEletronicaController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [VotacaoEletronicaController::class, 'edit'])->name('edit');
+        Route::get('/resultado/{id}', [VotacaoEletronicaController::class, 'resultado'])->name('resultado');
         Route::post('/update/{id}', [VotacaoEletronicaController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [VotacaoEletronicaController::class, 'destroy'])->name('destroy');
 

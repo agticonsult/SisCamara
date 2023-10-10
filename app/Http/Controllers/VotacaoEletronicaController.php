@@ -157,16 +157,18 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-    public function show($id)
+    public function resultado($id)
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votosSim = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Sim')->where('ativo', '=', 1)->count();
+            $votosNao = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Não')->where('ativo', '=', 1)->count();
+            $votosAbs = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Abstencao')->where('ativo', '=', 1)->count();
 
-            return view('votacao-eletronica.show', compact('votacao'));
+            return view('votacao-eletronica.resultado', compact('votosSim', 'votosNao', 'votosAbs'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

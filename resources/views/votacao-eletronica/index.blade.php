@@ -40,6 +40,7 @@
                             <th scope="col">Legislatura</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Resultado</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -55,6 +56,9 @@
                                     em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>{{ $votacao->id_status_votacao != null ? $votacao->status->descricao : 'não iniciada' }}</td>
+                                <td>
+                                    <a href="{{ route('votacao_eletronica.resultado', $votacao->id) }}" class="btn btn-secondary m-1" style="width: 100%">Resultado</a>
+                                </td>
                                 <td>
                                     @if ($votacao->votacaoEncerrada != 1)
                                         <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
