@@ -80,7 +80,9 @@ h4 {
     color: 	#FFD700;
 }
 
-.voto-nao
+.voto-total {
+    color: blue;
+}
 
 .d-none{
     display: none;

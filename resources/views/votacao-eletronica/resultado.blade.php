@@ -39,13 +39,14 @@
                         <p class="voto-sim">SIM {{ $votosSim }}</p>
                         <p class="voto-nao">NÃO {{ $votosNao }}</p>
                         <p class="voto-abstencao">ABSTENÇÃO {{ $votosAbs }}</p>
+                        <p class="voto-total">TOTAL {{ $votosSim + $votosNao + $votosAbs }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- <div id="accordion2">
+    <div id="accordion2">
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
@@ -56,7 +57,7 @@
             </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
                 <div class="card-body">
-                    @if (Count($legislaturas) == 0)
+                    @if (Count($vereadorVotacaos) == 0)
                         <div>
                             <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
                         </div>
@@ -65,59 +66,18 @@
                             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Mandato</th>
-                                        <th scope="col">Cadastrado por</th>
-                                        <th scope="col">Ações</th>
+                                        <th scope="col">Vereador</th>
+                                        <th scope="col">Voto</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($legislaturas as $legislatura)
+                                    @foreach ($vereadorVotacaos as $vereadorVotacao)
                                         <tr>
-                                            <td>Início: <strong>{{ $legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $legislatura->fim_mandato }}</strong></td>
+                                            <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nomeCompleto : 'não informado'}}</td>
                                             <td>
-                                                <strong>{{ $legislatura->cadastradoPorUsuario != null ? $legislatura->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                                em <strong>{{ $legislatura->created_at != null ? $legislatura->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('processo_legislativo.legislatura.edit', $legislatura->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
-                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $legislatura->id }}"><i class="fas fa-trash"></i></button>
+                                                {{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
                                             </td>
                                         </tr>
-
-                                        <div class="modal fade" id="exampleModalExcluir{{ $legislatura->id }}"
-                                            tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('processo_legislativo.legislatura.destroy', $legislatura->id) }}">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <div class="modal-header btn-danger">
-                                                            <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                    Excluir Legislatura -
-                                                                    <strong>
-                                                                    Início:
-                                                                    {{ $legislatura->inicio_mandato }}
-                                                                    - Fim:
-                                                                    {{ $legislatura->fim_mandato }}
-                                                                    </strong>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="motivo" class="form-label">Motivo</label>
-                                                                <input type="text" class="form-control" name="motivo">
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                            </button>
-                                                            <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -126,7 +86,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 </div>
 

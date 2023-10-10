@@ -164,11 +164,12 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
+            $vereadorVotacaos = VereadorVotacao::where('id_votacao', $id)->where('ativo', '=', 1)->get();
             $votosSim = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Sim')->where('ativo', '=', 1)->count();
             $votosNao = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Não')->where('ativo', '=', 1)->count();
             $votosAbs = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Abstencao')->where('ativo', '=', 1)->count();
 
-            return view('votacao-eletronica.resultado', compact('votosSim', 'votosNao', 'votosAbs'));
+            return view('votacao-eletronica.resultado', compact('vereadorVotacaos', 'votosSim', 'votosNao', 'votosAbs'));
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
