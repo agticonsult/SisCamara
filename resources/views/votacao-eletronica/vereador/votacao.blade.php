@@ -35,10 +35,6 @@
                             aria-controls="original" aria-selected="true">Descrição</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="consolidada-tab" data-toggle="tab" href="#consolidada" role="tab"
-                            aria-controls="consolidada" aria-selected="false">Resultado</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" id="compilado-tab" data-toggle="tab" href="#compilado" role="tab"
                             aria-controls="compilado" aria-selected="false">Seu voto</a>
                     </li>
@@ -56,16 +52,6 @@
                         <div class="card mt-2">
                             <div class="card-body">
                                 Descrição da proposição
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="consolidada" role="tabpanel" aria-labelledby="consolidada-tab">
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <p class="voto-sim">SIM 0</p>
-                                <p class="voto-nao">NÃO 0</p>
-                                <p class="voto-abstencao">ABSTENÇÃO 0</p>
                             </div>
                         </div>
                     </div>

@@ -90,7 +90,7 @@
                                                         {{ $vereadorVotacao->voto == 'Sim' ? 'btn-success' : '' }}
                                                         {{ $vereadorVotacao->voto == 'Não' ? 'btn-danger' : '' }}
                                                         {{ $vereadorVotacao->voto == 'Abstenção' ? 'btn-warning' : '' }}
-                                                        btn-sm">{{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
+                                                        m-1">{{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
                                                     </button>
                                                 </td>
                                             </tr>
