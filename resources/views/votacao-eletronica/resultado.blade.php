@@ -85,7 +85,13 @@
                                                 <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nomeCompleto : 'não informado' }}
                                                 </td>
                                                 <td>
-                                                    {{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
+                                                    <button
+                                                        class="btn
+                                                        {{ $vereadorVotacao->voto == 'Sim' ? 'btn-success' : '' }}
+                                                        {{ $vereadorVotacao->voto == 'Não' ? 'btn-danger' : '' }}
+                                                        {{ $vereadorVotacao->voto == 'Abstenção' ? 'btn-warning' : '' }}
+                                                        btn-sm">{{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
