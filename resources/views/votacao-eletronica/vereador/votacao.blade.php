@@ -51,7 +51,7 @@
                     <div class="tab-pane fade show active" id="original" role="tabpanel" aria-labelledby="original-tab">
                         <div class="card mt-2">
                             <div class="card-body">
-                                Descrição da proposição
+                                {{ $votacao->votacao->proposicao->conteudo }}
                             </div>
                         </div>
                     </div>
