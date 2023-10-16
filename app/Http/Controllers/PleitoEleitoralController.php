@@ -70,7 +70,7 @@ class PleitoEleitoralController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('PleitoEleitoral', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

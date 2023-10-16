@@ -88,7 +88,7 @@ class VereadorController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Vereador', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Vereador', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

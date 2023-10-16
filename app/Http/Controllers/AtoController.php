@@ -80,7 +80,7 @@ class AtoController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Ato', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

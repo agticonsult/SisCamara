@@ -42,7 +42,7 @@ class LegislaturaController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Legislatura', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Legislatura', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

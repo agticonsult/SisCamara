@@ -16,6 +16,10 @@ class VereadorVotacaoController extends Controller
     public function index()
     {
         try {
+            if(Auth::user()->temPermissao('VereadorVotacao', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
             $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
             if (!$vereador){
                 return redirect()->back()->with('erro', 'Vereador não cadastrado.');
@@ -37,8 +41,6 @@ class VereadorVotacaoController extends Controller
             $erro->save();
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
-
-
     }
 
     public function liberarVotacao($id)
@@ -75,9 +77,13 @@ class VereadorVotacaoController extends Controller
         }
     }
 
-    public function votacao($id) {
-
+    public function votacao($id)
+    {
         try {
+            if(Auth::user()->temPermissao('VereadorVotacao', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
             $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
             $votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', 1)->first();
 
@@ -112,6 +118,10 @@ class VereadorVotacaoController extends Controller
     public function votar(Request $request, $id)
     {
         try {
+            if(Auth::user()->temPermissao('VereadorVotacao', 'Cadastro') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
             $vereador_votacao = VereadorVotacao::find($id);
             $vereador_votacao->votou = 1;
             $vereador_votacao->voto = $request->voto;

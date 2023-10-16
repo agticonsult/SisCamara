@@ -68,7 +68,7 @@ class DocumentoController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Documento', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Documento', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

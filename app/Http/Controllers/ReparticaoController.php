@@ -64,7 +64,7 @@ class ReparticaoController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Reparticao', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Reparticao', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 

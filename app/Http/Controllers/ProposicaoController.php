@@ -71,7 +71,7 @@ class ProposicaoController extends Controller
     public function store(Request $request)
     {
         try {
-            if(Auth::user()->temPermissao('Proposicao', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Proposicao', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
