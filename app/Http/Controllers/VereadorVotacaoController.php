@@ -25,7 +25,7 @@ class VereadorVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Vereador não cadastrado.');
             }
 
-            $vereador_votacaos = VereadorVotacao::where('id_vereador', $vereador->id)->where('ativo', 1)->get();
+            $vereador_votacaos = VereadorVotacao::where('id_vereador', '=', $vereador->id)->where('ativo', 1)->get();
 
             return view('votacao-eletronica.vereador.index', compact('vereador_votacaos'));
 

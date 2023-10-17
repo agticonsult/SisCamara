@@ -129,7 +129,7 @@
                                 <div class="cpf text-muted mb-2">{{ $agente_politico->usuario->cpf }}</div>
                                 <h4 class="mb-2 underline"><strong>{{ $agente_politico->usuario->pessoa->nomeCompleto }}</strong></h4>
                                 <h4 class="mb-0">{{ $agente_politico->usuario->email }}</h4>
-                                <div class="mt-5">
+                                {{-- <div class="mt-5">
                                     <ul class="navbar-nav" style="text-align: center">
                                         <h4 style="text-align: center">
                                             Perfis: &nbsp
@@ -142,7 +142,7 @@
                                             @endforeach
                                         </h5>
                                     </ul>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

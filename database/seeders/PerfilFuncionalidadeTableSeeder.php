@@ -33,12 +33,13 @@ class PerfilFuncionalidadeTableSeeder extends Seeder
             ->leftJoin('tipo_funcionalidades', 'tipo_funcionalidades.id', '=', 'funcionalidades.id_tipo_funcionalidade')
             ->where(function (Builder $query) {
                 return
-                    $query->where('entidades.nomeEntidade', '=', 'VotacaoEletronica');
-                    })
+                    $query->where('entidades.nomeEntidade', '=', 'VotacaoEletronica')
+                        ->orWhere('entidades.nomeEntidade', '=', 'VereadorVotacao');
+                })
             ->where(function (Builder $query) {
                 return
-                    $query->where('tipo_funcionalidades.descricao', '=', 'Listagem');
-                        // ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro')
+                    $query->where('tipo_funcionalidades.descricao', '=', 'Listagem')
+                        ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro');
                         // ->orWhere('tipo_funcionalidades.descricao', '=', 'Alteração')
             })
             ->select('funcionalidades.id')
