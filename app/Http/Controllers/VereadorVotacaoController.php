@@ -20,7 +20,8 @@ class VereadorVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
+            $vereador = AgentePolitico::where('id_user', '=', Auth::user()->id)->first();
+
             if (!$vereador){
                 return redirect()->back()->with('erro', 'Vereador não cadastrado.');
             }

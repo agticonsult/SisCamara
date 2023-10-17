@@ -41,9 +41,7 @@
                                 <th scope="col">Tipo de Votação</th>
                                 <th scope="col">Proposição</th>
                                 <th scope="col">Legislatura</th>
-                                {{-- <th scope="col">Cadastrado por</th> --}}
                                 <th scope="col">Status</th>
-                                {{-- <th scope="col">Ações</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -59,12 +57,8 @@
                                         <strong>{{ $vereador_votacao->votacao->legislatura->inicio_mandato }}</strong> -
                                         Fim: <strong>{{ $vereador_votacao->votacao->legislatura->fim_mandato }}</strong>
                                     </td>
-                                    {{-- <td>
-                                    <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
-                                    em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                </td> --}}
                                     <td>
-                                        @if ($vereador_votacao->votacaoAutorizada != null)
+                                        {{-- @if ($vereador_votacao->votacaoAutorizada != null)
                                             @if ($vereador_votacao->votou == null)
                                                 <a href="{{ route('votacao_eletronica.vereador.votacao', $vereador_votacao->id) }}"
                                                     class="btn btn-info m-1">Votar</a>
@@ -79,45 +73,34 @@
                                             @endif
                                         @else
                                             {{ $vereador_votacao->votacao->id_status_votacao != null ? $vereador_votacao->votacao->status->descricao : 'não iniciada' }}
-                                        @endif
-                                    </td>
-                                    {{-- <td>
-                                    <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
-                                    @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
-                                        <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
-                                    @endif
-                                </td> --}}
-                                </tr>
-
-                                {{-- <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
-                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.destroy', $votacao->id) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <div class="modal-header btn-danger">
-                                                <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    <strong style="font-size: 1.2rem">Excluir Votação de ID <i>{{ $votacao->id }}</i></strong>
-                                                </h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="motivo" class="form-label">Motivo</label>
-                                                    <input type="text" class="form-control" name="motivo">
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                        @endif --}}
+                                        {{-- @if ($vereador_votacao->votacao->votacaoEncerrada != 1) --}}
+                                            @if ($vereador_votacao->votacao->votacaoPausada != 1)
+                                                @if ($vereador_votacao->votou == null)
+                                                    <a href="{{ route('votacao_eletronica.vereador.votacao', $vereador_votacao->id) }}" class="btn btn-info m-1">Votar</a>
+                                                @else
+                                                    <button type="button"
+                                                        class="btn {{ $vereador_votacao->voto == 'Sim' ? 'btn-success' : '' }}
+                                                        {{ $vereador_votacao->voto == 'Não' ? 'btn-danger' : '' }}
+                                                        {{ $vereador_votacao->voto == 'Abstenção' ? 'btn-warning' : '' }}">Votou
+                                                        <strong>{{ $vereador_votacao->voto }}</strong> em
+                                                        {{ date('d/m/Y H:i:s', strtotime($vereador_votacao->votouEm)) }}
+                                                    </button>
+                                                @endif
+                                            @else
+                                                <button class="btn btn-warning" style="width: 100%">
+                                                    <strong>--VOTAÇÃO PAUSADA--</strong>
                                                 </button>
-                                                <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div> --}}
+                                            @endif
+                                        {{-- @else
+                                            <button class="btn btn-danger" style="width: 100%">
+                                                Votação encerrada
+                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($votacao->dataHoraFim)) }}</strong><br>
+                                                <strong>--VOTAÇÃO ENCERRADA--</strong>
+                                            </button>
+                                        @endif --}}
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

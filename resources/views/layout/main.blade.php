@@ -100,12 +100,14 @@
                                 </li>
                             @endif
 
-                            <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'votacao-eletronica/vereador' ? 'active' : null }}">
-                                <a href="{{ route('votacao_eletronica.vereador.index') }}" class="sidebar-link">
-                                    Acompanhar Votações
-                                </a>
-                            </li>
+                            @if (Auth::user()->ehAgentePolitico() == 1)
+                                <li
+                                    class="sidebar-item {{ Route::current()->getPrefix() == 'votacao-eletronica/vereador' ? 'active' : null }}">
+                                    <a href="{{ route('votacao_eletronica.vereador.index') }}" class="sidebar-link">
+                                        Acompanhar Votações
+                                    </a>
+                                </li>
+                            @endif
 
                         </ul>
                     </li>
