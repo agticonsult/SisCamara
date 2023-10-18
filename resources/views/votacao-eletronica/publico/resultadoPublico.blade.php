@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.main-publico')
 
 @section('content')
 
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div id="accordion2">
+        {{-- <div id="accordion2">
             <div class="card">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
@@ -102,8 +102,12 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="card-footer">
+            <div class="col-md-12">
+                <a href="{{ route('web_publica.votacao_eletronica.indexPublico') }}" class="btn btn-light m-1">Voltar</a>
+            </div>
         </div>
-
     </div>
 
     <script src="{{ asset('js/datatables.min.js') }}"></script>

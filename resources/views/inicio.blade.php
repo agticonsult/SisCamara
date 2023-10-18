@@ -94,7 +94,7 @@
                                             </a>
                                         </div>
                                         <div class="mt-3">
-                                            <a href="#">
+                                            <a href="{{ route('web_publica.votacao_eletronica.indexPublico') }}">
                                                 <button type="button" class="btn btn-lg btn-success"
                                                     style="width: 100%; margin-bottom: 0.7rem">Votação</button>
                                             </a>

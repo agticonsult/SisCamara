@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('web_publica.votacao_eletronica.indexPublico') }}">
                             <button type="button" class="btn btn-outline-success btn-lg">Votação</button>
                         </a>
                     </li>
@@ -65,11 +65,11 @@
                             <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#">
                             <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </nav>

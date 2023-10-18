@@ -25,7 +25,7 @@
     <div class="card-header">
         <h2 class="text-center">
             <div>
-                <span><i class="fas fa-address-book"></i></span>
+                <span><i class="fas fa-chess-king"></i></span>
             </div>
             <strong>Gerenciamento da Votação Eletrônica</strong>
         </h2>

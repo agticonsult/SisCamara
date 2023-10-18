@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.main-publico')
 
 @section('content')
 
@@ -41,7 +41,7 @@
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status</th>
                             <th scope="col">Resultado</th>
-                            <th scope="col">Ações</th>
+                            {{-- <th scope="col">Ações</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -57,9 +57,9 @@
                                 </td>
                                 <td>{{ $votacao->id_status_votacao != null ? $votacao->status->descricao : 'não iniciada' }}</td>
                                 <td>
-                                    <a href="{{ route('votacao_eletronica.resultado', $votacao->id) }}" class="btn btn-secondary m-1" style="width: 100%">Resultado</a>
+                                    <a href="{{ route('web_publica.votacao_eletronica.resultadoPublico', $votacao->id) }}" class="btn btn-secondary m-1" style="width: 100%">Visualizar</a>
                                 </td>
-                                <td>
+                                {{-- <td>
                                     @if ($votacao->votacaoEncerrada != 1)
                                         <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
                                         <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
@@ -71,48 +71,20 @@
                                             <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-secondary m-1" style="width: 100%">Visualizar</a>
                                         @endif
                                     @endif
-                                </td>
+                                </td> --}}
                             </tr>
 
-                            <div class="modal fade" id="exampleModalExcluir{{ $votacao->id }}"
-                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.destroy', $votacao->id) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <div class="modal-header btn-danger">
-                                                <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                    Excluir Votação: <strong>{{ date('d/m/Y', strtotime($votacao->data)) }} - {{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }} - Início: <strong>{{ $votacao->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $votacao->legislatura->fim_mandato }}</strong>
-                                                </h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="motivo" class="form-label">Motivo</label>
-                                                    <input type="text" class="form-control" name="motivo">
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                </button>
-                                                <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         @endif
     </div>
-
     <div class="card-footer">
-        <a href="{{ route('votacao_eletronica.create') }}" class="btn btn-primary">Cadastrar Votação Eletrônica</a>
+        <div class="col-md-12">
+            <a href="{{ route('login') }}" class="btn btn-light m-1">Voltar</a>
+        </div>
     </div>
-
 </div>
 
 <script src="{{ asset('js/datatables.min.js') }}"></script>

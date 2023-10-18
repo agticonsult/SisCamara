@@ -404,12 +404,11 @@ Route::group(['prefix' => '/web-publica', 'as' => 'web_publica.'], function() {
         // });
     });
 
-    // Route::get('/index', [PerfilFuncionalidadeController::class, 'index'])->name('index');
-    // Route::get('/create', [PerfilFuncionalidadeController::class, 'create'])->name('create');
-    // Route::post('/store', [PerfilFuncionalidadeController::class, 'store'])->name('store');
-    // Route::get('/edit/{id}', [PerfilFuncionalidadeController::class, 'edit'])->name('edit');
-    // Route::post('/update/{id}', [PerfilFuncionalidadeController::class, 'update'])->name('update');
-    // Route::post('/inativar-funcionalidade/{id}', [PerfilFuncionalidadeController::class, 'inativarFuncionalidade'])->name('inativarFuncionalidade');
+    // Votação Eletrônica
+    Route::group(['prefix' => '/votacao-eletronica', 'as' => 'votacao_eletronica.'], function() {
+        Route::get('/index', [VotacaoEletronicaController::class, 'indexPublico'])->name('indexPublico');
+        Route::get('/resultado/{id}', [VotacaoEletronicaController::class, 'resultadoPublico'])->name('resultadoPublico');
+    });
 });
 
 //AJAX

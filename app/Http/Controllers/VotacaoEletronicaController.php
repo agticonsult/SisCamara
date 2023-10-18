@@ -168,7 +168,7 @@ class VotacaoEletronicaController extends Controller
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
-            
+
             $vereadorVotacaos = VereadorVotacao::where('id_votacao', $id)->where('ativo', '=', 1)->get();
             $votosSim = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Sim')->where('ativo', '=', 1)->count();
             $votosNao = VereadorVotacao::where('id_votacao', $id)->where('voto', '=', 'Não')->where('ativo', '=', 1)->count();
@@ -380,6 +380,54 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
+    //lado público
+    public function indexPublico()
+    {
+        try{
+            $votacaos = VotacaoEletronica::where('ativo', '=', 1)->get();
+
+            return view('votacao-eletronica.publico.indexPublico', compact('votacaos'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VotacaoEletronicaController";
+            $erro->funcao = "indexPublico";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function resultadoPublico($id)
+    {
+        try {
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            if (!$votacao){
+                return redirect()->back()->with('erro', 'Votação inválida.');
+            }
+
+            $vereadorVotacaos = VereadorVotacao::where('id_votacao','=', $id)->where('ativo', '=', 1)->get();
+            $votosSim = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Sim')->where('ativo', '=', 1)->count();
+            $votosNao = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Não')->where('ativo', '=', 1)->count();
+            $votosAbs = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Abstenção')->where('ativo', '=', 1)->count();
+
+            return view('votacao-eletronica.publico.resultadoPublico', compact('votacao', 'vereadorVotacaos', 'votosSim', 'votosNao', 'votosAbs'));
+        }
+        catch (\Exception $ex) {
+            $erro = new ErrorLog();
+            $erro->erro = $ex->getMessage();
+            $erro->controlador = "VotacaoEletronicaController";
+            $erro->funcao = "show";
+            if (Auth::check()){
+                $erro->cadastradoPorUsuario = auth()->user()->id;
+            }
+            $erro->save();
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
 
 
 }
