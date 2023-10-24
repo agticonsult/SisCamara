@@ -32,7 +32,7 @@
                 <ul class="nav nav-pills nav" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="original-tab" data-toggle="tab" href="#original" role="tab"
-                            aria-controls="original" aria-selected="true">Descrição</a>
+                            aria-controls="original" aria-selected="true">Proposição</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="compilado-tab" data-toggle="tab" href="#compilado" role="tab"
@@ -51,7 +51,32 @@
                     <div class="tab-pane fade show active" id="original" role="tabpanel" aria-labelledby="original-tab">
                         <div class="card mt-2">
                             <div class="card-body">
-                                {{ $votacao->votacao->proposicao->conteudo }}
+                                <div class="tab tab-primary">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#colored-icon-3" id="selecionar_assunto" data-toggle="tab" role="tab">
+                                                Assunto
+                                            </a>
+                                        </li>
+                                        <li class="nav-item" id="conteudo_clicado">
+                                            <a class="nav-link" href="#colored-icon-4" id="selecionar_conteudo" data-toggle="tab" role="tab">
+                                                Conteúdo
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
+                                            <div class="">
+                                                <div class="col-md-6 mb-3">
+                                                    <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $votacao->votacao->proposicao->assunto }}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="colored-icon-4" role="tabpanel">
+                                            <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $votacao->votacao->proposicao->conteudo }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -61,26 +86,29 @@
                             <div class="card-body">
                                 <p>Qual o seu voto?</p>
                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-lg btn-success"
-                                    data-toggle="modal" data-target="#exampleModalVotoSim{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Sim</button>
+                                    <button type="button" class="btn btn-lg btn-success" data-toggle="modal"
+                                        data-target="#exampleModalVotoSim{{ $votacao->id }}"
+                                        style="width: 15%; margin-bottom: 0.7rem">Sim</button>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-lg btn-danger"
-                                    data-toggle="modal" data-target="#exampleModalVotoNao{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Não</button>
+                                    <button type="button" class="btn btn-lg btn-danger" data-toggle="modal"
+                                        data-target="#exampleModalVotoNao{{ $votacao->id }}"
+                                        style="width: 15%; margin-bottom: 0.7rem">Não</button>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="button" class="btn btn-lg btn-warning"
-                                    data-toggle="modal" data-target="#exampleModalVotoAbstencao{{ $votacao->id }}" style="width: 15%; margin-bottom: 0.7rem">Abstenção</button>
+                                    <button type="button" class="btn btn-lg btn-warning" data-toggle="modal"
+                                        data-target="#exampleModalVotoAbstencao{{ $votacao->id }}"
+                                        style="width: 15%; margin-bottom: 0.7rem">Abstenção</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoSim{{ $votacao->id }}"
-                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoSim"
-                        aria-hidden="true">
+                    <div class="modal fade" id="exampleModalVotoSim{{ $votacao->id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabelVotoSim" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits"
+                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-success">
@@ -90,7 +118,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <input class="form-control" type="text" name="voto" id="voto" value="Sim" hidden>
+                                            <input class="form-control" type="text" name="voto" id="voto"
+                                                value="Sim" hidden>
                                             <p>Confirma seu voto?</p>
                                         </div>
                                     </div>
@@ -103,12 +132,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoNao{{ $votacao->id }}"
-                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoNao"
-                        aria-hidden="true">
+                    <div class="modal fade" id="exampleModalVotoNao{{ $votacao->id }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabelVotoNao" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits"
+                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-danger">
@@ -118,7 +147,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <input class="form-control" type="text" name="voto" id="voto" value="Não" hidden>
+                                            <input class="form-control" type="text" name="voto" id="voto"
+                                                value="Não" hidden>
                                             <p>Confirma seu voto?</p>
                                         </div>
                                     </div>
@@ -131,12 +161,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoAbstencao{{ $votacao->id }}"
-                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVotoAbstencao"
-                        aria-hidden="true">
+                    <div class="modal fade" id="exampleModalVotoAbstencao{{ $votacao->id }}" tabindex="-1"
+                        role="dialog" aria-labelledby="exampleModalLabelVotoAbstencao" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <form method="POST" class="form_prevent_multiple_submits" action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                <form method="POST" class="form_prevent_multiple_submits"
+                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-warning">
@@ -146,7 +176,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <input class="form-control" type="text" name="voto" id="voto" value="Abstenção" hidden>
+                                            <input class="form-control" type="text" name="voto" id="voto"
+                                                value="Abstenção" hidden>
                                             <p>Confirma seu voto?</p>
                                         </div>
                                     </div>
@@ -171,6 +202,7 @@
     <script src="{{ asset('js/datatables.js') }}"></script>
     <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/hh6dctatzptohe71nfevw76few6kevzc4i1q1utarze7tude/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
     <script>
         $('#cep').mask('00.000-000');
@@ -238,6 +270,19 @@
                     required: "Campo obrigatório"
                 }
             }
+        });
+
+        tinymce.init({
+            selector: 'textarea',
+            readonly: true,
+            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            toolbar_mode: 'floating',
+            entity_encoding: "raw",
+            force_br_newlines: false,
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            spellchecker_language: 'br',
+            language: 'pt_BR',
         });
 
         $(document).ready(function() {
