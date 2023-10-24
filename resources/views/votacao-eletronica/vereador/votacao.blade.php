@@ -68,12 +68,12 @@
                                         <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
                                             <div class="">
                                                 <div class="col-md-6 mb-3">
-                                                    <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $votacao->votacao->proposicao->assunto }}" readonly>
+                                                    <input type="text" class="form-control" name="assunto" id="assunto" value="{{ $vereador_votacao->votacao->proposicao->assunto }}" readonly>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="colored-icon-4" role="tabpanel">
-                                            <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $votacao->votacao->proposicao->conteudo }}</textarea>
+                                            <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $vereador_votacao->votacao->proposicao->conteudo }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -87,28 +87,28 @@
                                 <p>Qual o seu voto?</p>
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-lg btn-success" data-toggle="modal"
-                                        data-target="#exampleModalVotoSim{{ $votacao->id }}"
+                                        data-target="#exampleModalVotoSim{{ $vereador_votacao->id }}"
                                         style="width: 15%; margin-bottom: 0.7rem">Sim</button>
                                 </div>
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-lg btn-danger" data-toggle="modal"
-                                        data-target="#exampleModalVotoNao{{ $votacao->id }}"
+                                        data-target="#exampleModalVotoNao{{ $vereador_votacao->id }}"
                                         style="width: 15%; margin-bottom: 0.7rem">Não</button>
                                 </div>
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-lg btn-warning" data-toggle="modal"
-                                        data-target="#exampleModalVotoAbstencao{{ $votacao->id }}"
+                                        data-target="#exampleModalVotoAbstencao{{ $vereador_votacao->id }}"
                                         style="width: 15%; margin-bottom: 0.7rem">Abstenção</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoSim{{ $votacao->id }}" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="exampleModalVotoSim{{ $vereador_votacao->id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabelVotoSim" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <form method="POST" class="form_prevent_multiple_submits"
-                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                    action="{{ route('votacao_eletronica.vereador.votar', $vereador_votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-success">
@@ -132,12 +132,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoNao{{ $votacao->id }}" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="exampleModalVotoNao{{ $vereador_votacao->id }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabelVotoNao" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <form method="POST" class="form_prevent_multiple_submits"
-                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                    action="{{ route('votacao_eletronica.vereador.votar', $vereador_votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-danger">
@@ -161,12 +161,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="exampleModalVotoAbstencao{{ $votacao->id }}" tabindex="-1"
+                    <div class="modal fade" id="exampleModalVotoAbstencao{{ $vereador_votacao->id }}" tabindex="-1"
                         role="dialog" aria-labelledby="exampleModalLabelVotoAbstencao" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <form method="POST" class="form_prevent_multiple_submits"
-                                    action="{{ route('votacao_eletronica.vereador.votar', $votacao->id) }}">
+                                    action="{{ route('votacao_eletronica.vereador.votar', $vereador_votacao->id) }}">
                                     @csrf
                                     @method('POST')
                                     <div class="modal-header btn-warning">

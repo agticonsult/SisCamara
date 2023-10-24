@@ -86,21 +86,21 @@ class VereadorVotacaoController extends Controller
             }
 
             $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
-            $votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', 1)->first();
+            $vereador_votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', 1)->first();
 
-            if (!$votacao){
+            if (!$vereador_votacao){
                 return redirect()->back()->with('erro', 'Dados inválidos.');
             }
 
-            if($votacao->votou == 1) {
+            if($vereador_votacao->votou == 1) {
                 return redirect()->back()->with('erro', 'Você já votou.');
             }
 
-            if($votacao->votacaoAutorizada != 1) {
+            if($vereador_votacao->votacaoAutorizada != 1) {
                 return redirect()->back()->with('erro', 'Votação não autorizada.');
             }
 
-            return view('votacao-eletronica.vereador.votacao', compact('votacao'));
+            return view('votacao-eletronica.vereador.votacao', compact('vereador_votacao'));
 
         }
         catch (\Exception $ex) {
