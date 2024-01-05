@@ -56,7 +56,7 @@ class VereadorController extends Controller
             $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
-                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
                 ->get();
 
             $usuarios = array();
@@ -299,7 +299,7 @@ class VereadorController extends Controller
             $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
-                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
                 ->get();
 
             $usuarios = array();

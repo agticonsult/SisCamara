@@ -19,6 +19,9 @@ class Permissao extends Model implements Auditable
 
     protected $table = 'permissaos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function perfil()
     {
         return $this->belongsTo(Perfil::class, 'id_perfil');

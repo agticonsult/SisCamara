@@ -18,6 +18,9 @@ class AssuntoAto extends Model implements Auditable
 
     protected $table = 'assunto_atos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

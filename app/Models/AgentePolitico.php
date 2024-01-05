@@ -20,6 +20,9 @@ class AgentePolitico extends Model implements Auditable
 
     protected $table = 'agente_politicos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -65,7 +66,8 @@ class CreateUsersTable extends Migration
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->nullable();
+            $table->boolean('ativo')->default(User::ATIVO);
+            // $table->boolean('ativo')->nullable();
 
             $table->timestamp('email_verified_at')->nullable(); // verificacao email
             $table->rememberToken();

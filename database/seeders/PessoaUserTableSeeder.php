@@ -35,10 +35,10 @@ class PessoaUserTableSeeder extends Seeder
         $uuid4 = "e6ba7783-c32b-4ea8-bc0d-8149fdfdebce";
 
         DB::table('pessoas')->insert([
-            ['pessoaJuridica' => 0, 'nomeCompleto' => 'Agile', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
-            ['pessoaJuridica' => 0, 'nomeCompleto' => 'Fulano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
-            ['pessoaJuridica' => 0, 'nomeCompleto' => 'Ciclano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
-            ['pessoaJuridica' => 0, 'nomeCompleto' => 'Beltrano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01',  'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
+            ['pessoaJuridica' => 0, 'nome' => 'Agile', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
+            ['pessoaJuridica' => 0, 'nome' => 'Fulano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
+            ['pessoaJuridica' => 0, 'nome' => 'Ciclano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
+            ['pessoaJuridica' => 0, 'nome' => 'Beltrano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01',  'cadastradoPorUsuario' => $uuid1, 'created_at' => '2022-09-22 16:56:00', 'ativo' => 1],
         ]);
 
         DB::table('users')->insert([

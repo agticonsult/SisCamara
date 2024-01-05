@@ -38,27 +38,6 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('ato.anexos.edit', $ato->id) || Route::current()->uri == 'ato/anexos/edit/{id}' ? 'active' : null }}" href="{{ route('ato.anexos.edit', $ato->id) }}">Anexos</a>
                 </li>
-               {{--
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('gerenciamento.processo.cliente.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/cliente/{id}' ? 'active' : null }}"
-                        href="{{ route('gerenciamento.processo.cliente.index', $processo->id) }}">Clientes</a>
-                </li>
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('gerenciamento.processo.grupo.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/grupo/{id}' ? 'active' : null }}"
-                        href="{{ route('gerenciamento.processo.grupo.index', $processo->id) }}">Grupos</a>
-                </li>
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('gerenciamento.processo.anexo.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/anexo/{id}' ? 'active' : null }}"
-                        href="{{ route('gerenciamento.processo.anexo.index', $processo->id) }}">Anexos</a>
-                </li>
-                <li class="nav-item">
-                    <a
-                        class="nav-link {{ request()->routeIs('gerenciamento.processo.encaminhamento.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/encaminhamento/{id}' ? 'active' : null }}"
-                        href="{{ route('gerenciamento.processo.encaminhamento.index', $processo->id) }}">Encaminhamentos</a>
-                </li> --}}
             </ul>
         </div>
         <div class="col-lg-12 tab-content">
@@ -83,37 +62,6 @@
                     @include('ato.editAnexos')
                 </div>
             @endif
-
-            {{--
-
-            @if ((request()->routeIs('gerenciamento.processo.cliente.index', $processo->id) || (Route::current()->uri =='gerenciamento/processo/cliente/index/{id}')))
-                <div class="tab-pane {{ request()->routeIs('gerenciamento.processo.cliente.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/cliente/index/{id}' ? 'active' : null }}"
-                    id="{{ route('gerenciamento.processo.cliente.index', $processo->id) }}">
-                    @include('gerenciamento.processo.cliente')
-                </div>
-            @endif
-
-            @if ((request()->routeIs('gerenciamento.processo.grupo.index', $processo->id) || (Route::current()->uri =='gerenciamento/processo/grupo/index/{id}')))
-                <div class="tab-pane {{ request()->routeIs('gerenciamento.processo.grupo.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/grupo/index/{id}' ? 'active' : null }}"
-                    id="{{ route('gerenciamento.processo.grupo.index', $processo->id) }}">
-                    @include('gerenciamento.processo.grupo')
-                </div>
-            @endif
-
-            @if ((request()->routeIs('gerenciamento.processo.anexo.index', $processo->id) || (Route::current()->uri =='gerenciamento/processo/anexo/index/{id}')))
-                <div class="tab-pane {{ request()->routeIs('gerenciamento.processo.anexo.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/anexo/index/{id}' ? 'active' : null }}"
-                    id="{{ route('gerenciamento.processo.anexo.index', $processo->id) }}">
-                    @include('gerenciamento.processo.anexo')
-                </div>
-            @endif
-
-            @if ((request()->routeIs('gerenciamento.processo.encaminhamento.index', $processo->id) || (Route::current()->uri =='gerenciamento/processo/encaminhamento/index/{id}')))
-                <div class="tab-pane {{ request()->routeIs('gerenciamento.processo.encaminhamento.index', $processo->id) || Route::current()->uri == 'gerenciamento/processo/encaminhamento/index/{id}' ? 'active' : null }}"
-                    id="{{ route('gerenciamento.processo.grupo.index', $processo->id) }}">
-                    @include('gerenciamento.processo.encaminhamento')
-                </div>
-            @endif --}}
-
         </div>
     </div>
 
@@ -122,7 +70,6 @@
             <a href="{{ route('ato.index') }}" class="btn btn-light">Voltar</a>
         </div>
     </div>
-
 </div>
 
 @stop

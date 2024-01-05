@@ -30,11 +30,11 @@ class AtoPublicoController extends Controller
                 )
                 ->get();
 
-            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
-            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
-            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
-            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
-            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
+            $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
@@ -54,7 +54,7 @@ class AtoPublicoController extends Controller
     public function show($id)
     {
         try {
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
             // dd($ato->todas_linhas_ativas());
 
             return view('ato.publico.show', compact('ato'));
@@ -177,7 +177,7 @@ class AtoPublicoController extends Controller
 
                     // linhas com texto
                     $linhas_texto = LinhaAto::where('texto', 'LIKE', '%'.$request->palavra.'%')
-                        ->where('ativo', '=', 1)
+                        ->where('ativo', '=', LinhaAto::ATIVO)
                         // ->select('id_ato_principal as id')
                         ->get();
 
@@ -240,7 +240,7 @@ class AtoPublicoController extends Controller
 
                     // excluindo atos com texto
                     $linhas_texto_excluidos = LinhaAto::where('texto', 'LIKE', '%'.$request->exclusao.'%')
-                        ->where('ativo', '=', 1)
+                        ->where('ativo', '=', LinhaAto::ATIVO)
                         ->get();
 
                     $i = 0;
@@ -269,11 +269,11 @@ class AtoPublicoController extends Controller
                 }
             }
 
-            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
-            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
-            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
-            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
-            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
+            $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
@@ -295,11 +295,11 @@ class AtoPublicoController extends Controller
         try {
             $filtros = $request->except('_method', '_token');
             $atos = $ato->buscar($filtros);
-            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
-            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
-            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
-            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
-            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
+            $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'filtros', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }

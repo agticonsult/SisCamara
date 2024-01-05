@@ -11,74 +11,101 @@
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Classificação do Ato</label>
-                        <select name="id_classificacao" class="select2 form-control">
+                        <select name="id_classificacao" class="select2 form-control @error('id_classificacao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($classificacaos as $classificacao)
                                 <option value="{{ $classificacao->id }}" {{ $classificacao->id == $ato->id_classificacao ? 'selected' : '' }}>{{ $classificacao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_classificacao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Ano</label>
-                        <input type="text" class="form-control" name="ano" id="ano" value="{{ $ato->ano }}">
+                        <input type="text" class="form-control @error('ano') is-invalid @enderror" name="ano" id="ano" value="{{ $ato->ano }}">
+                        @error('ano')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Número</label>
-                        <input type="text" class="form-control" name="numero" value="{{ $ato->numero }}">
+                        <input type="text" class="form-control @error('numero') is-invalid @enderror" name="numero" value="{{ $ato->numero }}">
+                        @error('numero')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Grupo</label>
-                        <select name="id_grupo" class="select2 form-control">
+                        <select name="id_grupo" class="select2 form-control @error('id_grupo') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($grupos as $grupo)
                                 <option value="{{ $grupo->id }}" {{ $grupo->id == $ato->id_grupo ? 'selected' : '' }}>{{ $grupo->nome }}</option>
                             @endforeach
                         </select>
+                        @error('id_grupo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Tipo de Ato</label>
-                        <select name="id_tipo_ato" class="select2 form-control">
+                        <select name="id_tipo_ato" class="select2 form-control @error('id_tipo_ato') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipo_atos as $tipo_ato)
                                 <option value="{{ $tipo_ato->id }}" {{ $tipo_ato->id == $ato->id_tipo_ato ? 'selected' : '' }}>{{ $tipo_ato->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_tipo_ato')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Assunto</label>
-                        <select name="id_assunto" class="select2 form-control">
+                        <select name="id_assunto" class="select2 form-control @error('id_assunto') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($assuntos as $assunto)
                                 <option value="{{ $assunto->id }}" {{ $assunto->id == $ato->id_assunto ? 'selected' : '' }}>{{ $assunto->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_assunto')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Órgão que editou o ato</label>
-                        <select name="id_orgao" class="select2 form-control">
+                        <select name="id_orgao" class="select2 form-control @error('id_orgao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($orgaos as $orgao)
                                 <option value="{{ $orgao->id }}" {{ $orgao->id == $ato->id_orgao ? 'selected' : '' }}>{{ $orgao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_orgao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">Forma de Publicação</label>
-                        <select name="id_forma_publicacao" class="select2 form-control">
+                        <select name="id_forma_publicacao" class="select2 form-control @error('id_forma_publicacao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($forma_publicacaos as $forma_publicacao)
                                 <option value="{{ $forma_publicacao->id }}" {{ $forma_publicacao->id == $ato->id_forma_publicacao ? 'selected' : '' }}>{{ $forma_publicacao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_forma_publicacao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">Data de Publicação</label>
-                        <input type="date" class="form-control" name="data_publicacao" value="{{ $ato->data_publicacao }}">
+                        <input type="date" class="form-control @error('data_publicacao') is-invalid @enderror" name="data_publicacao" value="{{ $ato->data_publicacao }}">
                     </div>
+                    @error('data_publicacao')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="form-check col-md-6">
                     <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo" {{ $ato->altera_dispositivo == 1 ? 'checked' : '' }}>
@@ -103,56 +130,56 @@
 <script>
     $('#ano').mask('0000');
 
-    $("#form").validate({
-        rules : {
-            // Dados Gerais
-            id_classificacao:{
-                required:true
-            },
-            ano:{
-                required:true
-            },
-            numero:{
-                required:true
-            },
-            id_grupo:{
-                required:true
-            },
-            id_tipo_ato:{
-                required:true
-            },
-            id_assunto:{
-                required:true
-            },
-            id_orgao:{
-                required:true
-            },
-        },
-        messages:{
-            // Dados Gerais
-            id_classificacao:{
-                required:"Campo obrigatório"
-            },
-            ano:{
-                required:"Campo obrigatório"
-            },
-            numero:{
-                required:"Campo obrigatório"
-            },
-            id_grupo:{
-                required:"Campo obrigatório"
-            },
-            id_tipo_ato:{
-                required:"Campo obrigatório"
-            },
-            id_assunto:{
-                required:"Campo obrigatório"
-            },
-            id_orgao:{
-                required:"Campo obrigatório"
-            },
-        }
-    });
+    // $("#form").validate({
+    //     rules : {
+    //         // Dados Gerais
+    //         id_classificacao:{
+    //             required:true
+    //         },
+    //         ano:{
+    //             required:true
+    //         },
+    //         numero:{
+    //             required:true
+    //         },
+    //         id_grupo:{
+    //             required:true
+    //         },
+    //         id_tipo_ato:{
+    //             required:true
+    //         },
+    //         id_assunto:{
+    //             required:true
+    //         },
+    //         id_orgao:{
+    //             required:true
+    //         },
+    //     },
+    //     messages:{
+    //         // Dados Gerais
+    //         id_classificacao:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         ano:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         numero:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_grupo:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_tipo_ato:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_assunto:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_orgao:{
+    //             required:"Campo obrigatório"
+    //         },
+    //     }
+    // });
 
     $(document).ready(function() {
 

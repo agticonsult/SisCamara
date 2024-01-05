@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Services\ValidadorCPFService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use PhpParser\Node\Expr\Cast\String_;
@@ -41,6 +43,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -65,6 +70,25 @@ class User extends Authenticatable
         });
     }
 
+    //Eloquent Mutator
+    public function setTelefoneCelularAttribute($value)
+    {
+        $this->attributes['telefone_celular'] = preg_replace('/[^0-9]/', '', $value);
+    }
+    public function setTelefoneCelular2Attribute($value)
+    {
+        $this->attributes['telefone_celular2'] = preg_replace('/[^0-9]/', '', $value);
+    }
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+    public function setCpfAttribute($value)
+    {
+        $this->attributes['cpf'] = preg_replace('/[^0-9]/', '', $value);
+    }
+
+    //relações
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class, 'id_pessoa');
@@ -127,7 +151,6 @@ class User extends Authenticatable
 
         return false;
     }
-
     public function ehAgentePolitico()
     {
         // $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
@@ -138,7 +161,6 @@ class User extends Authenticatable
         }
         return true;
     }
-
     public function foto()
     {
         $resposta = array();

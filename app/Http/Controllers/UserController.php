@@ -37,7 +37,7 @@ class UserController extends Controller
                     'users.dataInativado', 'users.motivoInativado'
                 )
                 ->orderBy('users.ativo', 'asc')
-                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
                 ->get();
             return view('usuario.index', compact('usuarios'));
         }
@@ -338,7 +338,8 @@ class UserController extends Controller
         }
     }
 
-    function desbloquear($id) {
+    public function desbloquear($id)
+    {
         try {
             if (Auth::user()->temPermissao('User', 'Alteração') != 1) {
                 return redirect()->back()->with('erro', 'Acesso negado.');

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtoStoreRequest;
+use App\Http\Requests\AtoUpdateRequest;
 use App\Models\AnexoAto;
 use App\Models\AssuntoAto;
 use App\Models\Ato;
@@ -30,7 +32,8 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $atos = Ato::where('ativo', '=', 1)->get();
+            $atos = Ato::where('ativo', '=', Ato::ATIVO)->get();
+            // dd($atos);
 
             return view('ato.index', compact('atos'));
         }
@@ -50,17 +53,17 @@ class AtoController extends Controller
     public function create()
     {
         try {
-            if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('Ato', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
-            $grupos = Grupo::where('ativo', '=', 1)->get();
-            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
-            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
-            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
-            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
-            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
+            $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
+            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', Filesize::ATIVO)->first();
 
             return view('ato.create', compact('classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
         }
@@ -77,107 +80,21 @@ class AtoController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(AtoStoreRequest $request)
     {
         try {
-            if(Auth::user()->temPermissao('Ato', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
-
-            $input = [
-                // Texto
-                'titulo' => $request->titulo,
-                'subtitulo' => $request->subtitulo,
-                'corpo_texto' => $request->corpo_texto,
-
-                // Dados Gerais
-                'id_classificacao' => $request->id_classificacao,
-                'ano' => $request->ano,
-                'numero' => $request->numero,
-                'id_grupo' => $request->id_grupo,
-                'id_tipo_ato' => $request->id_tipo_ato,
-                'id_assunto' => $request->id_assunto,
-                'id_orgao' => $request->id_orgao,
-                'id_forma_publicacao' => $request->id_forma_publicacao,
-                'data_publicacao' => $request->data_publicacao,
-
-                // Anexos
-                'arquivo[]' => $request->arquivo
-            ];
-            $rules = [
-                // Texto
-                'titulo' => 'required',
-                'subtitulo' => 'nullable',
-                'corpo_texto' => 'required',
-
-                // Dados Gerais
-                'id_classificacao' => 'required|integer',
-                'ano' => 'required|integer',
-                'numero' => 'required',
-                'id_grupo' => 'required|integer',
-                'id_tipo_ato' => 'required|integer',
-                'id_assunto' => 'required|integer',
-                'id_orgao' => 'required|integer',
-                'id_forma_publicacao' => 'nullable|integer',
-                'data_publicacao' => 'nullable|date',
-
-                // Anexos
-                'arquivo[]' => 'nullable',
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $classificacao = ClassificacaoAto::where('id', '=', $request->id_classificacao)->where('ativo', '=', 1)->first();
-            if (!$classificacao){
-                return redirect()->back()->with('erro', 'Classificação inválida.');
-            }
-
-            $grupo = Grupo::where('id', '=', $request->id_grupo)->where('ativo', '=', 1)->first();
-            if (!$grupo){
-                return redirect()->back()->with('erro', 'Grupo inválido.');
-            }
-
-            $tipo_ato = Grupo::where('id', '=', $request->id_tipo_ato)->where('ativo', '=', 1)->first();
-            if (!$tipo_ato){
-                return redirect()->back()->with('erro', 'Tipo de ato inválido.');
-            }
-
-            $orgao = OrgaoAto::where('id', '=', $request->id_orgao)->where('ativo', '=', 1)->first();
-            if (!$orgao){
-                return redirect()->back()->with('erro', 'Órgão que editou o ato inválido.');
-            }
-
-            if ($request->id_forma_publicacao != null){
-                $forma_publicacao = Grupo::where('id', '=', $request->id_forma_publicacao)->where('ativo', '=', 1)->first();
-                if (!$forma_publicacao){
-                    return redirect()->back()->with('erro', 'Forma de publicação do ato inválido.');
-                }
-            }
-
             $altera_dispositivo = 0;
             if (isset($request->altera_dispositivo)){
                 if ($request->altera_dispositivo == 'on'){
                     $altera_dispositivo = 1;
                 }
             }
-
-            $ato = new Ato();
-            $ato->titulo = $request->titulo;
-            $ato->subtitulo = $request->subtitulo;
-            $ato->ano = $request->ano;
-            $ato->numero = $request->numero;
-            $ato->id_classificacao = $request->id_classificacao;
-            $ato->id_grupo = $request->id_grupo;
-            $ato->id_tipo_ato = $request->id_tipo_ato;
-            $ato->id_assunto = $request->id_assunto;
-            $ato->id_orgao = $request->id_orgao;
-            $ato->id_forma_publicacao = $request->id_forma_publicacao;
-            $ato->data_publicacao = $request->data_publicacao;
-            $ato->altera_dispositivo = $altera_dispositivo;
-            $ato->cadastradoPorUsuario = Auth::user()->id;
-            $ato->ativo = 1;
-            $ato->save();
+            //nova forma de implementaçao para persistir os dados no BD
+            $ato = Ato::create($request->validated() + [
+                'altera_dispositivo' => $altera_dispositivo,
+                'cadastradoPorUsuario' => Auth::user()->id,
+                // 'ativo' => Ato::ATIVO //default diretamente da migration
+            ]);
 
             $corpo_texto = $request->corpo_texto;
             $corpo_texto_alterado = preg_replace('/\r/', '', $corpo_texto);
@@ -185,15 +102,15 @@ class AtoController extends Controller
 
             for ($i = 0; $i < Count($array_corpo_texto); $i++){
                 if ($array_corpo_texto[$i] != ""){
-                    $linha_ato = new LinhaAto();
-                    $linha_ato->ordem = $i + 1;
-                    $linha_ato->texto = $array_corpo_texto[$i];
-                    $linha_ato->alterado = 0;
-                    $linha_ato->id_ato_principal = $ato->id;
-                    $linha_ato->id_tipo_linha = 1;
-                    $linha_ato->cadastradoPorUsuario = Auth::user()->id;
-                    $linha_ato->ativo = 1;
-                    $linha_ato->save();
+                    LinhaAto::create([
+                        'ordem' => $i + 1,
+                        'texto' => $array_corpo_texto[$i],
+                        'alterado' => 0,
+                        'id_ato_principal' => $ato->id,
+                        'id_tipo_linha' => 1,
+                        'cadastradoPorUsuario' => Auth::user()->id,
+                    ]);
+
                 }
             }
 
@@ -246,10 +163,10 @@ class AtoController extends Controller
                                     $extensao == 'odt' ||
                                     $extensao == 'jpg' ||
                                     $extensao == 'jpeg' ||
-                                    $extensao == 'png' ||
-                                    $extensao == 'mp3' ||
-                                    $extensao == 'mp4' ||
-                                    $extensao == 'mkv'
+                                    $extensao == 'png'
+                                    // $extensao == 'mp3' ||
+                                    // $extensao == 'mp4' ||
+                                    // $extensao == 'mkv'
                                 ) {
                                     $valido = 1;
                                 }
@@ -304,12 +221,6 @@ class AtoController extends Controller
 
             return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso');
         }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
-        }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
             $erro->erro = $ex->getMessage();
@@ -330,8 +241,7 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            // dd($ato->todas_linhas_ativas());
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
 
             return view('ato.show', compact('ato'));
         }
@@ -355,13 +265,12 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
 
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
-            // dd($ato->todas_linhas_ativas());
+            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
 
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
@@ -385,9 +294,8 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
-            // dd($ato->todas_linhas_ativas());
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
 
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
@@ -427,12 +335,12 @@ class AtoController extends Controller
             $validarUsuario = Validator::make($input, $rules);
             $validarUsuario->validate();
 
-            $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', 1)->first();
+            $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', Ato::ATIVO)->first();
             if (!$ato_add){
                 return redirect()->back()->with('erro', 'Ato que contém a alteração inválido.');
             }
 
-            $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('id_ato_principal', '=', $id)->where('ativo', '=', 1)->first();
+            $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('id_ato_principal', '=', $id)->where('ativo', '=', LinhaAto::ATIVO)->first();
             if (!$linha_antiga){
                 return redirect()->back()->with('erro', 'Não é possível alterar esta linha.');
             }
@@ -440,7 +348,6 @@ class AtoController extends Controller
             $linha_antiga->alterado = 1;
             $linha_antiga->save();
 
-            // dd($request->all());
             $linha_ato = new LinhaAto();
             $linha_ato->ordem = $linha_antiga->ordem;
             $linha_ato->sub_ordem = $linha_antiga->sub_ordem + 1;
@@ -488,19 +395,18 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', 1)->get();
+            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
 
-            $classificacaos = ClassificacaoAto::where('ativo', '=', 1)->get();
-            $grupos = Grupo::where('ativo', '=', 1)->get();
-            $assuntos = AssuntoAto::where('ativo', '=', 1)->get();
-            $tipo_atos = TipoAto::where('ativo', '=', 1)->get();
-            $orgaos = OrgaoAto::where('ativo', '=', 1)->get();
-            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', 1)->get();
-            // dd($ato->todas_linhas_ativas());
+            $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
+            $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
+            $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
+            $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
+            $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.edit', compact('ato', 'atos_relacionados', 'classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
@@ -517,69 +423,9 @@ class AtoController extends Controller
         }
     }
 
-    public function updateDadosGerais(Request $request, $id)
+    public function updateDadosGerais(AtoUpdateRequest $request, $id)
     {
         try {
-            if(Auth::user()->temPermissao('Ato', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
-
-            $input = [
-                'id' => $id,
-                // Dados Gerais
-                'id_classificacao' => $request->id_classificacao,
-                'ano' => $request->ano,
-                'numero' => $request->numero,
-                'id_grupo' => $request->id_grupo,
-                'id_tipo_ato' => $request->id_tipo_ato,
-                'id_assunto' => $request->id_assunto,
-                'id_orgao' => $request->id_orgao,
-                'id_forma_publicacao' => $request->id_forma_publicacao,
-                'data_publicacao' => $request->data_publicacao,
-            ];
-            $rules = [
-                'id' => 'required|integer',
-                // Dados Gerais
-                'id_classificacao' => 'required|integer',
-                'ano' => 'required|integer',
-                'numero' => 'required',
-                'id_grupo' => 'required|integer',
-                'id_tipo_ato' => 'required|integer',
-                'id_assunto' => 'required|integer',
-                'id_orgao' => 'required|integer',
-                'id_forma_publicacao' => 'nullable|integer',
-                'data_publicacao' => 'nullable|date',
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $classificacao = ClassificacaoAto::where('id', '=', $request->id_classificacao)->where('ativo', '=', 1)->first();
-            if (!$classificacao){
-                return redirect()->back()->with('erro', 'Classificação inválida.');
-            }
-
-            $grupo = Grupo::where('id', '=', $request->id_grupo)->where('ativo', '=', 1)->first();
-            if (!$grupo){
-                return redirect()->back()->with('erro', 'Grupo inválido.');
-            }
-
-            $tipo_ato = Grupo::where('id', '=', $request->id_tipo_ato)->where('ativo', '=', 1)->first();
-            if (!$tipo_ato){
-                return redirect()->back()->with('erro', 'Tipo de ato inválido.');
-            }
-
-            $orgao = OrgaoAto::where('id', '=', $request->id_orgao)->where('ativo', '=', 1)->first();
-            if (!$orgao){
-                return redirect()->back()->with('erro', 'Órgão que editou o ato inválido.');
-            }
-
-            if ($request->id_forma_publicacao != null){
-                $forma_publicacao = Grupo::where('id', '=', $request->id_forma_publicacao)->where('ativo', '=', 1)->first();
-                if (!$forma_publicacao){
-                    return redirect()->back()->with('erro', 'Forma de publicação do ato inválido.');
-                }
-            }
 
             $altera_dispositivo = 0;
             if (isset($request->altera_dispositivo)){
@@ -588,30 +434,16 @@ class AtoController extends Controller
                 }
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
 
-            $ato->ano = $request->ano;
-            $ato->numero = $request->numero;
-            $ato->id_classificacao = $request->id_classificacao;
-            $ato->id_grupo = $request->id_grupo;
-            $ato->id_tipo_ato = $request->id_tipo_ato;
-            $ato->id_assunto = $request->id_assunto;
-            $ato->id_orgao = $request->id_orgao;
-            $ato->id_forma_publicacao = $request->id_forma_publicacao;
-            $ato->data_publicacao = $request->data_publicacao;
-            $ato->altera_dispositivo = $altera_dispositivo;
-            $ato->save();
+            $ato->update($request->validated() + [
+                'altera_dispositivo' => $altera_dispositivo
+            ]);
 
             return redirect()->route('ato.dados_gerais.edit', $ato->id)->with('success', 'Alteração realizada com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();
@@ -638,23 +470,11 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
 
             if (!$ato){
                 return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
@@ -687,10 +507,10 @@ class AtoController extends Controller
 
             }
 
-            $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', 1)->first();
+            $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', AnexoAto::ATIVO)->first();
 
             if($anexoAto != null) {
-                $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', 1)->first();
+                // $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', AnexoAto::ATIVO)->first();
                 $anexoAto->inativadoPorUsuario = Auth::user()->id;
                 $anexoAto->dataInativado = Carbon::now();
                 $anexoAto->motivoInativado = $motivo;
@@ -699,12 +519,7 @@ class AtoController extends Controller
             }
 
             return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+            
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

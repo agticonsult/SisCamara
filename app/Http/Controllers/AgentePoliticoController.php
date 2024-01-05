@@ -31,7 +31,7 @@ class AgentePoliticoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $agente_politicos = AgentePolitico::where('ativo', '=', 1)->get();
+            $agente_politicos = AgentePolitico::where('ativo', '=', AgentePolitico::ATIVO)->get();
 
             return view('agente-politico.index', compact('agente_politicos'));
         }
@@ -51,15 +51,15 @@ class AgentePoliticoController extends Controller
     public function create()
     {
         try {
-            if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('AgentePolitico', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', 1)->get();
+            $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', PleitoEleitoral::ATIVO)->get();
             $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
-                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
                 ->get();
 
             $usuarios = array();
@@ -178,7 +178,7 @@ class AgentePoliticoController extends Controller
                     //Pessoa
                     $novaPessoa = new Pessoa();
                     $novaPessoa->pessoaJuridica = 0;
-                    $novaPessoa->nomeCompleto = $request->nomeCompleto;
+                    $novaPessoa->nome = $request->nomeCompleto;
                     $novaPessoa->apelidoFantasia = $request->apelidoFantasia;
                     $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
                     $novaPessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
@@ -410,7 +410,7 @@ class AgentePoliticoController extends Controller
             $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
-                ->orderBy('pessoas.nomeCompleto', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
                 ->get();
 
             $usuarios = array();
@@ -543,7 +543,7 @@ class AgentePoliticoController extends Controller
                 else{
                     //Pessoa
                     $pessoa = Pessoa::find($agente_politico->usuario->id_pessoa);
-                    $pessoa->nomeCompleto = $request->nomeCompleto;
+                    $pessoa->nome = $request->nomeCompleto;
                     $pessoa->apelidoFantasia = $request->apelidoFantasia;
                     $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
                     $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);

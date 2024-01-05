@@ -315,13 +315,8 @@
         </div>
     </nav>
 
-
-
-
-
     <div class="main">
         <nav class="navbar navbar-expand navbar-light navbar-bg">
-
 
             @if (Auth::guest())
                 <a class="sidebar-toggle">
@@ -370,7 +365,7 @@
                             </a>
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#"
                                 data-toggle="dropdown">
-                                <span class="avatar"> {{ auth()->user()->pessoa->nomeCompleto }}</span>
+                                <span class="avatar"> {{ Auth::user()->pessoa->nome }} - {{ Auth::user()->email }}</span>
                                 <span class="text-dark"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">

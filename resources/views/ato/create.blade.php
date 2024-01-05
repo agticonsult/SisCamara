@@ -3,8 +3,8 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
+{{-- <script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
+<script src="{{ asset('js/gmaps.js') }}"></script> --}}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -13,7 +13,7 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
+{{-- @include('errors.errors') --}}
 
 <div class="card" style="background-color:white">
 
@@ -36,19 +36,28 @@
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Título</label>
-                        <input type="text" class="form-control" name="titulo">
+                        <input type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" value="{{ old('titulo') }}">
+                        @error('titulo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">Subtítulo</label>
-                        <input type="text" class="form-control" name="subtitulo">
+                        <input type="text" class="form-control @error('subtitulo') is-invalid @enderror" name="subtitulo" value="{{ old('subtitulo') }}">
+                        @error('subtitulo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="form-label">*Corpo do Texto</label>
-                        <textarea name="corpo_texto" cols="10" rows="10" class="form-control"></textarea>
+                        <textarea name="corpo_texto" cols="10" rows="10" class="form-control @error('corpo_texto') is-invalid @enderror">{{ old('corpo_texto') }}</textarea>
+                        @error('corpo_texto')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -58,77 +67,104 @@
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Classificação do Ato</label>
-                        <select name="id_classificacao" class="select2 form-control">
+                        <select name="id_classificacao" class="select2 form-control @error('id_classificacao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($classificacaos as $classificacao)
-                                <option value="{{ $classificacao->id }}">{{ $classificacao->descricao }}</option>
+                                <option value="{{ $classificacao->id }}" {{ old('id_classificacao') == $classificacao->id ? 'selected' : '' }}>{{ $classificacao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_classificacao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Ano</label>
-                        <input type="text" class="form-control" name="ano" id="ano">
+                        <input type="text" class="form-control @error('ano') is-invalid @enderror" name="ano" id="ano" value="{{ old('ano') }}">
+                        @error('ano')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Número</label>
-                        <input type="text" class="form-control" name="numero">
+                        <input type="text" class="form-control @error('numero') is-invalid @enderror" name="numero" value="{{ old('numero') }}">
+                        @error('numero')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Grupo</label>
-                        <select name="id_grupo" class="select2 form-control">
+                        <select name="id_grupo" class="select2 form-control @error('id_grupo') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($grupos as $grupo)
-                                <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
+                                <option value="{{ $grupo->id }}" {{ old('id_grupo') == $grupo->id ? 'selected' : '' }}>{{ $grupo->nome }}</option>
                             @endforeach
                         </select>
+                        @error('id_grupo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Tipo de Ato</label>
-                        <select name="id_tipo_ato" class="select2 form-control">
+                        <select name="id_tipo_ato" class="select2 form-control @error('id_tipo_ato') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipo_atos as $tipo_ato)
-                                <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
+                                <option value="{{ $tipo_ato->id }}" {{ old('id_tipo_ato') == $tipo_ato->id ? 'selected' : '' }}>{{ $tipo_ato->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_tipo_ato')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">*Assunto</label>
-                        <select name="id_assunto" class="select2 form-control">
+                        <select name="id_assunto" class="select2 form-control @error('id_assunto') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($assuntos as $assunto)
-                                <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
+                                <option value="{{ $assunto->id }}" {{ old('id_assunto') == $assunto->id ? 'selected' : '' }}>{{ $assunto->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_assunto')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="form-label">*Órgão que editou o ato</label>
-                        <select name="id_orgao" class="select2 form-control">
+                        <select name="id_orgao" class="select2 form-control @error('id_orgao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($orgaos as $orgao)
-                                <option value="{{ $orgao->id }}">{{ $orgao->descricao }}</option>
+                                <option value="{{ $orgao->id }}" {{ old('id_orgao') == $orgao->id ? 'selected' : '' }}>{{ $orgao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_orgao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">Forma de Publicação</label>
-                        <select name="id_forma_publicacao" class="select2 form-control">
+                        <select name="id_forma_publicacao" class="select2 form-control @error('id_forma_publicacao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($forma_publicacaos as $forma_publicacao)
-                                <option value="{{ $forma_publicacao->id }}">{{ $forma_publicacao->descricao }}</option>
+                                <option value="{{ $forma_publicacao->id }}" {{ old('id_forma_publicacao') == $forma_publicacao->id ? 'selected' : '' }}>{{ $forma_publicacao->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_forma_publicacao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="form-label">Data de Publicação</label>
-                        <input type="date" class="form-control" name="data_publicacao">
+                        <input type="date" class="form-control @error('data_publicacao') is-invalid @enderror" name="data_publicacao" value="{{ old('data_publicacao') }}">
+                        @error('data_publicacao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="form-check col-md-6">
-                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo">
+                    <input type="checkbox" class="form-check-input" id="altera_dispositivo" name="altera_dispositivo" value="{{ old('altera_dispositivo') }}">
                     <label class="form-check-label" for="altera_dispositivo">Este ato altera algum dispositivo legal</label>
                 </div>
 
@@ -144,14 +180,17 @@
                     <ul>
                         <li>Documento (txt,pdf,xls,xlsx,doc,docx,odt)</li>
                         <li>Imagem (jpg,jpeg,png)</li>
-                        <li>Áudio (mp3)</li>
-                        <li>Vídeo (mp4, mkv)</li>
+                        {{-- <li>Áudio (mp3)</li>
+                        <li>Vídeo (mp4, mkv)</li> --}}
                     </ul>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="anexo">Arquivo</label>
-                        <input type="file" name="anexo[]" id="anexo" class="form-control-file" multiple>
+                        <input type="file" name="anexo[]" id="anexo" class="form-control-file @error('anexo[]') is-invalid @enderror" multiple>
+                        @error('anexo[]')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -191,72 +230,72 @@
     today = yyyy + '-' + mm + '-' + dd;
     $('.dataFormat').attr('max', today);
 
-    $("#form").validate({
-        rules : {
-            // Texto
-            titulo:{
-                required:true
-            },
-            corpo_texto:{
-                required:true
-            },
+    // $("#form").validate({
+    //     rules : {
+    //         // Texto
+    //         titulo:{
+    //             required:true
+    //         },
+    //         corpo_texto:{
+    //             required:true
+    //         },
 
-            // Dados Gerais
-            id_classificacao:{
-                required:true
-            },
-            ano:{
-                required:true
-            },
-            numero:{
-                required:true
-            },
-            id_grupo:{
-                required:true
-            },
-            id_tipo_ato:{
-                required:true
-            },
-            id_assunto:{
-                required:true
-            },
-            id_orgao:{
-                required:true
-            },
-        },
-        messages:{
-            // Texto
-            titulo:{
-                required:"Campo obrigatório"
-            },
-            corpo_texto:{
-                required:"Campo obrigatório"
-            },
+    //         // Dados Gerais
+    //         id_classificacao:{
+    //             required:true
+    //         },
+    //         ano:{
+    //             required:true
+    //         },
+    //         numero:{
+    //             required:true
+    //         },
+    //         id_grupo:{
+    //             required:true
+    //         },
+    //         id_tipo_ato:{
+    //             required:true
+    //         },
+    //         id_assunto:{
+    //             required:true
+    //         },
+    //         id_orgao:{
+    //             required:true
+    //         },
+    //     },
+    //     messages:{
+    //         // Texto
+    //         titulo:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         corpo_texto:{
+    //             required:"Campo obrigatório"
+    //         },
 
-            // Dados Gerais
-            id_classificacao:{
-                required:"Campo obrigatório"
-            },
-            ano:{
-                required:"Campo obrigatório"
-            },
-            numero:{
-                required:"Campo obrigatório"
-            },
-            id_grupo:{
-                required:"Campo obrigatório"
-            },
-            id_tipo_ato:{
-                required:"Campo obrigatório"
-            },
-            id_assunto:{
-                required:"Campo obrigatório"
-            },
-            id_orgao:{
-                required:"Campo obrigatório"
-            },
-        }
-    });
+    //         // Dados Gerais
+    //         id_classificacao:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         ano:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         numero:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_grupo:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_tipo_ato:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_assunto:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         id_orgao:{
+    //             required:"Campo obrigatório"
+    //         },
+    //     }
+    // });
 
     $(document).ready(function() {
 

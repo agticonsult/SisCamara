@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Ato;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -39,7 +40,8 @@ class CreateAtosTable extends Migration
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->nullable();
+            $table->boolean('ativo')->default(Ato::ATIVO);
+            // $table->boolean('ativo')->nullable();
             $table->timestamps();
         });
     }

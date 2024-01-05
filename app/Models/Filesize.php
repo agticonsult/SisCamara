@@ -19,6 +19,9 @@ class Filesize extends Model implements Auditable
 
     protected $table = 'filesizes';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

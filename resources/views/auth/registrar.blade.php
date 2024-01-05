@@ -55,63 +55,63 @@
                                             @csrf
                                             @method('POST')
                                             @include('errors.alerts')
-                                            @include('errors.errors')
+                                            {{-- @include('errors.errors') --}}
                                             <div class="m-sm-4">
                                                 <div class="mb-3">
                                                     <label class="form-label">*Nome</label>
-                                                    <input class="form-control" type="text" name="name" id="name" placeholder="Informe seu nome" value="{{ old('name') }}">
+                                                    <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ old('nome') }}">
+                                                    @error('nome')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">*CPF</label>
-                                                    <input class="form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ old('cpf') }}">
+                                                    <input class="form-control @error('cpf') is-invalid @enderror" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ old('cpf') }}">
+                                                    @error('cpf')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">*Email</label>
-                                                    <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
+                                                    <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
+                                                    @error('email')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">*Data de nascimento</label>
-                                                    <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min="1899-01-01" max="2000-13-13" value="{{ old('dt_nascimento_fundacao') }}">
+                                                    <input class="dataFormat form-control @error('dt_nascimento_fundacao') is-invalid @enderror" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min="1899-01-01" max="2000-13-13" value="{{ old('dt_nascimento_fundacao') }}">
+                                                    @error('dt_nascimento_fundacao')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
-                                                {{-- <div class="mb-3">
-                                                    <label for="id_municipio">*Município</label>
-                                                    <select name="id_municipio" id="id_municipio" class="form-control select2" required>
-                                                        <option value="" selected disabled>Selecione município</option>
-                                                        @foreach ($municipios as $municipio)
-                                                            <option value="{{ $municipio->id }}">{{ $municipio->descricao }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div> --}}
                                                 <div class="mb-3">
                                                     <label class="form-label">Celular/Telefone</label>
-                                                    <input class="telefone form-control" type="text" name="telefone_celular" value="{{ old('telefone_celular')}}">
+                                                    <input class="telefone form-control @error('telefone_celular') is-invalid @enderror" type="text" name="telefone_celular" value="{{ old('telefone_celular')}}">
+                                                    @error('telefone_celular')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Celular/Telefone Recado</label>
-                                                    <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ old('telefone_celular2')}}">
+                                                    <input class="telefone form-control @error('telefone_celular2') is-invalid @enderror" type="text" name="telefone_celular2" value="{{ old('telefone_celular2')}}">
+                                                    @error('telefone_celular2')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
-                                                {{-- <div class="mb-3">
-                                                    <label for="uf">UF</label>
-                                                    <select name="uf" id="uf" class="form-control select2" required>
-                                                        <option value="" selected disabled>Selecione UF</option>
-                                                        @foreach ($estados as $estado)
-                                                            <option value="{{ $estado->id }}">{{ $estado->sigla }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="id_municipio">Município</label>
-                                                        <select name="id_municipio" id="id_municipio" class="form-control select2" required>
-                                                            <option value="" selected disabled>Selecione município</option>
-                                                        </select>
-                                                </div> --}}
                                                 <div class="mb-3">
                                                     <label class="form-label">*Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                                    <input class="form-control" type="password" name="password" placeholder="Informe uma senha">
+                                                    <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe uma senha">
+                                                    @error('password')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Confirme a senha</label>
-                                                    <input class="form-control" type="password" name="confirmacao" placeholder="Confirme a senha">
+                                                    <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme a senha">
+                                                    @error('confirmacao')
+                                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                                    @enderror
                                                 </div>
                                                 <div class="mb-3">
                                                     <button type="submit" class="btn btn-lg btn-primary" style="width: 100%">Cadastrar</button>
@@ -182,72 +182,72 @@
     }
     maskInputs();
 
-    $("#form").validate({
-        rules : {
-            name:{
-                required:true,
-                maxlength:255,
-            },
-            cpf:{
-                required:true,
-                maxlength:14,
-            },
-            email:{
-                required:true,
-                maxlength:255,
-            },
-            id_municipio:{
-                required:true
-            },
-            dt_nascimento_fundacao:{
-                required:true,
-                maxlength:255,
-            },
-            password:{
-                required:true,
-                minlength:6,
-                maxlength:35
-            },
-            confirmacao:{
-                required:true,
-                minlength:6,
-                maxlength:35
-            },
-        },
-        messages:{
-            name:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de 255 caracteres"
-            },
-            cpf:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de 14 caracteres"
-            },
-            email:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de 255 caracteres"
-            },
-            id_municipio:{
-                required:"Campo obrigatório"
-            },
-            dt_nascimento_fundacao:{
-                required:"Campo obrigatório",
-                maxlength:"Máximo de  caracteres 15",
-                min:"Data mínima: 01/01/1899",
-                max:"Data máxima: data de hoje",
-            },
-            password:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres",
-                maxlength:"Máximo 35 caracteres"
-            },
-            confirmacao:{
-                required:"Campo obrigatório",
-                minlength:"Minímo 6 caracteres",
-                maxlength:"Máximo 35 caracteres"
-            },
-        }
-    });
+    // $("#form").validate({
+    //     rules : {
+    //         name:{
+    //             required:true,
+    //             maxlength:255,
+    //         },
+    //         cpf:{
+    //             required:true,
+    //             maxlength:14,
+    //         },
+    //         email:{
+    //             required:true,
+    //             maxlength:255,
+    //         },
+    //         id_municipio:{
+    //             required:true
+    //         },
+    //         dt_nascimento_fundacao:{
+    //             required:true,
+    //             maxlength:255,
+    //         },
+    //         password:{
+    //             required:true,
+    //             minlength:6,
+    //             maxlength:35
+    //         },
+    //         confirmacao:{
+    //             required:true,
+    //             minlength:6,
+    //             maxlength:35
+    //         },
+    //     },
+    //     messages:{
+    //         name:{
+    //             required:"Campo obrigatório",
+    //             maxlength:"Máximo de 255 caracteres"
+    //         },
+    //         cpf:{
+    //             required:"Campo obrigatório",
+    //             maxlength:"Máximo de 14 caracteres"
+    //         },
+    //         email:{
+    //             required:"Campo obrigatório",
+    //             maxlength:"Máximo de 255 caracteres"
+    //         },
+    //         id_municipio:{
+    //             required:"Campo obrigatório"
+    //         },
+    //         dt_nascimento_fundacao:{
+    //             required:"Campo obrigatório",
+    //             maxlength:"Máximo de  caracteres 15",
+    //             min:"Data mínima: 01/01/1899",
+    //             max:"Data máxima: data de hoje",
+    //         },
+    //         password:{
+    //             required:"Campo obrigatório",
+    //             minlength:"Minímo 6 caracteres",
+    //             maxlength:"Máximo 35 caracteres"
+    //         },
+    //         confirmacao:{
+    //             required:"Campo obrigatório",
+    //             minlength:"Minímo 6 caracteres",
+    //             maxlength:"Máximo 35 caracteres"
+    //         },
+    //     }
+    // });
 
     $(document).ready(function() {
 

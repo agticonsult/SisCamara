@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Permissao;
+use App\Models\PerfilUser;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermissaosTable extends Migration
+class CreatePerfilUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,22 +14,19 @@ class CreatePermissaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('permissaos', function (Blueprint $table) {
+        Schema::create('perfil_users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->integer('id_perfil')->unsigned()->nullable();
-            $table->foreign('id_perfil')->references('id')->on('perfils');
-            $table->integer('id_grupo')->unsigned()->nullable();
-            $table->foreign('id_grupo')->references('id')->on('grupos');
+            $table->integer('id_tipo_perfil')->unsigned()->nullable();
+            $table->foreign('id_tipo_perfil')->references('id')->on('perfils');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->default(Permissao::ATIVO);
-            // $table->boolean('ativo')->nullable();
+            $table->boolean('ativo')->default(PerfilUser::ATIVO);
             $table->timestamps();
         });
     }
@@ -41,6 +38,6 @@ class CreatePermissaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissaos');
+        Schema::dropIfExists('perfil_users');
     }
 }

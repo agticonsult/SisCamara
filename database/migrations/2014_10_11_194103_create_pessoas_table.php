@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pessoa;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ class CreatePessoasTable extends Migration
         Schema::create('pessoas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->boolean('pessoaJuridica')->nullable();
-            $table->string('nomeCompleto')->nullable();
+            $table->string('nome')->nullable();
             $table->string('apelidoFantasia')->nullable();
             $table->date('dt_nascimento_fundacao')->nullable();
 
@@ -31,7 +32,8 @@ class CreatePessoasTable extends Migration
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo');
+            $table->boolean('ativo')->default(Pessoa::ATIVO);
+            // $table->boolean('ativo');
             $table->timestamps();
         });
     }

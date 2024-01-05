@@ -21,20 +21,28 @@ class Pessoa extends Model implements Auditable
 
     protected $table = 'pessoas';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
-    public function municipio()
+    public function setNomeAttribute($value)
     {
-        return $this->belongsTo(Municipio::class, 'id_municipio');
+        $this->attributes['nomeCompleto'] = trim($value);
     }
-    public function usuario(){
-        return $this->hasOne(User::class, 'id_pessoa', 'id');
-    }
-    public function organizacao(){
-        return $this->hasOne(Organizacao::class, 'id_pj', 'id');
-    }
+
+    // public function municipio()
+    // {
+    //     return $this->belongsTo(Municipio::class, 'id_municipio');
+    // }
+    // public function usuario(){
+    //     return $this->hasOne(User::class, 'id_pessoa', 'id');
+    // }
+    // public function organizacao(){
+    //     return $this->hasOne(Organizacao::class, 'id_pj', 'id');
+    // }
 
 }
 

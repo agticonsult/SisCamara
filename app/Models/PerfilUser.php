@@ -6,18 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class AnexoAto extends Model implements Auditable
+class PerfilUser extends Model implements Auditable
 {
     use HasFactory;
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome_original', 'nome_hash', 'diretorio', 'descricao', 'ehAudio', 'id_ato',
-        'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'id_user', 'id_tipo_perfil', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
+
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'anexo_atos';
+    protected $table = 'perfil_users';
 
     const ATIVO = 1;
     const INATIVO = 0;
@@ -26,11 +26,12 @@ class AnexoAto extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
-    public function ato()
+    public function usuario()
     {
-        return $this->belongsTo(Ato::class ,'id_ato');
+        return $this->belongsTo(User::class, 'id_user');
+    }
+    public function tipo_perfil()
+    {
+        return $this->belongsTo(PerfilUser::class, 'id_tipo_perfil');
     }
 }
-
-
-
