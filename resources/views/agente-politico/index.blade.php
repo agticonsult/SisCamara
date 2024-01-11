@@ -44,14 +44,14 @@
                     <tbody>
                         @foreach ($agente_politicos as $agente)
                             <tr>
-                                <td><strong>{{ $agente->id_user != null ? $agente->usuario->pessoa->nomeCompleto : 'não informado' }}</strong></td>
+                                <td><strong>{{ $agente->id_user != null ? $agente->usuario->pessoa->nome : 'não informado' }}</strong></td>
                                 <td>
                                     Início: <strong>{{ $agente->dataInicioMandato != null ? date('d/m/Y', strtotime($agente->dataInicioMandato)) : 'não informado' }} </strong><br>
                                     Fim: <strong>{{ $agente->dataFimMandato != null ? date('d/m/Y', strtotime($agente->dataFimMandato)) : 'não informado' }} </strong>
                                 </td>
                                 <td><strong>{{ $agente->cargo_eletivo->descricao }}</strong></td>
                                 <td>
-                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -82,7 +82,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -92,7 +92,7 @@
                                 {{-- Início: {{ date('d/m/Y', strtotime($agente->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($agente->fim_mandato)) }} --}}
                                 {{-- <td>{{ $agente->id_tipo_pleito != null ? $agente->tipo_pleito->descricao : 'não informado' }}</td>
                                 <td>
-                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $agente->cadastradoPorUsuario != null ? $agente->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -140,7 +140,7 @@
                                             @method('POST')
                                             <div class="modal-header btn-primary">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                    <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                    <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-footer">

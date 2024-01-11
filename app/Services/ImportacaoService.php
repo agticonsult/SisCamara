@@ -57,7 +57,7 @@ class ImportacaoService
             //nova Pessoa
             $novaPessoa = new Pessoa();
             $novaPessoa->pessoaJuridica = 0;
-            $novaPessoa->nomeCompleto = $pessoaTemp->nomeCompleto;
+            $novaPessoa->nome = $pessoaTemp->nome;
             $novaPessoa->apelidoFantasia = $pessoaTemp->apelidoFantasia;
             $novaPessoa->dt_nascimento_fundacao = $pessoaTemp->dt_nascimento_fundacao;
             $novaPessoa->cep = preg_replace('/[^0-9]/', '',$pessoaTemp->cep);

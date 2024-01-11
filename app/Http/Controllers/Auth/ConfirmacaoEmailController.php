@@ -112,7 +112,7 @@ class ConfirmacaoEmailController extends Controller
                 $details = [
                     'assunto' => 'Confirmação de email',
                     'body' => 'Segue abaixo o link',
-                    'cliente' => $user->pessoa->nomeCompleto,
+                    'cliente' => $user->pessoa->nome,
                     'link' => $link,
                 ];
 
@@ -257,7 +257,7 @@ class ConfirmacaoEmailController extends Controller
                 $details = [
                     'assunto' => 'Confirmação de email',
                     'body' => 'Segue abaixo o link',
-                    'cliente' => $user->pessoa->nomeCompleto,
+                    'cliente' => $user->pessoa->nome,
                     'link' => $link,
                 ];
 

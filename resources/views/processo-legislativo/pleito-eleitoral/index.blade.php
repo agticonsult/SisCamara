@@ -63,7 +63,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -73,7 +73,7 @@
                                 {{-- Início: {{ date('d/m/Y', strtotime($pleito->inicio_mandato)) }} - Fim: {{ date('d/m/Y', strtotime($pleito->fim_mandato)) }} --}}
                                 {{-- <td>{{ $pleito->id_tipo_pleito != null ? $pleito->tipo_pleito->descricao : 'não informado' }}</td>
                                 <td>
-                                    <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $pleito->cadastradoPorUsuario != null ? $pleito->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $pleito->created_at != null ? $pleito->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -122,7 +122,7 @@
                                             @method('POST')
                                             <div class="modal-header btn-primary">
                                                 <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                    <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                    <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
                                                 </h5>
                                             </div>
                                             <div class="modal-footer">

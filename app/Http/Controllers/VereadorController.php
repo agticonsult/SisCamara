@@ -121,7 +121,7 @@ class VereadorController extends Controller
             switch ($request->selecionar_opcao) {
                 case '1':
                     $input_cad = [
-                        'nomeCompleto' => $request->nomeCompleto,
+                        'nome' => $request->nome,
                         'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                         'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                         'email' => $request->email,
@@ -131,7 +131,7 @@ class VereadorController extends Controller
                         'telefone_celular2' => preg_replace('/[^0-9]/', '', $request->telefone_celular2)
                     ];
                     $rules_cad = [
-                        'nomeCompleto' => 'required|max:255',
+                        'nome' => 'required|max:255',
                         'cpf' => 'required|min:11|max:11',
                         'email' => 'required|email',
                         'dt_nascimento_fundacao' => 'required|max:10',
@@ -176,7 +176,7 @@ class VereadorController extends Controller
                     //Pessoa
                     $novaPessoa = new Pessoa();
                     $novaPessoa->pessoaJuridica = 0;
-                    $novaPessoa->nomeCompleto = $request->nomeCompleto;
+                    $novaPessoa->nome = $request->nome;
                     $novaPessoa->apelidoFantasia = $request->apelidoFantasia;
                     $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
                     $novaPessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
@@ -344,7 +344,7 @@ class VereadorController extends Controller
                 'dataFimMandato' => $request->dataFimMandato,
 
                 // Dados pessoais obrigatórios
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'cpf' => preg_replace('/[^0-9]/', '',$request->cpf),
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'email' => $request->email,
@@ -370,7 +370,7 @@ class VereadorController extends Controller
                 'dataFimMandato' => 'required|date',
 
                 // Dados pessoais não obrigatórios
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email',
                 'dt_nascimento_fundacao' => 'required|max:10',
@@ -426,7 +426,7 @@ class VereadorController extends Controller
                 else{
                     //Pessoa
                     $pessoa = Pessoa::find($vereador->usuario->id_pessoa);
-                    $pessoa->nomeCompleto = $request->nomeCompleto;
+                    $pessoa->nome = $request->nome;
                     $pessoa->apelidoFantasia = $request->apelidoFantasia;
                     $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
                     $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);

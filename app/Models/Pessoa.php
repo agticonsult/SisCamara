@@ -12,7 +12,7 @@ class Pessoa extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'pessoaJuridica', 'nomeCompleto', 'apelidoFantasia', 'dt_nascimento_fundacao', 'cep',
+        'pessoaJuridica', 'nome', 'apelidoFantasia', 'dt_nascimento_fundacao', 'cep',
         'endereco', 'bairro', 'numero', 'complemento', 'ponto_referencia', 'id_municipio',
         'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
@@ -30,7 +30,7 @@ class Pessoa extends Model implements Auditable
     }
     public function setNomeAttribute($value)
     {
-        $this->attributes['nomeCompleto'] = trim($value);
+        $this->attributes['nome'] = trim($value);
     }
 
     // public function municipio()

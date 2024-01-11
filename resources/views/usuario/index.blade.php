@@ -73,7 +73,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{-- <strong>{{ $usuario->cadastradoPorUsuario != null ? $usuario->cad_usuario->pessoa->nomeCompleto : 'Sistema' }}</strong> --}}
+                                        {{-- <strong>{{ $usuario->cadastradoPorUsuario != null ? $usuario->cad_usuario->pessoa->nome : 'Sistema' }}</strong> --}}
                                         <strong>{{ $usuario->created_at != null ? $usuario->created_at->format('d/m/Y H:i:s') : 'sem registro' }}</strong>
                                     </td>
                                     <td>
@@ -87,7 +87,7 @@
                                         @else
                                             <button type="button" class="btn btn-danger m-1">
                                                 Excluído por
-                                                <strong>{{ $usuario->inativadoPorUsuario != null ? $usuario->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                <strong>{{ $usuario->inativadoPorUsuario != null ? $usuario->inativadoPor->pessoa->nome : 'não informado' }}</strong>
                                                 em
                                                 <strong>{{ date('d/m/Y H:i:s', strtotime($usuario->dataInativado)) }}</strong>
                                                 <br>

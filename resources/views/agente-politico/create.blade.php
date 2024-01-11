@@ -140,7 +140,7 @@
                                                 <div class="row">
                                                     <div class="form-group col-md-12">
                                                         <label class="form-label">*Nome</label>
-                                                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ old('nomeCompleto') }}">
+                                                        <input class="form-control" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ old('nome') }}">
                                                     </div>
                                                     <div class="form-group col-md-12">
                                                         <label class="form-label">Apelido</label>
@@ -212,100 +212,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <hr>
-                                        <div class="col-md-12">
-                                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                                            <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
-                                        </div>
-                                        <br> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-md-12">
-                        <hr>
-                        <div class="col-md-12">
-                            <h5>Dados Pessoais</h5>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label class="form-label">*Nome</label>
-                                    <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ old('nomeCompleto') }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Apelido</label>
-                                    <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ old('apelidoFantasia') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*CPF</label>
-                                    <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ old('cpf') }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Data de Nascimento</label>
-                                    <input class="dataFormat form-control" type="date" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" min='1899-01-01' max='2000-13-13' value="{{ old('dt_nascimento_fundacao') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Email</label>
-                                    <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Celular/Telefone</label>
-                                    <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ old('telefone_celular') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Celular/Telefone Recado</label>
-                                    <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ old('telefone_celular2') }}">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                    <input class="form-control" type="password" name="password" id="password" placeholder="Informe uma senha" value="{{ old('password') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                    <input class="form-control" type="password" name="confirmacao" id="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <hr>
-                            <h5>Endereço</h5>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="cep">CEP</label>
-                                    <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ old('cep') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="endereco">Endereço (Rua/Avenida)</label>
-                                    <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ old('endereco') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="numero">Número</label>
-                                    <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ old('numero') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="bairro">Bairro</label>
-                                    <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ old('bairro') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="complemento">Complemento</label>
-                                    <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ old('complemento') }}">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="ponto_referencia">Ponto de Referência</label>
-                                    <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ old('ponto_referencia') }}">
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                    </div> --}}
+
                 </div>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
@@ -475,7 +387,7 @@
                     $('#selectUser').addClass('d-none');
 
                     // Campos add required
-                    $('#nomeCompleto').attr('required', true);
+                    $('#nome').attr('required', true);
                     $('#cpf').attr('required', true);
                     $('#dt_nascimento_fundacao').attr('required', true);
                     $('#email').attr('required', true);
@@ -494,7 +406,7 @@
                     $('#id_usuario').attr('required', true);
 
                     // Campos add required FALSE
-                    $('#nomeCompleto').attr('required', false);
+                    $('#nome').attr('required', false);
                     $('#cpf').attr('required', false);
                     $('#dt_nascimento_fundacao').attr('required', false);
                     $('#email').attr('required', false);

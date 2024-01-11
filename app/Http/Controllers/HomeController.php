@@ -75,7 +75,7 @@ class HomeController extends Controller
                 'email' => $request->email,
 
                 //valiação dados pessoais
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'apelidoFantasia' => $request->apelidoFantasia,
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'cep' => $request->cep,
@@ -91,7 +91,7 @@ class HomeController extends Controller
                 'email' => 'required|email',
 
                 //Pessoa
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'apelidoFantasia' => 'max:255',
                 'dt_nascimento_fundacao' => 'required|date',
                 'cep' => 'max:255',
@@ -163,7 +163,7 @@ class HomeController extends Controller
             if($user->id_pessoa){
                 // $pessoa = Pessoa::where('id', '=', $user->id_pessoa)->first();
                 $pessoa = Pessoa::find($user->id_pessoa);
-                $pessoa->nomeCompleto = $request->nomeCompleto;
+                $pessoa->nome = $request->nome;
                 $pessoa->apelidoFantasia = $request->apelidoFantasia;
                 $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
                 $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);

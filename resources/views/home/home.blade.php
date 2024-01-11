@@ -75,7 +75,7 @@
                 </form>
                 <br>
                 <div class="cpf text-muted mb-2">{{ $user->cpf }}</div>
-                <h4 class="mb-2 underline"><strong>{{ $user->pessoa->nomeCompleto }}</strong></h4>
+                <h4 class="mb-2 underline"><strong>{{ $user->pessoa->nome }}</strong></h4>
                 <h4 class="mb-0">{{ $user->email }}</h4>
                 <div class="mt-5">
                     <ul class="navbar-nav" style="text-align: center">
@@ -116,7 +116,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-12">
                                         <label class="form-label">*Nome</label>
-                                        <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe seu nome" value="{{ $user->pessoa->nomeCompleto != null ? $user->pessoa->nomeCompleto : old('nomeCompleto') }}">
+                                        <input class="form-control" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ $user->pessoa->nome != null ? $user->pessoa->nome : old('nome') }}">
                                     </div>
                                     <div class="form-group col-md-12">
                                         <label class="form-label">Apelido</label>
@@ -245,7 +245,7 @@
 
     $("#form").validate({
         rules : {
-            nomeCompleto:{
+            nome:{
                 required:true
             },
             cpf:{
@@ -262,7 +262,7 @@
             },
         },
         messages:{
-            nomeCompleto:{
+            nome:{
                 required:"Campo obrigatório"
             },
             cpf:{

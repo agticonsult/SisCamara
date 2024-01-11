@@ -87,7 +87,7 @@ class UserController extends Controller
 
             //validação dos campos
             $input = [
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'email' => $request->email,
@@ -96,7 +96,7 @@ class UserController extends Controller
                 'id_perfil' => $request->id_perfil,
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email',
                 'dt_nascimento_fundacao' => 'required|max:10',
@@ -138,7 +138,7 @@ class UserController extends Controller
 
             //nova Pessoa
             $novaPessoa = new Pessoa();
-            $novaPessoa->nomeCompleto = $request->nomeCompleto;
+            $novaPessoa->nome = $request->nome;
             $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
             $novaPessoa->pessoaJuridica = 0;
             $novaPessoa->ativo = 1;
@@ -235,13 +235,13 @@ class UserController extends Controller
 
             //validação dos campos
             $input = [
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'email' => $request->email
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email',
                 'dt_nascimento_fundacao' => 'required|max:10'
@@ -289,7 +289,7 @@ class UserController extends Controller
 
             // pessoa
             $pessoa = Pessoa::find($usuario->id_pessoa);
-            $pessoa->nomeCompleto = $request->nomeCompleto;
+            $pessoa->nome = $request->nome;
             $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
             $pessoa->ativo = 1;
             $pessoa->save();

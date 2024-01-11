@@ -132,7 +132,7 @@ crossorigin=""/>
                                         {{ $f->funcionalidade->id_tipo_funcionalidade != null ? $f->funcionalidade->tipo_funcionalidade->descricao : 'tipo de funcionalidade não informada' }}
                                     </td>
                                     <td>
-                                        <strong>{{ $f->cadastradoPorUsuario != null ? $f->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                        <strong>{{ $f->cadastradoPorUsuario != null ? $f->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                         em <strong>{{ $f->created_at != null ? $f->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                     </td>
                                     @switch($f->ativo)
@@ -149,7 +149,7 @@ crossorigin=""/>
                                             <td>
                                                 <button type="button" class="btn btn-info">
                                                     Desativado
-                                                    por <strong>{{ $f->inativadoPorUsuario != null ? $f->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                    por <strong>{{ $f->inativadoPorUsuario != null ? $f->inativadoPor->pessoa->nome : 'não informado' }}</strong>
                                                     em <strong>{{ date('d/m/Y H:i:s', strtotime($f->dataInativado)) }}</strong>
                                                 </button>
                                             </td>

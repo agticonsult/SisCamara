@@ -161,6 +161,15 @@ class User extends Authenticatable
         }
         return true;
     }
+    public function usuarioInterno()
+    {
+        $eh = PerfilUser::where('id_user', '=', $this->id)->where('id_tipo_perfil', '=', 4)->where('ativo', '=', 1)->first();
+
+        if (!$eh){
+            return false;
+        }
+        return true;
+    }
     public function foto()
     {
         $resposta = array();

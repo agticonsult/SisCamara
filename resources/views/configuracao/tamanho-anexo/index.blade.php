@@ -68,7 +68,7 @@
                                             Auth::user()->temPermissao('Filesize', 'Listagem') == 1     // mudar a permissão para usuario
                                         )
                                         <td>
-                                            <strong>{{ $files->cadastradoPorUsuario != null ? $files->cad_usuario->pessoa->nomeCompleto : 'cadastrado pelo sistema' }}</strong>
+                                            <strong>{{ $files->cadastradoPorUsuario != null ? $files->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                             em <strong>{{ $files->created_at != null ? $files->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                         </td>
                                         @endif

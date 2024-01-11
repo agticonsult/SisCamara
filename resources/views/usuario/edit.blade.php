@@ -101,7 +101,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Nome</label>
-                                <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('nomeCompleto') }}">
+                                <input class="form-control" type="text" name="nome" id="nome" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('nome') }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Email</label>
@@ -165,7 +165,7 @@
                     <tbody>
                         @foreach ($usuario->permissoes as $permissao)
                             <tr>
-                                <td>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nomeCompleto : 'não informado' }}</td>
+                                <td>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nome : 'não informado' }}</td>
                                 <td class="cpf">{{ $permissao->user->cpf != null ? $permissao->user->cpf : 'não informado' }}</td>
                                 <td>{{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</td>
                                 <td>
@@ -174,7 +174,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <strong>{{ $permissao->cadastradoPorUsuario != null ? $permissao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $permissao->cadastradoPorUsuario != null ? $permissao->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $permissao->created_at != null ? $permissao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -187,7 +187,7 @@
                                         @default
                                             <button type="button" class="btn btn-info">
                                                 Desativado
-                                                por <strong>{{ $permissao->inativadoPorUsuario != null ? $permissao->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                por <strong>{{ $permissao->inativadoPorUsuario != null ? $permissao->inativadoPor->pessoa->nome : 'não informado' }}</strong>
                                                 em <strong>{{ date('d/m/Y H:i:s', strtotime($permissao->dataInativado)) }}</strong>
                                             </button>
                                             @break
@@ -229,7 +229,7 @@
 
     $("#form").validate({
         rules : {
-            nomeCompleto:{
+            nome:{
                 required:true
             },
             cpf:{
@@ -246,7 +246,7 @@
             // }
         },
         messages:{
-            nomeCompleto:{
+            nome:{
                 required:"Campo obrigatório"
             },
             cpf:{

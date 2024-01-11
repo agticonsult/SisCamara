@@ -74,7 +74,7 @@
                                     <img src="{{ asset('img/user-avatar2.png') }}" class="img-fluid rounded-circle mb-2" width="70px" height="70px" id="imgPhoto">
                                 @endif
                             </td>
-                            <td style="text-align: center">{{ $vereador_votacao->vereador->usuario->pessoa->nomeCompleto }}</td>
+                            <td style="text-align: center">{{ $vereador_votacao->vereador->usuario->pessoa->nome }}</td>
                             <td style="text-align: center">
                                 @if ($votacao->votacaoEncerrada != 1)
                                     @if ($votacao->votacaoIniciada != 1)
@@ -88,7 +88,7 @@
                                                     <button class="btn btn-light" style="width: 100%">
                                                         Votação autorizada
                                                         em <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->autorizadaEm)) }}</strong>
-                                                        por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nomeCompleto }}</strong> <br>
+                                                        por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nome }}</strong> <br>
                                                         <strong>--AGUARDANDO VOTO--</strong>
                                                     </button>
                                                 @endif
@@ -124,7 +124,7 @@
                                             <button class="btn btn-light">
                                                 Votação autorizada
                                                 em <strong>{{ date('d/m/Y H:i:s', strtotime($vereador_votacao->autorizadaEm)) }}</strong>
-                                                por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nomeCompleto }}</strong> <br>
+                                                por <strong>{{ $vereador_votacao->autorizadaPor->pessoa->nome }}</strong> <br>
                                                 <strong>--AGUARDANDO VOTO--</strong>
                                             </button>
                                         @endif

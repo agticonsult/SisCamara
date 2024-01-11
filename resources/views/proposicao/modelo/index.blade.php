@@ -44,7 +44,7 @@
                         <tr>
                             <td>{{ $modelo->assunto }}</td>
                             <td>
-                                <strong>{{ $modelo->cadastradoPorUsuario != null ? $modelo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                <strong>{{ $modelo->cadastradoPorUsuario != null ? $modelo->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                 em <strong>{{ $modelo->created_at != null ? $modelo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                             </td>
                             <td>

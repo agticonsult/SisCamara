@@ -37,7 +37,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label class="form-label">*Nome</label>
-                                <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" placeholder="Informe o nome" value="{{ old('nomeCompleto') }}">
+                                <input class="form-control" type="text" name="nome" id="nome" placeholder="Informe o nome" value="{{ old('nome') }}">
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="form-label">*CPF</label>
@@ -121,7 +121,7 @@
 
     $("#form").validate({
         rules : {
-            nomeCompleto:{
+            nome:{
                 required:true
             },
             cpf:{
@@ -148,7 +148,7 @@
             }
         },
         messages:{
-            nomeCompleto:{
+            nome:{
                 required:"Campo obrigatório"
             },
             cpf:{

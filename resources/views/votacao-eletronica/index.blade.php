@@ -52,7 +52,7 @@
                                 <td>{{ $votacao->id_proposicao != null ? $votacao->proposicao->titulo : 'não informado' }}</td>
                                 <td>Início: <strong>{{ $votacao->legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $votacao->legislatura->fim_mandato }}</strong></td>
                                 <td>
-                                    <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $votacao->cadastradoPorUsuario != null ? $votacao->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $votacao->created_at != null ? $votacao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>{{ $votacao->id_status_votacao != null ? $votacao->status->descricao : 'não iniciada' }}</td>

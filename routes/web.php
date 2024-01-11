@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
+use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\ProposicaoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
@@ -144,8 +145,6 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
     });
-
-
 
     // Processo Legilativo
     Route::group(['prefix' => '/processo-legislativo', 'as' => 'processo_legislativo.'], function() {
@@ -290,6 +289,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Configuração
     Route::group(['prefix' => '/configuracao', 'as' => 'configuracao.'], function() {
+
+        //Departamento
+        Route::group(['prefix' => '/departamento', 'as' => 'departamento.'], function() {
+            Route::get('/index', [DepartamentoController::class, 'index'])->name('index');
+            // Route::get('/create', [DepartamentoController::class, 'create'])->name('create');
+            Route::post('/store', [DepartamentoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [DepartamentoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [DepartamentoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [DepartamentoController::class, 'destroy'])->name('destroy');
+        });
 
         //Assunto do Ato
         Route::group(['prefix' => '/assunto-ato', 'as' => 'assunto_ato.'], function() {

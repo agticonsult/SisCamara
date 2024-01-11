@@ -116,7 +116,7 @@ class PessoaController extends Controller
 
             $input = [
                 //dados pessoais
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'apelidoFantasia' => $request->apelidoFantasia,
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
                 'pessoaJuridica' => $request->pessoaJuridica,
@@ -133,7 +133,7 @@ class PessoaController extends Controller
             $rules = [
 
                 //dados pessoais
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'apelidoFantasia' => 'max:255',
                 'dt_nascimento_fundacao' => 'required|max:255',
                 'pessoaJuridica' => 'required|max:255',
@@ -154,7 +154,7 @@ class PessoaController extends Controller
             //Nova Pessoa
             $novaPessoa = new Pessoa();
             $novaPessoa->pessoaJuridica = $request->pessoaJuridica;
-            $novaPessoa->nomeCompleto = $request->nomeCompleto;
+            $novaPessoa->nome = $request->nome;
             $novaPessoa->apelidoFantasia = $request->apelidoFantasia;
             $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
             $novaPessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
@@ -427,7 +427,7 @@ class PessoaController extends Controller
 
             $input = [
                 //dados pessoais
-                'nomeCompleto' => $request->nomeCompleto,
+                'nome' => $request->nome,
                 'apelidoFantasia' => $request->apelidoFantasia,
                 'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
 
@@ -443,7 +443,7 @@ class PessoaController extends Controller
             $rules = [
 
                 //dados pessoais
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'apelidoFantasia' => 'max:255',
                 'dt_nascimento_fundacao' => 'max:255',
 
@@ -461,7 +461,7 @@ class PessoaController extends Controller
             $validarUsuario->validate();
 
             $pessoa = Pessoa::find($id);
-            $pessoa->nomeCompleto = $request->nomeCompleto;
+            $pessoa->nome = $request->nome;
             $pessoa->apelidoFantasia = $request->apelidoFantasia;
             $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
             $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);

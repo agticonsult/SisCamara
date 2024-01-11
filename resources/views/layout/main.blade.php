@@ -239,6 +239,7 @@
                         <ul id="configuracao"
                             class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ||
                             Route::current()->getPrefix() == 'configuracao/assunto-ato' ||
+                            Route::current()->getPrefix() == 'configuracao/departamento' ||
                             Route::current()->getPrefix() == 'configuracao/autoridade' ||
                             Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
                             Route::current()->getPrefix() == 'configuracao/publicacao-ato' ||
@@ -249,6 +250,12 @@
                                 class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/assunto-ato' ? 'active' : null }}">
                                 <a class="sidebar-link "
                                     href="{{ route('configuracao.assunto_ato.index') }}">Assuntos
+                                </a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/departamento' ? 'active' : null }}">
+                                <a class="sidebar-link "
+                                    href="{{ route('configuracao.departamento.index') }}">Departamento
                                 </a>
                             </li>
                             <li

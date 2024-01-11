@@ -48,7 +48,7 @@
                             <td>{{ $proposicao->id_localizacao != null ? $proposicao->localizacao->descricao : 'não informado' }}</td>
                             <td>{{ $proposicao->id_status != null ? $proposicao->status->descricao : 'não informado' }}</td>
                             <td>
-                                <strong>{{ $proposicao->cadastradoPorUsuario != null ? $proposicao->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                <strong>{{ $proposicao->cadastradoPorUsuario != null ? $proposicao->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                 em <strong>{{ $proposicao->created_at != null ? $proposicao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                             </td>
                             <td>

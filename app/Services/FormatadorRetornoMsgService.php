@@ -59,7 +59,7 @@ class FormatadorRetornoMsgService {
         if ($chat->participantes_especificos != null) {
             foreach ($chat->participantes_especificos as $pe) {
                 if ($pe->id_mensagem == $this->mensagem->id) {
-                    array_push($p_especificos, $pe->user->pessoa->nomeCompleto);
+                    array_push($p_especificos, $pe->user->pessoa->nome);
                     array_push($p_especificos_all, $pe);
                 }
             }
@@ -87,7 +87,7 @@ class FormatadorRetornoMsgService {
             'dm' => $this->mensagem->created_at->format('d/m'),
             'hia' => $this->mensagem->created_at->format('H:i a'),
             'enviadoPorId' => $this->mensagem->enviadoPorUsuario,
-            'enviadoPor' => $this->mensagem->enviadoPor->pessoa->nomeCompleto,
+            'enviadoPor' => $this->mensagem->enviadoPor->pessoa->nome,
             'envioEspecifico' => $this->mensagem->envioEspecifico,
             'p_especificos' => $p_especificos,
             'p_especificos_all' => $p_especificos_all,

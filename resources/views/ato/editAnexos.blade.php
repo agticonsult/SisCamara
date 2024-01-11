@@ -117,7 +117,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <strong>{{ $anexo->cadastradoPorUsuario != null ? $anexo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                    <strong>{{ $anexo->cadastradoPorUsuario != null ? $anexo->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                                     em <strong>{{ $anexo->created_at != null ? $anexo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                                 </td>
                                                 @switch($anexo->ativo)
@@ -133,7 +133,7 @@
                                                         <td>
                                                             <button type="button" class="btn btn-info">
                                                                 Desativado
-                                                                por <strong>{{ $anexo->inativadoPorUsuario != null ? $anexo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                                por <strong>{{ $anexo->inativadoPorUsuario != null ? $anexo->inativadoPor->pessoa->nome : 'não informado' }}</strong>
                                                                 em <strong>{{ date('d/m/Y H:i:s', strtotime($anexo->dataInativado)) }}</strong>
                                                             </button>
                                                         </td>

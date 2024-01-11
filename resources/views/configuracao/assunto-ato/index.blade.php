@@ -90,7 +90,7 @@
                                         <tr>
                                             <td>{{ $assunto->descricao != null ? $assunto->descricao : 'não informado' }}</td>
                                             <td>
-                                                <strong>{{ $assunto->cadastradoPorUsuario != null ? $assunto->cad_usuario->pessoa->nomeCompleto : 'cadastrado pelo sistema' }}</strong>
+                                                <strong>{{ $assunto->cadastradoPorUsuario != null ? $assunto->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                                 em
                                                 <strong>{{ $assunto->created_at != null ? $assunto->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                             </td>

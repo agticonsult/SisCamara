@@ -82,7 +82,7 @@
                                     <tbody>
                                         @foreach ($vereadorVotacaos as $vereadorVotacao)
                                             <tr>
-                                                <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nomeCompleto : 'não informado' }}
+                                                <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nome : 'não informado' }}
                                                 </td>
                                                 <td>
                                                     <button

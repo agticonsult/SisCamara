@@ -47,7 +47,7 @@ class FamiliaService
             $resposta = [];
 
             $input = [
-                'nomeCompleto' => $dados['nomeCompleto'],
+                'nome' => $dados['nome'],
                 'cpf' => preg_replace('/[^0-9]/', '', $dados['cpf']),
                 'dt_nascimento_fundacao' => $dados['dt_nascimento_fundacao'],
                 'id_relacao_familiar' => $dados['id_relacao_familiar'],
@@ -57,7 +57,7 @@ class FamiliaService
                 'part_ativ_prod' => $dados['part_ativ_prod'],
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'id_relacao_familiar' => 'required|integer|max:255',
@@ -93,7 +93,7 @@ class FamiliaService
                 ->where('composicao_familiars.id_cliente', '=', $id_cliente)
                 ->where(function (Builder $query) use ($dados) {
                         return
-                            $query->where('pessoas.nomeCompleto', '=', $dados['nomeCompleto'])
+                            $query->where('pessoas.nome', '=', $dados['nome'])
                                 ->orWhere('composicao_familiars.cpf', '=', preg_replace('/[^0-9]/', '', $dados['cpf']));
                     })
                 ->where('composicao_familiars.ativo', '=', 1)
@@ -207,7 +207,7 @@ class FamiliaService
             else{
                 $pessoa = new Pessoa();
                 $pessoa->pessoaJuridica = 0;
-                $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                $pessoa->nome = $dados['nome'];
                 $pessoa->id_municipio = $agricultor->usuario->pessoa->id_municipio;
                 $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                 $pessoa->cadastradoPorUsuario = Auth::user()->id;
@@ -293,7 +293,7 @@ class FamiliaService
             $resposta = [];
 
             $input = [
-                'nomeCompleto' => $dados['nomeCompleto'],
+                'nome' => $dados['nome'],
                 'cpf' => preg_replace('/[^0-9]/', '', $dados['cpf']),
                 'dt_nascimento_fundacao' => $dados['dt_nascimento_fundacao'],
                 'id_relacao_familiar' => $dados['id_relacao_familiar'],
@@ -303,7 +303,7 @@ class FamiliaService
                 'part_ativ_prod' => $dados['part_ativ_prod'],
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'id_relacao_familiar' => 'required|integer|max:255',
@@ -462,7 +462,7 @@ class FamiliaService
                         // era usuário e agora não é mais
                         $pessoa = new Pessoa();
                         $pessoa->pessoaJuridica = 0;
-                        $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                        $pessoa->nome = $dados['nome'];
                         $pessoa->id_municipio = $agricultor->usuario->pessoa->id_municipio;
                         $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                         $pessoa->cadastradoPorUsuario = Auth::user()->id;
@@ -472,7 +472,7 @@ class FamiliaService
                     else{
                         // não era e continua não sendo usuário
                         $pessoa = Pessoa::find($familiar->id_pessoa);
-                        $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                        $pessoa->nome = $dados['nome'];
                         $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                         $pessoa->save();
                     }
@@ -2824,7 +2824,7 @@ class FamiliaService
             $resposta = [];
 
             $input = [
-                'nomeCompleto' => $dados['nomeCompleto'],
+                'nome' => $dados['nome'],
                 'cpf' => preg_replace('/[^0-9]/', '', $dados['cpf']),
                 'dt_nascimento_fundacao' => $dados['dt_nascimento_fundacao'],
                 'id_relacao_familiar' => $dados['id_relacao_familiar'],
@@ -2834,7 +2834,7 @@ class FamiliaService
                 'part_ativ_prod' => $dados['part_ativ_prod'],
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'id_relacao_familiar' => 'required|integer|max:255',
@@ -2870,7 +2870,7 @@ class FamiliaService
                 ->where('composicao_familiars.id_cliente', '=', $id_cliente)
                 ->where(function (Builder $query) use ($dados) {
                         return
-                            $query->where('pessoas.nomeCompleto', '=', $dados['nomeCompleto'])
+                            $query->where('pessoas.nome', '=', $dados['nome'])
                                 ->orWhere('composicao_familiars.cpf', '=', preg_replace('/[^0-9]/', '', $dados['cpf']));
                     })
                 ->where('composicao_familiars.ativo', '=', 1)
@@ -2984,7 +2984,7 @@ class FamiliaService
             else{
                 $pessoa = new Pessoa();
                 $pessoa->pessoaJuridica = 0;
-                $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                $pessoa->nome = $dados['nome'];
                 $pessoa->id_municipio = $agricultor->usuario->pessoa->id_municipio;
                 $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                 $pessoa->cadastradoPorUsuario = Auth::user()->id;
@@ -3070,7 +3070,7 @@ class FamiliaService
             $resposta = [];
 
             $input = [
-                'nomeCompleto' => $dados['nomeCompleto'],
+                'nome' => $dados['nome'],
                 'cpf' => preg_replace('/[^0-9]/', '', $dados['cpf']),
                 'dt_nascimento_fundacao' => $dados['dt_nascimento_fundacao'],
                 'id_relacao_familiar' => $dados['id_relacao_familiar'],
@@ -3080,7 +3080,7 @@ class FamiliaService
                 'part_ativ_prod' => $dados['part_ativ_prod'],
             ];
             $rules = [
-                'nomeCompleto' => 'required|max:255',
+                'nome' => 'required|max:255',
                 'cpf' => 'required|min:11|max:11',
                 'dt_nascimento_fundacao' => 'required|max:10',
                 'id_relacao_familiar' => 'required|integer|max:255',
@@ -3239,7 +3239,7 @@ class FamiliaService
                         // era usuário e agora não é mais
                         $pessoa = new Pessoa();
                         $pessoa->pessoaJuridica = 0;
-                        $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                        $pessoa->nome = $dados['nome'];
                         $pessoa->id_municipio = $agricultor->usuario->pessoa->id_municipio;
                         $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                         $pessoa->cadastradoPorUsuario = Auth::user()->id;
@@ -3249,7 +3249,7 @@ class FamiliaService
                     else{
                         // não era e continua não sendo usuário
                         $pessoa = Pessoa::find($familiar->id_pessoa);
-                        $pessoa->nomeCompleto = $dados['nomeCompleto'];
+                        $pessoa->nome = $dados['nome'];
                         $pessoa->dt_nascimento_fundacao = $dados['dt_nascimento_fundacao'];
                         $pessoa->save();
                     }

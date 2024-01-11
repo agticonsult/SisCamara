@@ -226,7 +226,7 @@ class LoginController extends Controller
                 return $this->success([
                     'token' => $token,
                     'id' => $user->id,
-                    'name' => $user->pessoa->nomeCompleto,
+                    'name' => $user->pessoa->nome,
                     'email' => $user->email,
                     'foto' => $path,
                     'ehCliente' => $ehCliente,

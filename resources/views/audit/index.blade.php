@@ -50,7 +50,7 @@
                                 <select name="user_id" class="form-control select2">
                                     <option value="" selected disabled>--Selecione--</option>
                                     @foreach ($users as $u)
-                                        <option value="{{ $u->id }}">{{ $u->pessoa->nomeCompleto }} - {{ $u->email != null ? $u->email : 'email não cadastrado' }}</option>
+                                        <option value="{{ $u->id }}">{{ $u->pessoa->nome }} - {{ $u->email != null ? $u->email : 'email não cadastrado' }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -109,7 +109,7 @@
                                         <td >{{ json_encode($audit->new_values) }}</td> --}}
                                         {{-- <td>{{ $audit->created_at->format('d/m/Y H:i:s') }}</td> --}}
                                         <td>
-                                            <strong>{{ $audit->user_id != null ? $audit->usuario->pessoa->nomeCompleto : '-' }}</strong>
+                                            <strong>{{ $audit->user_id != null ? $audit->usuario->pessoa->nome : '-' }}</strong>
                                             em <strong>{{ $audit->created_at->format('d/m/Y H:i:s') }}</strong>
                                         </td>
                                     </tr>

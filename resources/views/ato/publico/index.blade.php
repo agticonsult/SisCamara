@@ -228,7 +228,7 @@
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                <strong style="font-size: 1.2rem">Excluir <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                                <strong style="font-size: 1.2rem">Excluir <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">
@@ -257,7 +257,7 @@
                                                         @method('POST')
                                                         <div class="modal-header btn-primary">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                                <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                                <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
                                                             </h5>
                                                         </div>
                                                         <div class="modal-footer">

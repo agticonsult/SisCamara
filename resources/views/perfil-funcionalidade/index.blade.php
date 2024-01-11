@@ -172,7 +172,7 @@
                                             @endif
                                         </td> --}}
                                         <td>
-                                            <strong>{{ $pf->cadastradoPorUsuario != null ? $pf->cad_usuario->pessoa->nomeCompleto : 'cadastrado pelo sistema' }}</strong>
+                                            <strong>{{ $pf->cadastradoPorUsuario != null ? $pf->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                             em <strong>{{ $pf->created_at != null ? $pf->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                         </td>
                                         {{-- <td>

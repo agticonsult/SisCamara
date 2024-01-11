@@ -112,7 +112,7 @@
                                 <td>{{ $pleito_cargo->id }}</td>
                                 <td>{{ $pleito_cargo->cargo_eletivo->descricao }}</td>
                                 <td>
-                                    <strong>{{ $pleito_cargo->cadastradoPorUsuario != null ? $pleito_cargo->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                    <strong>{{ $pleito_cargo->cadastradoPorUsuario != null ? $pleito_cargo->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $pleito_cargo->created_at != null ? $pleito_cargo->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
@@ -123,7 +123,7 @@
                                     @else
                                         <button type="button" class="btn btn-info">
                                             Desativado
-                                            por <strong>{{ $pleito_cargo->inativadoPorUsuario != null ? $pleito_cargo->inativadoPor->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                            por <strong>{{ $pleito_cargo->inativadoPorUsuario != null ? $pleito_cargo->inativadoPor->pessoa->nome : 'não informado' }}</strong>
                                             em <strong>{{ date('d/m/Y H:i:s', strtotime($pleito_cargo->dataInativado)) }}</strong>
                                         </button>
                                     @endif

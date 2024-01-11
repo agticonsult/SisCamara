@@ -93,7 +93,7 @@
                                         <tr>
                                             <td>Início: <strong>{{ $legislatura->inicio_mandato }}</strong> - Fim: <strong>{{ $legislatura->fim_mandato }}</strong></td>
                                             <td>
-                                                <strong>{{ $legislatura->cadastradoPorUsuario != null ? $legislatura->cad_usuario->pessoa->nomeCompleto : 'não informado' }}</strong>
+                                                <strong>{{ $legislatura->cadastradoPorUsuario != null ? $legislatura->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                                 em <strong>{{ $legislatura->created_at != null ? $legislatura->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                             </td>
                                             <td>

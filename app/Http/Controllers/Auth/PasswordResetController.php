@@ -119,7 +119,7 @@ class PasswordResetController extends Controller
                 $details = [
                     'assunto' => 'Alteração de senha',
                     'body' => 'Segue abaixo o link',
-                    'cliente' => $user->pessoa->nomeCompleto,
+                    'cliente' => $user->pessoa->nome,
                     'link' => $link,
                 ];
 
@@ -215,7 +215,7 @@ class PasswordResetController extends Controller
                 $details = [
                     'assunto' => 'Alteração de senha',
                     'body' => 'Segue abaixo o link',
-                    'cliente' => $user->pessoa->nomeCompleto,
+                    'cliente' => $user->pessoa->nome,
                     'link' => $link,
                 ];
 
