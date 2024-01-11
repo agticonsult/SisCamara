@@ -44,7 +44,7 @@
                             <input class="form-control" type="text" name="permissao_id" id="permissao_id" hidden>
                             <div class="modal-body col-md-6">
                                 <label for="usuario">Usuário</label>
-                                <input class="form-control" type="text" name="usuario" value="{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : old('usuario') }}" readonly>
+                                <input class="form-control" type="text" name="usuario" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('usuario') }}" readonly>
                             </div>
                             <div class="modal-body col-md-6">
                                 <label for="permissao_descricao">Perfil</label>
@@ -101,7 +101,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Nome</label>
-                                <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" value="{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : old('nomeCompleto') }}">
+                                <input class="form-control" type="text" name="nomeCompleto" id="nomeCompleto" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('nomeCompleto') }}">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Email</label>

@@ -33,7 +33,6 @@ class AtoController extends Controller
             }
 
             $atos = Ato::where('ativo', '=', Ato::ATIVO)->get();
-            // dd($atos);
 
             return view('ato.index', compact('atos'));
         }
@@ -519,7 +518,7 @@ class AtoController extends Controller
             }
 
             return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');
-            
+
         }
         catch (\Exception $ex) {
             $erro = new ErrorLog();

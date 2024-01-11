@@ -198,7 +198,7 @@ class RegistrarController extends Controller
 
             Permissao::create([
                 'id_user' => $novoUsuario->id,
-                'id_perfil' => 2,
+                'id_perfil' => 3,
                 'cadastradoPorUsuario' => $novoUsuario->id,
                 // 'ativo' => Permissao::ATIVO //padrão diretamente da migration
             ]);

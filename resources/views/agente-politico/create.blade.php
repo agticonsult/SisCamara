@@ -98,7 +98,7 @@
                         <select name="id_usuario" class="form-control select2">
                             <option value="" selected disabled>-- Selecione --</option>
                             @foreach ($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}" {{ old('id_usuario') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nomeCompleto }}</option>
+                                <option value="{{ $usuario->id }}" {{ old('id_usuario') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
                             @endforeach
                         </select>
                     </div>

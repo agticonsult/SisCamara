@@ -49,7 +49,7 @@
                         <tbody>
                             @foreach ($usuarios as $usuario)
                                 <tr>
-                                    <td>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}
+                                    <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}
                                     </td>
                                     <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
                                     <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
@@ -111,7 +111,7 @@
                                                 @method('POST')
                                                 <div class="modal-header btn-danger">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                        Excluir: <strong>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</strong> - <strong>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</strong>?
+                                                        Excluir: <strong>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</strong> - <strong>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</strong>?
                                                     </h5>
                                                 </div>
                                                 <div class="modal-body">
@@ -146,7 +146,7 @@
                                                     </h5>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Deseja desbloquear o usuário: <strong>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</strong>?
+                                                    Deseja desbloquear o usuário: <strong>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</strong>?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -171,7 +171,7 @@
                                                 <div class="modal-header btn-primary">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
                                                         <strong style="font-size: 1.2rem">Recadastrar
-                                                            <i>{{ $usuario->pessoa->nomeCompleto != null ? $usuario->pessoa->nomeCompleto : 'não informado' }}</i></strong>
+                                                            <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
                                                     </h5>
                                                 </div>
                                                 <div class="modal-footer">
