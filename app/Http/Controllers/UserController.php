@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Models\Agricultor;
 use App\Models\ErrorLog;
 use App\Models\Estado;
@@ -11,6 +12,7 @@ use App\Models\PerfilUser;
 use App\Models\Permissao;
 use App\Models\Pessoa;
 use App\Models\User;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Services\ValidadorCPFService;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
@@ -39,17 +42,12 @@ class UserController extends Controller
                 ->orderBy('users.ativo', 'asc')
                 ->orderBy('pessoas.nome', 'asc')
                 ->get();
+
             return view('usuario.index', compact('usuarios'));
+
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -61,134 +59,63 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $perfils = Perfil::where('ativo', '=', 1)->get();
+            $perfils = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
 
             return view('usuario.create', compact('perfils'));
+
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         try {
-            if (Auth::user()->temPermissao('User', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
-
-            //validação dos campos
-            $input = [
-                'nome' => $request->nome,
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
-                'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
-                'email' => $request->email,
-                'password' => $request->password,
-                'confirmacao' => $request->confirmacao,
-                'id_perfil' => $request->id_perfil,
-            ];
-            $rules = [
-                'nome' => 'required|max:255',
-                'cpf' => 'required|min:11|max:11',
-                'email' => 'required|email',
-                'dt_nascimento_fundacao' => 'required|max:10',
-                'password' => 'required|min:6|max:35',
-                'confirmacao' => 'required|min:6|max:35',
-                'id_perfil' => 'required',
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             //verifica se a confirmação de senha estão ok
             if($request->password != $request->confirmacao){
                 return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
             }
 
-            //varifica se já existe um email ativo cadaastrado no BD
-            // $verifica_user = User::where('email', '=', $request->email)
-            //     ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-            //     ->select('email', 'cpf')
-            //     ->first();
-            $verifica_user = User::where(function (Builder $query) use ($request) {
-                return
-                    $query->where('email', '=', $request->email)
-                        ->orWhere('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf));
-                    })
-                ->select('id', 'email', 'cpf')
-                ->first();
-
-
-            //existe um email cadastrado?
-            if($verifica_user){
-                return redirect()->back()->with('erro', 'Já existe um usuário cadastrado com esse email e/ou CPF.')->withInput();
-            }
-
-            if (!ValidadorCPFService::ehValido($request->cpf)) {
-                return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
-            }
-
             //nova Pessoa
-            $novaPessoa = new Pessoa();
-            $novaPessoa->nome = $request->nome;
-            $novaPessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
-            $novaPessoa->pessoaJuridica = 0;
-            $novaPessoa->ativo = 1;
-            $novaPessoa->save();
+            $novaPessoa = Pessoa::create($request->validated() + [
+                'pessoaJuridica' => 0,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             //novo Usuário
-            $novoUsuario = new User();
-            $novoUsuario->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
-            $novoUsuario->email = $request->email;
-            $novoUsuario->password = Hash::make($request->password);
-            $novoUsuario->id_pessoa = $novaPessoa->id;
-            $novoUsuario->tentativa_senha = 0;
-            $novoUsuario->bloqueadoPorTentativa = 0;
-            $novoUsuario->confirmacao_email = 1;
-            $novoUsuario->envio_email_confirmacao = 0;
-            $novoUsuario->ativo = 1;
-            $novoUsuario->save();
+            $novoUsuario = User::create($request->validated() + [
+                'id_pessoa' => $novaPessoa->id,
+                'bloqueadoPorTentativa' => 0,
+                'confirmacao_email' => 1,
+            ]);
 
             $id_perfils = $request->id_perfil;
             foreach($id_perfils as $id_perf){
 
                 $perfil = Perfil::where('id', '=', $id_perf)->where('ativo', '=', 1)->first();
                 if ($perfil){
-                    $permissao = new Permissao();
-                    $permissao->id_user = $novoUsuario->id;
-                    $permissao->id_perfil = $perfil->id;
-                    $permissao->cadastradoPorUsuario = Auth::user()->id;
-                    $permissao->ativo = 1;
-                    $permissao->save();
+
+                    PerfilUser::create([
+                        'id_user' => $novoUsuario->id,
+                        'id_tipo_perfil' => $id_perf,
+                        'cadastradoPorUsuario' => $novoUsuario->id,
+                    ]);
+
+                    Permissao::create([
+                        'id_user' => $novoUsuario->id,
+                        'id_perfil' => $id_perf,
+                        'cadastradoPorUsuario' => $novoUsuario->id,
+                    ]);
                 }
             }
-
+            // throw new Exception('forcando o erro');
             return redirect()->route('usuario.index')->with('success', 'Cadastro realizado com sucesso.');
 
         }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
-        }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -201,27 +128,20 @@ class UserController extends Controller
             }
 
             $usuario = User::where('id', '=', $id)
-                ->where('ativo', '=', 1)
+                ->where('ativo', '=', User::ATIVO)
                 ->select('id', 'cpf', 'id_pessoa', 'email')
                 ->first();
 
             if (!$usuario) {
                 return redirect()->route('usuario.index')->with('erro', 'Não é possível alterar este usuário.');
             }
-
-            $perfils = Perfil::where('ativo', '=', 1)->get();
+            $perfils = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
 
             return view('usuario.edit', compact('usuario', 'perfils'));
+
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -319,21 +239,14 @@ class UserController extends Controller
             return redirect()->route('usuario.index')->with('success', 'Alteração realizada com sucesso.');
 
         }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
-        }
+        // catch (ValidationException $e ) {
+        //     $message = $e->errors();
+        //     return redirect()->back()
+        //         ->withErrors($message)
+        //         ->withInput();
+        // }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -359,15 +272,9 @@ class UserController extends Controller
 
             return redirect()->route('usuario.index')->with('success', 'Usuário desbloqueado com sucesso.');
 
-        } catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "desbloquear";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+        }
+        catch (\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desbloquear');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
 
@@ -429,14 +336,7 @@ class UserController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -501,14 +401,7 @@ class UserController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "restore";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'restore');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -569,14 +462,7 @@ class UserController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "UserController";
-            $erro->funcao = "desativaPerfil";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

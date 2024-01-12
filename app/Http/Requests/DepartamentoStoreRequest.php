@@ -28,8 +28,8 @@ class DepartamentoStoreRequest extends FormRequest
     {
         return [
             'descricao' => 'required|max:200',
-            'id_coordenador' => 'required|integer',
-            'id_user' => 'required|integer',
+            'id_coordenador' => 'nullable|integer',
+            'id_user' => 'nullable|integer',
         ];
     }
 
@@ -44,10 +44,10 @@ class DepartamentoStoreRequest extends FormRequest
             'descricao.required' => 'Descrição obrigatório.',
             'descricao.max' => 'Descricao: Máximo 200 caracteres.',
 
-            'id_coordenador.required' => 'Seleção COORDENADOR obrigatório',
+            // 'id_coordenador.required' => 'Seleção COORDENADOR obrigatório',
             'id_coordenador.integer' => 'Requer número inteiro',
 
-            'id_user.required' => 'Seleção USUÁRIO obrigatório',
+            // 'id_user.required' => 'Seleção USUÁRIO obrigatório',
             'id_user.integer' => 'Requer número inteiro'
         ];
     }

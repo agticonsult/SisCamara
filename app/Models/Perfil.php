@@ -20,6 +20,9 @@ class Perfil extends Model implements Auditable
 
     protected $table = 'perfils';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

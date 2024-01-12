@@ -7,6 +7,7 @@ use App\Models\Departamento;
 use App\Models\ErrorLog;
 use App\Models\PerfilUser;
 use App\Models\User;
+use App\Services\ErrorLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,11 +26,11 @@ class DepartamentoController extends Controller
             }
 
             $departamentos = Departamento::where('ativo', '=', 1)->get();
-            $users = PerfilUser::where('ativo', '=', 1)->get();
+            $users = User::where('ativo', '=', 1)->get();
 
             $usuarios = array();
             foreach ($users as $user) {
-                if ($user->usuarioInterno() == 0) {
+                if ($user->usuarioInterno() == 1) {
                     array_push($usuarios, $user);
                 }
             }
@@ -38,14 +39,7 @@ class DepartamentoController extends Controller
 
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DepartamentoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -74,18 +68,11 @@ class DepartamentoController extends Controller
             $departamento->cadastradoPorUsuario = Auth::user()->id;
             $departamento->save();
 
-            
+
 
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DepartamentoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

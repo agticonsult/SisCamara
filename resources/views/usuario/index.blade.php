@@ -15,16 +15,14 @@
     @include('errors.alerts')
     @include('errors.errors')
 
+    <h1 class="h3 mb-3">Usuários</h1>
     <div class="card" style="background-color:white">
 
-        <div class="card-header" style="background-color:white">
+        {{-- <div class="card-header" style="background-color:white">
             <h2 class="text-center">
-                <div>
-                    <span><i class="fas fa-address-book"></i></span>
-                </div>
-                <strong>Listagem de Usuários</strong>
+                <strong>Usuários</strong>
             </h2>
-        </div>
+        </div> --}}
 
         <div class="card-body">
             @if (Count($usuarios) == 0)

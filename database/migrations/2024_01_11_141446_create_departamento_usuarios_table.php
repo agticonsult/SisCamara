@@ -15,10 +15,10 @@ class CreateDepartamentoUsuariosTable extends Migration
     public function up()
     {
         Schema::create('departamento_usuarios', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_user')->unsigned()->nullable();
+            $table->bigIncrements('id');
+            $table->uuid('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->integer('id_coordenador')->unsigned()->nullable();
+            $table->uuid('id_coordenador')->nullable();
             $table->foreign('id_coordenador')->references('id')->on('users');
             $table->integer('id_departamento')->unsigned()->nullable();
             $table->foreign('id_departamento')->references('id')->on('departamentos');

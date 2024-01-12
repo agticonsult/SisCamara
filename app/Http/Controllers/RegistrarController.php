@@ -13,6 +13,7 @@ use App\Models\Permissao;
 use App\Models\Pessoa;
 use App\Models\User;
 use App\Services\EmailService;
+use App\Services\ErrorLogService;
 use App\Services\ValidadorCPFService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,14 +38,7 @@ class RegistrarController extends Controller
             return view('auth.registrar');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "RegistrarController";
-            $erro->funcao = "registrar";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'registrar');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -78,32 +72,17 @@ class RegistrarController extends Controller
 
             PerfilUser::create([
                 'id_user' => $novoUsuario->id,
-                'id_tipo_perfil' => 3, //usuário externo
+                'id_tipo_perfil' => User::USUARIO_EXTERNO,
                 'cadastradoPorUsuario' => $novoUsuario->id,
             ]);
 
             Permissao::create([
                 'id_user' => $novoUsuario->id,
-                'id_perfil' => 3,
+                'id_perfil' => User::USUARIO_EXTERNO,
                 'cadastradoPorUsuario' => $novoUsuario->id,
-                // 'ativo' => Permissao::ATIVO //padrão diretamente da migration
             ]);
 
-            //gera um link temporário e criptogrado
-            $link = URL::temporarySignedRoute('confirmacao_email', now()->addMinutes(20), [Crypt::encrypt($novoUsuario->id)]);
-
-            $details = [
-                'assunto' => 'Confirmação de email',
-                'body' => 'Segue abaixo o link',
-                'cliente' => $novoUsuario->pessoa->nome,
-                'link' => $link,
-            ];
-
-            EmailService::configuracaoEmail();
-
-            EmailService::novoEmail($novoUsuario, $link);
-
-            Mail::to($novoUsuario->email)->send(new ConfirmacaoEmail($details));
+            // manda e-mail de confirmação através do UserObserver na pasta Observers, configurado no App\Providers\EventServiceProvider
 
             return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso! Encaminhado link de confirmação no seu email, cheque sua caixa de spam.');
 

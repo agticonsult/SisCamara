@@ -13,16 +13,17 @@
 
 {{-- <div class="container box box-primary" style="padding: 3rem;"> --}}
 {{-- <div class="container box box-primary"> --}}
+<h1 class="h3 mb-3">Alteração de Ato</h1>
 <div class="card">
 
-    <div class="card-header" style="background-color:white">
+    {{-- <div class="card-header" style="background-color:white">
         <h2 class="text-center">
             <div>
                 <span><i class="fas fa-address-book"></i></span>
             </div>
             <strong>Alteração de Ato</strong>
         </h2>
-    </div>
+    </div> --}}
 
     <br>
     <div class="row">
