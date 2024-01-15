@@ -4,21 +4,9 @@ namespace App\Http\Requests;
 
 use App\Rules\CpfRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-class UserStoreRequest extends FormRequest
-{
-    // /**
-    //  * Determine if the user is authorized to make this request.
-    //  *
-    //  * @return bool
-    //  */
-    // public function authorize()
-    // {
-    //     $temPermissao = Auth::user()->temPermissao('User', 'Cadastro');
 
-    //     return $temPermissao;
-    // }
+class HomeUpdateRequest extends FormRequest
+{
 
     protected function prepareForValidation(): void
     {
@@ -42,13 +30,26 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            //Usuário
+            'cpf' => ['sometimes', 'required', new CpfRule, 'unique:users,cpf,' . $this->id],
+            'email' => 'required|email|exists:users,email',
+
+            //Pessoa
             'nome' => 'required|max:255',
-            'cpf' => ['required', 'unique:users,cpf', new CpfRule],
-            'email' => 'required|email|unique:users,email',
-            'dt_nascimento_fundacao' => 'required|max:10',
-            'password' => 'required|min:6|max:35',
-            'confirmacao' => 'required|min:6|max:35',
-            'id_perfil' => 'required',
+            'apelidoFantasia' => 'max:255',
+            'dt_nascimento_fundacao' => 'required|date',
+            'cep' => 'max:255',
+            'endereco' => 'max:255',
+            'bairro' => 'max:255',
+            'numero' => 'max:255',
+            'complemento' => 'max:255',
+            'ponto_referencia' => 'max:255',
+
+            'telefone_celular' => 'max:15',
+            'telefone_celular2' => 'max:15',
+
+            'password' => 'nullable|min:6|max:35',
+            'confirmacao' => 'nullable|min:6|max:35'
         ];
     }
 
@@ -68,24 +69,26 @@ class UserStoreRequest extends FormRequest
 
             'email.required' => 'E-mail obrigatório.',
             'email.email' => 'E-mail inválido',
-            // 'email.max' => 'E-mail: Máximo 255 caracteres',
-            'email.unique' => 'E-mail já cadastrado no sitema',
+            'email.exists' => 'E-mail já cadastrado no sitema',
 
             'dt_nascimento_fundacao.required' => 'Data nascimento obrigatório',
             'dt_nascimento_fundacao.date' => 'Data nascimento inválida',
 
-            'telefone_celular.max' => 'Telefone/Celular: Máximo 11 caracteres',
-            'telefone_celular2.max' => 'Telefone/Celular recado: Máximo 11 caracteres',
+            'apelidoFantasia.max' => 'Apelido Fantasia: Máximo 255 caracteres.',
+            'cep.max' => 'CEP: Máximo 255 caracteres.',
+            'endereco.max' => 'Endereço: Máximo 255 caracteres.',
+            'bairro.max' => 'Bairro: Máximo 255 caracteres.',
+            'numero.max' => 'Número: Máximo 255 caracteres.',
+            'complemento.max' => 'Complemento: Máximo 255 caracteres.',
+            'ponto_referencia.max' => 'Ponto de Referência: Máximo 255 caracteres.',
+            'telefone_celular.max' => 'Telefone Celular: Máximo 255 caracteres.',
+            'telefone_celular2.max' => 'Telefone Celular: Máximo 255 caracteres.',
 
-            'password.required' => 'Senha obrigatória.',
             'password.min' => 'Senha: Minímo 6 caracteres',
             'password.max' => 'Senha: Máximo 35 caracteres',
 
-            'confirmacao.required' => 'Confirmação obrigatória',
             'confirmacao.min' => 'Confirmação: Minímo 6 caracteres',
             'confirmacao.max' => 'Confirmação: Máximo 35 caracteres',
-
-            'id_perfil.required' => 'Seleção de perfil obrigatório.'
         ];
     }
 }

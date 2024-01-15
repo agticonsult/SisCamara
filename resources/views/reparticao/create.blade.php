@@ -15,7 +15,7 @@
 @include('errors.alerts')
 @include('errors.errors')
 
-<h1 class="h3 mb-3">Cadastro de Ato</h1>
+<h1 class="h3 mb-3">Cadastro de Repartição</h1>
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">

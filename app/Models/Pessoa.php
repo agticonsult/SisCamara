@@ -24,7 +24,7 @@ class Pessoa extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
     const PESSOA_JURIDICA = 1;
-    const NAO_PESSOA_JURIDICA = 1;
+    const NAO_PESSOA_JURIDICA = 0;
 
     public function cad_usuario()
     {

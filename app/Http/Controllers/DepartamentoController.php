@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartamentoStoreRequest;
 use App\Models\Departamento;
+use App\Models\DepartamentoUsuario;
 use App\Models\ErrorLog;
 use App\Models\PerfilUser;
 use App\Models\User;
@@ -25,8 +26,8 @@ class DepartamentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $departamentos = Departamento::where('ativo', '=', 1)->get();
-            $users = User::where('ativo', '=', 1)->get();
+            $departamentos = Departamento::where('ativo', '=', Departamento::ATIVO)->get();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
 
             $usuarios = array();
             foreach ($users as $user) {
@@ -35,7 +36,7 @@ class DepartamentoController extends Controller
                 }
             }
 
-            return view('configuracao.departamento.index', compact('usuarios'));
+            return view('configuracao.departamento.index', compact('usuarios', 'departamentos'));
 
         }
         catch(\Exception $ex){
@@ -63,12 +64,20 @@ class DepartamentoController extends Controller
     public function store(DepartamentoStoreRequest $request)
     {
         try{
-            $departamento = new Departamento();
-            $departamento->descricao = $request->descricao;
-            $departamento->cadastradoPorUsuario = Auth::user()->id;
-            $departamento->save();
+            if(Auth::user()->temPermissao('Departamento', 'Cadastro') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
 
+            $departamento = Departamento::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
+            DepartamentoUsuario::create($request->validated() + [
+                'id_departamento' => $departamento->id,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
+
+            return redirect()->back()->with('success', 'Cadastro realizado com sucesso.');
 
         }
         catch(\Exception $ex){
@@ -94,9 +103,30 @@ class DepartamentoController extends Controller
      * @param  \App\Models\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Departamento $departamento)
+    public function edit($id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Departamento', 'Alteração') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
+
+            $usuarios = array();
+            foreach ($users as $user) {
+                if ($user->usuarioInterno() == 1) {
+                    array_push($usuarios, $user);
+                }
+            }
+
+            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'edit');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     /**
@@ -106,9 +136,30 @@ class DepartamentoController extends Controller
      * @param  \App\Models\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Departamento $departamento)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Departamento', 'Alteração') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
+
+            $usuarios = array();
+            foreach ($users as $user) {
+                if ($user->usuarioInterno() == 1) {
+                    array_push($usuarios, $user);
+                }
+            }
+
+            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'edit');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     /**

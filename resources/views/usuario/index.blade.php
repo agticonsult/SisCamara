@@ -32,7 +32,7 @@
                                 <th scope="col">CPF</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Perfis ativos</th>
-                                <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão "Sim")</th>
+                                <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão)</th>
                                 <th scope="col">Cadastrado em</th>
                                 <th scope="col">Ações</th>
                             </tr>
@@ -40,23 +40,21 @@
                         <tbody>
                             @foreach ($usuarios as $usuario)
                                 <tr>
-                                    <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}
-                                    </td>
+                                    <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
                                     <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
                                     <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
                                     <td>
-                                        <ol>
+                                        <ul>
                                             @foreach ($usuario->permissoes_ativas as $permissao)
                                                 <li>
                                                     {{ $permissao->perfil->descricao }}
                                                 </li>
                                             @endforeach
-                                        </ol>
+                                        </ul>
                                     </td>
                                     <td>
                                         @if ($usuario->bloqueadoPorTentativa == true)
-                                            <button type="button" class="btn btn-dark m-1" data-toggle="modal"
-                                                data-target="#exampleModalDesbloquear{{ $usuario->id }}">Sim</button>
+                                            <button type="button" class="btn btn-dark m-1" data-toggle="modal" data-target="#exampleModalDesbloquear{{ $usuario->id }}">Sim</button>
                                         @else
                                             <button type="button" class="btn btn-info">
                                                 Não
@@ -184,7 +182,7 @@
         </div>
 
         <div class="card-footer">
-            <a href=" {{ route('usuario.create') }} " class="btn btn-primary">Cadastrar novo Funcionário</a>
+            <a href=" {{ route('usuario.create') }} " class="btn btn-primary">Cadastrar novo usuário</a>
         </div>
 
     </div>

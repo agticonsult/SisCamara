@@ -43,7 +43,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="id_coordenador">*Coordenador</label>
+                                        <label for="id_coordenador">Coordenador</label>
                                         <select name="id_coordenador" class="form-control @error('id_coordenador') is-invalid @enderror select2">
                                             <option value="" selected disabled>-- Selecione --</option>
                                             @foreach ($usuarios as $usuario)
@@ -55,7 +55,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label">*Usuário</label>
+                                        <label class="form-label">Usuário</label>
                                         <select name="id_user[]" class="form-control @error('id_user') is-invalid @enderror select2" multiple>
                                             @foreach ($usuarios as $usuario)
                                                 <option value="{{ $usuario->id }}" {{ old('id_user') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        {{-- <div id="accordion2">
+        <div id="accordion2">
             <div class="card">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
@@ -100,32 +100,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($assuntoAtos as $assunto)
+                                    @foreach ($departamentos as $departamento)
                                         <tr>
-                                            <td>{{ $assunto->descricao != null ? $assunto->descricao : 'não informado' }}</td>
+                                            <td>{{ $departamento->descricao != null ? $departamento->descricao : 'não informado' }}</td>
                                             <td>
-                                                <strong>{{ $assunto->cadastradoPorUsuario != null ? $assunto->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
+                                                <strong>{{ $departamento->cadastradoPorUsuario != null ? $departamento->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                                 em
-                                                <strong>{{ $assunto->created_at != null ? $assunto->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                                <strong>{{ $departamento->created_at != null ? $departamento->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                             </td>
                                             <td>
-                                                <a href="{{ route('configuracao.assunto_ato.edit', $assunto->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                                <a href="{{ route('configuracao.departamento.edit', $departamento->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $assunto->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $departamento->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="exampleModalExcluir{{ $assunto->id }}" tabindex="-1"
+                                        <div class="modal fade" id="exampleModalExcluir{{ $departamento->id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <form method="POST" class="form_prevent_multiple_submits"
-                                                        action="{{ route('configuracao.assunto_ato.destroy', $assunto->id) }}">
+                                                        action="{{ route('configuracao.assunto_ato.destroy', $departamento->id) }}">
                                                         @csrf
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                Excluir <strong>{{ $assunto->descricao != null ? $assunto->descricao : 'não informado' }}</strong>?
+                                                                Excluir <strong>{{ $departamento->descricao != null ? $departamento->descricao : 'não informado' }}</strong>?
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
     </div>
 

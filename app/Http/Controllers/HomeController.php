@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\HomeUpdateRequest;
 use App\Models\Distrito;
 use App\Models\ErrorLog;
 use App\Models\Estado;
@@ -58,79 +59,12 @@ class HomeController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(HomeUpdateRequest $request, $id)
     {
         try {
-            //validação dos campos
-            $input = [
-                //validação usuário
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
-                'email' => $request->email,
-
-                //valiação dados pessoais
-                'nome' => $request->nome,
-                'apelidoFantasia' => $request->apelidoFantasia,
-                'dt_nascimento_fundacao' => $request->dt_nascimento_fundacao,
-                'cep' => $request->cep,
-                'endereco' => $request->endereco,
-                'bairro' => $request->bairro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'ponto_referencia' => $request->ponto_referencia
-            ];
-            $rules = [
-                //Usuário
-                'cpf' => 'required|min:11|max:11',
-                'email' => 'required|email',
-
-                //Pessoa
-                'nome' => 'required|max:255',
-                'apelidoFantasia' => 'max:255',
-                'dt_nascimento_fundacao' => 'required|date',
-                'cep' => 'max:255',
-                'endereco' => 'max:255',
-                'bairro' => 'max:255',
-                'numero' => 'max:255',
-                'complemento' => 'max:255',
-                'ponto_referencia' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             //Busca o usuário no BD
             $user = User::find($id);
-
-            // se cpf antigo é diferente do cpf novo
-            if ($user->cpf != preg_replace('/[^0-9]/', '', $request->cpf)){ // mudou o cpf
-
-                // verificar se o novo cpf não está cadastrado no sistema
-                $userCpf = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))->first();
-                if ($userCpf){
-                    return redirect()->back()->with('erro', 'Este CPF já está cadastrado no sistema.')->withInput();
-                }
-
-                //verificando se o cpf é valido
-                if (!ValidadorCPFService::ehValido($request->cpf)) {
-                    return redirect()->back()->with('erro', 'CPF inválido.')->withInput();
-                }
-
-            }
-
-            // se email antigo é diferente do email novo
-            if ($user->email != $request->email){ // mudou o cpf
-
-                // verificar se o novo email não está cadastrado no sistema
-                $userEmail = User::where('email', '=', $request->email)->first();
-                if ($userEmail){
-                    return redirect()->back()->with('erro', 'Este EMAIL já está cadastrado no sistema.')->withInput();
-                }
-            }
-
-            $user->email = $request->email;
-            $user->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
-            $user->telefone_celular = preg_replace('/[^0-9]/', '', $request->telefone_celular);
-            $user->telefone_celular2 = preg_replace('/[^0-9]/', '', $request->telefone_celular2);
+            $user->update($request->validated());
 
             if ($request->password != null){
 
@@ -156,29 +90,10 @@ class HomeController extends Controller
             if($user->id_pessoa){
                 // $pessoa = Pessoa::where('id', '=', $user->id_pessoa)->first();
                 $pessoa = Pessoa::find($user->id_pessoa);
-                $pessoa->nome = $request->nome;
-                $pessoa->apelidoFantasia = $request->apelidoFantasia;
-                $pessoa->dt_nascimento_fundacao = $request->dt_nascimento_fundacao;
-                $pessoa->cep = preg_replace('/[^0-9]/', '',$request->cep);
-                $pessoa->endereco = $request->endereco;
-                $pessoa->bairro = $request->bairro;
-                $pessoa->numero = $request->numero;
-                $pessoa->complemento = $request->complemento;
-                $pessoa->ponto_referencia = $request->ponto_referencia;
-                $pessoa->save();
+                $pessoa->update($request->validated());
             }
-
-            $user->ativo = 1;
-            $user->save();
-
             return redirect()->route('home')->with('success', 'Cadastro alterado com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'update');

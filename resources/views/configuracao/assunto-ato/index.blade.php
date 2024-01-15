@@ -12,8 +12,7 @@
         }
     </style>
     @include('errors.alerts')
-    @include('errors.errors')
-
+    {{-- @include('errors.errors') --}}
 
     <h1 class="h3 mb-3">Assunto do Ato</h1>
     <div class="card" style="background-color:white">
@@ -38,8 +37,10 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label">*Nome</label>
-                                        <input class="form-control" type="text" name="descricao" id="descricao"
-                                            placeholder="Informe o nome do assunto" value="{{ old('descricao') }}">
+                                        <input class="form-control @error('descricao') is-invalid @enderror" type="text" name="descricao" id="descricao" placeholder="Informe o nome do assunto" value="{{ old('descricao') }}">
+                                        @error('descricao')
+                                            <div class="invalid-feedback">{{ $message }}</div><br>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -142,24 +143,8 @@
 
     <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
-    <script src="{{ asset('js/jquery.validate.js') }}"></script>
 
     <script>
-        $("#form").validate({
-            rules: {
-                descricao: {
-                    required: true,
-                    maxlength: 255,
-                }
-            },
-            messages: {
-                descricao: {
-                    required: "Campo obrigatório",
-                    maxlength: "Máximo de 255 caracteres"
-                }
-            }
-        });
-
         $(document).ready(function() {
 
             $('#datatables-reponsive').dataTable({

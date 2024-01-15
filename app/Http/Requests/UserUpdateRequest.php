@@ -5,8 +5,8 @@ namespace App\Http\Requests;
 use App\Rules\CpfRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-class UserStoreRequest extends FormRequest
+
+class UserUpdateRequest extends FormRequest
 {
     // /**
     //  * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class UserStoreRequest extends FormRequest
     //  */
     // public function authorize()
     // {
-    //     $temPermissao = Auth::user()->temPermissao('User', 'Cadastro');
+    //     $temPermissao = Auth::user()->temPermissao('User', 'Alteração');
 
     //     return $temPermissao;
     // }
@@ -43,11 +43,9 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'nome' => 'required|max:255',
-            'cpf' => ['required', 'unique:users,cpf', new CpfRule],
-            'email' => 'required|email|unique:users,email',
+            'cpf' => ['sometimes', 'required', new CpfRule, 'unique:users,cpf,' . $this->id],
+            'email' => 'required|email|exists:users,email',
             'dt_nascimento_fundacao' => 'required|max:10',
-            'password' => 'required|min:6|max:35',
-            'confirmacao' => 'required|min:6|max:35',
             'id_perfil' => 'required',
         ];
     }
@@ -68,22 +66,10 @@ class UserStoreRequest extends FormRequest
 
             'email.required' => 'E-mail obrigatório.',
             'email.email' => 'E-mail inválido',
-            // 'email.max' => 'E-mail: Máximo 255 caracteres',
-            'email.unique' => 'E-mail já cadastrado no sitema',
+            'email.exists' => 'E-mail já cadastrado no sitema',
 
             'dt_nascimento_fundacao.required' => 'Data nascimento obrigatório',
             'dt_nascimento_fundacao.date' => 'Data nascimento inválida',
-
-            'telefone_celular.max' => 'Telefone/Celular: Máximo 11 caracteres',
-            'telefone_celular2.max' => 'Telefone/Celular recado: Máximo 11 caracteres',
-
-            'password.required' => 'Senha obrigatória.',
-            'password.min' => 'Senha: Minímo 6 caracteres',
-            'password.max' => 'Senha: Máximo 35 caracteres',
-
-            'confirmacao.required' => 'Confirmação obrigatória',
-            'confirmacao.min' => 'Confirmação: Minímo 6 caracteres',
-            'confirmacao.max' => 'Confirmação: Máximo 35 caracteres',
 
             'id_perfil.required' => 'Seleção de perfil obrigatório.'
         ];

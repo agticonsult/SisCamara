@@ -7,17 +7,17 @@ use Illuminate\Support\Facades\Auth;
 
 class DepartamentoStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        $temPermissao = Auth::user()->temPermissao('Departamento', 'Cadastro');
+    // /**
+    //  * Determine if the user is authorized to make this request.
+    //  *
+    //  * @return bool
+    //  */
+    // public function authorize()
+    // {
+    //     $temPermissao = Auth::user()->temPermissao('Departamento', 'Cadastro');
 
-        return $temPermissao;
-    }
+    //     return $temPermissao;
+    // }
 
     /**
      * Get the validation rules that apply to the request.

@@ -13,7 +13,7 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
+{{-- @include('errors.errors') --}}
 
 <h1 class="h3 mb-3">Alteração de Usuário</h1>
 <div class="card" style="background-color:white">
@@ -92,19 +92,31 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Nome</label>
-                                <input class="form-control" type="text" name="nome" id="nome" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('nome') }}">
+                                <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" value="{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : old('nome') }}">
+                                @error('nome')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Email</label>
-                                <input class="form-control" type="email" name="email" value="{{ $usuario->email != null ? $usuario->email : old('email') }}">
+                                <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ $usuario->email != null ? $usuario->email : old('email') }}">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*CPF</label>
-                                <input class="cpf form-control" type="text" name="cpf" id="cpf" value="{{ $usuario->cpf != null ? $usuario->cpf : old('cpf') }}">
+                                <input class="cpf form-control @error('cpf') is-invalid @enderror" type="text" name="cpf" id="cpf" value="{{ $usuario->cpf != null ? $usuario->cpf : old('cpf') }}">
+                                @error('cpf')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Data de Nascimento</label>
-                                <input class="dataFormat form-control" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ $usuario->pessoa->dt_nascimento_fundacao != null ? $usuario->pessoa->dt_nascimento_fundacao: old('dt_nascimento_fundacao') }}">
+                                <input class="dataFormat form-control @error('dt_nascimento_fundacao') is-invalid @enderror" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ $usuario->pessoa->dt_nascimento_fundacao != null ? $usuario->pessoa->dt_nascimento_fundacao: old('dt_nascimento_fundacao') }}">
+                                @error('dt_nascimento_fundacao')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -114,15 +126,27 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Perfil</label>
-                                <select name="id_perfil[]" class="form-control select2" multiple>
+                                <select class="select_multiple form-control @error('id_perfil') is-invalid @enderror" name="id_perfil[]" multiple>
                                     @foreach ($perfils as $perfil)
-                                        @foreach ($usuario->permissoes_ativas as $permissao)
-                                            @if ($permissao->id_perfil != $perfil->id)
-                                                <option value="{{ $perfil->id }}">{{ $perfil->descricao }}</option>
-                                            @endif
-                                        @endforeach
+                                        @php
+                                            $temPerfil = 0;
+
+                                            foreach ($usuario->permissoes_ativas as $permissao){
+                                                if ($permissao->id_perfil == $perfil->id){
+                                                    $temPerfil = 1;
+                                                }
+                                            }
+                                        @endphp
+                                        @if ($temPerfil == 1)
+                                            <option value="{{ $perfil->id }}" selected>{{ $perfil->descricao }}</option>
+                                        @else
+                                            <option value="{{ $perfil->id }}">{{ $perfil->descricao }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
+                                @error('id_perfil')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -130,6 +154,7 @@
 
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <a href="{{ route('usuario.index') }}" class="btn btn-secondary">Voltar</a>
                 </div>
                 <br>
             </form>
@@ -218,45 +243,6 @@
     today = yyyy + '-' + mm + '-' + dd;
     $('.dataFormat').attr('max', today);
 
-    $("#form").validate({
-        rules : {
-            nome:{
-                required:true
-            },
-            cpf:{
-                required:true
-            },
-            dt_nascimento_fundacao:{
-                required:true
-            },
-            email:{
-                required:true
-            },
-            // lotacao:{
-            //     required:true
-            // }
-        },
-        messages:{
-            nome:{
-                required:"Campo obrigatório"
-            },
-            cpf:{
-                required:"Campo obrigatório"
-            },
-            dt_nascimento_fundacao:{
-                required:"Campo obrigatório",
-                min:"Data mínima: 01/01/1899",
-                max:"Data máxima: data de hoje",
-            },
-            email:{
-                required:"Campo obrigatório"
-            },
-            // lotacao:{
-            //     required:"Campo obrigatório"
-            // }
-        }
-    });
-
     $('.funcionalidades').on('click', function(){
         var id_perfil = this.id;
         var descricao_perfil = (this).name;
@@ -298,72 +284,83 @@
             width: '100%',
         });
 
-        $('#tipo_perfil').on('change', function(){
-            var valores = $('#tipo_perfil').val();
-
-            switch (valores.length) {
-
-                case 1:
-                    selected = valores[0];
-                    switch (selected) {
-                        case '1':
-                            $('#administrador').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '2':
-                            $('#funcionario').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                        case '3':
-                            $('#cliente').removeClass('d-none');
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            break;
-
-                        default:
-                            $('#administrador').addClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                            $('#cliente').addClass('d-none');
-                            break;
-                    }
-                    break;
-
-                case 2:
-                    console.log(valores);
-                    if ((valores[0] == 1 && valores[1] == 2) || (valores[0] == 2 && valores[1] == 1)){
-                        $('#administrador').removeClass('d-none');
-                        $('#funcionario').removeClass('d-none');
-                        $('#cliente').addClass('d-none');
-                    }
-                    else{
-                        if ((valores[0] == 1 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 1)){
-                            $('#administrador').removeClass('d-none');
-                            $('#cliente').removeClass('d-none');
-                            $('#funcionario').addClass('d-none');
-                        }
-                        else{
-                            if ((valores[0] == 2 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 2)){
-                                $('#funcionario').removeClass('d-none');
-                                $('#cliente').removeClass('d-none');
-                                $('#administrador').addClass('d-none');
-                            }
-                        }
-                    }
-                    break;
-
-                case 3:
-                    console.log(valores);
-                    $('#administrador').removeClass('d-none');
-                    $('#funcionario').removeClass('d-none');
-                    $('#cliente').removeClass('d-none');
-                    break;
-
-                default:
-                    break;
-            }
+        $('.select_multiple').select2({
+            language: {
+                noResults: function() {
+                    return "Nenhum resultado encontrado";
+                }
+            },
+            closeOnSelect: false,
+            width: '100%',
+            dropdownCssClass: "bigdrop"
         });
+
+        // $('#tipo_perfil').on('change', function(){
+        //     var valores = $('#tipo_perfil').val();
+
+        //     switch (valores.length) {
+
+        //         case 1:
+        //             selected = valores[0];
+        //             switch (selected) {
+        //                 case '1':
+        //                     $('#administrador').removeClass('d-none');
+        //                     $('#funcionario').addClass('d-none');
+        //                     $('#cliente').addClass('d-none');
+        //                     break;
+        //                 case '2':
+        //                     $('#funcionario').removeClass('d-none');
+        //                     $('#administrador').addClass('d-none');
+        //                     $('#cliente').addClass('d-none');
+        //                     break;
+        //                 case '3':
+        //                     $('#cliente').removeClass('d-none');
+        //                     $('#administrador').addClass('d-none');
+        //                     $('#funcionario').addClass('d-none');
+        //                     break;
+
+        //                 default:
+        //                     $('#administrador').addClass('d-none');
+        //                     $('#funcionario').addClass('d-none');
+        //                     $('#cliente').addClass('d-none');
+        //                     break;
+        //             }
+        //             break;
+
+        //         case 2:
+        //             console.log(valores);
+        //             if ((valores[0] == 1 && valores[1] == 2) || (valores[0] == 2 && valores[1] == 1)){
+        //                 $('#administrador').removeClass('d-none');
+        //                 $('#funcionario').removeClass('d-none');
+        //                 $('#cliente').addClass('d-none');
+        //             }
+        //             else{
+        //                 if ((valores[0] == 1 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 1)){
+        //                     $('#administrador').removeClass('d-none');
+        //                     $('#cliente').removeClass('d-none');
+        //                     $('#funcionario').addClass('d-none');
+        //                 }
+        //                 else{
+        //                     if ((valores[0] == 2 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 2)){
+        //                         $('#funcionario').removeClass('d-none');
+        //                         $('#cliente').removeClass('d-none');
+        //                         $('#administrador').addClass('d-none');
+        //                     }
+        //                 }
+        //             }
+        //             break;
+
+        //         case 3:
+        //             console.log(valores);
+        //             $('#administrador').removeClass('d-none');
+        //             $('#funcionario').removeClass('d-none');
+        //             $('#cliente').removeClass('d-none');
+        //             break;
+
+        //         default:
+        //             break;
+        //     }
+        // });
 
         $('.desativar').click(function () {
             var permissao_id = this.name;

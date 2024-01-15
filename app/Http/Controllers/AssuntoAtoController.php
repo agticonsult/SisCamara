@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AssuntoAtoRequest;
 use App\Models\AssuntoAto;
 use App\Models\ErrorLog;
 use App\Services\ErrorLogService;
@@ -51,37 +52,19 @@ class AssuntoAtoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AssuntoAtoRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $assuntoAto = new AssuntoAto();
-            $assuntoAto->descricao = $request->descricao;
-            $assuntoAto->cadastradoPorUsuario = Auth::user()->id;
-            $assuntoAto->ativo = 1;
-            $assuntoAto->save();
+            AssuntoAto::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->route('configuracao.assunto_ato.index')->with('success', 'Cadastro realizado com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'AssuntoAtoController', 'store');
@@ -113,8 +96,7 @@ class AssuntoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
+            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', AssuntoAto::ATIVO)->first();
             if (!$assunto){
                 return redirect()->route('configuracao.assunto_ato.index')->with('erro', 'Não é possível alterar este assunto.');
             }
@@ -134,35 +116,18 @@ class AssuntoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AssuntoAtoRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $assunto = AssuntoAto::find($id);
-            $assunto->descricao = $request->descricao;
-            $assunto->save();
+            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', AssuntoAto::ATIVO)->first();
+            $assunto->update($request->validated());
 
             return redirect()->route('configuracao.assunto_ato.index')->with('success', 'Alteração realizada com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'AssuntoAtoController', 'update');
@@ -183,41 +148,25 @@ class AssuntoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             $motivo = $request->motivo;
 
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
+            $assunto = AssuntoAto::where('id', '=', $id)->where('ativo', '=', AssuntoAto::ATIVO)->first();
             if (!$assunto){
                 return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
             }
 
-            $assunto->inativadoPorUsuario = Auth::user()->id;
-            $assunto->dataInativado = Carbon::now();
-            $assunto->motivoInativado = $motivo;
-            $assunto->ativo = 0;
-            $assunto->save();
+            $assunto->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => AssuntoAto::INATIVO
+            ]);
 
             return redirect()->route('configuracao.assunto_ato.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AssuntoAtoController', 'destroy');

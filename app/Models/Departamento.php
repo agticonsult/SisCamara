@@ -29,8 +29,8 @@ class Departamento extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'coordenador');
     }
-    public function usuario()
+    public function usuarios()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->hasMany(DepartamentoUsuario::class, 'id_user', 'id')->where('ativo', '=', User::ATIVO);
     }
 }
