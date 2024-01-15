@@ -16,6 +16,7 @@ use App\Models\Grupo;
 use App\Models\LinhaAto;
 use App\Models\OrgaoAto;
 use App\Models\TipoAto;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,14 +38,7 @@ class AtoController extends Controller
             return view('ato.index', compact('atos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -67,14 +61,7 @@ class AtoController extends Controller
             return view('ato.create', compact('classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -221,14 +208,7 @@ class AtoController extends Controller
             return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -245,14 +225,7 @@ class AtoController extends Controller
             return view('ato.show', compact('ato'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "show";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'show');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -274,14 +247,7 @@ class AtoController extends Controller
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -299,14 +265,7 @@ class AtoController extends Controller
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "editCorpoTexto";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'editCorpoTexto');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -375,14 +334,7 @@ class AtoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "alterarLinha";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'alterarLinha');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -410,14 +362,7 @@ class AtoController extends Controller
             return view('ato.edit', compact('ato', 'atos_relacionados', 'classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "editDadosGerais";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'editDadosGerais');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -445,14 +390,7 @@ class AtoController extends Controller
             return redirect()->route('ato.dados_gerais.edit', $ato->id)->with('success', 'Alteração realizada com sucesso');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "updateDadosGerais";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'updateDadosGerais');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -521,14 +459,7 @@ class AtoController extends Controller
 
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "destroy";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

@@ -20,17 +20,8 @@
 @include('errors.alerts')
 @include('errors.errors')
 
+<h1 class="h3 mb-3">Gerenciamento da Votação Eletrônica</h1>
 <div class="card" style="background-color:white">
-
-    <div class="card-header">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-chess-king"></i></span>
-            </div>
-            <strong>Gerenciamento da Votação Eletrônica</strong>
-        </h2>
-    </div>
-
     <div class="card-body">
         <div class="text-center">
             <h1 style="text-decoration: underline">LIBERAÇÃO DOS VEREADORES PARA VOTAÇÃO</h1>

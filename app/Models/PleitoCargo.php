@@ -19,6 +19,9 @@ class PleitoCargo extends Model implements Auditable
 
     protected $table = 'pleito_cargos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function pleito_eleitoral()
     {
         return $this->belongsTo(PleitoEleitoral::class, 'id_pleito_eleitoral');

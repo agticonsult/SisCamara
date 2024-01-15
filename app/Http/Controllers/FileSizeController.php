@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
 use App\Models\Filesize;
+use App\Services\ErrorLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,19 +24,12 @@ class FileSizeController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $files = Filesize::where('ativo', '=', 1)->with('tipo_filesize')->get();
+            $files = Filesize::where('ativo', '=', Filesize::ATIVO)->with('tipo_filesize')->get();
             return view('configuracao.tamanho-anexo.index', compact('files'));
 
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "FilesizeController";
-            $erro->funcao = "index";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'FilesizeController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -115,7 +109,7 @@ class FileSizeController extends Controller
                 return redirect()->route('configuracao.tamanho_anexo.index')->with('erro', 'Tamanho inválido.');
             }
 
-            $filesize = Filesize::where('id', '=', $request->file_id)->where('ativo', '=', 1)->first();
+            $filesize = Filesize::where('id', '=', $request->file_id)->where('ativo', '=', Filesize::ATIVO)->first();
 
             if (!$filesize) {
                 return redirect()->route('configuracao.tamanho_anexo.index')->with('erro', 'Não foi possível realizar esta alteração.');
@@ -133,15 +127,7 @@ class FileSizeController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "FilesizeController";
-            $erro->funcao = "update";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'FilesizeController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
 
         }

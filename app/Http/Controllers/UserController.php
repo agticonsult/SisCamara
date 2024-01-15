@@ -32,7 +32,6 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            // $usuarios = User::all();
             $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->select(
                     'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
@@ -73,22 +72,17 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-            //verifica se a confirmação de senha estão ok
-            if($request->password != $request->confirmacao){
-                return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
-            }
-
             //nova Pessoa
             $novaPessoa = Pessoa::create($request->validated() + [
-                'pessoaJuridica' => 0,
+                'pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA,
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
             //novo Usuário
             $novoUsuario = User::create($request->validated() + [
                 'id_pessoa' => $novaPessoa->id,
-                'bloqueadoPorTentativa' => 0,
-                'confirmacao_email' => 1,
+                'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
+                'confirmacao_email' => User::EMAIL_CONFIRMADO,
             ]);
 
             $id_perfils = $request->id_perfil;
@@ -258,7 +252,7 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuario = User::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
 
             if (!$usuario){
                 return redirect()->back()->with('erro', 'Não é possível desbloquear este usuário.')->withInput();

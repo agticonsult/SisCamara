@@ -47,6 +47,10 @@ class User extends Authenticatable
     const INATIVO = 0;
     const USUARIO_EXTERNO = 1;
     const USUARIO_INTERNO = 0;
+    const EMAIL_CONFIRMADO = 1;
+    const EMAIL_NAO_CONFIRMADO = 0;
+    const NAO_BLOQUEADO_TENTATIVA = 0;
+    const BLOQUEADO_TENTATIVA_EXCESSO = 1;
 
     /**
      * The attributes that should be cast to native types.

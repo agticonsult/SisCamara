@@ -17,6 +17,9 @@ class FotoPerfil extends Model implements Auditable
 
     protected $table = 'foto_perfils';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
 use App\Models\PublicacaoAto;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,19 +25,12 @@ class PublicacaoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $publicacaos = PublicacaoAto::where('ativo', '=', 1)->get();
+            $publicacaos = PublicacaoAto::where('ativo', '=', PublicacaoAto::ATIVO)->get();
 
             return view('configuracao.publicacao-ato.index', compact('publicacaos'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PublicacaoAtoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -90,14 +84,7 @@ class PublicacaoAtoController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PublicacaoAtoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -135,14 +122,7 @@ class PublicacaoAtoController extends Controller
             return view('configuracao.publicacao-ato.edit', compact('publicacao'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PublicacaoAtoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -185,14 +165,7 @@ class PublicacaoAtoController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PublicacaoAtoController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -247,14 +220,7 @@ class PublicacaoAtoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PublicacaoAtoController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

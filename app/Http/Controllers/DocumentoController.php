@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Documento;
 use App\Models\ErrorLog;
 use App\Models\ModeloDocumento;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,19 +21,12 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $documentos = Documento::where('ativo', '=', 1)->get();
+            $documentos = Documento::where('ativo', '=', Documento::ATIVO)->get();
 
             return view('documento.index', compact('documentos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DocumentoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -44,19 +38,12 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $modelos = ModeloDocumento::where('ativo', '=', 1)->get();
+            $modelos = ModeloDocumento::where('ativo', '=', Documento::ATIVO)->get();
 
             return view('documento.create', compact('modelos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DocumentoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -88,7 +75,7 @@ class DocumentoController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $modelo = ModeloDocumento::where('id', '=', $request->id_modelo)->where('ativo', '=', 1)->first();
+            $modelo = ModeloDocumento::where('id', '=', $request->id_modelo)->where('ativo', '=', ModeloDocumento::ATIVO)->first();
             if (!$modelo){
                 return redirect()->back()->with('erro', 'Modelo inválido.');
             }
@@ -111,14 +98,7 @@ class DocumentoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DocumentoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -130,24 +110,17 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', Documento::ATIVO)->first();
             if (!$documento){
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            $modelos = ModeloDocumento::where('ativo', '=', 1)->get();
+            $modelos = ModeloDocumento::where('ativo', '=', ModeloDocumento::ATIVO)->get();
 
             return view('documento.edit', compact('documento', 'modelos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DocumentoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -175,7 +148,7 @@ class DocumentoController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', Documento::ATIVO)->first();
             if (!$documento){
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
@@ -194,14 +167,7 @@ class DocumentoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "DocumentoController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -229,7 +195,7 @@ class DocumentoController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $documento = Documento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $documento = Documento::where('id', '=', $id)->where('ativo', '=', Documento::ATIVO)->first();
             if (!$documento){
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
@@ -249,14 +215,7 @@ class DocumentoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtividadeLazerController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

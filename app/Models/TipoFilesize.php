@@ -17,4 +17,7 @@ class TipoFilesize extends Model implements Auditable
     protected $guarded = ['id', 'created_at', 'update_at'];
 
     protected $table = 'tipo_filesizes';
+
+    const ATIVO = 1;
+    const INATIVO = 0;
 }

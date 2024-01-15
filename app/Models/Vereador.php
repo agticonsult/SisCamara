@@ -19,6 +19,9 @@ class Vereador extends Model implements Auditable
 
     protected $table = 'vereadors';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');

@@ -20,6 +20,9 @@ class Documento extends Model implements Auditable
 
     protected $table = 'documentos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
@@ -28,12 +31,12 @@ class Documento extends Model implements Auditable
     {
         return $this->belongsTo(ModeloDocumento::class, 'id_modelo');
     }
-    public function localizacao()
-    {
-        return $this->belongsTo(LocalizacaoDocumento::class, 'id_localizacao');
-    }
-    public function status()
-    {
-        return $this->belongsTo(StatusDocumento::class, 'id_status');
-    }
+    // public function localizacao()
+    // {
+    //     return $this->belongsTo(LocalizacaoDocumento::class, 'id_localizacao');
+    // }
+    // public function status()
+    // {
+    //     return $this->belongsTo(StatusDocumento::class, 'id_status');
+    // }
 }

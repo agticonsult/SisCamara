@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ErrorLog;
 use App\Models\Filesize;
 use App\Models\FotoPerfil;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class FotoPerfilController extends Controller
             //verifica se o arquivo é válido
             if($request->hasFile('fImage') && $request->file('fImage')->isValid()){
 
-                $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', 1)->first();
+                $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', Filesize::ATIVO)->first();
                 if ($max_filesize){
                     if ($max_filesize->mb != null){
                         if (is_int($max_filesize->mb)){
@@ -68,9 +69,9 @@ class FotoPerfilController extends Controller
                     }
                     else{
 
-                        $fotos = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', 1)->get();
+                        $fotos = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', FotoPerfil::ATIVO)->get();
                         foreach ($fotos as $foto) {
-                            $foto->ativo = 0;
+                            $foto->ativo = FotoPerfil::INATIVO;
                             $foto->inativadoPorUsuario = auth()->user()->id;
                             $foto->dataInativado = Carbon::now();
                             $foto->motivoInativado = "Alteração de foto de perfil pelo usuário";
@@ -82,7 +83,7 @@ class FotoPerfilController extends Controller
                         $foto_perfil->nome_hash = $nome_hash;
                         $foto_perfil->id_user = auth()->user()->id;
                         $foto_perfil->cadastradoPorUsuario = auth()->user()->id;
-                        $foto_perfil->ativo = 1;
+                        $foto_perfil->ativo = FotoPerfil::ATIVO;
                         $foto_perfil->save();
                     }
                 }
@@ -98,14 +99,7 @@ class FotoPerfilController extends Controller
 
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "FotoPerfilController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'FotoPerfilController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

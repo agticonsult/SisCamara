@@ -19,6 +19,9 @@ class TipoFuncionalidade extends Model implements Auditable
 
     protected $table = 'tipo_funcionalidades';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

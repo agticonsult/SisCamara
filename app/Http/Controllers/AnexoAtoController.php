@@ -6,6 +6,7 @@ use App\Models\AnexoAto;
 use App\Models\Ato;
 use App\Models\ErrorLog;
 use App\Models\Filesize;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -149,14 +150,7 @@ class AnexoAtoController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AnexoProcessoController";
-            $erro->funcao = "store";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AnexoAtoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -177,14 +171,7 @@ class AnexoAtoController extends Controller
             return view('ato.edit', compact('ato', 'filesize'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AnexoAtoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AnexoAtoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -238,14 +225,7 @@ class AnexoAtoController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AnexoAtoController";
-            $erro->funcao = "destroy";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AnexoAtoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

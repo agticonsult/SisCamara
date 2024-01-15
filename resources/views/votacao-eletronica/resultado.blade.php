@@ -14,17 +14,8 @@
     @include('errors.alerts')
     @include('errors.errors')
 
+    <h1 class="h3 mb-3">Resultado da Votação</h1>
     <div class="card" style="background-color:white">
-
-        <div class="card-header" style="background-color:white">
-            <h2 class="text-center">
-                <div>
-                    <span><i class="fas fa-chess-king"></i></span>
-                </div>
-                <strong>Resultado da Votação</strong>
-            </h2>
-        </div>
-
         <div id="accordion">
             <div class="card">
                 <div class="card-header" id="heading">

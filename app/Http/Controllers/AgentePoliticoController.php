@@ -11,6 +11,7 @@ use App\Models\Pessoa;
 use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Models\User;
+use App\Services\ErrorLogService;
 use App\Services\ValidadorCPFService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,14 +37,7 @@ class AgentePoliticoController extends Controller
             return view('agente-politico.index', compact('agente_politicos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -63,26 +57,16 @@ class AgentePoliticoController extends Controller
                 ->get();
 
             $usuarios = array();
-
             foreach ($users as $user) {
-
                 if ($user->ehAgentePolitico() == 0){
                     array_push($usuarios, $user);
                 }
             }
 
-
             return view('agente-politico.create', compact('pleito_eleitorals', 'usuarios'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -361,14 +345,7 @@ class AgentePoliticoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -426,14 +403,7 @@ class AgentePoliticoController extends Controller
             return view('agente-politico.edit', compact('agente_politico', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios', 'foto_perfil', 'temFoto', 'filesize'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -581,14 +551,7 @@ class AgentePoliticoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -644,14 +607,7 @@ class AgentePoliticoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AgentePoliticoController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

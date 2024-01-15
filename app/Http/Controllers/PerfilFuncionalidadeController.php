@@ -10,6 +10,7 @@ use App\Models\Perfil;
 use App\Models\PerfilFuncionalidade;
 use App\Models\TipoFuncionalidade;
 use App\Models\TipoPerfil;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,22 +35,13 @@ class PerfilFuncionalidadeController extends Controller
             $pfs = Perfil::where('ativo', '=', 1)->get();
             $perfis = Perfil::where('ativo', '=', 1)->get();
             $funcionalidades = Funcionalidade::where('ativo', '=', 1)->get();
-            $abrangencias = Abrangencia::where('ativo', '=', 1)->get();
-            $tipo_perfis = TipoPerfil::where('id', '!=', 1)->where('ativo', '=', 1)->get();
             $entidades = Entidade::where('ativo', '=', 1)->get();
             $tfs = TipoFuncionalidade::where('ativo', '=', 1)->get();
 
             return view('perfil-funcionalidade.index', compact('pfs', 'perfis', 'funcionalidades', 'abrangencias', 'entidades', 'tfs', 'tipo_perfis'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PerfilFuncionalidadeController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -163,7 +155,6 @@ class PerfilFuncionalidadeController extends Controller
                 return redirect()->route('perfil_funcionalidade.index')->with('erro', 'Não é possível alterar este perfil.');
             }
 
-            $abrangencias = Abrangencia::where('ativo', '=', 1)->get();
             $fs = Funcionalidade::where('ativo', '=', 1)->get();
             $funcs = array();
 
@@ -176,14 +167,7 @@ class PerfilFuncionalidadeController extends Controller
             return view('perfil-funcionalidade.edit', compact('perfil', 'funcs', 'abrangencias'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PerfilFuncionalidadeController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -253,14 +237,7 @@ class PerfilFuncionalidadeController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PerfilFuncionalidadeController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -325,14 +302,7 @@ class PerfilFuncionalidadeController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "PerfilFuncionalidadeController";
-            $erro->funcao = "inativarFuncionalidade";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'inativarFuncionalidade');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

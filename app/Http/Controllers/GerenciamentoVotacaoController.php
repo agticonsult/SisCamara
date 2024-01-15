@@ -6,6 +6,7 @@ use App\Models\AgentePolitico;
 use App\Models\ErrorLog;
 use App\Models\FotoPerfil;
 use App\Models\VotacaoEletronica;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             // $votacao = VotacaoEletronica::where('id', '=', $id)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
@@ -29,14 +30,7 @@ class GerenciamentoVotacaoController extends Controller
             return view('votacao-eletronica.gerenciamento.votacao', compact('votacao'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "GerenciamentoVotacaoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'gerenciar');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -48,7 +42,7 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
@@ -70,14 +64,7 @@ class GerenciamentoVotacaoController extends Controller
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação iniciada com sucesso!');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "GerenciamentoVotacaoController";
-            $erro->funcao = "iniciarVotacao";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'iniciarVotacao');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -89,7 +76,7 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
@@ -107,14 +94,7 @@ class GerenciamentoVotacaoController extends Controller
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação pausada com sucesso!');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "GerenciamentoVotacaoController";
-            $erro->funcao = "pausarVotacao";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'pausarVotacao');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -126,7 +106,7 @@ class GerenciamentoVotacaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
@@ -142,14 +122,7 @@ class GerenciamentoVotacaoController extends Controller
             return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação encerrada com sucesso!');
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "GerenciamentoVotacaoController";
-            $erro->funcao = "encerrarVotacao";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'encerrarVotacao');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

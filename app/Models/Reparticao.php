@@ -19,6 +19,9 @@ class Reparticao extends Model implements Auditable
 
     protected $table = 'reparticaos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

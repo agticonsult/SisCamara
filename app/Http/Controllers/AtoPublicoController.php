@@ -10,6 +10,7 @@ use App\Models\FormaPublicacaoAto;
 use App\Models\LinhaAto;
 use App\Models\OrgaoAto;
 use App\Models\TipoAto;
+use App\Services\ErrorLogService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,16 +38,10 @@ class AtoPublicoController extends Controller
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoPublicoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -55,19 +50,12 @@ class AtoPublicoController extends Controller
     {
         try {
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
-            // dd($ato->todas_linhas_ativas());
 
             return view('ato.publico.show', compact('ato'));
+
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoController";
-            $erro->funcao = "show";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'show');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -276,16 +264,10 @@ class AtoPublicoController extends Controller
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+            
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoPublicoController";
-            $erro->funcao = "buscar";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'buscaLivre');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -304,14 +286,7 @@ class AtoPublicoController extends Controller
             return view('ato.publico.index', compact('atos', 'filtros', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtoPublicoController";
-            $erro->funcao = "buscar";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'buscar');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

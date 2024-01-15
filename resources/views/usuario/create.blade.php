@@ -15,13 +15,6 @@
 
 <h1 class="h3 mb-3">Cadastro de Usuário</h1>
 <div class="card" style="background-color:white">
-
-    {{-- <div class="card-header">
-        <h2 class="text-center">
-            <strong>Cadastro de Usuário</strong>
-        </h2>
-    </div> --}}
-
     <div class="card-body">
         <div class="col-md-12">
             <form action="{{ route('usuario.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">

@@ -11,6 +11,7 @@ use App\Models\TipoVotacao;
 use App\Models\Vereador;
 use App\Models\VereadorVotacao;
 use App\Models\VotacaoEletronica;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,14 +33,7 @@ class VotacaoEletronicaController extends Controller
             return view('votacao-eletronica.index', compact('votacaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -51,21 +45,14 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $proposicaos = Proposicao::where('ativo', '=', 1)->get();
-            $tipo_votacaos = TipoVotacao::where('ativo', '=', 1)->get();
-            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
+            $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
+            $tipo_votacaos = TipoVotacao::where('ativo', '=', TipoVotacao::ATIVO)->get();
+            $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
 
             return view('votacao-eletronica.create', compact('proposicaos', 'tipo_votacaos', 'legislaturas'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -103,17 +90,17 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Não há vereadores cadastrador para realizar a votação!');
             }
 
-            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', 1)->first();
+            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', TipoVotacao::ATIVO)->first();
             if (!$tipo_votacao){
                 return redirect()->back()->with('erro', 'Tipo de votação inválido!');
             }
 
-            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', 1)->first();
+            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposição inválida!');
             }
 
-            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', Legislatura::ATIVO)->first();
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -145,14 +132,7 @@ class VotacaoEletronicaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -177,14 +157,7 @@ class VotacaoEletronicaController extends Controller
             return view('votacao-eletronica.resultado', compact('votacao', 'vereadorVotacaos', 'votosSim', 'votosNao', 'votosAbs'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "show";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'show');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -196,26 +169,19 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
-            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
-            $proposicaos = Proposicao::where('ativo', '=', 1)->get();
-            $tipo_votacaos = TipoVotacao::where('ativo', '=', 1)->get();
+            $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
+            $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
+            $tipo_votacaos = TipoVotacao::where('ativo', '=', TipoVotacao::ATIVO)->get();
 
             return view('votacao-eletronica.edit', compact('votacao', 'proposicaos', 'tipo_votacaos', 'legislaturas'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -245,22 +211,22 @@ class VotacaoEletronicaController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação eletrônica inválida.');
             }
 
-            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', 1)->first();
+            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', TipoVotacao::ATIVO)->first();
             if (!$tipo_votacao){
                 return redirect()->back()->with('erro', 'Tipo de votação inválido!');
             }
 
-            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', 1)->first();
+            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposição inválida!');
             }
 
-            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
+            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', Legislatura::ATIVO)->first();
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -280,14 +246,7 @@ class VotacaoEletronicaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -315,7 +274,7 @@ class VotacaoEletronicaController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação eletrônica inválida.');
             }
@@ -335,14 +294,7 @@ class VotacaoEletronicaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtividadeLazerController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
@@ -354,7 +306,7 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
@@ -368,14 +320,7 @@ class VotacaoEletronicaController extends Controller
             return view('votacao-eletronica.votacao', compact('votacao'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -384,19 +329,12 @@ class VotacaoEletronicaController extends Controller
     public function indexPublico()
     {
         try{
-            $votacaos = VotacaoEletronica::where('ativo', '=', 1)->get();
+            $votacaos = VotacaoEletronica::where('ativo', '=', VotacaoEletronica::ATIVO)->get();
 
             return view('votacao-eletronica.publico.indexPublico', compact('votacaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "indexPublico";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'VotacaoEletronicaController', 'indexPublico');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -404,27 +342,20 @@ class VotacaoEletronicaController extends Controller
     public function resultadoPublico($id)
     {
         try {
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
                 return redirect()->back()->with('erro', 'Votação inválida.');
             }
 
             $vereadorVotacaos = VereadorVotacao::where('id_votacao','=', $id)->where('ativo', '=', 1)->get();
-            $votosSim = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Sim')->where('ativo', '=', 1)->count();
-            $votosNao = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Não')->where('ativo', '=', 1)->count();
-            $votosAbs = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Abstenção')->where('ativo', '=', 1)->count();
+            $votosSim = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Sim')->where('ativo', '=', VereadorVotacao::ATIVO)->count();
+            $votosNao = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Não')->where('ativo', '=', VereadorVotacao::ATIVO)->count();
+            $votosAbs = VereadorVotacao::where('id_votacao','=', $id)->where('voto', '=', 'Abstenção')->where('ativo', '=', VereadorVotacao::ATIVO)->count();
 
             return view('votacao-eletronica.publico.resultadoPublico', compact('votacao', 'vereadorVotacaos', 'votosSim', 'votosNao', 'votosAbs'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VotacaoEletronicaController";
-            $erro->funcao = "show";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'VotacaoEletronicaController', 'resultadoPublico');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

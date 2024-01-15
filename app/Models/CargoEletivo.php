@@ -19,6 +19,9 @@ class CargoEletivo extends Model implements Auditable
 
     protected $table = 'cargo_eletivos';
 
+    const ATIVO = 1;
+    const INATIVO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

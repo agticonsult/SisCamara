@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ErrorLog;
 use App\Models\Legislatura;
+use App\Services\ErrorLogService;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,19 +23,12 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $legislaturas = Legislatura::where('ativo', '=', 1)->get();
+            $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
 
             return view('processo-legislativo.legislatura.index', compact('legislaturas'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "LegislaturaController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -74,14 +68,7 @@ class LegislaturaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "LegislaturaController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -93,7 +80,7 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', Legislatura::ATIVO)->first();
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -101,14 +88,7 @@ class LegislaturaController extends Controller
             return view('processo-legislativo.legislatura.edit', compact('legislatura'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "LegislaturaController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -152,14 +132,7 @@ class LegislaturaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "LegislaturaController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -187,7 +160,7 @@ class LegislaturaController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', Legislatura::ATIVO)->first();
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -207,14 +180,7 @@ class LegislaturaController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtividadeLazerController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

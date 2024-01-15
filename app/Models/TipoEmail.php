@@ -18,4 +18,7 @@ class TipoEmail extends Model implements Auditable
     protected $guarded = ['id', 'created_at', 'update_at'];
 
     protected $table = 'tipo_emails';
+
+    const ATIVO = 1;
+    const INATIVO = 0;
 }

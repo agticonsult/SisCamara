@@ -17,5 +17,13 @@ class ErrorLogService
         ]);
     }
 
+    public static function salvarPublico(string $erro, string $controlador, string $funcao)
+    {
+        ErrorLog::create([
+            'erro' => $erro,
+            'controlador' => $controlador,
+            'funcao' => $funcao,
+        ]);
+    }
 
 }

@@ -8,6 +8,7 @@ use App\Models\LocalizacaoProposicao;
 use App\Models\ModeloProposicao;
 use App\Models\StatusProposicao;
 use App\Models\TextoProposicao;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,19 +24,12 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $proposicaos = Proposicao::where('ativo', '=', 1)->get();
+            $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
 
             return view('proposicao.index', compact('proposicaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -47,19 +41,12 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $modelos = ModeloProposicao::where('ativo', '=', 1)->get();
+            $modelos = ModeloProposicao::where('ativo', '=', ModeloProposicao::ATIVO)->get();
 
             return view('proposicao.create', compact('modelos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -133,14 +120,7 @@ class ProposicaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -152,26 +132,19 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
-            $modelos = ModeloProposicao::where('ativo', '=', 1)->get();
-            $localizacaos = LocalizacaoProposicao::where('ativo', '=', 1)->get();
-            $statuses = StatusProposicao::where('ativo', '=', 1)->get();
+            $modelos = ModeloProposicao::where('ativo', '=', ModeloProposicao::ATIVO)->get();
+            $localizacaos = LocalizacaoProposicao::where('ativo', '=', LocalizacaoProposicao::ATIVO)->get();
+            $statuses = StatusProposicao::where('ativo', '=', StatusProposicao::ATIVO)->get();
 
             return view('proposicao.edit', compact('proposicao', 'localizacaos', 'statuses'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -203,17 +176,17 @@ class ProposicaoController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
-            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', LocalizacaoProposicao::ATIVO)->first();
             if (!$localizacao){
                 return redirect()->back()->with('erro', 'Localização inválida.');
             }
 
-            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', LocalizacaoProposicao::ATIVO)->first();
             if (!$localizacao){
                 return redirect()->back()->with('erro', 'Status inválido.');
             }
@@ -234,14 +207,7 @@ class ProposicaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -269,7 +235,7 @@ class ProposicaoController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
@@ -289,14 +255,7 @@ class ProposicaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ProposicaoController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

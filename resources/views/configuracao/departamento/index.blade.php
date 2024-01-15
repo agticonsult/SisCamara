@@ -14,17 +14,8 @@
     @include('errors.alerts')
     {{-- @include('errors.errors') --}}
 
+    <h1 class="h3 mb-3">Departamentos</h1>
     <div class="card" style="background-color:white">
-
-        <div class="card-header" style="background-color:white">
-            <h2 class="text-center">
-                {{-- <div>
-                    <span><i class="fas fa-address-book"></i></span>
-                </div> --}}
-                <strong>Departamento</strong>
-            </h2>
-        </div>
-
         <div id="accordion3">
             <div class="card">
                 <div class="card-header" id="headingThree">

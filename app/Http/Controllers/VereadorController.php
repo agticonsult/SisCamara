@@ -10,6 +10,7 @@ use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Models\User;
 use App\Models\Vereador;
+use App\Services\ErrorLogService;
 use App\Services\ValidadorCPFService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,19 +29,12 @@ class VereadorController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $vereadores = Vereador::where('ativo', '=', 1)->get();
+            $vereadores = Vereador::where('ativo', '=', Vereador::ATIVO)->get();
 
             return view('vereador.index', compact('vereadores'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -73,14 +67,7 @@ class VereadorController extends Controller
             return view('vereador.create', compact('pleito_eleitorals', 'usuarios'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -262,14 +249,7 @@ class VereadorController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -286,7 +266,7 @@ class VereadorController extends Controller
                 return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
-            $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', 1)->get();
+            $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', PleitoEleitoral::ATIVO)->get();
             $pleito_cargos = $vereador->pleito_eleitoral->cargos_eletivos_ativos();
             $cargos_eletivos = [];
             foreach ($pleito_cargos as $pleito_cargo) {
@@ -315,14 +295,7 @@ class VereadorController extends Controller
             return view('vereador.edit', compact('vereador', 'pleito_eleitorals', 'cargos_eletivos', 'usuarios'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -390,14 +363,14 @@ class VereadorController extends Controller
             $validar = Validator::make($input, $rules);
             $validar->validate();
 
-            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $vereador = Vereador::where('id', '=', $id)->where('ativo', '=', Vereador::ATIVO)->first();
             if (!$vereador){
                 return redirect()->back()->with('erro', 'Vereador inválido.');
             }
 
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', 1)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
-                ->where('ativo', '=', 1)
+                ->where('ativo', '=', PleitoCargo::ATIVO)
                 ->first();
             if (!$pleito_cargo){
                 return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
@@ -463,14 +436,7 @@ class VereadorController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -526,14 +492,7 @@ class VereadorController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "VereadorController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'VereadorController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

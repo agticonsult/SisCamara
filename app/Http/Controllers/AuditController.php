@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Auditoria;
 use App\Models\ErrorLog;
 use App\Models\User;
+use App\Services\ErrorLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Models\Audit;
@@ -19,19 +20,13 @@ class AuditController extends Controller
             }
 
             $audits = Auditoria::all();
-            $users = User::where('ativo', '=', 1)->get();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
 
             return view('audit.index', compact('audits', 'users'));
+
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AuditController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AuditController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -47,19 +42,12 @@ class AuditController extends Controller
 
             $audits = $this->repository->buscar($request->all());
 
-            $users = User::where('ativo', '=', 1)->get();
+            $users = User::where('ativo', '=', User::ATIVO)->get();
 
             return view('audit.index', compact('audits', 'users'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AuditController";
-            $erro->funcao = "buscar";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AuditController', 'buscar');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

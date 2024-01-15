@@ -15,17 +15,8 @@
 @include('errors.alerts')
 @include('errors.errors')
 
+<h1 class="h3 mb-3">Alteração de Modelo</h1>
 <div class="card" style="background-color:white">
-
-    <div class="card-header">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
-            </div>
-            <strong>Alteração de Modelo</strong>
-        </h2>
-    </div>
-
     <div class="card-body">
         <div class="col-md-12">
             <form action="{{ route('proposicao.modelo.update', $modelo_proposicao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">

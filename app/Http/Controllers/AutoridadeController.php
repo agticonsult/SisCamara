@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Autoridade;
 use App\Models\ErrorLog;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,14 +30,7 @@ class AutoridadeController extends Controller
             return view('configuracao.autoridade.index', compact('autoridades'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AutoridadeController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -90,15 +84,8 @@ class AutoridadeController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AutoridadeController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'store');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
@@ -135,14 +122,7 @@ class AutoridadeController extends Controller
             return view('configuracao.autoridade.edit', compact('autoridade'));
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AutoridadeController";
-            $erro->funcao = "edit";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -185,15 +165,8 @@ class AutoridadeController extends Controller
                 ->withInput();
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AutoridadeController";
-            $erro->funcao = "update";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'update');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
@@ -247,15 +220,8 @@ class AutoridadeController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AutoridadeController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'destroy');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 }

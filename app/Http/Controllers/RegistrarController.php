@@ -59,15 +59,15 @@ class RegistrarController extends Controller
             }
 
             $novaPessoa = Pessoa::create($request->validated() + [
-                'pessoaJuridica' => 0,
+                'pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA,
             ]);
 
             $id_pessoa = $novaPessoa->id;
 
             $novoUsuario = User::create($request->validated() + [
                 'id_pessoa' => $id_pessoa,
-                'bloqueadoPorTentativa' => 0,
-                'confirmacao_email' => 0,
+                'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
+                'confirmacao_email' => User::EMAIL_CONFIRMADO,
             ]);
 
             PerfilUser::create([
@@ -88,11 +88,7 @@ class RegistrarController extends Controller
 
         }
         catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "RegistrarController";
-            $erro->funcao = "registrarStore";
-            $erro->save();
+            ErrorLogService::salvarPublico($ex->getMessage(), 'RegistrarController', 'registrarStore');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

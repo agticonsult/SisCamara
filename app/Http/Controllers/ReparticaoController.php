@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ErrorLog;
 use App\Models\Reparticao;
 use App\Models\TipoReparticao;
+use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,19 +21,12 @@ class ReparticaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $reparticaos = Reparticao::where('ativo', '=', 1)->get();
+            $reparticaos = Reparticao::where('ativo', '=', Reparticao::ATIVO)->get();
 
             return view('reparticao.index', compact('reparticaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ReparticaoController";
-            $erro->funcao = "index";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -44,19 +38,12 @@ class ReparticaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+            $tipo_reparticaos = TipoReparticao::where('ativo', '=', TipoReparticao::ATIVO)->get();
 
             return view('reparticao.create', compact('tipo_reparticaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ReparticaoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'create');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -101,14 +88,7 @@ class ReparticaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ReparticaoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -120,24 +100,17 @@ class ReparticaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', Reparticao::ATIVO)->first();
             if (!$reparticao){
                 return redirect()->back()->with('erro', 'Repartição inválida.');
             }
 
-            $tipo_reparticaos = TipoReparticao::where('ativo', '=', 1)->get();
+            $tipo_reparticaos = TipoReparticao::where('ativo', '=', TipoReparticao::ATIVO)->get();
 
             return view('reparticao.edit', compact('reparticao', 'tipo_reparticaos'));
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ReparticaoController";
-            $erro->funcao = "create";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -186,14 +159,7 @@ class ReparticaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "ReparticaoController";
-            $erro->funcao = "store";
-            if (Auth::check()){
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -241,14 +207,7 @@ class ReparticaoController extends Controller
                 ->withInput();
         }
         catch (\Exception $ex) {
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->controlador = "AtividadeLazerController";
-            $erro->funcao = "destroy";
-            if (Auth::check()) {
-                $erro->cadastradoPorUsuario = auth()->user()->id;
-            }
-            $erro->save();
+            ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'destroy');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
