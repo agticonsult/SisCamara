@@ -8,6 +8,7 @@ use App\Models\ComposicaoFamiliar;
 use App\Models\Email;
 use App\Models\ErrorLog;
 use App\Models\Municipio;
+use App\Models\Perfil;
 use App\Models\PerfilUser;
 use App\Models\Permissao;
 use App\Models\Pessoa;
@@ -72,13 +73,13 @@ class RegistrarController extends Controller
 
             PerfilUser::create([
                 'id_user' => $novoUsuario->id,
-                'id_tipo_perfil' => User::USUARIO_EXTERNO,
+                'id_tipo_perfil' => Perfil::USUARIO_EXTERNO,
                 'cadastradoPorUsuario' => $novoUsuario->id,
             ]);
 
             Permissao::create([
                 'id_user' => $novoUsuario->id,
-                'id_perfil' => User::USUARIO_EXTERNO,
+                'id_perfil' => Perfil::USUARIO_EXTERNO,
                 'cadastradoPorUsuario' => $novoUsuario->id,
             ]);
 

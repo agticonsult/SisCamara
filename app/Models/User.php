@@ -27,8 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'cpf', 'password', 'email', 'telefone_celular', 'telefone_celular2',
-        'id_pessoa', 'importado', 'id_importacao', 'tentativa_senha',
+        'cpf', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'importado', 'id_importacao', 'tentativa_senha',
         'bloqueadoPorTentativa', 'dataBloqueadoPorTentativa', 'envio_email_recuperacao', 'envio_email_confirmacaoApi',
         'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'validado', 'validadoPorUsuario',
         'validadoEm', 'incluso', 'incluidoPorUsuario', 'incluidoEm', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
@@ -45,12 +44,12 @@ class User extends Authenticatable
 
     const ATIVO = 1;
     const INATIVO = 0;
-    const USUARIO_EXTERNO = 1;
-    const USUARIO_INTERNO = 0;
     const EMAIL_CONFIRMADO = 1;
     const EMAIL_NAO_CONFIRMADO = 0;
     const NAO_BLOQUEADO_TENTATIVA = 0;
     const BLOQUEADO_TENTATIVA_EXCESSO = 1;
+    const USUARIO_VALIDADO = 1;
+    const USUARIO_NAO_VALIDADO = 0;
 
     /**
      * The attributes that should be cast to native types.
@@ -109,11 +108,11 @@ class User extends Authenticatable
     }
     public function permissoes_ativas()
     {
-        return $this->hasMany(Permissao::class, 'id_user', 'id')->where('ativo', '=', 1);
+        return $this->hasMany(Permissao::class, 'id_user', 'id')->where('ativo', '=', Permissao::ATIVO);
     }
     public function temPerfil($id_perfil)
     {
-        $tem = Permissao::where('id_perfil', '=', $id_perfil)->where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+        $tem = Permissao::where('id_perfil', '=', $id_perfil)->where('id_user', '=', $this->id)->where('ativo', '=', Permissao::ATIVO)->first();
 
         if (!$tem){
             return false;
@@ -138,13 +137,13 @@ class User extends Authenticatable
             return false;
         }
 
-        $funcionalidade = Funcionalidade::where('id_entidade', '=', $e->id)->where('id_tipo_funcionalidade', '=', $tp->id)->where('ativo', '=', 1)->first();
+        $funcionalidade = Funcionalidade::where('id_entidade', '=', $e->id)->where('id_tipo_funcionalidade', '=', $tp->id)->where('ativo', '=', Funcionalidade::ATIVO)->first();
 
         if (!$funcionalidade){
             return false;
         }
 
-        $permissoes = Permissao::where('id_user', '=', $this->id)->where('ativo', '=', 1)->get();
+        $permissoes = Permissao::where('id_user', '=', $this->id)->where('ativo', '=', Permissao::ATIVO)->get();
 
         foreach ($permissoes as $permissao){
 
@@ -160,7 +159,7 @@ class User extends Authenticatable
     public function ehAgentePolitico()
     {
         // $eh = Vereador::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
-        $eh = AgentePolitico::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+        $eh = AgentePolitico::where('id_user', '=', $this->id)->where('ativo', '=', AgentePolitico::ATIVO)->first();
 
         if (!$eh){
             return false;
@@ -169,7 +168,7 @@ class User extends Authenticatable
     }
     public function usuarioInterno()
     {
-        $eh = PerfilUser::where('id_user', '=', $this->id)->where('id_tipo_perfil', '=', 4)->where('ativo', '=', 1)->first();
+        $eh = PerfilUser::where('id_user', '=', $this->id)->where('id_tipo_perfil', '=', 4)->where('ativo', '=', PerfilUser::ATIVO)->first();
 
         if (!$eh){
             return false;
@@ -179,7 +178,7 @@ class User extends Authenticatable
     public function foto()
     {
         $resposta = array();
-        $foto = FotoPerfil::where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
+        $foto = FotoPerfil::where('id_user', '=', $this->id)->where('ativo', '=', FotoPerfil::ATIVO)->first();
         if ($foto){
             $existe = Storage::disk('public')->exists('foto-perfil/'.$foto->nome_hash);
             // $existe = public_path('foto-perfil/'.$foto_perfil->nome_hash);

@@ -159,18 +159,7 @@ class ModeloDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
@@ -180,19 +169,14 @@ class ModeloDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Modelo inválido.');
             }
 
-            $modelo_documento->inativadoPorUsuario = Auth::user()->id;
-            $modelo_documento->dataInativado = Carbon::now();
-            $modelo_documento->motivoInativado = $motivo;
-            $modelo_documento->ativo = 0;
-            $modelo_documento->save();
+            $modelo_documento->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => ModeloDocumento::ATIVO
+            ]);
 
             return redirect()->route('documento.modelo.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'destroy');
@@ -207,7 +191,7 @@ class ModeloDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $modelo_documento = ModeloDocumento::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $modelo_documento = ModeloDocumento::where('id', '=', $id)->where('ativo', '=', ModeloDocumento::ATIVO)->first();
             if (!$modelo_documento){
                 return redirect()->back()->with('erro', 'Modelo inválido.');
             }

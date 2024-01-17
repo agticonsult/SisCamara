@@ -16,6 +16,7 @@ class FilesizeTableSeeder extends Seeder
     {
         DB::table('tipo_filesizes')->insert([
             ['descricao'=>'Anexo do Ato', 'ativo'=>1],
+            ['descricao'=>'Foto de Perfil', 'ativo'=>1],
         ]);
 
         DB::table('filesizes')->insert([

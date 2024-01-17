@@ -3,8 +3,6 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -40,195 +38,28 @@
 <h1 class="h3 mb-3">Cadastro de Agente Político</h1>
 <div class="card" style="background-color:white">
 
-    {{-- <div class="card-header">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
-            </div>
-            <strong>Cadastro de Agente Político</strong>
-        </h2>
-    </div> --}}
-
     <div class="card-body">
-        <div class="col-md-12">
-            <form action="{{ route('agente_politico.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
-                @csrf
-                @method('POST')
-
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Pleito Eleitoral</label>
-                        <select name="id_pleito_eleitoral" id="id_pleito_eleitoral" class="select2 form-control" required>
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($pleito_eleitorals as $pleito_eleitoral)
-                                <option value="{{ $pleito_eleitoral->id }}">
-                                    Primeiro Turno: <strong>{{ date('d/m/Y', strtotime($pleito_eleitoral->dataPrimeiroTurno)) }}</strong> -
-                                    Segundo Turno: <strong>{{ date('d/m/Y', strtotime($pleito_eleitoral->dataPrimeiroTurno)) }}</strong>
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Cargo Eletivo</label>
-                        <select name="id_cargo_eletivo" id="id_cargo_eletivo" class="select2 form-control" required>
-                            <option value="" selected disabled>--Selecione--</option>
-                        </select>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body" style="background-color: rgb(196, 216, 238)">
+                        <h5 class="card-title">Cadastrar</h5>
+                        <p class="card-text">Realizar um novo cadastro no sistema</p>
+                        <a href="{{ route('agente_politico.novo_agente_politico') }}" class="btn btn-primary">Avançar</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data início mandato</label>
-                        <input type="date" name="dataInicioMandato" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Data fim mandato</label>
-                        <input type="date" name="dataFimMandato" class="form-control" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="selecionar_opcao">*Cadastrar usuário ou vincular a um usuário já existente?</label>
-                        <select name="selecionar_opcao" class="form-control" id="optionSelect" required>
-                            <option value="" selected disabled>-- Selecione --</option>
-                            <option value="1">Cadastrar usuário</option>
-                            <option value="2">Vincular a usuário já existente</option>
-                        </select>
-                    </div>
-                    <div class="d-none form-group col-md-6" id="selectUser">
-                        <label for="id_usuario">*Usuário</label>
-                        <select name="id_usuario" class="form-control select2">
-                            <option value="" selected disabled>-- Selecione --</option>
-                            @foreach ($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}" {{ old('id_usuario') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
-                            @endforeach
-                        </select>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body" style="background-color: rgb(196, 202, 209)">
+                        <h5 class="card-title">Vincular a um usuário existente</h5>
+                        <p class="card-text">Vincular a um usuário existente no sistema</p>
+                        <a href="{{ route('agente_politico.vincularUsuario') }}" class="btn btn-secondary">Avançar</a>
                     </div>
                 </div>
-
-                <div class="d-none row" id="cadUser">
-                    <div class="row">
-                        <div class="col-md-3 mr-3">
-                            <div class="card mb-3">
-                                <div class="card-header">
-                                    <h4 class="mb-3">Foto de Perfil</h4>
-                                </div>
-                                <div class="card-body text-center">
-                                    <div class="max-width">
-                                        <div class="imageContainer">
-                                            <img src="{{ asset('img/user-avatar2.png') }}" class="img-fluid rounded-circle mb-2" width="60%" height="60%" alt="Selecione uma imagem" id="imgPhoto">
-                                            <input type="file" id="flImage" name="fImage" accept="image/jpg, image/jpeg, image/png" value="{{'fImage'}}">
-                                        </div>
-                                        <span>Clique na ícone para selecionar a foto de perfil</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h4 class="text-left mb-0 mt-2">Atualizar dados</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="my-0">
-                                <div class="card-body">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h5>Dados Pessoais</h5>
-                                                <div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">*Nome</label>
-                                                        <input class="form-control" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ old('nome') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">Apelido</label>
-                                                        <input class="form-control" type="text" name="apelidoFantasia" id="apelidoFantasia" placeholder="Apelido" value="{{ old('apelidoFantasia') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">*CPF</label>
-                                                        <input class="cpf form-control" type="text" name="cpf" id="cpf" placeholder="Informe seu CPF" value="{{ old('cpf') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">*Data de Nascimento</label>
-                                                        <input class="dataFormat form-control" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ old('dt_nascimento_fundacao') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">*Email</label>
-                                                        <input class="form-control" type="email" name="email" placeholder="Informe um email válido" value="{{ old('email') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">Celular/Telefone</label>
-                                                        <input class="telefone form-control" type="text"  name="telefone_celular" value="{{ old('telefone_celular') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">Celular/Telefone Recado</label>
-                                                        <input class="telefone form-control" type="text" name="telefone_celular2" value="{{ old('telefone_celular2') }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h5>Endereço</h5>
-                                                <div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <label for="cep">CEP</label>
-                                                        <input type="text" name="cep" id="cep" class="form-control" placeholder="Informe o CEP" value="{{ old('cep') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label for="endereco">Endereço (Rua/Avenida)</label>
-                                                        <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Informe o endereço" value="{{ old('endereco') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label for="numero">Número</label>
-                                                        <input type="text" name="numero" id="numero" class="form-control" placeholder="Informe o número" value="{{ old('numero') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label for="bairro">Bairro / Comunidade</label>
-                                                        <input type="text" name="bairro" id="bairro" class="form-control" placeholder="Informe o bairro" value="{{ old('bairro') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label for="complemento">Complemento</label>
-                                                        <input type="text" name="complemento" id="complemento" class="form-control" placeholder="Informe o complemento" value="{{ old('complemento') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label for="ponto_referencia">Ponto de Referência</label>
-                                                        <input type="text" name="ponto_referencia" class="form-control" placeholder="Informe o ponto de referência" value="{{ old('ponto_referencia') }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr class="my-0"><br>
-                                            <div class="col-md-12">
-                                                <h5>Senha de acesso ao sistema</h5>
-                                                <div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                                        <input class="form-control" type="password" name="password" placeholder="Informe uma senha" value="{{ old('password') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="form-label">Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                                        <input class="form-control" type="password" name="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
-                </div>
-                <br>
-            </form>
+            </div>
         </div>
     </div>
-
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

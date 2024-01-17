@@ -28,32 +28,7 @@ class PerfilFuncionalidadeTableSeeder extends Seeder
             $perfilFuncionalidade->save();
         }
 
-        //--------------------------Funcionalidades do Vereador--------------------------
-        $funcionalidadesVereador = Funcionalidade::leftJoin('entidades', 'entidades.id', '=', 'funcionalidades.id_entidade')
-            ->leftJoin('tipo_funcionalidades', 'tipo_funcionalidades.id', '=', 'funcionalidades.id_tipo_funcionalidade')
-            ->where(function (Builder $query) {
-                return
-                    $query->where('entidades.nomeEntidade', '=', 'VotacaoEletronica')
-                        ->orWhere('entidades.nomeEntidade', '=', 'VereadorVotacao');
-                })
-            ->where(function (Builder $query) {
-                return
-                    $query->where('tipo_funcionalidades.descricao', '=', 'Listagem')
-                        ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro');
-                        // ->orWhere('tipo_funcionalidades.descricao', '=', 'Alteração')
-            })
-            ->select('funcionalidades.id')
-            ->get();
-
-        foreach ($funcionalidadesVereador as $f2) {
-            $perfilFuncionalidade = new PerfilFuncionalidade();
-            $perfilFuncionalidade->id_perfil = 2;
-            $perfilFuncionalidade->id_funcionalidade = $f2->id;
-            $perfilFuncionalidade->ativo = 1;
-            $perfilFuncionalidade->save();
-        }
-
-        //--------------------------Funcionalidades do usuário interno--------------------------
+        //--------------------------Funcionalidades do Político--------------------------
         $funcionalidadesUsuarioInterno = Funcionalidade::leftJoin('entidades', 'entidades.id', '=', 'funcionalidades.id_entidade')
             ->leftJoin('tipo_funcionalidades', 'tipo_funcionalidades.id', '=', 'funcionalidades.id_tipo_funcionalidade')
             ->where(function (Builder $query) {
@@ -81,13 +56,14 @@ class PerfilFuncionalidadeTableSeeder extends Seeder
             ->select('funcionalidades.id')
             ->get();
 
-        foreach ($funcionalidadesUsuarioInterno as $f3) {
+        foreach ($funcionalidadesUsuarioInterno as $f2) {
             $perfilFuncionalidade = new PerfilFuncionalidade();
-            $perfilFuncionalidade->id_perfil = 4;
-            $perfilFuncionalidade->id_funcionalidade = $f3->id;
+            $perfilFuncionalidade->id_perfil = 2;
+            $perfilFuncionalidade->id_funcionalidade = $f2->id;
             $perfilFuncionalidade->ativo = 1;
             $perfilFuncionalidade->save();
         }
+
         //--------------------------Funcionalidades do usuário interno--------------------------
         $funcionalidadesUsuarioInterno = Funcionalidade::leftJoin('entidades', 'entidades.id', '=', 'funcionalidades.id_entidade')
             ->leftJoin('tipo_funcionalidades', 'tipo_funcionalidades.id', '=', 'funcionalidades.id_tipo_funcionalidade')
@@ -102,9 +78,7 @@ class PerfilFuncionalidadeTableSeeder extends Seeder
                         ->orWhere('entidades.nomeEntidade', '=', 'ModeloProposicao')
                         ->orWhere('entidades.nomeEntidade', '=', 'AgentePolitico')
                         ->orWhere('entidades.nomeEntidade', '=', 'Legislatura')
-                        ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral')
-                        ->orWhere('entidades.nomeEntidade', '=', 'VotacaoEletronica')
-                        ->orWhere('entidades.nomeEntidade', '=', 'VereadorVotacao');
+                        ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral');
                 })
             ->where(function (Builder $query) {
                 return

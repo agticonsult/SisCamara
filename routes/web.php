@@ -252,7 +252,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/index', [AgentePoliticoController::class, 'index'])->name('index');
         Route::get('/show/{id}', [AgentePoliticoController::class, 'show'])->name('show');
         Route::get('/create', [AgentePoliticoController::class, 'create'])->name('create');
+        Route::get('/novo-agente-politico', [AgentePoliticoController::class, 'novoAgentePolitico'])->name('novo_agente_politico');
+        Route::get('/vincular', [AgentePoliticoController::class, 'vincularUsuario'])->name('vincularUsuario');
         Route::post('/store', [AgentePoliticoController::class, 'store'])->name('store');
+        Route::post('/store-vincular', [AgentePoliticoController::class, 'storeVincular'])->name('storeVincular');
         Route::get('/edit/{id}', [AgentePoliticoController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [AgentePoliticoController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [AgentePoliticoController::class, 'destroy'])->name('destroy');

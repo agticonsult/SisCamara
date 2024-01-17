@@ -23,12 +23,16 @@ class Perfil extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
+    const USUARIO_ADM = 1;
+    const USUARIO_POLITICO = 2;
+    const USUARIO_EXTERNO = 3;
+    const USUARIO_INTERNO = 4;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
     public function funcionalidades_ativas(){
-        // return PerfilFuncionalidade::where('id_perfil', '=', $this->id)->where('ativo', '=', 1)->get();
         return $this->hasMany(PerfilFuncionalidade::class, 'id_perfil', 'id')->where('ativo', '=', 1);
     }
     public function funcionalidades(){

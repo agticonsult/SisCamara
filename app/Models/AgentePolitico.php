@@ -13,7 +13,7 @@ class AgentePolitico extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'inicio_mandato', 'fim_mandato', 'id_legilslatura', 'id_cargo_eletivo', 'id_pleito_eleitoral', 'id_user', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'dataInicioMandato', 'dataFimMandato', 'id_legislatura', 'id_cargo_eletivo', 'id_pleito_eleitoral', 'id_user', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -46,7 +46,7 @@ class AgentePolitico extends Model implements Auditable
     public function imagem()
     {
         $resposta = array();
-        $imagem = FotoPerfil::where('id_user', '=', $this->id_user)->where('ativo', '=', 1)->first();
+        $imagem = FotoPerfil::where('id_user', '=', $this->id_user)->where('ativo', '=', FotoPerfil::ATIVO)->first();
         if ($imagem){
             $existe = Storage::disk('public')->exists('foto-perfil/' . $imagem->nome_hash);
             if ($existe){

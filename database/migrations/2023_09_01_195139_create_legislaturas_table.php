@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Legislatura;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,7 +24,7 @@ class CreateLegislaturasTable extends Migration
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->nullable();
+            $table->boolean('ativo')->default(Legislatura::ATIVO);
             $table->timestamps();
         });
     }

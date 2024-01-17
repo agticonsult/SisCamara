@@ -93,19 +93,17 @@
                                             @include('errors.errors')
                                             <div class="mb-3">
                                                 <label for="cpf">CPF</label>
-                                                <input type="text" name="cpf" id="cpf"
-                                                    class="form-control form-control-lg" placeholder="Digite seu CPF"
-                                                    value="{{ old('cpf') }}">
+                                                <input type="text" name="cpf" id="cpf" class="form-control form-control-lg" placeholder="Digite seu CPF" value="{{ old('cpf') }}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password">Senha</label>
-                                                <input type="password" name="password" id="password"
-                                                    class="form-control form-control-lg" placeholder="Digite sua senha"
-                                                    value="{{ old('password') }}">
+                                                <input type="password" name="password" id="password" class="form-control form-control-lg" placeholder="Digite sua senha" value="{{ old('password') }}">
+                                                <br>
+                                                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                                                <label for="showPassword">Mostrar Senha</label>
                                             </div>
                                             <div class="mt-3">
-                                                <button type="submit" class="btn btn-lg btn-primary"
-                                                    style="width: 100%; margin-bottom: 0.7rem">Entrar</button>
+                                                <button type="submit" class="btn btn-lg btn-primary" style="width: 100%; margin-bottom: 0.7rem">Entrar</button>
                                             </div>
                                             <small>
                                                 <a href="{{ route('registrar_usuario') }}">Cadastrar-se</a>
@@ -157,6 +155,18 @@
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
     <script>
         $('#cpf').mask('000.000.000-00');
+
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('password');
+            var showPasswordCheckbox = document.getElementById('showPassword');
+
+            if (showPasswordCheckbox.checked) {
+                passwordInput.type = 'text';
+            }
+            else {
+                passwordInput.type = 'password';
+            }
+        }
     </script>
 
 </body>

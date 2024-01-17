@@ -20,6 +20,9 @@ class FotoPerfil extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
+    const TEM_FOTO = 1;
+    const NAO_TEM_FOTO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

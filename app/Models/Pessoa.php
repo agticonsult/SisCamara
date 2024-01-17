@@ -34,6 +34,10 @@ class Pessoa extends Model implements Auditable
     {
         $this->attributes['nome'] = trim($value);
     }
+    public function setCepAttribute($value)
+    {
+        $this->attributes['cep'] = preg_replace('/[^0-9]/', '', $value);
+    }
 
     // public function municipio()
     // {

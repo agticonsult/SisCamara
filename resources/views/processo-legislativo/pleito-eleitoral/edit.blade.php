@@ -91,7 +91,7 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
+                            {{-- <th scope="col">ID</th> --}}
                             <th scope="col">Cargo Eletivo</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão "Ativo")</th>
@@ -100,7 +100,7 @@
                     <tbody>
                         @foreach ($pleito_eleitoral->cargos_eletivos() as $pleito_cargo)
                             <tr>
-                                <td>{{ $pleito_cargo->id }}</td>
+                                {{-- <td>{{ $pleito_cargo->id }}</td> --}}
                                 <td>{{ $pleito_cargo->cargo_eletivo->descricao }}</td>
                                 <td>
                                     <strong>{{ $pleito_cargo->cadastradoPorUsuario != null ? $pleito_cargo->cad_usuario->pessoa->nome : 'não informado' }}</strong>

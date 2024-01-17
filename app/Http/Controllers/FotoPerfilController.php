@@ -21,7 +21,7 @@ class FotoPerfilController extends Controller
             //verifica se o arquivo é válido
             if($request->hasFile('fImage') && $request->file('fImage')->isValid()){
 
-                $max_filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', Filesize::ATIVO)->first();
+                $max_filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
                 if ($max_filesize){
                     if ($max_filesize->mb != null){
                         if (is_int($max_filesize->mb)){

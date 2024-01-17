@@ -15,16 +15,6 @@
 
 <h1 class="h3 mb-3">Agentes Políticos</h1>
 <div class="card" style="background-color:white">
-
-    {{-- <div class="card-header" style="background-color:white">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
-            </div>
-            <strong>Listagem de Agentes Políticos</strong>
-        </h2>
-    </div> --}}
-
     <div class="card-body">
         @if (Count($agente_politicos) == 0)
             <div>
@@ -57,7 +47,7 @@
                                 </td>
                                 <td>
                                     {{-- <a href="{{ route('agente_politico.edit', $agente->id) }}" class="btn btn-warning m-1">Alterar</a> --}}
-                                    <a href="{{ route('agente_politico.edit', $agente->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                    <a href="{{ route('agente_politico.edit', $agente->id_user) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                     {{-- <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $agente->id }}">Excluir</button> --}}
                                 </td>
                                 {{-- $table->date('')->nullable();

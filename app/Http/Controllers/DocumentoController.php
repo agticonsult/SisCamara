@@ -179,18 +179,7 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
@@ -200,19 +189,15 @@ class DocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            $documento->inativadoPorUsuario = Auth::user()->id;
-            $documento->dataInativado = Carbon::now();
-            $documento->motivoInativado = $motivo;
-            $documento->ativo = 0;
-            $documento->save();
+            $documento->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => Documento::INATIVO
+            ]);
 
             return redirect()->route('documento.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'destroy');

@@ -22,6 +22,9 @@ class Filesize extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
+    const ANEXO_ATO = 1;
+    const FOTO_PERFIL = 2;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

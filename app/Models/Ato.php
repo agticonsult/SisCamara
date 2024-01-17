@@ -53,31 +53,31 @@ class Ato extends Model implements Auditable
     }
     public function linhas_originais_ativas()
     {
-        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1)->orderBy('ordem')->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('id_tipo_linha', '=', 1)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem')->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1);
     }
     public function todas_linhas_ativas()
     {
-        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('ativo', '=', 1)->orderBy('ordem')->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem')->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
     public function linhas_inalteradas_ativas()
     {
-        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('alterado', '=', 0)->where('ativo', '=', 1)->orderBy('ordem', 'asc')->orderBy('sub_ordem', 'asc')->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('alterado', '=', 0)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem', 'asc')->orderBy('sub_ordem', 'asc')->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
     public function anexos_ativos()
     {
-        $anexos = AnexoAto::where('id_ato', '=', $this->id)->where('ativo', '=', 1)->get();
+        $anexos = AnexoAto::where('id_ato', '=', $this->id)->where('ativo', '=', AnexoAto::ATIVO)->get();
         return $anexos;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
     public function atos_relacionados_ativos()
     {
-        $atos = AtoRelacionado::where('id_ato_principal', '=', $this->id)->where('ativo', '=', 1)->get();
+        $atos = AtoRelacionado::where('id_ato_principal', '=', $this->id)->where('ativo', '=', AtoRelacionado::ATIVO)->get();
         return $atos;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
@@ -148,50 +148,6 @@ class Ato extends Model implements Auditable
         return $resultados;
     }
 
-    // public function buscar($filtro = null)
-    // {
-    //     return $this->select('atos.*', 'linha_atos.texto')
-    //     ->from('atos')
-    //     ->leftJoin('linha_atos', 'atos.id', '=', 'linha_atos.id_ato_principal')
-    //     ->where(function($query) use($filtro){
-
-    //         if(isset($filtro['id_classificacao'])){
-    //             $query->where('id_classificacao', '=', $filtro['id_classificacao']);
-    //         }
-
-    //         if(isset($filtro['ano'])){
-    //             $query->where('ano', '=', $filtro['ano']);
-    //         }
-
-    //         if(isset($filtro['numero'])){
-    //             $query->where('numero', 'LIKE', '%' . $filtro['numero'] . '%');
-    //         }
-
-    //         if(isset($filtro['id_tipo_ato'])){
-    //             $query->where('id_tipo_ato', '=', $filtro['id_tipo_ato']);
-    //         }
-
-    //         if(isset($filtro['id_assunto'])){
-    //             $query->where('id_assunto', '=', $filtro['id_assunto']);
-    //         }
-
-    //         if(isset($filtro['altera_dispositivo'])){
-    //             $query->where('altera_dispositivo', '=', $filtro['altera_dispositivo']);
-    //         }
-
-    //         if(isset($filtro['id_orgao'])){
-    //             $query->where('id_orgao', '=', $filtro['id_orgao']);
-    //         }
-
-    //         if(isset($filtro['id_forma_publicacao'])){
-    //             $query->where('id_forma_publicacao', '=', $filtro['id_forma_publicacao']);
-    //         }
-
-    //     })->when(isset($filtro['data_publicacao']), function($query) use ($filtro){
-    //         $query->whereDate('data_publicacao', $filtro['data_publicacao']);
-    //     })
-    //     ->paginate(20);
-    // }
 }
 
 
