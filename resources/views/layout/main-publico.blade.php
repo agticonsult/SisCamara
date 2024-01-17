@@ -25,6 +25,9 @@
             font-size: 1.1rem;
             font-weight: bold;
         }
+        .sidebar {
+            background-color: #2172cf !important;
+        }
     </style>
 </head>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TipoAtoRequest;
 use App\Models\ErrorLog;
 use App\Models\TipoAto;
 use App\Services\ErrorLogService;
@@ -51,37 +52,19 @@ class TipoAtoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TipoAtoRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $tipoAto = new TipoAto();
-            $tipoAto->descricao = $request->descricao;
-            $tipoAto->cadastradoPorUsuario = Auth::user()->id;
-            $tipoAto->ativo = 1;
-            $tipoAto->save();
+            TipoAto::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Cadastro realizado com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'store');
@@ -113,13 +96,13 @@ class TipoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
+            $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
             if (!$tipoAto){
                 return redirect()->route('configuracao.tipo_ato.index')->with('erro', 'Não é possível alterar este tipo de ato.');
             }
 
             return view('configuracao.tipo-ato.edit', compact('tipoAto'));
+
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'edit');
@@ -134,35 +117,18 @@ class TipoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TipoAtoRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $tipoAto = TipoAto::find($id);
-            $tipoAto->descricao = $request->descricao;
-            $tipoAto->save();
+            $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
+            $tipoAto->update($request->validated());
 
             return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Alteração realizada com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'update');
@@ -183,41 +149,26 @@ class TipoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             $motivo = $request->motivo;
 
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $tipo = TipoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
-            if (!$tipo){
+            $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
+            if (!$tipoAto){
                 return redirect()->back()->with('erro', 'Não é possível excluir este tipo de ato.')->withInput();
             }
 
-            $tipo->inativadoPorUsuario = Auth::user()->id;
-            $tipo->dataInativado = Carbon::now();
-            $tipo->motivoInativado = $motivo;
-            $tipo->ativo = 0;
-            $tipo->save();
+            $tipoAto->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => TipoAto::ATIVO
+            ]);
 
             return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+            
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'destroy');

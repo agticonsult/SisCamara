@@ -22,6 +22,22 @@
     <script src="{{ asset('js/jquery.js') }}"></script>
 </head>
 
+<style>
+    .sidebar {
+        background-color: #185ead !important;
+    }
+    .sidebar-item.active > a {
+        background-color: #386ca0 !important;
+        /* color: rgb(201, 187, 187) */
+    }
+    .sidebar-link{
+        color: rgb(233, 221, 221) !important;
+    }
+    .sidebar-content{
+        background-color: rgba(0, 0, 0, 0) !important;
+    }
+</style>
+
 
 {{-- @php
     use App\Models\Encaminhamento;
@@ -73,7 +89,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'ato' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->uri == 'ato/index' ? 'active' : null }}">
                         <a href="{{ route('ato.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Atos</span>
@@ -209,7 +225,7 @@
 
                 @if (Auth::user()->temPermissao('AgentePolitico', 'Listagem') == 1)
                     <li
-                        class="sidebar-item {{ Route::current()->getPrefix() == 'agente-politico' ? 'active' : null }}">
+                        class="sidebar-item {{ Route::current()->uri == 'agente-politico/index' ? 'active' : null }}">
                         <a href="{{ route('agente_politico.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Agentes Políticos</span>
@@ -218,7 +234,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->getPrefix() == 'reparticao' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->uri == 'reparticao/index' ? 'active' : null }}">
                         <a href="{{ route('reparticao.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Repartição</span>

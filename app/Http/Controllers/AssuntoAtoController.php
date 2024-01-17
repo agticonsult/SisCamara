@@ -26,7 +26,7 @@ class AssuntoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $assuntoAtos = AssuntoAto::where('ativo', '=', 1)->get();
+            $assuntoAtos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
 
             return view('configuracao.assunto-ato.index', compact('assuntoAtos'));
         }

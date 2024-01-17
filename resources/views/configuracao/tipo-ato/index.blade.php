@@ -12,8 +12,6 @@
         }
     </style>
     @include('errors.alerts')
-    @include('errors.errors')
-
 
     <h1 class="h3 mb-3">Tipos de Ato</h1>
     <div class="card" style="background-color:white">
@@ -29,8 +27,7 @@
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
                     <div class="card-body">
-                        <form action="{{ route('configuracao.tipo_ato.store') }}" id="form" method="POST"
-                            class="form_prevent_multiple_submits">
+                        <form action="{{ route('configuracao.tipo_ato.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                             @csrf
                             @method('POST')
 
@@ -38,8 +35,10 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label">*Nome</label>
-                                        <input class="form-control" type="text" name="descricao" id="descricao"
-                                            placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
+                                        <input class="form-control @error('descricao') is-invalid @enderror"" type="text" name="descricao" id="descricao"  placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
+                                        @error('descricao')
+                                            <div class="invalid-feedback">{{ $message }}</div><br>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -145,21 +144,6 @@
     <script src="{{ asset('js/jquery.validate.js') }}"></script>
 
     <script>
-        $("#form").validate({
-            rules: {
-                descricao: {
-                    required: true,
-                    maxlength: 255,
-                }
-            },
-            messages: {
-                descricao: {
-                    required: "Campo obrigatório",
-                    maxlength: "Máximo de 255 caracteres"
-                }
-            }
-        });
-
         $(document).ready(function() {
 
             $('#datatables-reponsive').dataTable({
