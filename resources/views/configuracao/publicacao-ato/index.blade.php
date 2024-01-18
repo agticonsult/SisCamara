@@ -12,8 +12,6 @@
         }
     </style>
     @include('errors.alerts')
-    @include('errors.errors')
-
 
     <h1 class="h3 mb-3">Publicações</h1>
     <div class="card" style="background-color:white">
@@ -38,8 +36,10 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label">*Nome</label>
-                                        <input class="form-control" type="text" name="descricao" id="descricao"
-                                            placeholder="Informe o nome da publicação" value="{{ old('descricao') }}">
+                                        <input class="form-control @error('descricao') is-invalid @enderror" type="text" name="descricao" id="descricao" placeholder="Informe o nome da publicação" value="{{ old('descricao') }}">
+                                        @error('descricao')
+                                            <div class="invalid-feedback">{{ $message }}</div><br>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -89,22 +89,17 @@
                                             class="btn btn-warning">Alterar</a>
                                         </td> --}}
                                             <td>
-                                                <a href="{{ route('configuracao.publicacao_ato.edit', $publicacao->id) }}"
-                                                    class="btn btn-warning"><i
-                                                        class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                                <a href="{{ route('configuracao.publicacao_ato.edit', $publicacao->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                    data-target="#exampleModalExcluir{{ $publicacao->id }}"><i
-                                                    class="align-middle me-2 fas fa-fw fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $publicacao->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button>
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="exampleModalExcluir{{ $publicacao->id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
-                                                    <form method="POST" class="form_prevent_multiple_submits"
-                                                        action="{{ route('configuracao.publicacao_ato.destroy', $publicacao->id) }}">
+                                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('configuracao.publicacao_ato.destroy', $publicacao->id) }}">
                                                         @csrf
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
@@ -119,11 +114,9 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Cancelar
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
                                                             </button>
-                                                            <button type="submit"
-                                                                class="button_submit btn btn-danger">Excluir</button>
+                                                            <button type="submit" class="button_submit btn btn-danger">Excluir</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -143,23 +136,7 @@
     <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
     <script src="{{ asset('js/jquery.validate.js') }}"></script>
-
     <script>
-        $("#form").validate({
-            rules: {
-                descricao: {
-                    required: true,
-                    maxlength: 255,
-                }
-            },
-            messages: {
-                descricao: {
-                    required: "Campo obrigatório",
-                    maxlength: "Máximo de 255 caracteres"
-                }
-            }
-        });
-
         $(document).ready(function() {
 
             $('#datatables-reponsive').dataTable({

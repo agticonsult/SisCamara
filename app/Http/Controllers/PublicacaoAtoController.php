@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PublicacaoAtoRequest;
 use App\Models\ErrorLog;
 use App\Models\PublicacaoAto;
 use App\Services\ErrorLogService;
@@ -51,37 +52,19 @@ class PublicacaoAtoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PublicacaoAtoRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
-            $publicacao = new PublicacaoAto();
-            $publicacao->descricao = $request->descricao;
-            $publicacao->cadastradoPorUsuario = Auth::user()->id;
-            $publicacao->ativo = 1;
-            $publicacao->save();
+            PublicacaoAto::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Cadastro realizado com sucesso.');
 
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'store');
@@ -113,13 +96,13 @@ class PublicacaoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
+            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
             if (!$publicacao){
                 return redirect()->route('configuracao.publicacao_ato.index')->with('erro', 'Não é possível alterar esta publicacao.');
             }
 
             return view('configuracao.publicacao-ato.edit', compact('publicacao'));
+
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'edit');
@@ -134,35 +117,18 @@ class PublicacaoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PublicacaoAtoRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'descricao' => $request->descricao
-            ];
-            $rules = [
-                'descricao' => 'required|max:255'
-            ];
+            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
+            $publicacao->update($request->validated());
 
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
+            return redirect()->route('configuracao.publicacao_ato.edit', $publicacao->id)->with('success', 'Alteração realizada com sucesso.');
 
-            $publicacao = PublicacaoAto::find($id);
-            $publicacao->descricao = $request->descricao;
-            $publicacao->save();
-
-            return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Alteração realizada com sucesso.');
-
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'update');
@@ -183,41 +149,24 @@ class PublicacaoAtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', 1)->first();
-
+            $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
             if (!$publicacao){
                 return redirect()->back()->with('erro', 'Não é possível excluir esta publicação.')->withInput();
             }
 
-            $publicacao->inativadoPorUsuario = Auth::user()->id;
-            $publicacao->dataInativado = Carbon::now();
-            $publicacao->motivoInativado = $motivo;
-            $publicacao->ativo = 0;
-            $publicacao->save();
+            $publicacao->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => PublicacaoAto::INATIVO
+            ]);
 
             return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'destroy');

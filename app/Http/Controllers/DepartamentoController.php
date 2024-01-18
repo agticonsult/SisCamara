@@ -153,7 +153,7 @@ class DepartamentoController extends Controller
                 }
             }
 
-            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
+            return redirect()->route('configuracao.departamento.edit', $departamento->id)->with('success', 'Departamento alterado com sucesso.');
 
         }
         catch(\Exception $ex){
