@@ -35,7 +35,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label">*Nome</label>
-                                        <input class="form-control @error('descricao') is-invalid @enderror"" type="text" name="descricao" id="descricao"  placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
+                                        <input class="form-control @error('descricao') is-invalid @enderror" type="text" name="descricao" id="descricao"  placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
                                         @error('descricao')
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror

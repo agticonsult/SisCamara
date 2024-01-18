@@ -31,7 +31,7 @@
                         </div>
                         <div class="col-md-12">
                             <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                            <a href="{{ URL::previous() }}" class="btn btn-light">Voltar</a>
+                            <a href="{{ route('configuracao.tipo_ato.index') }}" class="btn btn-light">Voltar</a>
                         </div>
                     </div>
                 </div>
