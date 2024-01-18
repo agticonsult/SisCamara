@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VotacaoEletronicaRequest;
 use App\Models\AgentePolitico;
 use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
@@ -27,8 +28,7 @@ class VotacaoEletronicaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $votacaos = VotacaoEletronica::where('ativo', '=', 1)->get();
-            // $votacaos = VotacaoEletronica::get();
+            $votacaos = VotacaoEletronica::where('ativo', '=', VotacaoEletronica::ATIVO)->get();
 
             return view('votacao-eletronica.index', compact('votacaos'));
         }
@@ -57,28 +57,12 @@ class VotacaoEletronicaController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(VotacaoEletronicaRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
-
-            $input = [
-                'data' => $request->data,
-                'id_tipo_votacao' => $request->id_tipo_votacao,
-                'id_proposicao' => $request->id_proposicao,
-                'id_legislatura' => $request->id_legislatura
-            ];
-            $rules = [
-                'data' => 'required|date',
-                'id_tipo_votacao' => 'required|integer',
-                'id_proposicao' => 'required|integer',
-                'id_legislatura' => 'required|integer'
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
 
             $vereadores = AgentePolitico::leftJoin('pleito_eleitorals', 'pleito_eleitorals.id', '=', 'agente_politicos.id_pleito_eleitoral')
                 ->where('pleito_eleitorals.id_legislatura', '=', $request->id_legislatura)
@@ -87,49 +71,22 @@ class VotacaoEletronicaController extends Controller
                 ->get();
 
             if (Count($vereadores) == 0){
-                return redirect()->back()->with('erro', 'Não há vereadores cadastrador para realizar a votação!');
+                return redirect()->back()->with('erro', 'Não há POLÍTICOS cadastrador para realizar a votação!');
             }
 
-            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', TipoVotacao::ATIVO)->first();
-            if (!$tipo_votacao){
-                return redirect()->back()->with('erro', 'Tipo de votação inválido!');
-            }
-
-            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', Proposicao::ATIVO)->first();
-            if (!$proposicao){
-                return redirect()->back()->with('erro', 'Proposição inválida!');
-            }
-
-            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', Legislatura::ATIVO)->first();
-            if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
-            }
-
-            $votacao = new VotacaoEletronica();
-            $votacao->data = $request->data;
-            $votacao->id_tipo_votacao = $request->id_tipo_votacao;
-            $votacao->id_proposicao = $request->id_proposicao;
-            $votacao->id_legislatura = $request->id_legislatura;
-            $votacao->cadastradoPorUsuario = Auth::user()->id;
-            $votacao->ativo = 1;
-            $votacao->save();
+            $votacao = VotacaoEletronica::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             foreach ($vereadores as $vereador){
-                $vereador_votacao = new VereadorVotacao();
-                $vereador_votacao->id_vereador = $vereador->id;
-                $vereador_votacao->id_votacao = $votacao->id;
-                $vereador_votacao->cadastradoPorUsuario = Auth::user()->id;
-                $vereador_votacao->ativo = 1;
-                $vereador_votacao->save();
+                VereadorVotacao::create([
+                    'id_vereador' => $vereador->id,
+                    'id_votacao' => $votacao->id,
+                    'cadastradoPorUsuario' => Auth::user()->id
+                ]);
             }
 
             return redirect()->route('votacao_eletronica.index')->with('success', 'Cadastro realizado com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'store');
