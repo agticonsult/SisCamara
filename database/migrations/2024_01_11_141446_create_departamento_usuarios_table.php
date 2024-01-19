@@ -18,8 +18,6 @@ class CreateDepartamentoUsuariosTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->uuid('id_coordenador')->nullable();
-            $table->foreign('id_coordenador')->references('id')->on('users');
             $table->integer('id_departamento')->unsigned()->nullable();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
             $table->uuid('cadastradoPorUsuario')->nullable();

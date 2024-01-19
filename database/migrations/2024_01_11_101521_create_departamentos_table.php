@@ -17,6 +17,8 @@ class CreateDepartamentosTable extends Migration
         Schema::create('departamentos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descricao')->nullable();
+            $table->uuid('id_coordenador')->nullable();
+            $table->foreign('id_coordenador')->references('id')->on('users');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();

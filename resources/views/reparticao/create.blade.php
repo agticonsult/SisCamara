@@ -44,6 +44,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                        <a href="{{ route('reparticao.index') }}" class="btn btn-light">Voltar</a>
                     </div>
                 </div>
             </form>

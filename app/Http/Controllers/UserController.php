@@ -92,10 +92,8 @@ class UserController extends Controller
 
             $id_perfils = $request->id_perfil;
             foreach($id_perfils as $id_perf) {
-
-                $perfil = Perfil::where('id', '=', $id_perf)->where('ativo', '=', 1)->first();
+                $perfil = Perfil::where('id', '=', $id_perf)->where('ativo', '=', Perfil::ATIVO)->first();
                 if ($perfil) {
-
                     PerfilUser::create([
                         'id_user' => $novoUsuario->id,
                         'id_tipo_perfil' => $id_perf,
@@ -285,34 +283,39 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            //validação dos campos
-            $input = [
-                'id_user_desativa' => $request->id_user_desativa,
-                'permissao_id' => $request->permissao_id
-            ];
-            $rules = [
-                'id_user_desativa' => 'required',
-                'permissao_id' => 'required'
-            ];
+            $motivo = $request->motivo;
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
 
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
+            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+            if (!$usuario) {
+                return redirect()->route('usuario.index')->with('erro', 'Houve erro ao desativar o perfil do usuário.');
+            }
 
-            $qtd_perfis = Permissao::where('id_user', '=', $request->id_user_desativa)->where('ativo', '=', 1)->count();
+            $qtd_perfis = Permissao::where('id_user', '=', $usuario->id)->where('ativo', '=', Permissao::ATIVO)->count();
 
             if ($qtd_perfis > 1){
 
-                $permissao = Permissao::where('id', '=', $request->permissao_id)->where('ativo', '=', 1)->first();
-
+                $permissao = Permissao::where('id_user', '=', $usuario->id)->where('ativo', '=', Permissao::ATIVO)->first();
                 if (!$permissao){
                     return redirect()->route('usuario.edit', $request->id_user_desativa)->with('erro', 'Não é possível alterar este perfil.')->withInput();
                 }
+                $perfilUser = PerfilUser::where('id_user', '=', $usuario->id)->where('ativo', '=', PerfilUser::ATIVO)->first();
 
-                $permissao->inativadoPorUsuario = auth()->user()->id;
-                $permissao->dataInativado = Carbon::now();
-                $permissao->motivoInativado = $request->motivo;
-                $permissao->ativo = 0;
-                $permissao->save();
+                $permissao->update([
+                   'inativadoPorUsuario' => Auth::user()->id,
+                   'dataInativado' => Carbon::now(),
+                   'motivoInativado' => $motivo,
+                   'ativo' => Permissao::INATIVO
+                ]);
+
+                $perfilUser->update([
+                    'inativadoPorUsuario' => Auth::user()->id,
+                    'dataInativado' => Carbon::now(),
+                    'motivoInativado' => $motivo,
+                    'ativo' => PerfilUser::INATIVO
+                ]);
 
                 $id_user = $permissao->id_user;
                 if ($id_user == Auth::user()->id && Auth::user()->temPermissao('User', 'Alteração') != 1){
@@ -327,15 +330,10 @@ class UserController extends Controller
                 return redirect()->route('usuario.edit', $request->id_user_desativa)->with('erro', 'É necessário pelo menos 1 perfil ativo para o usuário.')->withInput();
             }
         }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
-        }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            return $ex->getMessage();
+            // ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
+            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
 }

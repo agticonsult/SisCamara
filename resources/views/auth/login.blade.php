@@ -13,8 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/rr-1.2.8/datatables.min.css" />
 
     <style>
         .error {
@@ -30,7 +29,7 @@
 
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #1e70b8">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #0f4e96">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">
@@ -43,12 +42,6 @@
                     class="align-middle mr-3" alt="" width="80px" height="60px" />
                     <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span> --}}
                 </a>
-                {{-- <div class="container">
-                        <a class="sidebar-brand" href="{{ url('/') }}">
-                            <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural -
-                                Paraná</span>
-                        </a>
-                    </div> --}}
                 <ul class="nav justify-content-end">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('web_publica.ato.index') }}">
@@ -65,11 +58,6 @@
                             <button type="button" class="btn btn-outline-warning btn-lg">Atos</button>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <button type="button" class="btn btn-outline-danger btn-lg">E-SIC</button>
-                        </a>
-                    </li> --}}
                 </ul>
             </div>
         </nav>
@@ -109,20 +97,13 @@
                                                 <a href="{{ route('registrar_usuario') }}">Cadastrar-se</a>
                                             </small>
                                             <small>
-                                                <a href="{{ route('passwordReset1') }}" style="float: right">Esqueceu a
-                                                    senha?</a>
+                                                <a href="{{ route('passwordReset1') }}" style="float: right">Esqueceu a senha?</a>
                                             </small>
                                             <br>
                                             <small>
-                                                <a href="{{ route('reenviar_link') }}" style="float: left">Reenviar
-                                                    link de confirmação de e-mail</a>
+                                                <a href="{{ route('reenviar_link') }}" style="float: left">Reenviar link de confirmação de e-mail</a>
                                             </small>
                                             <br>
-
-                                            {{-- <small>
-                                                <a href="{{route('pub.acervo.indexpub')}}" style="float: left">acessar acervo</a>
-                                            </small> --}}
-
                                         </form>
                                     </div>
                                 </div>

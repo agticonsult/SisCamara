@@ -12,7 +12,7 @@ class Departamento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'descricao', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoIntivaado', 'ativo'
+        'descricao', 'id_coordenador', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoIntivaado', 'ativo'
     ];
     protected $guarded = ['id', 'created_at', 'update_at'];
 
@@ -27,7 +27,7 @@ class Departamento extends Model implements Auditable
     }
     public function coordenador()
     {
-        return $this->belongsTo(User::class, 'coordenador');
+        return $this->hasOne(User::class, 'id_coordenador');
     }
     public function usuarios()
     {

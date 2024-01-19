@@ -11,7 +11,6 @@
     }
 </style>
 @include('errors.alerts')
-{{-- @include('errors.errors') --}}
 
 <h1 class="h3 mb-3">Cadastro de Usuário</h1>
 <div class="card" style="background-color:white">
@@ -58,14 +57,17 @@
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="form-label">*Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe uma senha">
+                                <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" id="password" placeholder="Informe uma senha">
+                                <br>
+                                <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility()">
+                                <label for="showPassword">Mostrar Senha</label>
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>
                             <div class="form-group col-md-12">
                                 <label class="form-label">*Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme a senha">
+                                <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" id="confirmacao" placeholder="Confirme a senha">
                                 @error('confirmacao')
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
@@ -92,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
                 </div>
@@ -100,7 +101,6 @@
             </form>
         </div>
     </div>
-
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -129,64 +129,26 @@
     today = yyyy + '-' + mm + '-' + dd;
     $('.dataFormat').attr('max', today);
 
-    // $("#form").validate({
-    //     rules : {
-    //         nome:{
-    //             required:true
-    //         },
-    //         cpf:{
-    //             required:true
-    //         },
-    //         dt_nascimento_fundacao:{
-    //             required:true
-    //         },
-    //         email:{
-    //             required:true
-    //         },
-    //         password:{
-    //             required:true,
-    //             minlength:6,
-    //             maxlength:35
-    //         },
-    //         confirmacao:{
-    //             required:true,
-    //             minlength:6,
-    //             maxlength:35
-    //         },
-    //         perfil:{
-    //             required:true
-    //         }
-    //     },
-    //     messages:{
-    //         nome:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         cpf:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         dt_nascimento_fundacao:{
-    //             required:"Campo obrigatório",
-    //             min:"Data mínima: 01/01/1899",
-    //             max:"Data máxima: data de hoje",
-    //         },
-    //         email:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         password:{
-    //             required:"Campo obrigatório",
-    //             minlength:"Minímo 6 caracteres",
-    //             maxlength:"Máximo 35 caracteres"
-    //         },
-    //         confirmacao:{
-    //             required:"Campo obrigatório",
-    //             minlength:"Minímo 6 caracteres",
-    //             maxlength:"Máximo 35 caracteres"
-    //         },
-    //         perfil:{
-    //             required:"Campo obrigatório"
-    //         },
-    //     }
-    // });
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById('password');
+        var showPasswordCheckbox = document.getElementById('showPassword');
+
+        if (showPasswordCheckbox.checked) {
+            passwordInput.type = 'text';
+        }
+        else {
+            passwordInput.type = 'password';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var confirmationInput = document.getElementById("confirmacao");
+
+        confirmationInput.addEventListener("paste", function (e) {
+            e.preventDefault();
+            alert("Ação de colar não permitida neste campo de confirmação de senha!");
+        });
+    });
 
     $(document).ready(function() {
 

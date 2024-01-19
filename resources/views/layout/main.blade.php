@@ -24,39 +24,19 @@
 
 <style>
     .sidebar {
-        background-color: #185ead !important;
+        background-color: #0f4e96 !important;
     }
     .sidebar-item.active > a {
         background-color: #386ca0 !important;
         /* color: rgb(201, 187, 187) */
     }
     .sidebar-link{
-        color: rgb(233, 221, 221) !important;
+        color: rgb(211, 199, 199) !important;
     }
     .sidebar-content{
         background-color: rgba(0, 0, 0, 0) !important;
     }
 </style>
-
-
-{{-- @php
-    use App\Models\Encaminhamento;
-    // use App\AvisoVisualizacao;
-    use App\Models\MensagemVisualizacao;
-    if (Auth::user()) {
-        $visu = Encaminhamento::where('id_destinatario', '=', Auth::user()->id)
-            ->where('visto', '=', 0)
-            ->get();
-        $countVisu = count($visu);
-
-        $visuMsg = MensagemVisualizacao::where('id_user', '=', Auth::user()->id)
-            ->where('visto', '=', 0)
-            ->where('ativo', '=', 1)
-            ->get();
-        $countVisuMsg = count($visuMsg);
-    }
-@endphp --}}
-
 
 <div class="wrapper">
     <nav id="sidebar" class="sidebar">
@@ -67,9 +47,6 @@
                         <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.png'))) }}"
                             class="img-thumbnail" width="30%" height="30%" alt="">
                         <span class="align-middle mr-3" style="font-size: .999rem;">SisCamara</span>
-                        {{-- <img src="{{ 'data:image/jpg;base64,' . base64_encode(file_get_contents(public_path('imagens/logo.jpg'))) }}"
-                            class="img-thumbnail" width="30%" height="30%" alt="">
-                        <span class="align-middle mr-3" style="font-size: .999rem;">IDR-Paraná</span> --}}
                     </div>
                 </div>
             </a>
@@ -89,7 +66,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->uri == 'ato/index' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->uri == 'ato/index' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
                         <a href="{{ route('ato.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Atos</span>
@@ -225,7 +202,7 @@
 
                 @if (Auth::user()->temPermissao('AgentePolitico', 'Listagem') == 1)
                     <li
-                        class="sidebar-item {{ Route::current()->uri == 'agente-politico/index' ? 'active' : null }}">
+                        class="sidebar-item {{ Route::current()->uri == 'agente-politico/index' || Route::current()->uri == 'agente-politico/create' || Route::current()->uri == 'agente-politico/novo-agente-politico' || Route::current()->uri == 'agente-politico/vincular' || Route::current()->uri == 'agente-politico/edit/{id}'? 'active' : null }}">
                         <a href="{{ route('agente_politico.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Agentes Políticos</span>
@@ -234,7 +211,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->uri == 'reparticao/index' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->uri == 'reparticao/index' || Route::current()->uri == 'reparticao/create' || Route::current()->uri == 'reparticao/edit/{id}' ? 'active' : null }}">
                         <a href="{{ route('reparticao.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Repartição</span>

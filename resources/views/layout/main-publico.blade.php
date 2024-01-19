@@ -25,15 +25,13 @@
             font-size: 1.1rem;
             font-weight: bold;
         }
-        .sidebar {
-            background-color: #2172cf !important;
-        }
+
     </style>
 </head>
 
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #1e70b8">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #0f4e96">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
                     <div class="max-width">

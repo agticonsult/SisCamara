@@ -12,7 +12,6 @@
         }
     </style>
     @include('errors.alerts')
-    {{-- @include('errors.errors') --}}
 
     <h1 class="h3 mb-3">Departamentos</h1>
     <div class="card" style="background-color:white">
@@ -28,8 +27,7 @@
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
                     <div class="card-body">
-                        <form action="{{ route('configuracao.departamento.store') }}" id="form" method="POST"
-                            class="form_prevent_multiple_submits">
+                        <form action="{{ route('configuracao.departamento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                             @csrf
                             @method('POST')
 

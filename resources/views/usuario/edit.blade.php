@@ -164,15 +164,15 @@
     <div class="card-body">
         <div class="col-md-12">
             <hr><br>
-            <h5>Listagem de Perfis</h5>
+            <h3>Listagem de Perfis do usuário:  <strong>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nome : 'não informado' }} - {{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</strong></h3>
             <br>
             <div class="table-responsive">
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th scope="col">Usuário</th>
+                            {{-- <th scope="col">Usuário</th>
                             <th scope="col">CPF</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">Email</th> --}}
                             <th scope="col">Perfil (clique no botão para ver as funcionalidades do perfil)</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Status <br>(para desativar este perfil deste usuário, clique no botão "Ativo")</th>
@@ -181,11 +181,11 @@
                     <tbody>
                         @foreach ($usuario->permissoes as $permissao)
                             <tr>
-                                <td>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nome : 'não informado' }}</td>
+                                {{-- <td>{{ $permissao->user->id_pessoa != null ? $permissao->user->pessoa->nome : 'não informado' }}</td>
                                 <td class="cpf">{{ $permissao->user->cpf != null ? $permissao->user->cpf : 'não informado' }}</td>
-                                <td>{{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</td>
-                                <td>
-                                    <button  type="button" class="funcionalidades btn btn-dark" id="{{ $permissao->id_perfil }}" name="{{ $permissao->perfil->descricao }}">
+                                <td>{{ $permissao->user->email != null ? $permissao->user->email : 'não informado' }}</td> --}}
+                                <td >
+                                    <button  type="button" class="funcionalidades btn btn-dark" id="{{ $permissao->id_perfil }}" name="{{ $permissao->perfil->descricao }}" style="width: 100%">
                                         {{ $permissao->perfil->descricao }}
                                     </button>
                                 </td>
@@ -196,7 +196,7 @@
                                 <td>
                                     @switch($permissao->ativo)
                                         @case(1)
-                                            <button type="button" class="desativar btn btn-success" name="{{ $permissao->id }}" id="{{ $permissao->perfil->descricao }}">
+                                            <button type="button" class="desativar btn btn-success" name="{{ $permissao->id }}" id="{{ $permissao->perfil->descricao }}" style="width: 100%">
                                                 Ativo
                                             </button>
                                             @break
@@ -294,73 +294,6 @@
             width: '100%',
             dropdownCssClass: "bigdrop"
         });
-
-        // $('#tipo_perfil').on('change', function(){
-        //     var valores = $('#tipo_perfil').val();
-
-        //     switch (valores.length) {
-
-        //         case 1:
-        //             selected = valores[0];
-        //             switch (selected) {
-        //                 case '1':
-        //                     $('#administrador').removeClass('d-none');
-        //                     $('#funcionario').addClass('d-none');
-        //                     $('#cliente').addClass('d-none');
-        //                     break;
-        //                 case '2':
-        //                     $('#funcionario').removeClass('d-none');
-        //                     $('#administrador').addClass('d-none');
-        //                     $('#cliente').addClass('d-none');
-        //                     break;
-        //                 case '3':
-        //                     $('#cliente').removeClass('d-none');
-        //                     $('#administrador').addClass('d-none');
-        //                     $('#funcionario').addClass('d-none');
-        //                     break;
-
-        //                 default:
-        //                     $('#administrador').addClass('d-none');
-        //                     $('#funcionario').addClass('d-none');
-        //                     $('#cliente').addClass('d-none');
-        //                     break;
-        //             }
-        //             break;
-
-        //         case 2:
-        //             console.log(valores);
-        //             if ((valores[0] == 1 && valores[1] == 2) || (valores[0] == 2 && valores[1] == 1)){
-        //                 $('#administrador').removeClass('d-none');
-        //                 $('#funcionario').removeClass('d-none');
-        //                 $('#cliente').addClass('d-none');
-        //             }
-        //             else{
-        //                 if ((valores[0] == 1 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 1)){
-        //                     $('#administrador').removeClass('d-none');
-        //                     $('#cliente').removeClass('d-none');
-        //                     $('#funcionario').addClass('d-none');
-        //                 }
-        //                 else{
-        //                     if ((valores[0] == 2 && valores[1] == 3) || (valores[0] == 3 && valores[1] == 2)){
-        //                         $('#funcionario').removeClass('d-none');
-        //                         $('#cliente').removeClass('d-none');
-        //                         $('#administrador').addClass('d-none');
-        //                     }
-        //                 }
-        //             }
-        //             break;
-
-        //         case 3:
-        //             console.log(valores);
-        //             $('#administrador').removeClass('d-none');
-        //             $('#funcionario').removeClass('d-none');
-        //             $('#cliente').removeClass('d-none');
-        //             break;
-
-        //         default:
-        //             break;
-        //     }
-        // });
 
         $('.desativar').click(function () {
             var permissao_id = this.name;

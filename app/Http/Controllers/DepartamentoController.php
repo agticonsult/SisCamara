@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartamentoRequest;
 use App\Http\Requests\DepartamentoStoreRequest;
 use App\Models\Departamento;
 use App\Models\DepartamentoUsuario;
@@ -61,7 +62,7 @@ class DepartamentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DepartamentoStoreRequest $request)
+    public function store(DepartamentoRequest $request)
     {
         try{
             if(Auth::user()->temPermissao('Departamento', 'Cadastro') != 1) {
@@ -72,10 +73,17 @@ class DepartamentoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            DepartamentoUsuario::create($request->validated() + [
-                'id_departamento' => $departamento->id,
-                'cadastradoPorUsuario' => Auth::user()->id
-            ]);
+            $id_usuarios = $request->id_user;
+            foreach ($id_usuarios as $id_usuario) {
+                $temUsuario = User::where('id', '=', $id_usuario)->where('ativo', '=', User::ATIVO)->first();
+                if ($temUsuario) {
+                    DepartamentoUsuario::create([
+                        'id_user' => $temUsuario->id,
+                        'id_departamento' => $departamento->id,
+                        'cadastradoPorUsuario' => Auth::user()->id
+                    ]);
+                }
+            }
 
             return redirect()->back()->with('success', 'Cadastro realizado com sucesso.');
 
@@ -111,8 +119,11 @@ class DepartamentoController extends Controller
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            if (!$departamento) {
+                return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível alterar este departamento.');
+            }
             $users = User::where('ativo', '=', User::ATIVO)->get();
-
+            $pertecentesDepartamento = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
             $usuarios = array();
             foreach ($users as $user) {
                 if ($user->usuarioInterno() == 1) {
@@ -120,7 +131,7 @@ class DepartamentoController extends Controller
                 }
             }
 
-            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
+            return view('configuracao.departamento.edit', compact('departamento', 'usuarios', 'pertecentesDepartamento'));
 
         }
         catch(\Exception $ex){
@@ -136,7 +147,7 @@ class DepartamentoController extends Controller
      * @param  \App\Models\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(DepartamentoRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('Departamento', 'Alteração') != 1) {
@@ -144,12 +155,15 @@ class DepartamentoController extends Controller
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
-            $users = User::where('ativo', '=', User::ATIVO)->get();
+            $vincularUsuarioDep = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
 
-            $usuarios = array();
-            foreach ($users as $user) {
-                if ($user->usuarioInterno() == 1) {
-                    array_push($usuarios, $user);
+            $id_usuarios = $request->id_user;
+            foreach ($id_usuarios as $id_usuario) {
+                $temUsuario = User::where('id', '=', $id_usuario)->where('ativo', '=', User::ATIVO)->first();
+                if ($temUsuario) {
+                    $vincularUsuarioDep->update($request->validated() + [
+                        'id_user' => $temUsuario->id,
+                    ]);
                 }
             }
 
