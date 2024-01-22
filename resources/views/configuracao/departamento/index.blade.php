@@ -113,17 +113,15 @@
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $departamento->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="exampleModalExcluir{{ $departamento->id }}" tabindex="-1"
-                                            role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
+                                        <div class="modal fade" id="exampleModalExcluir{{ $departamento->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
-                                                    <form method="POST" class="form_prevent_multiple_submits"
-                                                        action="{{ route('configuracao.assunto_ato.destroy', $departamento->id) }}">
+                                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('configuracao.departamento.destroy', $departamento->id) }}">
                                                         @csrf
                                                         @method('POST')
                                                         <div class="modal-header btn-danger">
                                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                Excluir <strong>{{ $departamento->descricao != null ? $departamento->descricao : 'não informado' }}</strong>?
+                                                                Excluir departamento <strong>{{ $departamento->descricao != null ? $departamento->descricao : 'não informado' }}</strong>?
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">

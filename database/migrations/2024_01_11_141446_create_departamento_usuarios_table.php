@@ -20,12 +20,11 @@ class CreateDepartamentoUsuariosTable extends Migration
             $table->foreign('id_user')->references('id')->on('users');
             $table->integer('id_departamento')->unsigned()->nullable();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
-            $table->uuid('cadastradoPorUsuario')->nullable();
-            $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
+            // $table->uuid('cadastradoPorUsuario')->nullable();
+            // $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
-            $table->text('motivoInativado')->nullable();
             $table->boolean('ativo')->default(DepartamentoUsuario::ATIVO);
             $table->timestamps();
         });

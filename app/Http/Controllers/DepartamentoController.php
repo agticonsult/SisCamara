@@ -10,6 +10,7 @@ use App\Models\ErrorLog;
 use App\Models\PerfilUser;
 use App\Models\User;
 use App\Services\ErrorLogService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,16 +75,9 @@ class DepartamentoController extends Controller
             ]);
 
             $id_usuarios = $request->id_user;
-            foreach ($id_usuarios as $id_usuario) {
-                $temUsuario = User::where('id', '=', $id_usuario)->where('ativo', '=', User::ATIVO)->first();
-                if ($temUsuario) {
-                    DepartamentoUsuario::create([
-                        'id_user' => $temUsuario->id,
-                        'id_departamento' => $departamento->id,
-                        'cadastradoPorUsuario' => Auth::user()->id
-                    ]);
-                }
-            }
+            $departamento->usuarios()->attach($id_usuarios, [
+                'created_at' => Carbon::now()
+            ]);
 
             return redirect()->back()->with('success', 'Cadastro realizado com sucesso.');
 
@@ -118,20 +112,19 @@ class DepartamentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->with('usuarios')->first();
             if (!$departamento) {
                 return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível alterar este departamento.');
             }
             $users = User::where('ativo', '=', User::ATIVO)->get();
-            $pertecentesDepartamento = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
             $usuarios = array();
             foreach ($users as $user) {
-                if ($user->usuarioInterno() == 1) {
+                if ($user->usuarioInterno() == 1 && $user->estaNoDepartamento() == 0) {
                     array_push($usuarios, $user);
                 }
             }
 
-            return view('configuracao.departamento.edit', compact('departamento', 'usuarios', 'pertecentesDepartamento'));
+            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
 
         }
         catch(\Exception $ex){
@@ -155,15 +148,17 @@ class DepartamentoController extends Controller
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
-            $vincularUsuarioDep = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
+            $departamento->update($request->validated());
 
-            $id_usuarios = $request->id_user;
-            foreach ($id_usuarios as $id_usuario) {
-                $temUsuario = User::where('id', '=', $id_usuario)->where('ativo', '=', User::ATIVO)->first();
-                if ($temUsuario) {
-                    $vincularUsuarioDep->update($request->validated() + [
-                        'id_user' => $temUsuario->id,
-                    ]);
+            if (isset($request->id_user)) {
+                $id_usuarios = $request->id_user;
+                foreach($id_usuarios as $usuario) {
+                    $estaDepartamento = DepartamentoUsuario::where('id_user', '=', $usuario)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
+                    if (!$estaDepartamento) {
+                        $departamento->usuarios()->attach($usuario, [
+                            'created_at' => Carbon::now()
+                        ]);
+                    }
                 }
             }
 
@@ -171,7 +166,7 @@ class DepartamentoController extends Controller
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'edit');
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'update');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -182,8 +177,67 @@ class DepartamentoController extends Controller
      * @param  \App\Models\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Departamento $departamento)
+    public function destroy(Request $request, $id)
     {
-        //
+        try {
+            if(Auth::user()->temPermissao('Departamento', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $motivo = $request->motivo;
+            if ($request->motivo == null || $request->motivo == "") {
+                $motivo = "Exclusão pelo usuário.";
+            }
+
+            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            if (!$departamento) {
+                return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível excluir este departamento.');
+            }
+            $departamento->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => Departamento::INATIVO
+            ]);
+
+            // $departamentoUsuarios = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
+            // foreach ($departamentoUsuarios as $departamentoUsuario) {
+            //     $departamentoUsuario->update([
+            //         'ativo' => DepartamentoUsuario::INATIVO
+            //     ]);
+            // }
+            $departamento->usuarios()->update([
+                'departamento_usuarios.ativo' => DepartamentoUsuario::INATIVO,
+                'departamento_usuarios.updated_at' => Carbon::now()
+            ]);
+
+            return redirect()->route('configuracao.departamento.index')->with('success', 'Departamento excluído com sucesso.');
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'destroy');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function desvincularUsuario($id)
+    {
+        try{
+            if(Auth::user()->temPermissao('Departamento', 'Exclusão') != 1) {
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $desvincularUsuario = DepartamentoUsuario::where('id_user', '=', $id)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
+            $desvincularUsuario->update([
+                'ativo' => DepartamentoUsuario::INATIVO
+            ]);
+
+            return redirect()->back()->with('success', 'Departamento excluído com sucesso.');
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'desvincularUsuario');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 }

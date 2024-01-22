@@ -27,10 +27,11 @@ class Departamento extends Model implements Auditable
     }
     public function coordenador()
     {
-        return $this->hasOne(User::class, 'id_coordenador');
+        return $this->belongsTo(User::class, 'id_coordenador');
     }
     public function usuarios()
     {
-        return $this->hasMany(DepartamentoUsuario::class, 'id_user', 'id')->where('ativo', '=', User::ATIVO);
+        // return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->withPivot('cadastradoPorUsuario');
+        return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->wherePivot('ativo', '=', DepartamentoUsuario::ATIVO);
     }
 }

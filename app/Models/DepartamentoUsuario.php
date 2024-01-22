@@ -12,7 +12,7 @@ class DepartamentoUsuario extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'id_user', 'id_departamento', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'id_user', 'id_departamento', 'inativadoPorUsuario', 'dataInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -22,17 +22,9 @@ class DepartamentoUsuario extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
-    public function cad_usuario()
-    {
-        return $this->belongsTo(User::class, 'cadastradoPorUsuario');
-    }
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');
-    }
-    public function inativadoPor()
-    {
-        return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
     public function departamento()
     {
