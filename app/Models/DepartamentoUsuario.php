@@ -22,6 +22,10 @@ class DepartamentoUsuario extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
+    public function inativadoPor()
+    {
+        return $this->belongsTo(User::class, 'inativadoPorUsuario');
+    }
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');

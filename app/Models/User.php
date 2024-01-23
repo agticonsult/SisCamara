@@ -100,7 +100,7 @@ class User extends Authenticatable
     }
     public function coordenadorDepartamentos()
     {
-        return $this->hasMany(Departamento::class, 'id_coordenador', 'id')->where('ativo', '=', Departamento::ATIVO);
+        return $this->hasMany(Departamento::class, 'id_coordenador', 'id');
     }
     public function pessoa()
     {
@@ -176,15 +176,6 @@ class User extends Authenticatable
     public function usuarioInterno()
     {
         $eh = PerfilUser::where('id_user', '=', $this->id)->where('id_tipo_perfil', '=', 4)->where('ativo', '=', PerfilUser::ATIVO)->first();
-
-        if (!$eh){
-            return false;
-        }
-        return true;
-    }
-    public function estaNoDepartamento()
-    {
-        $eh = DepartamentoUsuario::where('id_user', '=', $this->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
 
         if (!$eh){
             return false;

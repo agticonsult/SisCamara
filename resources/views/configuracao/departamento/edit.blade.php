@@ -4,13 +4,6 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-{{-- script referente ao mapa --}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
-integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
-crossorigin=""/>
-<script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
-<link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
     .error{
@@ -39,8 +32,18 @@ crossorigin=""/>
                             <label for="id_coordenador">Coordenador</label>
                             <select name="id_coordenador" class="form-control @error('id_coordenador') is-invalid @enderror select2">
                                 <option value="" selected disabled>-- Selecione --</option>
-                                @foreach ($departamento->usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}" {{ $departamento->id_coordenador  ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
+                                @foreach ($usuarios as $usuario)
+                                    @php
+                                        $temCoordenador = 0;
+                                        if ($departamento->id_coordenador == $usuario->id) {
+                                            $temCoordenador = 1;
+                                        }
+                                    @endphp
+                                    @if ($temCoordenador == 1)
+                                        <option value="{{ $usuario->id }}" selected>{{ $usuario->pessoa->nome }}</option>
+                                    @else
+                                        <option value="{{ $usuario->id }}">{{ $usuario->pessoa->nome }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             @error('id_coordenador')
@@ -51,7 +54,19 @@ crossorigin=""/>
                             <label class="form-label">Usuário</label>
                             <select name="id_user[]" class="form-control @error('id_user') is-invalid @enderror select2" multiple>
                                 @foreach ($usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}" {{ old('id_user') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
+                                    @php
+                                        $temUsuario = 0;
+                                        foreach ($departamento->usuarios as $usuarioDepartamento) {
+                                            if ($usuarioDepartamento->id == $usuario->id){
+                                                $temUsuario = 1;
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($temUsuario == 1)
+                                        <option value="{{ $usuario->id }}" selected>{{ $usuario->pessoa->nome }}</option>
+                                    @else
+                                        <option value="{{ $usuario->id }}">{{ $usuario->pessoa->nome }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -68,7 +83,7 @@ crossorigin=""/>
     <div class="card-body">
         <div class="col-md-12">
             <hr><br>
-            <h3>Listagem de Usuários vinculados ao departamento</h3>
+            <h3>Usuários vinculados ao departamento</h3>
             <br>
             <div class="table-responsive">
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
@@ -77,7 +92,7 @@ crossorigin=""/>
                             <th scope="col">Nome</th>
                             <th scope="col">CPF</th>
                             <th scope="col">E-mail</th>
-                            <th scope="col">Desvincular do departamento</th>
+                            <th scope="col">Desvincular</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,20 +108,10 @@ crossorigin=""/>
                                     {{ $usuarioDepartamento->email }}
                                 </td>
                                 <td>
-                                    @switch($usuarioDepartamento->ativo)
-                                        @case(1)
-                                            <button type="button" class="desativar btn btn-success" name="{{ $usuarioDepartamento->id_user }}" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}" style="width: 100%">
-                                                Ativo
-                                            </button>
-                                            @break
-                                        @default
-                                            <button type="button" class="btn btn-info">
-                                                Desativado
-                                                por <strong>{{ $usuarioDepartamento->inativadoPorUsuario != null ? $usuarioDepartamento->inativadoPor->pessoa->nome : 'não informado' }}</strong>
-                                                em <strong>{{ date('d/m/Y H:i:s', strtotime($usuarioDepartamento->dataInativado)) }}</strong>
-                                            </button>
-                                            @break
-                                    @endswitch
+                                    <button type="button" class="desativar btn btn-danger" name="{{ $usuarioDepartamento->id_user }}" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}" style="width: 100%">
+                                        <i class="align-middle me-2 fas fa-fw fa-trash"></i>
+                                    </button>
+                                    {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button> --}}
                                 </td>
                             </tr>
                             <div class="modal fade" id="exampleModalExcluir{{ $usuarioDepartamento->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">

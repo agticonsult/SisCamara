@@ -113,18 +113,19 @@ class DepartamentoController extends Controller
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->with('usuarios')->first();
+            $usuariosDep = DepartamentoUsuario::where('id', '=', $id)->get();
             if (!$departamento) {
                 return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível alterar este departamento.');
             }
             $users = User::where('ativo', '=', User::ATIVO)->get();
             $usuarios = array();
             foreach ($users as $user) {
-                if ($user->usuarioInterno() == 1 && $user->estaNoDepartamento() == 0) {
+                if ($user->usuarioInterno() == 1) {
                     array_push($usuarios, $user);
                 }
             }
 
-            return view('configuracao.departamento.edit', compact('departamento', 'usuarios'));
+            return view('configuracao.departamento.edit', compact('departamento', 'usuarios', 'usuariosDep'));
 
         }
         catch(\Exception $ex){
@@ -208,7 +209,9 @@ class DepartamentoController extends Controller
             // }
             $departamento->usuarios()->update([
                 'departamento_usuarios.ativo' => DepartamentoUsuario::INATIVO,
-                'departamento_usuarios.updated_at' => Carbon::now()
+                'departamento_usuarios.updated_at' => Carbon::now(),
+                'departamento_usuarios.inativadoPorUsuario' => Auth::user()->id,
+                'departamento_usuarios.dataInativado' => Carbon::now()
             ]);
 
             return redirect()->route('configuracao.departamento.index')->with('success', 'Departamento excluído com sucesso.');
@@ -229,7 +232,9 @@ class DepartamentoController extends Controller
 
             $desvincularUsuario = DepartamentoUsuario::where('id_user', '=', $id)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
             $desvincularUsuario->update([
-                'ativo' => DepartamentoUsuario::INATIVO
+                'ativo' => DepartamentoUsuario::INATIVO,
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now()
             ]);
 
             return redirect()->back()->with('success', 'Departamento excluído com sucesso.');

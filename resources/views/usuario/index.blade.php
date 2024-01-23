@@ -67,11 +67,9 @@
                                     </td>
                                     <td>
                                         @if ($usuario->ativo == 1)
-                                            <a href="{{ route('usuario.edit', $usuario->id) }}"
-                                                class="btn btn-warning"><i class="fas fa-pen"></i></a>
+                                            <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-warning"><i class="fas fa-pen"></i></a>
                                             @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
-                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal"
-                                                    data-target="#exampleModalExcluir{{ $usuario->id }}"><i class="fas fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuario->id }}"><i class="fas fa-trash"></i></button>
                                             @endif
                                         @else
                                             <button type="button" class="btn btn-danger m-1">
@@ -83,8 +81,7 @@
                                                 Motivo: {{ $usuario->motivoInativado }}</strong>
                                             </button>
                                             @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
-                                                <button type="button" class="btn btn-primary m-1" data-toggle="modal"
-                                                    data-target="#exampleModalRecadastrar{{ $usuario->id }}">Recadastrar</button>
+                                                <button type="button" class="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModalRecadastrar{{ $usuario->id }}">Reativar usuário</button>
                                             @endif
                                         @endif
                                     </td>
@@ -94,8 +91,7 @@
                                     role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            <form method="POST" class="form_prevent_multiple_submits"
-                                                action="{{ route('usuario.destroy', $usuario->id) }}">
+                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.destroy', $usuario->id) }}">
                                                 @csrf
                                                 @method('POST')
                                                 <div class="modal-header btn-danger">
@@ -110,19 +106,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Cancelar
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
                                                     </button>
-                                                    <button type="submit"
-                                                        class="button_submit btn btn-danger">Excluir</button>
+                                                    <button type="submit" class="button_submit btn btn-danger">Excluir</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="modal fade" id="exampleModalDesbloquear{{ $usuario->id }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="exampleModalLabelDesbloquear" aria-hidden="true">
+                                <div class="modal fade" id="exampleModalDesbloquear{{ $usuario->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelDesbloquear" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <form method="POST" class="form_prevent_multiple_submits"
@@ -131,7 +124,7 @@
                                                 @method('POST')
                                                 <div class="modal-header btn-primary">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelDesbloquear">
-                                                        <strong style="font-size: 1.2rem">Desbloqueio</strong>
+                                                        <strong>Desbloqueio</strong>
                                                     </h5>
                                                 </div>
                                                 <div class="modal-body">
@@ -149,26 +142,21 @@
                                     </div>
                                 </div>
 
-                                <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="exampleModalLabelRecadastrar" aria-hidden="true">
+                                <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelRecadastrar" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            <form method="POST" class="form_prevent_multiple_submits"
-                                                action="{{ route('usuario.restore', $usuario->id) }}">
+                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.restore', $usuario->id) }}">
                                                 @csrf
                                                 @method('POST')
-                                                <div class="modal-header btn-primary">
+                                                <div class="modal-header btn-warning">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                        <strong style="font-size: 1.2rem">Recadastrar
-                                                            <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
+                                                        Reativar usuário? <strong>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }} - {{ $usuario->email != null ? $usuario->email : 'não informado' }}</strong>
                                                     </h5>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Cancelar
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Não
                                                     </button>
-                                                    <button type="submit"
-                                                        class="button_submit btn btn-primary">Recadastrar</button>
+                                                    <button type="submit" class="button_submit btn btn-success">Sim</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -180,11 +168,9 @@
                 </div>
             @endif
         </div>
-
         <div class="card-footer">
             <a href=" {{ route('usuario.create') }} " class="btn btn-primary">Cadastrar novo usuário</a>
         </div>
-
     </div>
 
     <script src="{{ asset('js/datatables.min.js') }}"></script>
