@@ -3,8 +3,6 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -13,7 +11,6 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
 
 <h1 class="h3 mb-3">Alteração de Pleito Eleitoral</h1>
 <div class="card" style="background-color:white">
@@ -26,11 +23,17 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Início do mandato</label>
-                        <input type="text" class="ano form-control" name="inicio_mandato" value="{{ $legislatura->inicio_mandato }}">
+                        <input type="text" class="ano form-control @error('inicio_mandato') is-invalid @enderror" name="inicio_mandato" value="{{ $legislatura->inicio_mandato }}" placeholder="somente ano(XXXX)">
+                        @error('inicio_mandato')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Fim do mandato</label>
-                        <input type="text" class="ano form-control" name="fim_mandato" value="{{ $legislatura->fim_mandato }}">
+                        <input type="text" class="ano form-control @error('fim_mandato') is-invalid @enderror" name="fim_mandato" value="{{ $legislatura->fim_mandato }}" placeholder="somente ano(XXXX)">
+                        @error('fim_mandato')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                 </div>
 
@@ -54,25 +57,6 @@
 
 <script>
     $('.ano').mask('0000');
-
-    $("#form").validate({
-        rules : {
-            inicio_mandato:{
-                required:true
-            },
-            fim_mandato:{
-                required:true
-            }
-        },
-        messages:{
-            inicio_mandato:{
-                required:"Campo obrigatório"
-            },
-            fim_mandato:{
-                required:"Campo obrigatório"
-            }
-        }
-    });
 
     $(document).ready(function() {
 

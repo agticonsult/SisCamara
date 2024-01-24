@@ -149,7 +149,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Processo Legilativo
     Route::group(['prefix' => '/processo-legislativo', 'as' => 'processo_legislativo.'], function() {
 
-        // Pleito Eleitoral
+        // Legislatura
         Route::group(['prefix' => '/legislatura', 'as' => 'legislatura.'], function() {
             Route::get('/index', [LegislaturaController::class, 'index'])->name('index');
             Route::post('/store', [LegislaturaController::class, 'store'])->name('store');

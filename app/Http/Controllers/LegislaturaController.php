@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LegislaturaRequest;
 use App\Models\ErrorLog;
 use App\Models\Legislatura;
 use App\Services\ErrorLogService;
@@ -33,39 +34,18 @@ class LegislaturaController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(LegislaturaRequest $request)
     {
         try {
-            if(Auth::user()->temPermissao('Legislatura', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('Legislatura', 'Cadastro') != 1) {
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
-            ];
-            $rules = [
-                'inicio_mandato' => 'required|integer',
-                'fim_mandato' => 'required|integer',
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
-            $legislatura = new Legislatura();
-            $legislatura->inicio_mandato = $request->inicio_mandato;
-            $legislatura->fim_mandato = $request->fim_mandato;
-            $legislatura->cadastradoPorUsuario = Auth::user()->id;
-            $legislatura->ativo = 1;
-            $legislatura->save();
+            Legislatura::create($request->validated() + [
+                'cadastradoPorUsuario' =>  Auth::user()->id
+            ]);
 
             return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Cadastro realizado com sucesso.');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'store');
@@ -93,43 +73,21 @@ class LegislaturaController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(LegislaturaRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('Legislatura', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'id' => $request->id,
-                'inicio_mandato' => $request->inicio_mandato,
-                'fim_mandato' => $request->fim_mandato,
-            ];
-            $rules = [
-                'id' => 'required|integer',
-                'inicio_mandato' => 'required|integer',
-                'fim_mandato' => 'required|integer',
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', 1)->first();
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
 
-            $legislatura->inicio_mandato = $request->inicio_mandato;
-            $legislatura->fim_mandato = $request->fim_mandato;
-            $legislatura->save();
+            $legislatura->update($request->validated());
 
             return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Alteração realizada com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'update');
@@ -144,18 +102,7 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validarUsuario = Validator::make($input, $rules);
-            $validarUsuario->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
@@ -165,19 +112,14 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
 
-            $legislatura->inativadoPorUsuario = Auth::user()->id;
-            $legislatura->dataInativado = Carbon::now();
-            $legislatura->motivoInativado = $motivo;
-            $legislatura->ativo = 0;
-            $legislatura->save();
+            $legislatura->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => Legislatura::INATIVO
+            ]);
 
             return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'destroy');
