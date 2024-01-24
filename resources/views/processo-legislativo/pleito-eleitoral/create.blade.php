@@ -3,8 +3,6 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -13,7 +11,6 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
 
 <h1 class="h3 mb-3">Cadastro de Pleito Eleitoral</h1>
 <div class="card" style="background-color:white">
@@ -26,46 +23,65 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Ano do Pleito Eleitoral</label>
-                        <input type="text" class="ano form-control" name="ano_pleito">
+                        <input type="text" class="ano form-control @error('ano_pleito') is-invalid @enderror" name="ano_pleito" value="{{ old('ano_pleito') }}">
+                        @error('ano_pleito')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">Pleito Especial</label>
-                        <select name="pleitoEspecial" class="form-control">
+                        <select name="pleitoEspecial" class="form-control @error('pleitoEspecial') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
                             <option value="0">Não</option>
                             <option value="1">Sim</option>
                         </select>
+                        @error('pleitoEspecial')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data do primeiro turno</label>
-                        <input type="date" class="form-control" name="dataPrimeiroTurno">
+                        <input type="date" class="form-control @error('dataPrimeiroTurno') is-invalid @enderror" name="dataPrimeiroTurno" value="{{ old('dataPrimeiroTurno') }}">
+                        @error('dataPrimeiroTurno')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Data do segundo turno</label>
-                        <input type="date" class="form-control" name="dataSegundoTurno">
+                        <input type="date" class="form-control @error('dataSegundoTurno') is-invalid @enderror" name="dataSegundoTurno" value="{{ old('dataSegundoTurno') }}">
+                        @error('dataSegundoTurno')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Legislatura</label>
-                        <select name="id_legislatura" class="select2 form-control">
+                        <select name="id_legislatura" class="select2 form-control @error('id_legislatura') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($legislaturas as $legislatura)
-                                <option value="{{ $legislatura->id }}">
+                                <option value="{{ $legislatura->id }}" {{ old('id_legislatura') == $legislatura->id ? 'selected' : '' }}>
                                     Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
                                     Fim: <strong>{{ $legislatura->fim_mandato }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('id_legislatura')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Cargos eletivos</label>
-                        <select name="id_cargo_eletivo[]" class="select2 form-control" multiple>
+                        <select name="id_cargo_eletivo[]" class="select2 form-control @error('id_cargo_eletivo') is-invalid @enderror" multiple>
                             @foreach ($cargo_eletivos as $cargo_eletivo)
                                 <option value="{{ $cargo_eletivo->id }}">{{ $cargo_eletivo->descricao }}</option>
                             @endforeach
                         </select>
+                        @error('id_cargo_eletivo')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                 </div>
 
@@ -89,43 +105,6 @@
 
 <script>
     $('.ano').mask('0000');
-
-    $("#form").validate({
-        rules : {
-            ano_pleito:{
-                required:true
-            },
-            id_legislatura:{
-                required:true
-            },
-            dataPrimeiroTurno:{
-                required:true
-            },
-            dataSegundoTurno:{
-                required:true
-            },
-            "id_cargo_eletivo[]":{
-                required:true
-            },
-        },
-        messages:{
-            ano_pleito:{
-                required:"Campo obrigatório"
-            },
-            id_legislatura:{
-                required:"Campo obrigatório"
-            },
-            dataPrimeiroTurno:{
-                required:"Campo obrigatório"
-            },
-            dataSegundoTurno:{
-                required:"Campo obrigatório"
-            },
-            "id_cargo_eletivo[]":{
-                required:"Campo obrigatório"
-            },
-        }
-    });
 
     $(document).ready(function() {
 

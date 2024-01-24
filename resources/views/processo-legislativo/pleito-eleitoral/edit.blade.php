@@ -76,6 +76,7 @@
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <a href="{{ route('processo_legislativo.pleito_eleitoral.index') }}" class="btn btn-light m-1">Voltar</a>
                 </div>
                 <br>
             </form>
