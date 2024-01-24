@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ModeloProposicaoRequest;
 use App\Models\ErrorLog;
 use App\Models\ModeloProposicao;
 use App\Services\ErrorLogService;
@@ -48,39 +49,18 @@ class ModeloProposicaoController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(ModeloProposicaoRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('ModeloProposicao', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'assunto' => $request->assunto,
-                'conteudo' => $request->conteudo,
-            ];
-            $rules = [
-                'assunto' => 'required',
-                'conteudo' => 'required',
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
-            $modelo_proposicao = new ModeloProposicao();
-            $modelo_proposicao->assunto = $request->assunto;
-            $modelo_proposicao->conteudo = $request->conteudo;
-            $modelo_proposicao->cadastradoPorUsuario = Auth::user()->id;
-            $modelo_proposicao->ativo = 1;
-            $modelo_proposicao->save();
+            ModeloProposicao::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->route('proposicao.modelo.index')->with('success', 'Cadastro realizado com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'store');
@@ -108,43 +88,21 @@ class ModeloProposicaoController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(ModeloProposicaoRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('ModeloProposicao', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'id' => $id,
-                'assunto' => $request->assunto,
-                'conteudo' => $request->conteudo,
-            ];
-            $rules = [
-                'id' => 'required|integer',
-                'assunto' => 'required',
-                'conteudo' => 'required',
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $modelo_proposicao = ModeloProposicao::where('id', '=', $id)->where('ativo', '=', ModeloProposicao::ATIVO)->first();
             if (!$modelo_proposicao){
                 return redirect()->back()->with('erro', 'Modelo inválido.');
             }
 
-            $modelo_proposicao->assunto = $request->assunto;
-            $modelo_proposicao->conteudo = $request->conteudo;
-            $modelo_proposicao->save();
+            $modelo_proposicao->update($request->validated());
 
-            return redirect()->route('proposicao.modelo.index')->with('success', 'Alteração realizada com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+            return redirect()->route('proposicao.modelo.edit', $modelo_proposicao->id)->with('success', 'Alteração realizada com sucesso');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'update');
@@ -159,18 +117,7 @@ class ModeloProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
@@ -180,19 +127,14 @@ class ModeloProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Modelo inválido.');
             }
 
-            $modelo_proposicao->inativadoPorUsuario = Auth::user()->id;
-            $modelo_proposicao->dataInativado = Carbon::now();
-            $modelo_proposicao->motivoInativado = $motivo;
-            $modelo_proposicao->ativo = 0;
-            $modelo_proposicao->save();
+            $modelo_proposicao->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => ModeloProposicao::INATIVO
+            ]);
 
             return redirect()->route('proposicao.modelo.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'destroy');

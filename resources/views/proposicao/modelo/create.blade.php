@@ -3,8 +3,6 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyAUgxBPrGkKz6xNwW6Z1rJh26AqR8ct37A"></script>
-<script src="{{ asset('js/gmaps.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
@@ -13,7 +11,6 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
 
 <h1 class="h3 mb-3">Cadastro de Modelo</h1>
 <div class="card" style="background-color:white">
@@ -26,11 +23,17 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label" for="assunto">Assunto</label>
-                        <input type="text" class="form-control" name="assunto" value="{{ old("assunto") }}" required>
+                        <input type="text" class="form-control @error('assunto') is-invalid @enderror" name="assunto" value="{{ old("assunto") }}">
+                        @error('assunto')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="body">Conteúdo</label>
-                        <textarea name="conteudo" class="form-control" cols="30" rows="15">{{ old("conteudo") }}</textarea>
+                        <textarea name="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="15" id="conteudo">{{ old("conteudo") }}</textarea>
+                        @error('conteudo')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
                 </div>
 
@@ -54,25 +57,6 @@
 <script src="https://cdn.tiny.cloud/1/hh6dctatzptohe71nfevw76few6kevzc4i1q1utarze7tude/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-    $("#form").validate({
-        rules : {
-            titulo:{
-                required:true
-            },
-            conteudo:{
-                required:true
-            },
-        },
-        messages:{
-            titulo:{
-                required:"Campo obrigatório"
-            },
-            conteudo:{
-                required:"Campo obrigatório"
-            },
-        }
-    });
-
     tinymce.init({
         selector: 'textarea',
         plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
