@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProposicaoRequest;
+use App\Http\Requests\ProposicaoStoreRequest;
+use App\Http\Requests\ProposicaoUpdateRequest;
 use App\Models\Proposicao;
 use App\Models\ErrorLog;
 use App\Models\LocalizacaoProposicao;
@@ -55,44 +58,18 @@ class ProposicaoController extends Controller
 
     }
 
-    public function store(Request $request)
+    public function store(ProposicaoStoreRequest $request)
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'titulo' => $request->titulo,
-                'id_modelo' => $request->id_modelo,
-                'assunto' => $request->assunto,
-                'conteudo' => $request->conteudo,
-            ];
-            $rules = [
-                'titulo' => 'required',
-                'id_modelo' => 'required|integer',
-                'assunto' => 'required',
-                'conteudo' => 'required',
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
-            $modelo = ModeloProposicao::where('id', '=', $request->id_modelo)->where('ativo', '=', 1)->first();
-            if (!$modelo){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
-            }
-
-            $proposicao = new Proposicao();
-            $proposicao->titulo = $request->titulo;
-            $proposicao->id_modelo = $request->id_modelo;
-            $proposicao->assunto = $request->assunto;
-            $proposicao->conteudo = $request->conteudo;
-            $proposicao->id_status = 1;
-            $proposicao->id_localizacao = 1;
-            $proposicao->cadastradoPorUsuario = Auth::user()->id;
-            $proposicao->ativo = 1;
-            $proposicao->save();
+            $proposicao = Proposicao::create($request->validated() + [
+                'id_status' => 1,
+                'id_localizacao' => 1,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             $texto_proposicao = $request->texto_proposicao;
             $texto_proposicao_alterado = preg_replace('/\r/', '', $texto_proposicao);
@@ -100,24 +77,17 @@ class ProposicaoController extends Controller
 
             for ($i = 0; $i < Count($array_texto_proposicao); $i++){
                 if ($array_texto_proposicao[$i] != ""){
-                    $texto_proposicao = new TextoProposicao();
-                    $texto_proposicao->ordem = $i + 1;
-                    $texto_proposicao->texto = $array_texto_proposicao[$i];
-                    $texto_proposicao->alterado = 0;
-                    $texto_proposicao->id_proposicao = $proposicao->id;
-                    $texto_proposicao->cadastradoPorUsuario = Auth::user()->id;
-                    $texto_proposicao->ativo = 1;
-                    $texto_proposicao->save();
+                    TextoProposicao::create([
+                        'ordem' => $i + 1,
+                        'texto' => $array_texto_proposicao[$i],
+                        'alterado' => TextoProposicao::TEXTO_NAO_ALTERADO,
+                        'id_proposicao' => $proposicao->id,
+                        'cadastradoPorUsuario' => Auth::user()->id
+                    ]);
                 }
             }
 
             return redirect()->route('proposicao.index')->with('success', 'Cadastro realizado com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'store');
@@ -149,62 +119,21 @@ class ProposicaoController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(ProposicaoUpdateRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'id' => $id,
-                'titulo' => $request->titulo,
-                'assunto' => $request->assunto,
-                'conteudo' => $request->conteudo,
-                'id_localizacao' => $request->id_localizacao,
-                'id_status' => $request->id_status,
-            ];
-            $rules = [
-                'id' => 'required|integer',
-                'titulo' => 'required',
-                'assunto' => 'required',
-                'conteudo' => 'required',
-                'id_localizacao' => 'required|integer',
-                'id_status' => 'required|integer',
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
-            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', LocalizacaoProposicao::ATIVO)->first();
-            if (!$localizacao){
-                return redirect()->back()->with('erro', 'Localização inválida.');
-            }
-
-            $localizacao = LocalizacaoProposicao::where('id', '=', $id)->where('ativo', '=', LocalizacaoProposicao::ATIVO)->first();
-            if (!$localizacao){
-                return redirect()->back()->with('erro', 'Status inválido.');
-            }
-
-            $proposicao->titulo = $request->titulo;
-            $proposicao->assunto = $request->assunto;
-            $proposicao->conteudo = $request->conteudo;
-            $proposicao->id_localizacao = $request->id_localizacao;
-            $proposicao->id_status = $request->id_status;
-            $proposicao->save();
+            $proposicao->update($request->validated());
 
             return redirect()->route('proposicao.index')->with('success', 'Alteração realizada com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'update');
@@ -219,18 +148,7 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $input = [
-                'motivo' => $request->motivo
-            ];
-            $rules = [
-                'motivo' => 'max:255'
-            ];
-
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
@@ -240,19 +158,14 @@ class ProposicaoController extends Controller
                 return redirect()->back()->with('erro', 'Proposicao inválido.');
             }
 
-            $proposicao->inativadoPorUsuario = Auth::user()->id;
-            $proposicao->dataInativado = Carbon::now();
-            $proposicao->motivoInativado = $motivo;
-            $proposicao->ativo = 0;
-            $proposicao->save();
+            $proposicao->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => Proposicao::isUnguarded()
+            ]);
 
             return redirect()->route('proposicao.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'destroy');

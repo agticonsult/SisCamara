@@ -23,6 +23,9 @@ class TextoProposicao extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
+    const TEXTO_ALTERADO = 1;
+    const TEXTO_NAO_ALTERADO = 0;
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

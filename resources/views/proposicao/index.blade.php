@@ -58,7 +58,7 @@
                                         @method('POST')
                                         <div class="modal-header btn-danger">
                                             <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                Excluir - <strong>{{ $proposicao->assunto != null ? $proposicao->assunto : 'não informado' }}</strong>
+                                                Excluir Proposição - <strong>{{ $proposicao->assunto != null ? $proposicao->assunto : 'não informado' }}</strong>
                                             </h5>
                                         </div>
                                         <div class="modal-body">
