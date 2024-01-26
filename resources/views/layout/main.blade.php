@@ -59,7 +59,7 @@
                 @if (Auth::user())
                     <li class="sidebar-item {{ Route::current()->uri == 'home' ? 'active' : null }}">
                         <a href="{{ route('home') }}" class="sidebar-link">
-                            <i class="fas fa-user-circle"></i>
+                            <i class="fas fa-fw fa-user-edit"></i>
                             Dados do Usuário
                         </a>
                     </li>
@@ -68,7 +68,7 @@
                 @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
                     <li class="sidebar-item {{ Route::current()->uri == 'ato/index' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
                         <a href="{{ route('ato.index') }}" class="sidebar-link">
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <i class="fas fa-fw fa-file-alt" aria-hidden="true"></i>
                             <span>Atos</span>
                         </a>
                     </li>
@@ -113,7 +113,7 @@
                 )
                     <li class="sidebar-item">
                         <a href="#processoLegislativo" data-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="fas fa-chess-king"></i>Processo Legislativo
+                            <i class="fas fa-fw fa-clipboard"></i>Processo Legislativo
                         </a>
                         <ul id="processoLegislativo"
                             class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/proposicao' ||
@@ -145,57 +145,6 @@
                                     href="{{ route('processo_legislativo.pleito_eleitoral.index') }}">Pleitos
                                     Eleitorais</a>
                             </li>
-                            {{-- <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
-                                <a href="{{ route('proposicao.index') }}" class="sidebar-link">
-                                    Protocolo
-                                </a>
-                            </li>
-                            <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
-                                <a href="{{ route('proposicao.index') }}" class="sidebar-link">
-                                    Secretaria
-                                </a>
-                            </li>
-                            <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
-                                <a href="{{ route('proposicao.index') }}" class="sidebar-link">
-                                    Relatores
-                                </a>
-                            </li>
-                            <li class="sidebar-item {{ Route::current()->getPrefix() == '/proposicao' ? 'active' : null }}">
-                                <a href="{{ route('proposicao.index') }}" class="sidebar-link">
-                                    Votação
-                                </a>
-                            </li> --}}
-                            {{-- <li class="sidebar-item">
-                                <a href="#admNewsletter" data-toggle="collapse" class="sidebar-link collapsed">
-                                    Newsletter
-                                </a>
-                                <ul id="admNewsletter" class="sidebar-dropdown list-unstyled {{
-                                    Route::current()->uri == 'email_newsletter/index'
-                                ? 'active' : 'collapse' }}">
-                                    <li class="sidebar-item {{ Route::current()->uri == 'email_newsletter/index' ? 'active' : null }}">
-                                        <a href="{{ route('email_newsletter.index') }}" class="sidebar-link">
-                                            Lista de e-mails
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li> --}}
-                            {{-- <li class="sidebar-item">
-                                <a href="#clienteAdm" data-toggle="collapse" class="sidebar-link collapsed">
-                                    Clientes
-                                </a>
-                                <ul id="clienteAdm" class="sidebar-dropdown list-unstyled collapse" style="">
-                                    <li class="sidebar-item {{ Route::current()->uri == 'assinante/create' ? 'active' : null }}">
-                                        <a class="sidebar-link" href="{{ route('assinante.create') }}">
-                                            Cadastrar
-                                        </a>
-                                    </li>
-                                    <li class="sidebar-item {{ Route::current()->uri == 'assinante/index' ? 'active' : null }}">
-                                        <a class="sidebar-link" href="{{ route('assinante.index') }}">
-                                            Listar
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li> --}}
                         </ul>
                     </li>
                 @endif
@@ -204,7 +153,7 @@
                     <li
                         class="sidebar-item {{ Route::current()->uri == 'agente-politico/index' || Route::current()->uri == 'agente-politico/create' || Route::current()->uri == 'agente-politico/novo-agente-politico' || Route::current()->uri == 'agente-politico/vincular' || Route::current()->uri == 'agente-politico/edit/{id}'? 'active' : null }}">
                         <a href="{{ route('agente_politico.index') }}" class="sidebar-link">
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <i class="fas fa-fw fa-user-tie" aria-hidden="true"></i>
                             <span>Agentes Políticos</span>
                         </a>
                     </li>
@@ -269,12 +218,12 @@
                                     href="{{ route('configuracao.publicacao_ato.index') }}">Publicações
                                 </a>
                             </li>
-                            <li
+                            {{-- <li
                                 class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ? 'active' : null }}">
                                 <a class="sidebar-link "
                                     href="{{ route('configuracao.finalidade_grupo.index') }}">Finalidade dos
                                     Grupos de Usuário</a>
-                            </li>
+                            </li> --}}
                             <li
                                 class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ? 'active' : null }}">
                                 <a class="sidebar-link "

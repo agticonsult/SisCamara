@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SGCP</title>
+    <title>SIS-CAMARA</title>
     <link rel="shortcut icon" type="svg" href="{{ asset('image/layer-group-solid.svg') }}" style="color: #4a88eb">
 
     {{-- Styles --}}
@@ -21,10 +21,10 @@
 </head>
 <body>
     <div class="main d-flex justify-content-center w-100">
-        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #293042">
+        <nav class="navbar navbar-expand-md shadow-sm" style="background-color: #4a88eb">
             <div class="container">
                 <a class="sidebar-brand" href="{{ url('/') }}">
-                    <span class="align-middle mr-3" style="font-size: .999rem;">Instituto de Desenvolvimento Rural - Paraná</span>
+                    <span class="align-middle mr-3" style="font-size: .999rem;">SIS-CAMARA</span>
                 </a>
             </div>
         </nav>

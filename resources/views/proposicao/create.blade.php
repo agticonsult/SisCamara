@@ -18,7 +18,7 @@
     <div class="alert alert-warning alert-dismissible" role="alert">
         {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
         <div class="alert-message">
-            <strong>Sem MODELO DE PROPOSIÇÃO CADASTRADO!</strong>
+            <strong>Sem MODELO DE PROPOSIÇÃO cadastrado!</strong>
             <a href="{{ route('proposicao.modelo.create') }}">Clique aqui para cadastrar</a>
         </div>
     </div>
