@@ -7,6 +7,7 @@ use App\Models\AgentePolitico;
 use App\Models\CargoEletivo;
 use App\Models\ErrorLog;
 use App\Models\Legislatura;
+use App\Models\ModeloProposicao;
 use App\Models\Proposicao;
 use App\Models\TipoVotacao;
 use App\Models\Vereador;
@@ -48,8 +49,9 @@ class VotacaoEletronicaController extends Controller
             $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
             $tipo_votacaos = TipoVotacao::where('ativo', '=', TipoVotacao::ATIVO)->get();
             $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
+            $proposicoes = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
 
-            return view('votacao-eletronica.create', compact('proposicaos', 'tipo_votacaos', 'legislaturas'));
+            return view('votacao-eletronica.create', compact('proposicaos', 'tipo_votacaos', 'legislaturas', 'proposicoes'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'create');

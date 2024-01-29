@@ -12,6 +12,16 @@
 </style>
 @include('errors.alerts')
 
+@if (!isset($proposicoes[0]))
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+        <div class="alert-message">
+            <strong>Sem PROPOSIÇÃO cadastrado!</strong>
+            <a href="{{ route('proposicao.create') }}">Clique aqui para cadastrar</a>
+        </div>
+    </div>
+@endif
+
 <h1 class="h3 mb-3">Cadastro de Votação Eletrônica</h1>
 <div class="card" style="background-color:white">
     <div class="card-body">
