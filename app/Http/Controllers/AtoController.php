@@ -91,9 +91,9 @@ class AtoController extends Controller
                     LinhaAto::create([
                         'ordem' => $i + 1,
                         'texto' => $array_corpo_texto[$i],
-                        'alterado' => 0,
+                        'alterado' => LinhaAto::LINHA_NAO_ALTERADO,
                         'id_ato_principal' => $ato->id,
-                        'id_tipo_linha' => 1,
+                        'id_tipo_linha' => LinhaAto::TEXTO_ORIGINAL,
                         'cadastradoPorUsuario' => Auth::user()->id,
                     ]);
 
@@ -303,27 +303,26 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Não é possível alterar esta linha.');
             }
 
-            $linha_antiga->alterado = 1;
-            $linha_antiga->save();
+            $linha_antiga->update([
+                'alterado' => LinhaAto::LINHA_ALTERADO
+            ]);
 
-            $linha_ato = new LinhaAto();
-            $linha_ato->ordem = $linha_antiga->ordem;
-            $linha_ato->sub_ordem = $linha_antiga->sub_ordem + 1;
-            $linha_ato->texto = $request->corpo_texto;
-            $linha_ato->alterado = 0;
-            $linha_ato->id_ato_principal = $linha_antiga->id_ato_principal;
-            $linha_ato->id_ato_add = $request->id_ato_add;
-            $linha_ato->id_tipo_linha = 2;
-            $linha_ato->cadastradoPorUsuario = Auth::user()->id;
-            $linha_ato->ativo = 1;
-            $linha_ato->save();
+            LinhaAto::create([
+                'ordem' => $linha_antiga->ordem,
+                'sub_ordem' => $linha_antiga->sub_ordem + 1,
+                'texto' => $request->corpo_texto,
+                'alterado' => LinhaAto::LINHA_NAO_ALTERADO,
+                'id_ato_principal' => $linha_antiga->id_ato_principal,
+                'id_ato_add' => $request->id_ato_add,
+                'id_tipo_linha' => LinhaAto::TEXTO_ADICIONADO,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
-            $ato_relacionado = new AtoRelacionado();
-            $ato_relacionado->id_ato_principal = $linha_antiga->id_ato_principal;
-            $ato_relacionado->id_ato_relacionado = $request->id_ato_add;
-            $ato_relacionado->cadastradoPorUsuario = Auth::user()->id;
-            $ato_relacionado->ativo = 1;
-            $ato_relacionado->save();
+            AtoRelacionado::create([
+                'id_ato_principal' => $linha_antiga->id_ato_principal,
+                'id_ato_relacionado' => $request->id_ato_add,
+                'cadastradoPorUsuario' => Auth::user()->id,
+            ]);
 
             return redirect()->route('ato.corpo_texto.edit', $linha_antiga->id_ato_principal)->with('success', 'Alteração realizada com sucesso.');
         }
@@ -412,47 +411,46 @@ class AtoController extends Controller
             }
 
             $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
-
             if (!$ato){
                 return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
             }
 
-            // inativando o ato
-            $ato->inativadoPorUsuario = Auth::user()->id;
-            $ato->dataInativado = Carbon::now();
-            $ato->motivoInativado = $motivo;
-            $ato->ativo = 0;
-            $ato->save();
+            $ato->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $motivo,
+                'ativo' => Ato::INATIVO
+            ]);
 
             //  inativando ato relacionado
-            $atoRelacionado = AtoRelacionado::where('id_ato_relacionado', '=', $id)->where('ativo', '=', 1)->first();
-
+            $atoRelacionado = AtoRelacionado::where('id_ato_relacionado', '=', $id)->where('ativo', '=', AtoRelacionado::ATIVO)->first();
             if($atoRelacionado != null) {
-                $atoRelacionado->inativadoPorUsuario = Auth::user()->id;
-                $atoRelacionado->dataInativado = Carbon::now();
-                $atoRelacionado->motivoInativado = $motivo;
-                $atoRelacionado->ativo = 0;
-                $atoRelacionado->save();
+                $atoRelacionado->update([
+                    'inativadoPorUsuario' => Auth::user()->id,
+                    'dataInativado' => Carbon::now(),
+                    'motivoInativado' => $motivo,
+                    'ativo' => AtoRelacionado::INATIVO
+                ]);
 
                 //inativando linha do ato
-                $linhaAto = LinhaAto::where('id_ato_add', '=', $id)->where('ativo', '=', 1)->first();
-                $linhaAto->inativadoPorUsuario = Auth::user()->id;
-                $linhaAto->dataInativado = Carbon::now();
-                $linhaAto->motivoInativado = $motivo;
-                $linhaAto->ativo = 0;
-                $linhaAto->save();
+                $linhaAto = LinhaAto::where('id_ato_add', '=', $id)->where('ativo', '=', LinhaAto::ATIVO)->first();
+                $linhaAto->update([
+                    'inativadoPorUsuario' => Auth::user()->id,
+                    'dataInativado' => Carbon::now(),
+                    'motivoInativado' => $motivo,
+                    'ativo' => LinhaAto::INATIVO
+                ]);
 
             }
 
             $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', AnexoAto::ATIVO)->first();
-
             if($anexoAto != null) {
-                // $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', AnexoAto::ATIVO)->first();
-                $anexoAto->inativadoPorUsuario = Auth::user()->id;
-                $anexoAto->dataInativado = Carbon::now();
-                $anexoAto->motivoInativado = $motivo;
-                $anexoAto->ativo = 0;
-                $anexoAto->save();
+                $anexoAto->update([
+                    'inativadoPorUsuario' => Auth::user()->id,
+                    'dataInativado' => Carbon::now(),
+                    'motivoInativado' => $motivo,
+                    'ativo' => AnexoAto::INATIVO
+                ]);
             }
 
             return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');

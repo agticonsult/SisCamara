@@ -168,6 +168,33 @@
                     </li>
                 @endif
 
+                {{-- Usuários --}}
+                @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
+                    <li class="sidebar-item">
+                        <a href="#usuarios" data-toggle="collapse" class="sidebar-link collapsed">
+                            <i class="fas fa-users"></i>
+                            Usuários
+                        </a>
+                        <ul id="usuarios"
+                            class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/usuario' || Route::current()->getPrefix() == '/auditoria'
+                                ? 'active'
+                                : 'collapse' }}">
+                            <li
+                                class="sidebar-item {{ Route::current()->uri == 'usuario/index' || Route::current()->uri == 'usuario/edit/{id}' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('usuario.index') }}">Listagem</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->uri == 'usuario/create' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('usuario.create') }}">Cadastro</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">
+                                <a class="sidebar-link" href="{{ route('auditoria.index') }}">Auditoria</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+
                 {{-- Configuração --}}
                 @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||
                         Auth::user()->temPermissao('Filesize', 'Listagem') == 1 ||
@@ -234,32 +261,6 @@
                     </li>
                 @endif
 
-                {{-- Usuários --}}
-                @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
-                    <li class="sidebar-item">
-                        <a href="#usuarios" data-toggle="collapse" class="sidebar-link collapsed">
-                            <i class="fas fa-users"></i>
-                            Usuários
-                        </a>
-                        <ul id="usuarios"
-                            class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/usuario' || Route::current()->getPrefix() == '/auditoria'
-                                ? 'active'
-                                : 'collapse' }}">
-                            <li
-                                class="sidebar-item {{ Route::current()->uri == 'usuario/index' || Route::current()->uri == 'usuario/edit/{id}' ? 'active' : null }}">
-                                <a class="sidebar-link" href="{{ route('usuario.index') }}">Listagem</a>
-                            </li>
-                            <li
-                                class="sidebar-item {{ Route::current()->uri == 'usuario/create' ? 'active' : null }}">
-                                <a class="sidebar-link" href="{{ route('usuario.create') }}">Cadastro</a>
-                            </li>
-                            <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">
-                                <a class="sidebar-link" href="{{ route('auditoria.index') }}">Auditoria</a>
-                            </li>
-                        </ul>
-                    </li>
-                @endif
             </ul>
         </div>
     </nav>

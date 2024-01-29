@@ -67,7 +67,7 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                                <thead>
+                                <thead class="table-light">
                                     <tr>
                                         <th scope="col">Nome da publicação</th>
                                         <th scope="col">Cadastrado por</th>

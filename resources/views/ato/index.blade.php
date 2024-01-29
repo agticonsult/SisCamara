@@ -15,16 +15,6 @@
 
 <h1 class="h3 mb-3">Atos</h1>
 <div class="card" style="background-color:white">
-
-    {{-- <div class="card-header" style="background-color:white">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
-            </div>
-            <strong>Listagem de Atos</strong>
-        </h2>
-    </div> --}}
-
     <div class="card-body">
         @if (Count($atos) == 0)
             <div>
@@ -33,7 +23,7 @@
         @else
             <div class="table-responsive">
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                    <thead>
+                    <thead class="table-light">
                         <tr>
                             <th scope="col">Ato</th>
                             <th scope="col">Título</th>
@@ -41,12 +31,6 @@
                             <th scope="col">Altera dispositivo</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Ações</th>
-                            {{-- <th scope="col">CPF</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Lotação (apenas para funcionários)</th>
-                            <th scope="col">Perfis ativos</th>
-                            <th scope="col">Cadastrado em</th>
-                            <th scope="col">Ações</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -69,9 +53,9 @@
                                     em <strong>{{ $ato->created_at != null ? $ato->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1">Visualizar</a>
-                                    <a href="{{ route('ato.dados_gerais.edit', $ato->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}">Excluir</button>
+                                    <a href="{{ route('ato.show', $ato->id) }}" class="btn btn-secondary m-1"><i class="fas fa-eye"></i></a>
+                                    <a href="{{ route('ato.dados_gerais.edit', $ato->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $ato->id }}"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
 
@@ -103,29 +87,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            {{-- <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}"
-                                tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelRecadastrar"
-                                aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.restore', $usuario->id) }}">
-                                            @csrf
-                                            @method('POST')
-                                            <div class="modal-header btn-primary">
-                                                <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                    <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
-                                                </h5>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                </button>
-                                                <button type="submit" class="button_submit btn btn-primary">Recadastrar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div> --}}
                         @endforeach
                     </tbody>
                 </table>

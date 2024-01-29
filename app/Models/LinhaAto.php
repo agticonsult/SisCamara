@@ -22,6 +22,10 @@ class LinhaAto extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
+    const LINHA_ALTERADO = 1;
+    const LINHA_NAO_ALTERADO = 0;
+    const TEXTO_ORIGINAL = 1;
+    const TEXTO_ADICIONADO = 2;
 
     public function cad_usuario()
     {

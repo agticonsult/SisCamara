@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                            <thead>
+                            <thead class="table-light">
                                 <tr>
                                     <th scope="col">Tipo</th>
                                     <th scope="col">Tamanho do Arquivo</th>

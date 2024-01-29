@@ -187,14 +187,14 @@
                     @else
                         <div class="table-responsive">
                             <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                                <thead>
+                                <thead class="table-light">
                                     <tr>
                                         <th scope="col">Ato</th>
                                         <th scope="col">Título</th>
                                         <th scope="col">Assunto</th>
                                         <th scope="col">Dados gerais</th>
                                         <th scope="col">Altera dispositivo</th>
-                                        <th scope="col">Ações</th>
+                                        <th scope="col">Visualizar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -214,61 +214,9 @@
                                             </td>
                                             <td>{{ $ato['altera_dispositivo'] == 1 ? 'Sim' : 'Não' }}</td>
                                             <td>
-                                                <a href="{{ route('web_publica.ato.show', $ato['id']) }}" class="btn btn-secondary m-1">Visualizar</a>
+                                                <a href="{{ route('web_publica.ato.show', $ato['id']) }}" class="btn btn-secondary m-1"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
-
-                                        {{-- <div class="modal fade" id="exampleModalExcluir{{ $usuario->id }}"
-                                            tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.destroy', $usuario->id) }}">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <div class="modal-header btn-danger">
-                                                            <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                                <strong style="font-size: 1.2rem">Excluir <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="motivo" class="form-label">Motivo</label>
-                                                                <input type="text" class="form-control" name="motivo" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                            </button>
-                                                            <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="exampleModalRecadastrar{{ $usuario->id }}"
-                                            tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelRecadastrar"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <form method="POST" class="form_prevent_multiple_submits" action="{{ route('usuario.restore', $usuario->id) }}">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <div class="modal-header btn-primary">
-                                                            <h5 class="modal-title text-center" id="exampleModalLabelRecadastrar">
-                                                                <strong style="font-size: 1.2rem">Recadastrar <i>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</i></strong>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                            </button>
-                                                            <button type="submit" class="button_submit btn btn-primary">Recadastrar</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div> --}}
                                     @endforeach
                                 </tbody>
                             </table>

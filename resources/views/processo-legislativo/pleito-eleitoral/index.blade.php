@@ -23,7 +23,7 @@
         @else
             <div class="table-responsive">
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                    <thead>
+                    <thead class="table-light">
                         <tr>
                             <th scope="col">Ano Pleito</th>
                             <th scope="col">Legislatura</th>

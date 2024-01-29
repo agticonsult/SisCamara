@@ -130,57 +130,6 @@
 <script>
     $('#ano').mask('0000');
 
-    // $("#form").validate({
-    //     rules : {
-    //         // Dados Gerais
-    //         id_classificacao:{
-    //             required:true
-    //         },
-    //         ano:{
-    //             required:true
-    //         },
-    //         numero:{
-    //             required:true
-    //         },
-    //         id_grupo:{
-    //             required:true
-    //         },
-    //         id_tipo_ato:{
-    //             required:true
-    //         },
-    //         id_assunto:{
-    //             required:true
-    //         },
-    //         id_orgao:{
-    //             required:true
-    //         },
-    //     },
-    //     messages:{
-    //         // Dados Gerais
-    //         id_classificacao:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         ano:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         numero:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         id_grupo:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         id_tipo_ato:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         id_assunto:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         id_orgao:{
-    //             required:"Campo obrigatório"
-    //         },
-    //     }
-    // });
-
     $(document).ready(function() {
 
         $('.select2').select2({
