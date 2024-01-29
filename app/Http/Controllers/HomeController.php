@@ -36,7 +36,7 @@ class HomeController extends Controller
                 )->first();
 
             $foto_perfil = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', User::ATIVO)->first();
-
+            $filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
             $temFoto = 0;
 
             if ($foto_perfil){
@@ -47,11 +47,8 @@ class HomeController extends Controller
                 }
             }
 
-            // $municipio = Municipio::where('codIbge', '=', '4113700')->where('ativo', '=', 1)->first();dd($municipio);
-
-            $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', Filesize::ATIVO)->first();
-
             return view('home.home', compact('user', 'foto_perfil', 'temFoto', 'filesize'));
+            
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'index');

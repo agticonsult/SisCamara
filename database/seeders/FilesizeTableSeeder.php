@@ -21,6 +21,7 @@ class FilesizeTableSeeder extends Seeder
 
         DB::table('filesizes')->insert([
             ['mb' => 10, 'id_tipo_filesize' => 1, 'ativo' => 1],
+            ['mb' => 10, 'id_tipo_filesize' => 2, 'ativo' => 1],
         ]);
     }
 }

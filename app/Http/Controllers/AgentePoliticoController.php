@@ -70,6 +70,7 @@ class AgentePoliticoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
+            $filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
             $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', PleitoEleitoral::ATIVO)->get();
             $users = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->where('users.ativo', '=', 1)
@@ -84,7 +85,7 @@ class AgentePoliticoController extends Controller
                 }
             }
 
-            return view('agente-politico.novoUsuario', compact('pleito_eleitorals', 'usuarios'));
+            return view('agente-politico.novoUsuario', compact('pleito_eleitorals', 'usuarios', 'filesize'));
 
         }
         catch (\Exception $ex) {

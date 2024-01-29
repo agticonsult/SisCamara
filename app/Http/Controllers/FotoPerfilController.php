@@ -52,18 +52,11 @@ class FotoPerfilController extends Controller
                         return redirect()->back()->with('erro', 'Extensão de imagem inválida. Extensões permitidas .png, .jpg e .jpeg')->withInput();
                     }
 
-                    // $nome_hash = Carbon::now()->timestamp;
-                    // $nome_hash = $nome_hash.'.'.$extensao;
-
                     $nome_hash = Uuid::uuid4();
                     $datahora = Carbon::now()->timestamp;
                     $nome_hash = $nome_hash . '-' . $datahora . '.' . $extensao;
-                    //diretório onde estará as fotos de perfil
-
                     $upload = $request->fImage->storeAs('public/foto-perfil/', $nome_hash);
-                    // $upload = $request->fImage->move('foto-perfil/', $nome_hash);
 
-                    // $path = public_path() . '/foto-perfil/';
                     if(!$upload){
                         return redirect()->back()->with('erro', 'Ocorreu um erro ao salvar a foto de perfil.')->withInput();
                     }
@@ -71,20 +64,20 @@ class FotoPerfilController extends Controller
 
                         $fotos = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', FotoPerfil::ATIVO)->get();
                         foreach ($fotos as $foto) {
-                            $foto->ativo = FotoPerfil::INATIVO;
-                            $foto->inativadoPorUsuario = auth()->user()->id;
-                            $foto->dataInativado = Carbon::now();
-                            $foto->motivoInativado = "Alteração de foto de perfil pelo usuário";
-                            $foto->save();
+                            $foto->update([
+                                'inativadoPorUsuario' => Auth::user()->id,
+                                'dataInativado' => Carbon::now(),
+                                'motivoInativado' => "Alteração de foto de perfil pelo usuário",
+                                'ativo' => FotoPerfil::INATIVO
+                            ]);
                         }
 
-                        $foto_perfil = new FotoPerfil();
-                        $foto_perfil->nome_original = $nome_original;
-                        $foto_perfil->nome_hash = $nome_hash;
-                        $foto_perfil->id_user = auth()->user()->id;
-                        $foto_perfil->cadastradoPorUsuario = auth()->user()->id;
-                        $foto_perfil->ativo = FotoPerfil::ATIVO;
-                        $foto_perfil->save();
+                        FotoPerfil::create([
+                            'nome_original' => $nome_original,
+                            'nome_hash' => $nome_hash,
+                            'id_user' => Auth::user()->id,
+                            'cadastradoPorUsuario' => Auth::user()->id
+                        ]);
                     }
                 }
                 else{

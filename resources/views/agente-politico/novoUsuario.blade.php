@@ -101,6 +101,7 @@
                                         <input type="file" id="flImage" name="fImage" accept="image/jpg, image/jpeg, image/png" value="{{'fImage'}}">
                                     </div>
                                     <span>Clique na ícone para selecionar a foto de perfil</span>
+                                    <span>(tamanho máximo da imagem: {{ $filesize->mb }}MB)</span>
                                 </div>
                             </div>
                         </div>
@@ -222,16 +223,21 @@
                                         <hr class="my-0"><br>
                                         <div class="col-md-12">
                                             <h5>Senha de acesso ao sistema</h5>
+                                            <ul>
+                                                <li>
+                                                    Mínimo 6 caracteres e máximo 35 caracteres
+                                                </li>
+                                            </ul>
                                             <div class="row">
-                                                <div class="form-group col-md-12">
-                                                    <label class="form-label">Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                                    <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe uma senha" value="{{ old('password') }}">
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label">Senha</label>
+                                                    <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe a senha" value="{{ old('password') }}">
                                                     @error('password')
                                                         <div class="invalid-feedback">{{ $message }}</div><br>
                                                     @enderror
                                                 </div>
-                                                <div class="form-group col-md-12">
-                                                    <label class="form-label">Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label">Confirme a senha</label>
                                                     <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
                                                     @error('confirmacao')
                                                         <div class="invalid-feedback">{{ $message }}</div><br>
@@ -247,8 +253,8 @@
                 </div>
 
                 <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1">Voltar</a>
+                    <button type="submit" class="button_submit btn btn-primary m-1" style="width: 20%">Salvar</button>
+                    <a href="{{ route('agente_politico.index') }}" class="btn btn-light m-1" style="width: 20%">Voltar</a>
                 </div>
                 <br>
             </form>

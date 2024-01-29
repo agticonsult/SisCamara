@@ -217,24 +217,29 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <h5>Troca de senha</h5>
+                                <ul>
+                                    <li>
+                                        Mínimo 6 caracteres e máximo 35 caracteres
+                                    </li>
+                                </ul>
                                 <div class="row">
-                                    <div class="form-group col-md-12">
-                                        <label class="form-label">Senha Antiga</label>
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Senha antiga</label>
                                         <input class="form-control" type="password" name="senha_antiga" placeholder="Informe a senha antiga" value="{{ old('senha_antiga') }}">
                                         {{-- @error('senha_antiga')
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror --}}
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <label class="form-label">Senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                        <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Informe uma senha" value="{{ old('password') }}">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Senha</label>
+                                        <input class="form-control @error('password') is-invalid @enderror" type="password" name="password" placeholder="Nova senha" value="{{ old('password') }}">
                                         @error('password')
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <label class="form-label">Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
-                                        <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme a senha" value="{{ old('confirmacao') }}">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Confirme a senha</label>
+                                        <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" placeholder="Confirme nova senha" value="{{ old('confirmacao') }}">
                                         @error('confirmacao')
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror
@@ -244,7 +249,7 @@
                         </div>
                         <hr>
                         <div class="col-md-12">
-                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                            <button type="submit" class="button_submit btn btn-primary" style="width: 20%">Salvar</button>
                         </div>
                         <br>
                     </form>
