@@ -57,5 +57,10 @@ class Perfil extends Model implements Auditable
         array_push($resposta, $tem->perfil->id_abrangencia);
         return $resposta;
     }
+
+    public static function perfisAtivos()
+    {
+        return Perfil::where('ativo', '=', Perfil::ATIVO)->get();
+    }
 }
 

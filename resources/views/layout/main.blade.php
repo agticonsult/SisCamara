@@ -212,7 +212,8 @@
                             Route::current()->getPrefix() == 'configuracao/autoridade' ||
                             Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
                             Route::current()->getPrefix() == 'configuracao/publicacao-ato' ||
-                            Route::current()->getPrefix() == 'configuracao/tamanho-anexo'
+                            Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ||
+                            Route::current()->getPrefix() == 'configuracao/tipo-documento'
                                 ? 'active'
                                 : 'collapse' }}">
                             <li
@@ -245,17 +246,16 @@
                                     href="{{ route('configuracao.publicacao_ato.index') }}">Publicações
                                 </a>
                             </li>
-                            {{-- <li
-                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ? 'active' : null }}">
-                                <a class="sidebar-link "
-                                    href="{{ route('configuracao.finalidade_grupo.index') }}">Finalidade dos
-                                    Grupos de Usuário</a>
-                            </li> --}}
                             <li
                                 class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ? 'active' : null }}">
                                 <a class="sidebar-link "
-                                    href="{{ route('configuracao.tamanho_anexo.index') }}">Tamanho
-                                    dos Anexos</a>
+                                    href="{{ route('configuracao.tamanho_anexo.index') }}">Tamanho dos Anexos</a>
+                            </li>
+                            <li
+                                class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-documento' ? 'active' : null }}">
+                                <a class="sidebar-link "
+                                    href="{{ route('configuracao.tipo_documento.index') }}">Tipo de Documento
+                                </a>
                             </li>
                         </ul>
                     </li>

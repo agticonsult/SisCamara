@@ -12,7 +12,7 @@ class TipoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'descricao', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'nome', 'tipoDocumento', 'nivel', 'contador', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -21,4 +21,10 @@ class TipoDocumento extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
+    const NIVEL_INI = 0;
+
+    public static function retornaTipoDocumentosAtivos()
+    {
+        return TipoDocumento::where('ativo', '=', TipoDocumento::ATIVO)->get();
+    }
 }

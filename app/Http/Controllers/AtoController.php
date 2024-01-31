@@ -33,7 +33,7 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $atos = Ato::where('ativo', '=', Ato::ATIVO)->get();
+            $atos = Ato::retornaAtosAtivos();
 
             return view('ato.index', compact('atos'));
         }
@@ -220,7 +220,7 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
 
             return view('ato.show', compact('ato'));
         }
@@ -237,12 +237,12 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
 
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
+            $atos_relacionados = Ato::retornaAtosRelacionadosAtivos();
 
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
@@ -259,8 +259,8 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
+            $ato = Ato::retornaAtoAtivo($id);
+            $atos_relacionados = Ato::retornaAtosRelacionadosAtivos();
 
             return view('ato.edit', compact('ato', 'atos_relacionados'));
         }
@@ -345,11 +345,11 @@ class AtoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
+            $atos_relacionados = Ato::retornaAtosRelacionadosAtivos();
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
-            $atos_relacionados = Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
             $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
@@ -377,7 +377,7 @@ class AtoController extends Controller
                 }
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
                 return redirect()->back()->with('erro', 'Ato inválido.');
             }
@@ -410,7 +410,7 @@ class AtoController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
                 return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
             }

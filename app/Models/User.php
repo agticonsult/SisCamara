@@ -93,6 +93,26 @@ class User extends Authenticatable
         $this->attributes['cpf'] = preg_replace('/[^0-9]/', '', $value);
     }
 
+    //métodos estáticos
+    public static function retornaUsuariosAtivos()
+    {
+        $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
+                ->select(
+                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
+                    'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
+                    'users.dataInativado', 'users.motivoInativado'
+                )
+                ->orderBy('users.ativo', 'asc')
+                ->orderBy('pessoas.nome', 'asc')
+                ->get();
+
+        return $usuarios;
+    }
+    public static function retornaUsuarioAtivo($id)
+    {
+        return User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+    }
+
     //relações
     public function departamentos()
     {

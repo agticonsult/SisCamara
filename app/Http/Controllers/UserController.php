@@ -33,15 +33,7 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
-                ->select(
-                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
-                    'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
-                    'users.dataInativado', 'users.motivoInativado'
-                )
-                ->orderBy('users.ativo', 'asc')
-                ->orderBy('pessoas.nome', 'asc')
-                ->get();
+            $usuarios = User::retornaUsuariosAtivos();
 
             return view('usuario.index', compact('usuarios'));
 
@@ -59,7 +51,7 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $perfils = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
+            $perfils = Perfil::perfisAtivos();
 
             return view('usuario.create', compact('perfils'));
 
@@ -124,15 +116,11 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuario = User::where('id', '=', $id)
-                ->where('ativo', '=', User::ATIVO)
-                ->select('id', 'cpf', 'id_pessoa', 'email')
-                ->first();
-
+            $perfils = Perfil::perfisAtivos();
+            $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario) {
                 return redirect()->route('usuario.index')->with('erro', 'Não é possível alterar este usuário.');
             }
-            $perfils = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
 
             return view('usuario.edit', compact('usuario', 'perfils'));
 
@@ -150,7 +138,8 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuario = User::where('id', '=', $id)->Where('ativo', '=', User::ATIVO)->first();
+            // $usuario = User::where('id', '=', $id)->Where('ativo', '=', User::ATIVO)->first();
+            $usuario = User::retornaUsuarioAtivo($id);
             $usuario->update($request->validated());
 
             $pessoa = Pessoa::find($usuario->id_pessoa);
@@ -198,7 +187,7 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+            $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario){
                 return redirect()->back()->with('erro', 'Não é possível desbloquear este usuário.')->withInput();
             }
@@ -224,13 +213,13 @@ class UserController extends Controller
             if (Auth::user()->temPermissao('User', 'Exclusão') != 1) {
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
+            
             $motivo = $request->motivo;
-
             if ($request->motivo == null || $request->motivo == "") {
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+            $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario){
                 return redirect()->back()->with('erro', 'Não é possível excluir este usuário.')->withInput();
             }
@@ -256,7 +245,7 @@ class UserController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+            $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario){
                 return redirect()->back()->with('erro', 'Usuário não encontrado!.')->withInput();
             }
@@ -288,7 +277,7 @@ class UserController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $usuario = User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
+            $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario) {
                 return redirect()->route('usuario.index')->with('erro', 'Houve erro ao desativar o perfil do usuário.');
             }
@@ -331,9 +320,8 @@ class UserController extends Controller
             }
         }
         catch(\Exception $ex){
-            return $ex->getMessage();
-            // ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
-            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }
 }

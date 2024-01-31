@@ -34,4 +34,13 @@ class Departamento extends Model implements Auditable
         // return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->withPivot('cadastradoPorUsuario');
         return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->wherePivot('ativo', '=', DepartamentoUsuario::ATIVO);
     }
+
+    public static function retornaDepartamentosAtivos()
+    {
+        return Departamento::where('ativo', '=', Departamento::ATIVO)->get();
+    }
+    public static function retornaDepartamentoAtivo($id)
+    {
+        return Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+    }
 }

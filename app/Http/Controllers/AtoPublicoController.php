@@ -20,16 +20,7 @@ class AtoPublicoController extends Controller
     public function index()
     {
         try {
-            $atos = Ato::leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
-                ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
-                ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
-                ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
-                ->where('atos.ativo', '=', 1)
-                ->select(
-                    'atos.*', 'assunto_atos.descricao as assunto', 'tipo_atos.descricao as tipo_ato',
-                    'orgao_atos.descricao as orgao', 'forma_publicacao_atos.descricao as forma_publicacao',
-                )
-                ->get();
+            $atos = Ato::retornaAtosPublicosAtivos();
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
             $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
@@ -49,7 +40,7 @@ class AtoPublicoController extends Controller
     public function show($id)
     {
         try {
-            $ato = Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+            $ato = Ato::retornaAtoAtivo($id);
 
             return view('ato.publico.show', compact('ato'));
 
@@ -264,7 +255,7 @@ class AtoPublicoController extends Controller
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
             return view('ato.publico.index', compact('atos', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
-            
+
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'buscaLivre');

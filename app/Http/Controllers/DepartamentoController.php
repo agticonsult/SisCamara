@@ -28,7 +28,7 @@ class DepartamentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $departamentos = Departamento::where('ativo', '=', Departamento::ATIVO)->get();
+            $departamentos = Departamento::retornaDepartamentosAtivos();
             $users = User::where('ativo', '=', User::ATIVO)->get();
 
             $usuarios = array();
@@ -148,7 +148,7 @@ class DepartamentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            $departamento = Departamento::retornaDepartamentoAtivo($id);
             $departamento->update($request->validated());
 
             if (isset($request->id_user)) {
@@ -190,7 +190,7 @@ class DepartamentoController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
+            $departamento = Departamento::retornaDepartamentoAtivo($id);
             if (!$departamento) {
                 return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível excluir este departamento.');
             }

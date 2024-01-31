@@ -81,12 +81,10 @@ class Ato extends Model implements Auditable
         return $atos;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
-
     public function linha_atos()
     {
         return $this->hasMany(LinhaAto::class, 'id_ato_principal', 'id');
     }
-
     public function buscar($filtro = null)
     {
         $resultados = $this->leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
@@ -147,6 +145,34 @@ class Ato extends Model implements Auditable
 
         return $resultados;
     }
+
+    public static function retornaAtosAtivos()
+    {
+        return Ato::where('ativo', '=', Ato::ATIVO)->get();
+    }
+    public static function retornaAtosPublicosAtivos()
+    {
+        $atos = Ato::leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
+                ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
+                ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
+                ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
+                ->where('atos.ativo', '=', 1)
+                ->select(
+                    'atos.*', 'assunto_atos.descricao as assunto', 'tipo_atos.descricao as tipo_ato',
+                    'orgao_atos.descricao as orgao', 'forma_publicacao_atos.descricao as forma_publicacao',
+                )
+                ->get();
+        return $atos;
+    }
+    public static function retornaAtoAtivo($id)
+    {
+        return Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
+    }
+    public static function retornaAtosRelacionadosAtivos()
+    {
+        return Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();
+    }
+
 
 }
 

@@ -11,11 +11,11 @@
     }
 </style>
 @include('errors.alerts')
-@include('errors.errors')
+{{-- @include('errors.errors') --}}
 
-<h1 class="h3 mb-3">Agentes Políticos</h1>
+<h1 class="h3 mb-3">Tipo de Documentos</h1>
 <div class="card" style="background-color:white">
-    <div class="card-body">
+    {{-- <div class="card-body">
         @if (Count($agente_politicos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
@@ -46,9 +46,7 @@
                                     em <strong>{{ $agente->created_at != null ? $agente->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    {{-- <a href="{{ route('agente_politico.edit', $agente->id) }}" class="btn btn-warning m-1">Alterar</a> --}}
                                     <a href="{{ route('agente_politico.edit', $agente->id_user) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
-                                    {{-- <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $agente->id }}">Excluir</button> --}}
                                 </td>
                             </tr>
                         @endforeach
@@ -56,10 +54,10 @@
                 </table>
             </div>
         @endif
-    </div>
+    </div> --}}
 
     <div class="card-footer">
-        <a href="{{ route('agente_politico.create') }}" class="btn btn-primary">Cadastrar Agente Político</a>
+        <a href="{{ route('configuracao.tipo_documento.create') }}" class="btn btn-primary">Cadastrar Tipo de Documento</a>
     </div>
 
 </div>

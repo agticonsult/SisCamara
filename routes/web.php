@@ -32,6 +32,7 @@ use App\Http\Controllers\PublicacaoAtoController;
 use App\Http\Controllers\RegistrarController;
 use App\Http\Controllers\ReparticaoController;
 use App\Http\Controllers\TipoAtoController;
+use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VereadorController;
@@ -357,6 +358,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => '/tamanho-anexo', 'as' => 'tamanho_anexo.'], function() {
             Route::get('/index', [FilesizeController::class, 'index'])->name('index');
             Route::post('/update', [FileSizeController::class, 'update'])->name('update');
+        });
+
+         //Tipo de documento
+         Route::group(['prefix' => '/tipo-documento', 'as' => 'tipo_documento.'], function() {
+            Route::get('/index', [TipoDocumentoController::class, 'index'])->name('index');
+            Route::get('/create', [TipoDocumentoController::class, 'create'])->name('create');
+            // Route::post('/store', [TipoDocumentoController::class, 'store'])->name('store');
+            // Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
+            // Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
+            // Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
         });
 
     });
