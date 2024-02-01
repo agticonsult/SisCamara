@@ -107,10 +107,10 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('ModeloProposicao', 'Listagem') == 1 ||
-                    Auth::user()->temPermissao('Proposicao', 'Listagem') == 1 ||
-                    Auth::user()->temPermissao('Legislatura', 'Listagem') == 1 ||
-                    Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') == 1
-                )
+                        Auth::user()->temPermissao('Proposicao', 'Listagem') == 1 ||
+                        Auth::user()->temPermissao('Legislatura', 'Listagem') == 1 ||
+                        Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') == 1
+                    )
                     <li class="sidebar-item">
                         <a href="#processoLegislativo" data-toggle="collapse" class="sidebar-link collapsed">
                             <i class="fas fa-fw fa-clipboard"></i>Processo Legislativo

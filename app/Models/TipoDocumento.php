@@ -12,7 +12,7 @@ class TipoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome', 'tipoDocumento', 'nivel', 'contador', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'nome', 'tipoDocumento', 'nivel', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -23,8 +23,21 @@ class TipoDocumento extends Model implements Auditable
     const INATIVO = 0;
     const NIVEL_INI = 0;
 
+    public function cad_usuario()
+    {
+        return $this->belongsTo(User::class, 'cadastradoPorUsuario');
+    }
+    public function departamentoVinculados()
+    {
+        return $this->hasMany(DepartamentoTramitacao::class, 'id_tipo_documento')->where('ativo', '=', DepartamentoTramitacao::ATIVO);
+    }
+
     public static function retornaTipoDocumentosAtivos()
     {
-        return TipoDocumento::where('ativo', '=', TipoDocumento::ATIVO)->get();
+        return TipoDocumento::where('ativo', '=', TipoDocumento::ATIVO)->with('departamentoVinculados')->get();
+    }
+    public static function retornaTipoDocumentoAtivo($id)
+    {
+        return TipoDocumento::where('id', '=', $id)->where('ativo', '=', TipoDocumento::ATIVO)->with('departamentoVinculados')->first();
     }
 }

@@ -93,6 +93,7 @@
                                     <tr>
                                         <th scope="col">Nome do Assunto</th>
                                         <th scope="col">Cadastrado por</th>
+                                        <th scope="col">Usuários vinculados</th>
                                         <th scope="col">Editar</th>
                                         <th scope="col">Excluir</th>
                                     </tr>
@@ -105,6 +106,9 @@
                                                 <strong>{{ $departamento->cadastradoPorUsuario != null ? $departamento->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                                 em
                                                 <strong>{{ $departamento->created_at != null ? $departamento->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalVisualizar{{ $departamento->id }}">Visualizar</i></button>
                                             </td>
                                             <td>
                                                 <a href="{{ route('configuracao.departamento.edit', $departamento->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
@@ -136,6 +140,34 @@
                                                             <button type="submit" class="button_submit btn btn-danger">Excluir</button>
                                                         </div>
                                                     </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="exampleModalVisualizar{{ $departamento->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVisualizar" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header btn-info">
+                                                        <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
+                                                            Usuários ativos no departamento <strong>{{$departamento->descricao}}</strong>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                       @if (count($departamento->usuarios) != null)
+                                                            @foreach ($departamento->usuarios as $usuario)
+                                                                <ul>
+                                                                    <li>
+                                                                        {{ $usuario->pessoa->nome }}
+                                                                    </li>
+                                                                </ul>
+                                                            @endforeach
+                                                       @else
+                                                            Sem usuários vinculados
+                                                       @endif
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">voltar</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

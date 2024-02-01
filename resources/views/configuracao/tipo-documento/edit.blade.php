@@ -12,20 +12,11 @@
 </style>
 @include('errors.alerts')
 
-<h1 class="h3 mb-3">Cadastro Tipo de Documento</h1>
-@if (!isset($departamentos[0]))
-    <div class="alert alert-warning alert-dismissible" role="alert">
-        <div class="alert-message">
-            <strong>Sem DEPARTAMENTO cadastrado!</strong>
-            <a href="{{ route('configuracao.departamento.index') }}">Clique aqui para cadastrar</a>
-        </div>
-    </div>
-@endif
-
+<h1 class="h3 mb-3">Alteração Tipo de Documento</h1>
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('configuracao.tipo_documento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="#" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -34,14 +25,14 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Nome</label>
-                                <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" placeholder="Informe o nome" value="{{ old('nome') }}">
+                                <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" placeholder="Informe o nome" value="{{ $tipoDocumento->nome }}">
                                 @error('nome')
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label">*Tipo de Documento</label>
-                                <input class="form-control @error('tipoDocumento') is-invalid @enderror" type="text" name="tipoDocumento" id="tipoDocumento" placeholder="Informe o nome do Tipo de Documento" value="{{ old('tipoDocumento') }}">
+                                <input class="form-control @error('tipoDocumento') is-invalid @enderror" type="text" name="tipoDocumento" id="tipoDocumento" placeholder="Informe o nome do Tipo de Documento" value="{{ $tipoDocumento->tipoDocumento }}">
                                 @error('tipoDocumento')
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
@@ -49,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -67,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-md-12">
                         <button type="submit" class="button_submit btn btn-primary">Salvar</button>

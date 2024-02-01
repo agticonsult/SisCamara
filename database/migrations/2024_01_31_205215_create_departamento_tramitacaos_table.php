@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\TipoDocumento;
+use App\Models\DepartamentoTramitacao;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipoDocumentosTable extends Migration
+class CreateDepartamentoTramitacaosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,18 +14,19 @@ class CreateTipoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipo_documentos', function (Blueprint $table) {
+        Schema::create('departamento_tramitacaos', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('nome')->nullable();
-            $table->text('tipoDocumento')->nullable();
-            $table->integer('nivel')->default(TipoDocumento::NIVEL_INI);
+            $table->integer('id_tipo_documento')->unsigned()->nullable();
+            $table->foreign('id_tipo_documento')->references('id')->on('tipo_documentos');
+            $table->integer('id_departamento')->unsigned()->nullable();
+            $table->foreign('id_departamento')->references('id')->on('departamentos');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->default(TipoDocumento::ATIVO);
+            $table->boolean('ativo')->default(DepartamentoTramitacao::ATIVO);
             $table->timestamps();
         });
     }
@@ -37,6 +38,6 @@ class CreateTipoDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_documentos');
+        Schema::dropIfExists('departamento_tramitacaos');
     }
 }

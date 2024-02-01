@@ -16,7 +16,7 @@ class TipoDocumentoRequest extends FormRequest
         return [
             'nome' => 'required|max:200',
             'tipoDocumento' => 'required|max:200',
-            'id_departamento' => 'required|integer'
+            'id_departamento' => 'required'
         ];
     }
 
@@ -34,8 +34,8 @@ class TipoDocumentoRequest extends FormRequest
             'tipoDocumento.required' => 'Tipo Documento obrigatório.',
             'tipoDocumento.max' => 'Tipo Documento: Máximo 200 caracteres.',
 
-            'id_departamento.required' => 'Seleção Departamento obrigatório',
-            'id_departamento.integer' => 'Requer número inteiro'
+            'id_departamento.required' => 'Seleção Departamento obrigatório'
+            // 'id_departamento.integer' => 'Requer número inteiro'
         ];
     }
 }

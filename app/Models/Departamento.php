@@ -37,7 +37,7 @@ class Departamento extends Model implements Auditable
 
     public static function retornaDepartamentosAtivos()
     {
-        return Departamento::where('ativo', '=', Departamento::ATIVO)->get();
+        return Departamento::where('ativo', '=', Departamento::ATIVO)->with('usuarios')->get();
     }
     public static function retornaDepartamentoAtivo($id)
     {

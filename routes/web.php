@@ -360,12 +360,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/update', [FileSizeController::class, 'update'])->name('update');
         });
 
-         //Tipo de documento
-         Route::group(['prefix' => '/tipo-documento', 'as' => 'tipo_documento.'], function() {
+        //Tipo de documento
+        Route::group(['prefix' => '/tipo-documento', 'as' => 'tipo_documento.'], function() {
             Route::get('/index', [TipoDocumentoController::class, 'index'])->name('index');
             Route::get('/create', [TipoDocumentoController::class, 'create'])->name('create');
-            // Route::post('/store', [TipoDocumentoController::class, 'store'])->name('store');
-            // Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
+            Route::post('/store', [TipoDocumentoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
             // Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
             // Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
         });
