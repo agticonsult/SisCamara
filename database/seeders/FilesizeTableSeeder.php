@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Filesize;
+use App\Models\TipoFilesize;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,13 +17,13 @@ class FilesizeTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_filesizes')->insert([
-            ['descricao'=>'Anexo do Ato', 'ativo'=>1],
-            ['descricao'=>'Foto de Perfil', 'ativo'=>1],
+            ['descricao'=>'Anexo do Ato', 'ativo'=> TipoFilesize::ATIVO],
+            ['descricao'=>'Foto de Perfil', 'ativo'=> TipoFilesize::ATIVO]
         ]);
 
         DB::table('filesizes')->insert([
-            ['mb' => 10, 'id_tipo_filesize' => 1, 'ativo' => 1],
-            ['mb' => 10, 'id_tipo_filesize' => 2, 'ativo' => 1],
+            ['mb' => 10, 'id_tipo_filesize' => 1, 'ativo' => Filesize::ATIVO],
+            ['mb' => 10, 'id_tipo_filesize' => 2, 'ativo' => Filesize::ATIVO]
         ]);
     }
 }

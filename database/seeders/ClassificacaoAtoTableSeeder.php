@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ClassificacaoAto;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,9 +16,9 @@ class ClassificacaoAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('classificacao_atos')->insert([
-            ['descricao'=>'Lei Ordinária', 'ativo'=>1],
-            ['descricao'=>'Lei Complementar', 'ativo'=>1],
-            ['descricao'=>'Código', 'ativo'=>1]
+            ['descricao'=>'Lei Ordinária', 'ativo'=> ClassificacaoAto::ATIVO],
+            ['descricao'=>'Lei Complementar', 'ativo'=> ClassificacaoAto::ATIVO],
+            ['descricao'=>'Código', 'ativo'=> ClassificacaoAto::ATIVO]
         ]);
     }
 }

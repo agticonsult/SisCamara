@@ -15,10 +15,10 @@ class FinalidadeGrupoSeeder extends Seeder
     public function run()
     {
         DB::table('finalidade_grupos')->insert([
-            ['descricao'=>'Atendimento', 'ativo'=>1],
-            ['descricao'=>'Programas', 'ativo'=>1],
-            ['descricao'=>'Permissão', 'ativo'=>1],
-            ['descricao'=>'Chat', 'ativo'=>1]
+            ['descricao' => 'Atendimento', 'ativo' => 1],
+            ['descricao' => 'Programas', 'ativo' => 1],
+            ['descricao' => 'Permissão', 'ativo' => 1],
+            ['descricao' => 'Chat', 'ativo'=>1]
         ]);
     }
 }

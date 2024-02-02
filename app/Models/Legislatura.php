@@ -25,6 +25,15 @@ class Legislatura extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
+    public static function retornaLegislaturasAtivas()
+    {
+        return Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
+    }
+    public static function retornaLegislaturaAtiva($id)
+    {
+        return Legislatura::where('id', '=', $id)->where('ativo', '=', Legislatura::ATIVO)->first();
+    }
 }
 
 

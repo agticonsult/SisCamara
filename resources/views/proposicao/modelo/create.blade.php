@@ -36,7 +36,6 @@
                         @enderror
                     </div>
                 </div>
-
                 <br>
                 <div class="col-md-12">
                     <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoLinhaAto;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,8 @@ class TipoLinhaAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_linha_atos')->insert([
-            ['descricao' => 'Texto Original', 'ativo' => 1],
-            ['descricao' => 'Texto Adicionado', 'ativo' => 1]
+            ['descricao' => 'Texto Original', 'ativo' => TipoLinhaAto::ATIVO],
+            ['descricao' => 'Texto Adicionado', 'ativo' => TipoLinhaAto::ATIVO]
         ]);
     }
 }

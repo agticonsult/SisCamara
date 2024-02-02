@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoHorarioVotacao;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,8 @@ class TipoHorarioVotacaoTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_horario_votacaos')->insert([
-            ['descricao' => 'Início da Votação', 'ativo' => 1],
-            ['descricao' => 'Fim da Votação', 'ativo' => 1]
+            ['descricao' => 'Início da Votação', 'ativo' => TipoHorarioVotacao::ATIVO],
+            ['descricao' => 'Fim da Votação', 'ativo' => TipoHorarioVotacao::ATIVO]
         ]);
     }
 }

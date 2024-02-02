@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Perfil;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,10 +16,10 @@ class PerfilTableSeeder extends Seeder
     public function run()
     {
         DB::table('perfils')->insert([
-            ['descricao'=>'Administrador', 'ativo'=>1],
-            ['descricao'=>'Político', 'ativo'=>1],
-            ['descricao'=>'Usuário Externo', 'ativo'=>1],
-            ['descricao'=>'Usuário Interno', 'ativo'=>1],
+            ['descricao' => 'Administrador', 'ativo'=> Perfil::ATIVO],
+            ['descricao' => 'Político', 'ativo'=> Perfil::ATIVO],
+            ['descricao' => 'Usuário Externo', 'ativo'=> Perfil::ATIVO],
+            ['descricao' => 'Usuário Interno', 'ativo'=> Perfil::ATIVO],
         ]);
     }
 }

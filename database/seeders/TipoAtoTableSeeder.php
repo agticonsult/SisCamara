@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoAto;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,8 +16,8 @@ class TipoAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_atos')->insert([
-            ['descricao'=>'Ordinário', 'ativo'=>1],
-            ['descricao'=>'Extraordinário', 'ativo'=>1]
+            ['descricao' => 'Ordinário', 'ativo'=> TipoAto::ATIVO],
+            ['descricao' => 'Extraordinário', 'ativo'=> TipoAto::ATIVO]
         ]);
     }
 }

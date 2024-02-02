@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
 use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\DepartamentoDocumentoController;
 use App\Http\Controllers\ProposicaoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
@@ -89,7 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Ato
     Route::group(['prefix' => '/ato', 'as' => 'ato.'], function() {
-        Route::get('/index', [AtoController::class, 'index'])->name('index');
+        Route::get('/', [AtoController::class, 'index'])->name('index');
         Route::get('/show/{id}', [AtoController::class, 'show'])->name('show');
         Route::get('/create', [AtoController::class, 'create'])->name('create');
         Route::post('/store', [AtoController::class, 'store'])->name('store');
@@ -211,6 +212,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
     });
 
+    // Departamento documento
+    Route::group(['prefix' => '/departamento-documento', 'as' => 'departamento_documento.'], function() {
+        Route::get('/', [DepartamentoDocumentoController::class, 'index'])->name('index');
+        Route::get('/create', [DepartamentoDocumentoController::class, 'create'])->name('create');
+        Route::post('/store', [DepartamentoDocumentoController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [DepartamentoDocumentoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [DepartamentoDocumentoController::class, 'update'])->name('update');
+        Route::post('/destroy/{id}', [DepartamentoDocumentoController::class, 'destroy'])->name('destroy');
+    });
+
     // Votação Eletrônica
     Route::group(['prefix' => '/votacao-eletronica', 'as' => 'votacao_eletronica.'], function() {
         Route::get('/index', [VotacaoEletronicaController::class, 'index'])->name('index');
@@ -250,7 +261,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Agente político
     Route::group(['prefix' => '/agente-politico', 'as' => 'agente_politico.'], function() {
-        Route::get('/index', [AgentePoliticoController::class, 'index'])->name('index');
+        Route::get('/', [AgentePoliticoController::class, 'index'])->name('index');
         Route::get('/show/{id}', [AgentePoliticoController::class, 'show'])->name('show');
         Route::get('/create', [AgentePoliticoController::class, 'create'])->name('create');
         Route::get('/novo-agente-politico', [AgentePoliticoController::class, 'novoAgentePolitico'])->name('novo_agente_politico');

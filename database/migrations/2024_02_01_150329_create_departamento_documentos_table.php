@@ -1,12 +1,11 @@
 <?php
 
-use App\Models\Perfil;
-use App\Models\PerfilFuncionalidade;
+use App\Models\DepartamentoDocumento;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePerfilFuncionalidadesTable extends Migration
+class CreateDepartamentoDocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,19 +14,19 @@ class CreatePerfilFuncionalidadesTable extends Migration
      */
     public function up()
     {
-        Schema::create('perfil_funcionalidades', function (Blueprint $table) {
+        Schema::create('departamento_documentos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_perfil')->unsigned()->nullable();
-            $table->foreign('id_perfil')->references('id')->on('perfils');
-            $table->integer('id_funcionalidade')->unsigned()->nullable();
-            $table->foreign('id_funcionalidade')->references('id')->on('funcionalidades');
+            $table->string('titulo')->nullable();
+            $table->text('conteudo')->nullable();
+            $table->integer('id_tipo_documento')->unsigned()->nullable();
+            $table->foreign('id_tipo_documento')->references('id')->on('tipo_documentos');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->default(PerfilFuncionalidade::ATIVO);
+            $table->boolean('ativo')->default(DepartamentoDocumento::ATIVO);
             $table->timestamps();
         });
     }
@@ -39,6 +38,6 @@ class CreatePerfilFuncionalidadesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('perfil_funcionalidades');
+        Schema::dropIfExists('departamento_documentos');
     }
 }

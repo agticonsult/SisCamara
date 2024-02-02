@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Autoridade;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,10 +16,10 @@ class AutoridadeSeeder extends Seeder
     public function run()
     {
         DB::table('autoridades')->insert([
-            ['descricao'=>'Autoridade 1', 'ativo'=>1],
-            ['descricao'=>'Autoridade 2', 'ativo'=>1],
-            ['descricao'=>'Autoridade 3', 'ativo'=>1],
-            ['descricao'=>'Autoridade 4', 'ativo'=>1]
+            ['descricao' => 'Autoridade 1', 'ativo' => Autoridade::ATIVO],
+            ['descricao' => 'Autoridade 2', 'ativo' => Autoridade::ATIVO],
+            ['descricao' => 'Autoridade 3', 'ativo' => Autoridade::ATIVO],
+            ['descricao' => 'Autoridade 4', 'ativo' => Autoridade::ATIVO]
         ]);
     }
 }

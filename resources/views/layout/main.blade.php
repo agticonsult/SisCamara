@@ -66,7 +66,7 @@
                 @endif
 
                 @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
-                    <li class="sidebar-item {{ Route::current()->uri == 'ato/index' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
+                    <li class="sidebar-item {{ Route::current()->uri == 'ato' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
                         <a href="{{ route('ato.index') }}" class="sidebar-link">
                             <i class="fas fa-fw fa-file-alt" aria-hidden="true"></i>
                             <span>Atos</span>
@@ -151,7 +151,7 @@
 
                 @if (Auth::user()->temPermissao('AgentePolitico', 'Listagem') == 1)
                     <li
-                        class="sidebar-item {{ Route::current()->uri == 'agente-politico/index' || Route::current()->uri == 'agente-politico/create' || Route::current()->uri == 'agente-politico/novo-agente-politico' || Route::current()->uri == 'agente-politico/vincular' || Route::current()->uri == 'agente-politico/edit/{id}'? 'active' : null }}">
+                        class="sidebar-item {{ Route::current()->uri == 'agente-politico' || Route::current()->uri == 'agente-politico/create' || Route::current()->uri == 'agente-politico/novo-agente-politico' || Route::current()->uri == 'agente-politico/vincular' || Route::current()->uri == 'agente-politico/edit/{id}'? 'active' : null }}">
                         <a href="{{ route('agente_politico.index') }}" class="sidebar-link">
                             <i class="fas fa-fw fa-user-tie" aria-hidden="true"></i>
                             <span>Agentes Políticos</span>
@@ -164,6 +164,15 @@
                         <a href="{{ route('reparticao.index') }}" class="sidebar-link">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             <span>Repartição</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if (Auth::user()->temPermissao('DepartamentoDocumento', 'Listagem') == 1)
+                    <li class="sidebar-item {{ Route::current()->uri == 'departamento-documento' || Route::current()->uri == 'departamento-documento/create' || Route::current()->uri == 'departamento-documento/edit/{id}' ? 'active' : null }}">
+                        <a href="{{ route('departamento_documento.index') }}" class="sidebar-link">
+                            <i class="fa fa-book" aria-hidden="true"></i>
+                            <span>Documentos</span>
                         </a>
                     </li>
                 @endif

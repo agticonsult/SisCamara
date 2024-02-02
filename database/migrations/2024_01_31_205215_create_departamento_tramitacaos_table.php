@@ -20,6 +20,7 @@ class CreateDepartamentoTramitacaosTable extends Migration
             $table->foreign('id_tipo_documento')->references('id')->on('tipo_documentos');
             $table->integer('id_departamento')->unsigned()->nullable();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
+            $table->integer('ordem')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();

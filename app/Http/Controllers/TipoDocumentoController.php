@@ -82,10 +82,11 @@ class TipoDocumentoController extends Controller
             ]);
 
             $departamentos = $request->id_departamento;
-            foreach ($departamentos as $departamento) {
+            for ($i = 0 ; $i < $niveis; $i++) {
                 DepartamentoTramitacao::create([
                     'id_tipo_documento' => $tipoDocumento->id,
-                    'id_departamento' => $departamento,
+                    'id_departamento' => $departamentos[$i],
+                    'ordem' => $i + 1,
                     'cadastradoPorUsuario' => Auth::user()->id
                 ]);
             }
@@ -156,5 +157,26 @@ class TipoDocumentoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function get($id)
+    {
+        try{
+            if (Auth::user()->temPermissao('TipoDocumentoController', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $tipoDocumento = TipoDocumento::retornaTipoDocumentoAtivo($id);
+            if (!$tipoDocumento) {
+                return redirect()->back()->with('erro', 'Tipo de documento inválido.');
+            }
+
+            return $this->success($tipoDocumento);
+
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'get');
+            return $this->error('Erro', 'Contate o administrador do sistema', 500);
+        }
     }
 }

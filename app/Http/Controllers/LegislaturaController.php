@@ -24,7 +24,7 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
+            $legislaturas = Legislatura::retornaLegislaturasAtivas();
 
             return view('processo-legislativo.legislatura.index', compact('legislaturas'));
         }
@@ -60,7 +60,7 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', Legislatura::ATIVO)->first();
+            $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -80,7 +80,7 @@ class LegislaturaController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', 1)->first();
+            $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }
@@ -107,7 +107,7 @@ class LegislaturaController extends Controller
                 $motivo = "Exclusão pelo usuário.";
             }
 
-            $legislatura = Legislatura::where('id', '=', $id)->where('ativo', '=', Legislatura::ATIVO)->first();
+            $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
                 return redirect()->back()->with('erro', 'Legislatura inválida.');
             }

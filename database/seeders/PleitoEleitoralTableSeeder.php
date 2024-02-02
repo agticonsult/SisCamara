@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Legislatura;
 use App\Models\Permissao;
+use App\Models\PleitoCargo;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +20,7 @@ class PleitoEleitoralTableSeeder extends Seeder
         $agile = Permissao::where('id_perfil', '=', 1)->first();
 
         DB::table('legislaturas')->insert([
-            ['id' => 1, 'inicio_mandato' => 2023, 'fim_mandato' => 2026, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id' => 1, 'inicio_mandato' => 2023, 'fim_mandato' => 2026, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => Legislatura::ATIVO],
         ]);
 
         DB::table('pleito_eleitorals')->insert([
@@ -29,15 +31,15 @@ class PleitoEleitoralTableSeeder extends Seeder
         DB::table('pleito_cargos')->insert([
 
             //Pleito de 2022
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 4, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 5, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 6, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 7, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 8, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 9, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 10, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 11, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
-            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 12, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => 1],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 4, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 5, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 6, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 7, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 8, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 9, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 10, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 11, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO],
+            ['id_pleito_eleitoral' => 1, 'id_cargo_eletivo' => 12, 'cadastradoPorUsuario' => $agile->id_user, 'ativo' => PleitoCargo::ATIVO]
         ]);
 
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoAnexo;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,10 +16,10 @@ class TipoAnexoTableSeeder extends Seeder
     public function run()
     {
         DB::table('tipo_anexos')->insert([
-            ['descricao'=>'Documento', 'ativo'=>1],
-            ['descricao'=>'Imagem', 'ativo'=>1],
-            ['descricao'=>'Áudio', 'ativo'=>1],
-            ['descricao'=>'Vídeo', 'ativo'=>1]
+            ['descricao'=>'Documento', 'ativo' => TipoAnexo::ATIVO],
+            ['descricao'=>'Imagem', 'ativo' => TipoAnexo::ATIVO],
+            ['descricao'=>'Áudio', 'ativo' => TipoAnexo::ATIVO],
+            ['descricao'=>'Vídeo', 'ativo' => TipoAnexo::ATIVO]
         ]);
     }
 }
