@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartamentoDocumentoRequest;
 use App\Models\DepartamentoDocumento;
 use App\Models\StatusDepartamentoDocumento;
 use App\Models\TipoDocumento;
@@ -62,9 +63,19 @@ class DepartamentoDocumentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DepartamentoDocumentoRequest $request)
     {
-        //
+        try{
+            if(Auth::user()->temPermissao('DepartamentoDocumento', 'Cadastro') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+            dd($request->validated());
+
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'store');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     /**

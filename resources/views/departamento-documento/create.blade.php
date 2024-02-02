@@ -25,7 +25,7 @@
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">
-            <form action="#" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('departamento_documento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -42,7 +42,7 @@
                         <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($statusDepDocs as $status)
-                                <option value="{{ $status->id }}"> {{ $status->descricao }} </option>
+                                <option value="{{ $status->id }}" {{ old('id_status') == $status->id ? 'selected' : '' }}> {{ $status->descricao }} </option>
                             @endforeach
                         </select>
                         @error('id_status')
