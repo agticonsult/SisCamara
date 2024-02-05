@@ -69,7 +69,14 @@ class DepartamentoDocumentoController extends Controller
             if(Auth::user()->temPermissao('DepartamentoDocumento', 'Cadastro') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
-            dd($request->validated());
+
+            $depDoc = DepartamentoDocumento::create($request->validated() + [
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
+
+            //registrando histórico de movimentação do documento
+
+            return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
 
         }
         catch(\Exception $ex) {
