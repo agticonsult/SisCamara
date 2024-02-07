@@ -294,13 +294,13 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Pessoa
-    Route::group(['prefix' => '/pessoa', 'as' => 'pessoa.'], function() {
-        Route::get('/index', [PessoaController::class, 'index'])->name('index');
-        Route::get('/create', [PessoaController::class, 'create'])->name('create');
-        Route::post('/store', [PessoaController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [PessoaController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [PessoaController::class, 'update'])->name('update');
-    });
+    // Route::group(['prefix' => '/pessoa', 'as' => 'pessoa.'], function() {
+    //     Route::get('/index', [PessoaController::class, 'index'])->name('index');
+    //     Route::get('/create', [PessoaController::class, 'create'])->name('create');
+    //     Route::post('/store', [PessoaController::class, 'store'])->name('store');
+    //     Route::get('/edit/{id}', [PessoaController::class, 'edit'])->name('edit');
+    //     Route::post('/update/{id}', [PessoaController::class, 'update'])->name('update');
+    // });
 
     // Configuração
     Route::group(['prefix' => '/configuracao', 'as' => 'configuracao.'], function() {

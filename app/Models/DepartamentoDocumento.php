@@ -34,4 +34,12 @@ class DepartamentoDocumento extends Model implements Auditable
     // {
     //     return $this->belongsTo(StatusDepartamentoDocumento::class, 'id_status');
     // }
+    public static function retornaDocumentosDepAtivos()
+    {
+        return DepartamentoDocumento::where('ativo', '=', DepartamentoDocumento::ATIVO)->get();
+    }
+    public static function retornaDocumentoDepAtivo($id)
+    {
+        return DepartamentoDocumento::where('id', '=', $id)->where('ativo', '=', DepartamentoDocumento::ATIVO)->first();
+    }
 }

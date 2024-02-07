@@ -15,8 +15,8 @@
 
 <h1 class="h3 mb-3">Departamento Documento</h1>
 <div class="card" style="background-color:white">
-    {{-- <div class="card-body">
-        @if (Count($reparticaos) == 0)
+    <div class="card-body">
+        @if (Count($departamentoDocumentos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -25,28 +25,28 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Descrição</th>
-                            <th scope="col">Tipo de Repartição</th>
+                            <th scope="col">Título</th>
+                            <th scope="col">Tipo de documento</th>
                             <th scope="col">Cadastrado por</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($reparticaos as $reparticao)
+                        @foreach ($departamentoDocumentos as $depDoc)
                             <tr>
-                                <td>{{ $reparticao->descricao }}</td>
-                                <td>{{ $reparticao->id_tipo_reparticao != null ? $reparticao->tipo_reparticao->descricao : 'não informado' }}</td>
+                                <td>{{ $depDoc->titulo }}</td>
+                                <td>{{ $depDoc->id_tipo_documento != null ? $depDoc->tipoDocumento->nome : 'não informado' }}</td>
                                 <td>
-                                    <strong>{{ $reparticao->cadastradoPorUsuario != null ? $reparticao->cad_usuario->pessoa->nome : 'não informado' }}</strong>
-                                    em <strong>{{ $reparticao->created_at != null ? $reparticao->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $depDoc->cadastradoPorUsuario != null ? $depDoc->cad_usuario->pessoa->nome : 'não informado' }}</strong>
+                                    em <strong>{{ $depDoc->created_at != null ? $depDoc->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('reparticao.edit', $reparticao->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $reparticao->id }}"><i class="fas fa-trash"></i></button>
+                                    <a href="{{ route('departamento_documento.edit', $depDoc->id) }}" class="btn btn-warning m-1"><i class="fas fa-pen"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $depDoc->id }}"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
 
-                            <div class="modal fade" id="exampleModalExcluir{{ $reparticao->id }}"
+                            {{-- <div class="modal fade" id="exampleModalExcluir{{ $reparticao->id }}"
                                 tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                 aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -73,13 +73,13 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         @endforeach
                     </tbody>
                 </table>
             </div>
         @endif
-    </div> --}}
+    </div>
 
     <div class="card-footer">
         <a href="{{ route('departamento_documento.create') }}" class="btn btn-primary">Cadastrar documento</a>

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartamentoDocumentoRequest;
 use App\Models\DepartamentoDocumento;
+use App\Models\DepartamentoTramitacao;
+use App\Models\HistoricoMovimentacaoDoc;
 use App\Models\StatusDepartamentoDocumento;
 use App\Models\TipoDocumento;
 use App\Services\ErrorLogService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +27,9 @@ class DepartamentoDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            return view('departamento-documento.index');
+            $departamentoDocumentos = DepartamentoDocumento::retornaDocumentosDepAtivos();
+
+            return view('departamento-documento.index', compact('departamentoDocumentos'));
 
         }
         catch(\Exception $ex) {
@@ -75,6 +80,29 @@ class DepartamentoDocumentoController extends Controller
             ]);
 
             //registrando histórico de movimentação do documento
+            switch ($request->id_status) {
+                case '1': //aprovado
+                    HistoricoMovimentacaoDoc::create([
+                        'dataAprovado' => Carbon::now(),
+                        'aprovadoPor' => Auth::user()->id,
+                        'id_status' => $request->id_status,
+                        'id_documento' => $depDoc->id
+                    ]);
+                break;
+
+                case '2': //reprovado
+                    HistoricoMovimentacaoDoc::create([
+                        'dataReprovado' => Carbon::now(),
+                        'reprovadoPor' => Auth::user()->id,
+                        'id_status' => $request->id_status,
+                        'id_documento' => $depDoc->id
+                    ]);
+                break;
+
+                default:
+                    return redirect()->route('departamento_documento.index')->with('error', 'Status inválido.');
+                break;
+            }
 
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
 
@@ -102,9 +130,30 @@ class DepartamentoDocumentoController extends Controller
      * @param  \App\Models\DepartamentoDocumento  $departamentoDocumento
      * @return \Illuminate\Http\Response
      */
-    public function edit(DepartamentoDocumento $departamentoDocumento)
+    public function edit($id)
     {
-        //
+        try{
+            if(Auth::user()->temPermissao('DepartamentoDocumento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $departamentoDocumentoEdit = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
+            $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
+            $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
+            $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
+            $documentoTramitacaoDeps = DepartamentoTramitacao::retornaDocDepAtivos($departamentoDocumentoEdit->id_tipo_documento);
+
+            if (!$departamentoDocumentoEdit) {
+                return redirect()->back()->with('erro', 'Documento inválido.');
+            }
+
+            return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'statusDepDocs', 'tipoDocumentos', 'documentoTramitacaoDeps'));
+
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     /**

@@ -25,8 +25,8 @@ class CreateHistoricoMovimentacaoDocsTable extends Migration
             $table->foreign('reprovadoPor')->references('id')->on('users');
             $table->integer('id_status')->unsigned()->nullable();
             $table->foreign('id_status')->references('id')->on('status_departamento_documentos');
-            $table->integer('id_departamento_encaminhado')->unsigned()->nullable();
-            $table->foreign('id_departamento_encaminhado')->references('id')->on('departamentos');
+            // $table->integer('id_departamento_encaminhado')->unsigned()->nullable();
+            // $table->foreign('id_departamento_encaminhado')->references('id')->on('departamentos');
             $table->integer('id_documento')->unsigned()->nullable();
             $table->foreign('id_documento')->references('id')->on('departamento_documentos');
             $table->uuid('cadastradoPorUsuario')->nullable();
