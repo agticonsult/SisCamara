@@ -26,6 +26,10 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    public function alt_usuario()
+    {
+        return $this->belongsTo(User::class, 'alteradoPorUsuario');
+    }
     public function status()
     {
         return $this->belongsTo(StatusDepartamentoDocumento::class, 'id_status');

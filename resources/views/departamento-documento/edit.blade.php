@@ -66,13 +66,13 @@
             <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion2">
                 <div class="card-body">
                     <div class="col-md-12">
-                        <strong><h2>Departamento(s) vinculado(s) ao documento</h2></strong>
+                        <strong><h4>Departamento(s)</h4></strong>
                         @foreach ($departamentoTramitacao as $tramitacao)
                             <ul>
                                 <li>
-                                    <h3>
+                                    <h5>
                                         {{ $tramitacao->departamento->descricao }}
-                                    </h3>
+                                    </h5>
                                 </li>
                             </ul>
                         @endforeach
@@ -93,11 +93,12 @@
             </div>
             <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion3">
                 <div class="card-body">
-                    <div class="row">
+                    <form action="{{ route('departamento_documento.update', $departamentoDocumentoEdit->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+                        @csrf
+                        @method('POST')
+
                         <div class="col-md-12">
-                            <form action="#" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
-                                @csrf
-                                @method('POST')
+                            <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label">*Status</label>
                                     <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
@@ -110,11 +111,15 @@
                                         <div class="invalid-feedback">{{ $message }}</div><br>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Próximo departamento na tramitação do documento</label>
+                                    <input type="text" class="form-control" value="{{ $proximoDep->departamento->descricao }}" readonly>
+                                </div>
                                 <div class="col-md-12">
                                     <button type="submit" class="button_submit btn btn-primary">Salvar</button>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

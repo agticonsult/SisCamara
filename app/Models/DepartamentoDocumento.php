@@ -12,7 +12,7 @@ class DepartamentoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'conteudo', 'id_tipo_documento', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
+        'titulo', 'conteudo', 'id_tipo_documento','cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];

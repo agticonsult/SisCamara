@@ -16,9 +16,9 @@ class CreateHistoricoMovimentacaoDocsTable extends Migration
     {
         Schema::create('historico_movimentacao_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('dataEncaminhado')->nullable();
-            $table->date('dataAprovado')->nullable();
-            $table->date('dataReprovado')->nullable();
+            $table->timestamp('dataEncaminhado')->nullable();
+            $table->timestamp('dataAprovado')->nullable();
+            $table->timestamp('dataReprovado')->nullable();
             $table->uuid('aprovadoPor')->nullable();
             $table->foreign('aprovadoPor')->references('id')->on('users');
             $table->uuid('reprovadoPor')->nullable();
@@ -31,6 +31,8 @@ class CreateHistoricoMovimentacaoDocsTable extends Migration
             $table->foreign('id_documento')->references('id')->on('departamento_documentos');
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
+            $table->uuid('alteradoPorUsuario')->nullable();
+            $table->foreign('alteradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
