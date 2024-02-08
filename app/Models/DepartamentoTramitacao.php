@@ -27,21 +27,21 @@ class DepartamentoTramitacao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
-    public function departamento()
-    {
-        return $this->belongsTo(Departamento::class, 'id_departamento');
-    }
-    public function tipoDocumento()
-    {
-        return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
-    }
+    // public function departamento()
+    // {
+    //     return $this->belongsTo(Departamento::class, 'id_departamento');
+    // }
+    // public function tipoDocumento()
+    // {
+    //     return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
+    // }
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
 
-    public static function retornaDocDepAtivos($id)
-    {
-        return DepartamentoTramitacao::where('id_tipo_documento', '=', $id)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->orderBy('ordem')->get();
-    }
+    // public static function retornaDocDepAtivos($id)
+    // {
+    //     return DepartamentoTramitacao::where('id_tipo_documento', '=', $id)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->orderBy('ordem')->get();
+    // }
 }

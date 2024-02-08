@@ -8,6 +8,7 @@ use App\Models\DepartamentoTramitacao;
 use App\Models\Perfil;
 use App\Models\TipoDocumento;
 use App\Services\ErrorLogService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

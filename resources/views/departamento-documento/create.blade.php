@@ -71,7 +71,7 @@
                         @enderror
                     </div>
                 </div>
-                <br>
+                {{-- <br>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Status documento</label>
@@ -85,7 +85,7 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
                 <br>
                 <div class="row">
                     <div class="col-md-12">

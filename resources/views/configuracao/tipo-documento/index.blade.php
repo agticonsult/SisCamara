@@ -63,7 +63,7 @@
                                                 @foreach ($tp->departamentoVinculados as $dpVinc)
                                                     <ul>
                                                         <li>
-                                                            {{ $dpVinc->departamento->descricao }}
+                                                            {{ $dpVinc->descricao }}
                                                         </li>
                                                     </ul>
                                                 @endforeach

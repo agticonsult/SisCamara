@@ -29,7 +29,7 @@ class TipoDocumento extends Model implements Auditable
     }
     public function departamentoVinculados()
     {
-        return $this->hasMany(DepartamentoTramitacao::class, 'id_tipo_documento')->where('ativo', '=', DepartamentoTramitacao::ATIVO);
+        return $this->belongsToMany(Departamento::class, 'departamento_tramitacaos', 'id_tipo_documento', 'id_departamento')->wherePivot('ativo', '=', DepartamentoTramitacao::ATIVO);
     }
 
     public static function retornaTipoDocumentosAtivos()

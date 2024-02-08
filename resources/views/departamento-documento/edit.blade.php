@@ -23,34 +23,25 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Título</label>
-                        <input type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}">
-                        @error('titulo')
-                            <div class="invalid-feedback">{{ $message }}</div><br>
-                        @enderror
+                        <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}" readonly>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Tipo de Documento</label>
-                        <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control @error('id_tipo_documento') is-invalid @enderror">
+                        <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control" disabled>
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($tipoDocumentos as $tipoDocumento)
                                 <option value="{{ $tipoDocumento->id }}" {{ $departamentoDocumentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
                             @endforeach
                         </select>
-                        @error('id_tipo_documento')
-                            <div class="invalid-feedback">{{ $message }}</div><br>
-                        @enderror
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <label class="form-label" for="body">Conteúdo</label>
-                        <textarea name="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="20" id="conteudo">{{ $departamentoDocumentoEdit->conteudo }}</textarea>
-                        @error('conteudo')
-                            <div class="invalid-feedback">{{ $message }}</div><br>
-                        @enderror
+                        <textarea name="conteudo" class="form-control" cols="30" rows="20" id="conteudo">{{ $departamentoDocumentoEdit->conteudo }}</textarea>
                     </div>
                 </div>
-                <br>
+                {{-- <br>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label class="form-label">*Status documento</label>
@@ -64,7 +55,7 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
                 <br>
                 <div class="row">
                     <div class="col-md-12">
@@ -73,23 +64,6 @@
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div class="card-body">
-        <div class="row">
-            <div class="form-group col-md-12">
-                <hr><br>
-                <h3>Departamentos tramitações: </h3>
-                <br>
-                @foreach ($documentoTramitacaoDeps as $dep)
-                    <ol>
-                        <li>
-                            {{ $dep->departamento->descricao }}
-                        </li>
-                    </ol>
-                @endforeach
-            </div>
         </div>
     </div>
 </div>
@@ -104,6 +78,7 @@
 <script>
     tinymce.init({
         selector: 'textarea',
+        readonly: true,
         plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
         toolbar_mode: 'floating',
         entity_encoding : "raw",
