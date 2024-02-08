@@ -17,7 +17,7 @@ class DepartamentoDocumentoRequest extends FormRequest
         return [
             'titulo' => 'required|max:200',
             'conteudo' => 'required',
-            'id_status' => 'required|integer',
+            // 'id_status' => 'required|integer',
             'id_tipo_documento' => ['required', new TipoDocumentoule]
         ];
     }
@@ -35,8 +35,8 @@ class DepartamentoDocumentoRequest extends FormRequest
 
             'conteudo.required' => 'Conteúdo do documento obrigatório.',
 
-            'id_status.required' => 'Seleção STATUS obrigatório',
-            'id_status.integer' => 'Requer número inteiro',
+            // 'id_status.required' => 'Seleção STATUS obrigatório',
+            // 'id_status.integer' => 'Requer número inteiro',
 
             'id_tipo_documento.required' => 'Seleção TIPO DE DOCUMENTO obrigatório',
         ];

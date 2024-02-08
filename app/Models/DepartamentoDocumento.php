@@ -30,10 +30,6 @@ class DepartamentoDocumento extends Model implements Auditable
     {
         return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
     }
-    // public function status()
-    // {
-    //     return $this->belongsTo(StatusDepartamentoDocumento::class, 'id_status');
-    // }
     public static function retornaDocumentosDepAtivos()
     {
         return DepartamentoDocumento::where('ativo', '=', DepartamentoDocumento::ATIVO)->get();

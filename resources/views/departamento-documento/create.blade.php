@@ -37,18 +37,6 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                    {{-- <div class="form-group col-md-4">
-                        <label class="form-label">*Status documento</label>
-                        <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($statusDepDocs as $status)
-                                <option value="{{ $status->id }}" {{ old('id_status') == $status->id ? 'selected' : '' }}> {{ $status->descricao }} </option>
-                            @endforeach
-                        </select>
-                        @error('id_status')
-                            <div class="invalid-feedback">{{ $message }}</div><br>
-                        @enderror
-                    </div> --}}
                     <div class="form-group col-md-6">
                         <label class="form-label">*Tipo de Documento</label>
                         <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control @error('id_tipo_documento') is-invalid @enderror">
@@ -71,21 +59,6 @@
                         @enderror
                     </div>
                 </div>
-                {{-- <br>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Status documento</label>
-                        <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($statusDepDocs as $status)
-                                <option value="{{ $status->id }}" {{ old('id_status') == $status->id ? 'selected' : '' }}> {{ $status->descricao }} </option>
-                            @endforeach
-                        </select>
-                        @error('id_status')
-                            <div class="invalid-feedback">{{ $message }}</div><br>
-                        @enderror
-                    </div>
-                </div> --}}
                 <br>
                 <div class="row">
                     <div class="col-md-12">

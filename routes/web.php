@@ -216,6 +216,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => '/departamento-documento', 'as' => 'departamento_documento.'], function() {
         Route::get('/', [DepartamentoDocumentoController::class, 'index'])->name('index');
         Route::get('/create', [DepartamentoDocumentoController::class, 'create'])->name('create');
+        // Route::get('/acompanhar-doc/{id}', [DepartamentoDocumentoController::class, 'acompanharDoc'])->name('acompanharDoc');
         Route::post('/store', [DepartamentoDocumentoController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [DepartamentoDocumentoController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [DepartamentoDocumentoController::class, 'update'])->name('update');

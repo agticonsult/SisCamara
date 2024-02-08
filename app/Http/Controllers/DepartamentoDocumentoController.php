@@ -80,29 +80,10 @@ class DepartamentoDocumentoController extends Controller
             ]);
 
             //registrando histórico de movimentação do documento
-            switch ($request->id_status) {
-                case '1': //aprovado
-                    HistoricoMovimentacaoDoc::create([
-                        'dataAprovado' => Carbon::now(),
-                        'aprovadoPor' => Auth::user()->id,
-                        'id_status' => $request->id_status,
-                        'id_documento' => $depDoc->id
-                    ]);
-                break;
-
-                case '2': //reprovado
-                    HistoricoMovimentacaoDoc::create([
-                        'dataReprovado' => Carbon::now(),
-                        'reprovadoPor' => Auth::user()->id,
-                        'id_status' => $request->id_status,
-                        'id_documento' => $depDoc->id
-                    ]);
-                break;
-
-                default:
-                    return redirect()->route('departamento_documento.index')->with('error', 'Status inválido.');
-                break;
-            }
+            HistoricoMovimentacaoDoc::create([
+                'id_documento' => $depDoc->id,
+                'cadastradoPorUsuario' => Auth::user()->id
+            ]);
 
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
 
@@ -140,14 +121,13 @@ class DepartamentoDocumentoController extends Controller
             $departamentoDocumentoEdit = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
             $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
+            $departamentoTramitacao = DepartamentoTramitacao::where('id_tipo_documento', '=', $departamentoDocumentoEdit->id_tipo_documento)->orderBy('ordem')->get();
             $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
-            $documentoTramitacaoDeps = DepartamentoTramitacao::retornaDocDepAtivos($departamentoDocumentoEdit->id_tipo_documento);
-
             if (!$departamentoDocumentoEdit) {
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'statusDepDocs', 'tipoDocumentos', 'documentoTramitacaoDeps'));
+            return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos', 'departamentoTramitacao', 'statusDepDocs'));
 
         }
         catch(\Exception $ex) {
@@ -178,4 +158,19 @@ class DepartamentoDocumentoController extends Controller
     {
         //
     }
+
+    // public function acompanharDoc($id)
+    // {
+    //     try{
+    //         if(Auth::user()->temPermissao('DepartamentoDocumento', 'Listagem') != 1){
+    //             return redirect()->back()->with('erro', 'Acesso negado.');
+    //         }
+    //         return view('departamento-documento.acompanhar');
+
+    //     }
+    //     catch(\Exception $ex) {
+    //         ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'acompanharDoc');
+    //         return redirect()->back()->with('erro', 'Contate o administrador do sistema');
+    //     }
+    // }
 }
