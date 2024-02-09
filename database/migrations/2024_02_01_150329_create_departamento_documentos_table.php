@@ -18,6 +18,7 @@ class CreateDepartamentoDocumentosTable extends Migration
             $table->increments('id');
             $table->string('titulo')->nullable();
             $table->text('conteudo')->nullable();
+            $table->text('protocolo')->nullable();
             $table->integer('id_tipo_documento')->unsigned()->nullable();
             $table->foreign('id_tipo_documento')->references('id')->on('tipo_documentos');
             $table->uuid('cadastradoPorUsuario')->nullable();

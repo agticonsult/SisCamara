@@ -77,8 +77,12 @@ class DepartamentoDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
+            $timestamp = Carbon::now()->timestamp;
+            $protocolo = $timestamp . '/' . rand(100000, 999999);
+
             $depDoc = DepartamentoDocumento::create($request->validated() + [
-                'cadastradoPorUsuario' => Auth::user()->id
+                'cadastradoPorUsuario' => Auth::user()->id,
+                'protocolo' => $protocolo
             ]);
 
             //registrando histórico de movimentação do documento

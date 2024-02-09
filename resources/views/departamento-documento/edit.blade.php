@@ -12,7 +12,7 @@
 </style>
 @include('errors.alerts')
 
-<h1 class="h3 mb-3">Dados do documento</h1>
+{{-- <h1 class="h3 mb-3">Dados do documento</h1> --}}
 <div class="card" style="background-color:white">
 
     <div id="accordion1">
@@ -28,11 +28,11 @@
                 <div class="card-body">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="form-label">Título</label>
                                 <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}" readonly>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label class="form-label">Tipo de Documento</label>
                                 <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control" disabled>
                                     <option value="" selected disabled>--Selecione--</option>
@@ -40,6 +40,10 @@
                                         <option value="{{ $tipoDocumento->id }}" {{ $departamentoDocumentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Protocolo</label>
+                                <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->protocolo }}" readonly>
                             </div>
                         </div>
                         <div class="row">
