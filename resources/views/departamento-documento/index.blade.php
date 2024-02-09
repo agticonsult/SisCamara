@@ -13,9 +13,9 @@
 @include('errors.alerts')
 @include('errors.errors')
 
-<h1 class="h3 mb-3">Departamento Documento</h1>
 <div class="card" style="background-color:white">
     <div class="card-body">
+        <h5 class="card-title mb-0">Departamento Documento</h5><br>
         @if (Count($departamentoDocumentos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
@@ -75,6 +75,44 @@
                                     </div>
                                 </div>
                             </div> --}}
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title mb-0">Histórico de Movimentações</h5><br>
+        @if (Count($departamentoDocumentos) == 0)
+            <div>
+                <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Tipo de documento</th>
+                            <th scope="col">Cadastrado por</th>
+                            {{-- <th scope="col">Ações</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($departamentoDocumentos as $depDoc)
+                            <tr>
+                                <td>{{ $depDoc->titulo }}</td>
+                                <td>{{ $depDoc->id_tipo_documento != null ? $depDoc->tipoDocumento->nome : 'não informado' }}</td>
+                                <td>
+                                    <strong>{{ $depDoc->cadastradoPorUsuario != null ? $depDoc->cad_usuario->pessoa->nome : 'não informado' }}</strong>
+                                    em <strong>{{ $depDoc->created_at != null ? $depDoc->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                </td>
+                                {{-- <td>
+                                    <a href="{{ route('departamento_documento.edit', $depDoc->id) }}" class="btn btn-info m-1"><i class="fas fa-eye"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $depDoc->id }}"><i class="fas fa-trash"></i></button>
+                                </td> --}}
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

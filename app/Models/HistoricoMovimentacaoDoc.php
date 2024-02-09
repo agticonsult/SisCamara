@@ -45,7 +45,11 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     public static function retornaHistoricoMovAtivo($id)
     {
-        return HistoricoMovimentacaoDoc::where('id_documento', '=', $id)->where('ativo', '=', HistoricoMovimentacaoDoc::ATIVO)->first();
+        return HistoricoMovimentacaoDoc::where('id_documento', '=', $id)->where('ativo', '=', HistoricoMovimentacaoDoc::ATIVO)->get();
+    }
+    public static function retornaUltimoHistoricoMovStatusAtivo($id)
+    {
+        return HistoricoMovimentacaoDoc::where('id_documento', '=', $id)->where('ativo', '=', HistoricoMovimentacaoDoc::ATIVO)->latest()->first();
     }
 
 }

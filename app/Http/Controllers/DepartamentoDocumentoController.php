@@ -121,7 +121,7 @@ class DepartamentoDocumentoController extends Controller
             }
 
             $departamentoDocumentoEdit = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
-            $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
+            $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaUltimoHistoricoMovStatusAtivo($departamentoDocumentoEdit->id);
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $departamentoTramitacao = DepartamentoTramitacao::retornaDepartamentoTramitacoes($departamentoDocumentoEdit->id_tipo_documento);
             $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoEdit->id_tipo_documento);
