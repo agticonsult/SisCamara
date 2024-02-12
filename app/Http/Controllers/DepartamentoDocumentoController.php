@@ -126,6 +126,7 @@ class DepartamentoDocumentoController extends Controller
 
             $departamentoDocumentoEdit = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
             $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaUltimoHistoricoMovStatusAtivo($departamentoDocumentoEdit->id);
+            $todoHistoricoMovDocumento = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $departamentoTramitacao = DepartamentoTramitacao::retornaDepartamentoTramitacoes($departamentoDocumentoEdit->id_tipo_documento);
             $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoEdit->id_tipo_documento);
@@ -134,7 +135,7 @@ class DepartamentoDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
 
-            return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos', 'departamentoTramitacao', 'statusDepDocs', 'proximoDep'));
+            return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos', 'departamentoTramitacao', 'statusDepDocs', 'proximoDep', 'todoHistoricoMovDocumento'));
 
         }
         catch(\Exception $ex) {

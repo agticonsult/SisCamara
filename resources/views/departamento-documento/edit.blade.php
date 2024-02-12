@@ -145,6 +145,60 @@
         </div>
     </div>
 
+    <div id="accordion4">
+        <div class="card">
+            <div class="card-header" id="heading4">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="true" aria-controls="collapse4">
+                        Histórico de movimentações
+                    </button>
+                </h5>
+            </div>
+            <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordion4">
+                <div class="card-body">
+                    <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Data Encaminhado</th>
+                                <th scope="col">Data Aprovado</th>
+                                <th scope="col">Data Reprovado</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Cadastrado por</th>
+                                <th scope="col">Alterado por</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($todoHistoricoMovDocumento as $historico)
+                                <tr>
+                                    <td>{{ $historico->dataEncaminhado != null ? date('d/m/Y H:i:s', strtotime($historico->dataEncaminhado)) : '-' }}</td>
+                                    <td>{{ $historico->dataAprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataAprovado)) : '-' }}</td>
+                                    <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td>
+                                    <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
+                                    <td>
+                                        @if ($historico->cadastradoPorUsuario && $historico->created_at)
+                                            <strong>{{ $historico->cadastradoPorUsuario != null ? $historico->cad_usuario->pessoa->nome : 'não informado' }}</strong>
+                                            em <strong>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($historico->alteradoPorUsuario && $historico->created_at)
+                                            <strong>{{ $historico->alteradoPorUsuario != null ? $historico->alt_usuario->pessoa->nome : 'não informado' }}</strong>
+                                            em <strong>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card-body">
         <a href="{{ route('departamento_documento.index') }}" class="btn btn-light">Voltar</a>
     </div>
@@ -172,6 +226,23 @@
     });
 
     $(document).ready(function() {
+        $('#datatables-reponsive').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "Mostrar _MENU_ registros por página",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                "sSearch": "Pesquisar: ",
+                "oPaginate": {
+                    "sFirst": "Início",
+                    "sPrevious": "Anterior",
+                    "sNext": "Próximo",
+                    "sLast": "Último"
+                }
+            },
+        });
+
         $('.select2').select2({
             language: {
                 noResults: function() {
