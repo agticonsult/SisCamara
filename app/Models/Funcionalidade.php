@@ -48,7 +48,7 @@ class Funcionalidade extends Model implements Auditable
     /*
     ** funcionalidades político, usuários interno e externo
     */
-    
+
     public static function funcionalidadesPolitico()
     {
         $funcionalidadesPolitico = Funcionalidade::leftJoin('entidades', 'entidades.id', '=', 'funcionalidades.id_entidade')
@@ -96,6 +96,7 @@ class Funcionalidade extends Model implements Auditable
                         ->orWhere('entidades.nomeEntidade', '=', 'ModeloProposicao')
                         ->orWhere('entidades.nomeEntidade', '=', 'AgentePolitico')
                         ->orWhere('entidades.nomeEntidade', '=', 'Legislatura')
+                        ->orWhere('entidades.nomeEntidade', '=', 'DepartamentoDocumento')
                         ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral');
                 })
             ->where(function (Builder $query) {

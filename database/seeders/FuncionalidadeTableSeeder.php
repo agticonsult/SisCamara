@@ -60,11 +60,10 @@ class FuncionalidadeTableSeeder extends Seeder
 
         foreach ($entidades as $e) {
             foreach ($tipo_funcionalidades as $tp) {
-                $funcionalidade = new Funcionalidade();
-                $funcionalidade->id_entidade = $e->id;
-                $funcionalidade->id_tipo_funcionalidade = $tp->id;
-                $funcionalidade->ativo = 1;
-                $funcionalidade->save();
+                Funcionalidade::create([
+                    'id_entidade' => $e->id,
+                    'id_tipo_funcionalidade' => $tp->id
+                ]);
             }
         }
     }
