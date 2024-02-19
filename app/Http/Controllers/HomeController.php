@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\HomeUpdateRequest;
+use App\Models\DepartamentoUsuario;
 use App\Models\Distrito;
 use App\Models\ErrorLog;
 use App\Models\Estado;
@@ -35,6 +36,7 @@ class HomeController extends Controller
                     'id_pessoa'
                 )->first();
 
+            $departamentos = DepartamentoUsuario::where('id_user', '=', $user->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
             $foto_perfil = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', User::ATIVO)->first();
             $filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
             $temFoto = 0;
@@ -47,8 +49,8 @@ class HomeController extends Controller
                 }
             }
 
-            return view('home.home', compact('user', 'foto_perfil', 'temFoto', 'filesize'));
-            
+            return view('home.home', compact('user', 'foto_perfil', 'temFoto', 'filesize', 'departamentos'));
+
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'index');

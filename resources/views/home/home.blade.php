@@ -89,9 +89,22 @@
                                 </li>
                             @endforeach
                         </h5>
+                        <h4 style="text-align: center">
+                            Departamento(s) vinculado(s): &nbsp
+                        </h4>
+                        <h5>
+                            @if (count($departamentos) != null)
+                                @foreach ($departamentos as $departamento)
+                                    <li>
+                                        {{ $departamento->departamento->descricao }}
+                                    </li>
+                                @endforeach
+                            @else
+                                Não está relacionado a nenhum departamento
+                            @endif
+                        </h5>
                     </ul>
                 </div>
-
             </div>
         </div>
     </div>

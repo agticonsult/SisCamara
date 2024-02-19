@@ -36,7 +36,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     }
     // public function departamento()
     // {
-    //     return $this->belongsTo(Departamento::class, 'id_departamento_encaminhado');
+    //     return $this->hasMany(Departamento::class, 'id_departamento_encaminhado')->where('ativo', '=', Departamento::ATIVO);
     // }
     public function documento()
     {

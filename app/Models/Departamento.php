@@ -38,6 +38,10 @@ class Departamento extends Model implements Auditable
     {
         return $this->belongsToMany(TipoDocumento::class, 'departamento_tramitacaos', 'id_departamento', 'id_tipo_documento');
     }
+    // public function hsitoricoDocumento()
+    // {
+    //     return $this->belongsTo(HistoricoMovimentacaoDoc::class, 'id_departamento_encaminhado');
+    // }
 
     public static function retornaDepartamentosAtivos()
     {
