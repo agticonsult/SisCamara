@@ -12,7 +12,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'dataEncaminhado', 'dataAprovado', 'dataReprovado', 'aprovadoPor' ,'reprovadoPor', 'id_status', 'id_documento', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'paracer', 'id_documento', 'id_usuario', 'id_status', 'id_departamento', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -22,25 +22,21 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     const ATIVO = 1;
     const INATIVO = 0;
 
-    public function cad_usuario()
-    {
-        return $this->belongsTo(User::class, 'cadastradoPorUsuario');
-    }
-    public function alt_usuario()
-    {
-        return $this->belongsTo(User::class, 'alteradoPorUsuario');
-    }
     public function status()
     {
         return $this->belongsTo(StatusDepartamentoDocumento::class, 'id_status');
     }
-    // public function departamento()
-    // {
-    //     return $this->hasMany(Departamento::class, 'id_departamento_encaminhado')->where('ativo', '=', Departamento::ATIVO);
-    // }
+    public function departamento()
+    {
+        return $this->hasMany(Departamento::class, 'id_departamento')->where('ativo', '=', Departamento::ATIVO);
+    }
     public function documento()
     {
         return $this->belongsTo(DepartamentoDocumento::class, 'id_documento');
+    }
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'id_usuario');
     }
 
     public static function retornaHistoricoMovAtivo($id)

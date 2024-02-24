@@ -16,27 +16,15 @@ class CreateHistoricoMovimentacaoDocsTable extends Migration
     {
         Schema::create('historico_movimentacao_docs', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamp('dataEncaminhado')->nullable();
-            $table->timestamp('dataAprovado')->nullable();
-            $table->timestamp('dataReprovado')->nullable();
-            $table->uuid('aprovadoPor')->nullable();
-            $table->foreign('aprovadoPor')->references('id')->on('users');
-            $table->uuid('reprovadoPor')->nullable();
-            $table->foreign('reprovadoPor')->references('id')->on('users');
-            $table->integer('id_status')->unsigned()->nullable();
-            $table->foreign('id_status')->references('id')->on('status_departamento_documentos');
-            // $table->integer('id_departamento_encaminhado')->unsigned()->nullable();
-            // $table->foreign('id_departamento_encaminhado')->references('id')->on('departamentos');
+            $table->string('parecer')->nullable();
             $table->integer('id_documento')->unsigned()->nullable();
             $table->foreign('id_documento')->references('id')->on('departamento_documentos');
-            $table->uuid('cadastradoPorUsuario')->nullable();
-            $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
-            $table->uuid('alteradoPorUsuario')->nullable();
-            $table->foreign('alteradoPorUsuario')->references('id')->on('users');
-            $table->uuid('inativadoPorUsuario')->nullable();
-            $table->foreign('inativadoPorUsuario')->references('id')->on('users');
-            $table->timestamp('dataInativado')->nullable();
-            $table->text('motivoInativado')->nullable();
+            $table->uuid('id_usuario')->nullable();
+            $table->foreign('id_usuario')->references('id')->on('users');
+            $table->integer('id_status')->unsigned()->nullable();
+            $table->foreign('id_status')->references('id')->on('status_departamento_documentos');
+            $table->integer('id_departamento')->unsigned()->nullable();
+            $table->foreign('id_departamento')->references('id')->on('departamentos');
             $table->boolean('ativo')->default(HistoricoMovimentacaoDoc::ATIVO);
             $table->timestamps();
         });

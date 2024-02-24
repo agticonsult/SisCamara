@@ -159,8 +159,6 @@ class DepartamentoDocumentoController extends Controller
             }
 
             $departamentoDocumentoUpdate = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
-            // $departamentoTramitacaoUpdate = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoUpdate->id_tipo_documento);
-            // dd($departamentoTramitacaoUpdate);
             if ($request->id_status == 1) {
                 HistoricoMovimentacaoDoc::create([
                     'dataAprovado' => Carbon::now(),
@@ -201,18 +199,4 @@ class DepartamentoDocumentoController extends Controller
         //
     }
 
-    // public function acompanharDoc($id)
-    // {
-    //     try{
-    //         if(Auth::user()->temPermissao('DepartamentoDocumento', 'Listagem') != 1){
-    //             return redirect()->back()->with('erro', 'Acesso negado.');
-    //         }
-    //         return view('departamento-documento.acompanhar');
-
-    //     }
-    //     catch(\Exception $ex) {
-    //         ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'acompanharDoc');
-    //         return redirect()->back()->with('erro', 'Contate o administrador do sistema');
-    //     }
-    // }
 }
