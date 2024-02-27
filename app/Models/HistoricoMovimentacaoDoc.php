@@ -12,7 +12,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'paracer', 'id_documento', 'id_usuario', 'id_status', 'id_departamento', 'ativo'
+        'parecer', 'id_documento', 'id_usuario', 'id_status', 'id_departamento', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -38,6 +38,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'id_usuario');
     }
+
 
     public static function retornaHistoricoMovAtivo($id)
     {

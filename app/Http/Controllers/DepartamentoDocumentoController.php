@@ -88,7 +88,7 @@ class DepartamentoDocumentoController extends Controller
             //registrando histórico de movimentação do documento
             HistoricoMovimentacaoDoc::create([
                 'id_documento' => $depDoc->id,
-                'cadastradoPorUsuario' => Auth::user()->id
+                'id_usuario' => Auth::user()->id
             ]);
 
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
@@ -159,32 +159,21 @@ class DepartamentoDocumentoController extends Controller
             }
 
             $departamentoDocumentoUpdate = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
-            if ($request->id_status == 1) {
-                HistoricoMovimentacaoDoc::create([
-                    'dataAprovado' => Carbon::now(),
-                    'aprovadoPor' => Auth::user()->id,
-                    'id_status' => $request->id_status,
-                    'dataEncaminhado' => Carbon::now(),
-                    'id_documento' => $departamentoDocumentoUpdate->id,
-                    'alteradoPorUsuario' => Auth::user()->id
-                ]);
-            }
-            else{
-                HistoricoMovimentacaoDoc::create([
-                    'dataReprovado' => Carbon::now(),
-                    'reprovadoPor' => Auth::user()->id,
-                    'id_status' => $request->id_status,
-                    'id_documento' => $departamentoDocumentoUpdate->id,
-                    'alteradoPorUsuario' => Auth::user()->id
-                ]);
-            }
+            $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoUpdate->id_tipo_documento);
+
+            HistoricoMovimentacaoDoc::create($request->validated() + [
+                'id_documento' => $departamentoDocumentoUpdate->id,
+                'id_usuario' => Auth::user()->id,
+                'id_departamento' => $proximoDep->id_departamento
+            ]);
 
             return redirect()->back()->with('success', 'Alteração realizado com sucesso.');
 
         }
         catch(\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            return $ex->getMessage();
+            // ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'update');
+            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 

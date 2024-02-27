@@ -117,7 +117,7 @@
 
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label class="form-label">*Status</label>
                                         <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
                                             <option value="" selected disabled>--Selecione--</option>
@@ -129,7 +129,14 @@
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
+                                        <label class="form-label">Parecer</label>
+                                        <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
+                                        @error('parecer')
+                                            <div class="invalid-feedback">{{ $message }}</div><br>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         <label class="form-label">Próximo departamento na tramitação do documento</label>
                                         <input type="text" class="form-control" value="{{ $proximoDep->departamento->descricao }}" readonly>
                                     </div>
@@ -159,37 +166,19 @@
                     <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col">Data Encaminhado</th>
-                                <th scope="col">Data Aprovado</th>
-                                <th scope="col">Data Reprovado</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Cadastrado por</th>
-                                <th scope="col">Alterado por</th>
+                                <th scope="col">Usuário</th>
+                                <th scope="col">Departamento</th>
+                                <th scope="col">Data Reprovado</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($todoHistoricoMovDocumento as $historico)
                                 <tr>
-                                    <td>{{ $historico->dataEncaminhado != null ? date('d/m/Y H:i:s', strtotime($historico->dataEncaminhado)) : '-' }}</td>
+                                    <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
+                                    <td>{{ $historico->id_usuario != null ? $historico->usuario->pessoa->nome : '-' }}</td>
                                     <td>{{ $historico->dataAprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataAprovado)) : '-' }}</td>
                                     <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td>
-                                    <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
-                                    <td>
-                                        @if ($historico->cadastradoPorUsuario && $historico->created_at)
-                                            <strong>{{ $historico->cadastradoPorUsuario != null ? $historico->cad_usuario->pessoa->nome : 'não informado' }}</strong>
-                                            em <strong>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($historico->alteradoPorUsuario && $historico->created_at)
-                                            <strong>{{ $historico->alteradoPorUsuario != null ? $historico->alt_usuario->pessoa->nome : 'não informado' }}</strong>
-                                            em <strong>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -30,6 +30,11 @@ class DepartamentoDocumento extends Model implements Auditable
     {
         return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
     }
+    public function obterDepartamentoAtual()
+    {
+        $historicos = HistoricoMovimentacaoDoc::where('id_documento', $this->id)->get();
+    }
+
     public static function retornaDocumentosDepAtivos()
     {
         return DepartamentoDocumento::where('ativo', '=', DepartamentoDocumento::ATIVO)->get();

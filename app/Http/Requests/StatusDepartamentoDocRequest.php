@@ -15,7 +15,8 @@ class StatusDepartamentoDocRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_status' => ['required', 'integer', new StatusDepartamentoDocRule]
+            'id_status' => ['required', 'integer', new StatusDepartamentoDocRule],
+            'parecer' => 'required'
         ];
     }
 
@@ -27,6 +28,7 @@ class StatusDepartamentoDocRequest extends FormRequest
     public function messages()
     {
         return [
+            'parecer.required' => 'Parecer obrigatório.',
             'id_status.required' => 'Status obrigatório.',
             'id_status.integer' => 'Status inválido.'
         ];
