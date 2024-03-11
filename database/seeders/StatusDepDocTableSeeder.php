@@ -18,6 +18,8 @@ class StatusDepDocTableSeeder extends Seeder
         DB::table('status_departamento_documentos')->insert([
             ['descricao'=> 'Aprovado', 'ativo' => StatusDepartamentoDocumento::ATIVO],
             ['descricao'=> 'Reprovado', 'ativo' => StatusDepartamentoDocumento::ATIVO],
+            ['descricao'=> 'Criação', 'ativo' => StatusDepartamentoDocumento::ATIVO],
+            ['descricao'=> 'Finalizado', 'ativo' => StatusDepartamentoDocumento::ATIVO]
         ]);
     }
 }

@@ -100,11 +100,15 @@
                     @if ($historicoMovimentacao->id_status == 1)
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label class="form-label">Status</label>
                                     <input type="text" class="form-control"  value="{{ $historicoMovimentacao->status->descricao }}" readonly>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
+                                    <label class="form-label">Parecer</label>
+                                    <input type="text" class="form-control" value="{{ $historicoMovimentacao->parecer }}" readonly>
+                                </div>
+                                <div class="form-group col-md-4">
                                     <label class="form-label">Departamento</label>
                                     <input type="text" class="form-control"  value="{{ $proximoDep->departamento->descricao }}" readonly>
                                 </div>
@@ -169,7 +173,7 @@
                                 <th scope="col">Status</th>
                                 <th scope="col">Usuário</th>
                                 <th scope="col">Departamento</th>
-                                <th scope="col">Data Reprovado</th>
+                                <th scope="col">Data</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,8 +181,9 @@
                                 <tr>
                                     <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
                                     <td>{{ $historico->id_usuario != null ? $historico->usuario->pessoa->nome : '-' }}</td>
-                                    <td>{{ $historico->dataAprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataAprovado)) : '-' }}</td>
-                                    <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td>
+                                    <td>{{ $historico->id_departamento != null ? $historico->departamento->descricao : '-' }}</td>
+                                    {{-- <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td> --}}
+                                    <td>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
