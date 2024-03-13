@@ -32,7 +32,7 @@
                                 <th scope="col">CPF</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Perfis ativos</th>
-                                <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão)</th>
+                                {{-- <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão)</th> --}}
                                 <th scope="col">Cadastrado em</th>
                                 <th scope="col">Ações</th>
                             </tr>
@@ -52,7 +52,7 @@
                                             @endforeach
                                         </ul>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($usuario->bloqueadoPorTentativa == true)
                                             <button type="button" class="btn btn-dark m-1" data-toggle="modal" data-target="#exampleModalDesbloquear{{ $usuario->id }}">Sim</button>
                                         @else
@@ -60,13 +60,19 @@
                                                 Não
                                             </button>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         {{-- <strong>{{ $usuario->cadastradoPorUsuario != null ? $usuario->cad_usuario->pessoa->nome : 'Sistema' }}</strong> --}}
                                         <strong>{{ $usuario->created_at != null ? $usuario->created_at->format('d/m/Y H:i:s') : 'sem registro' }}</strong>
                                     </td>
                                     <td>
                                         @if ($usuario->ativo == 1)
+                                            @if ($usuario->bloqueadoPorTentativa == true)
+                                                <button type="button" class="btn btn-dark m-1"
+                                                    data-toggle="modal" data-target="#exampleModalDesbloquear{{ $usuario->id }}">
+                                                    Desbloquear
+                                                </button>
+                                            @endif
                                             <a href="{{ route('usuario.edit', $usuario->id) }}" class="btn btn-warning"><i class="fas fa-pen"></i></a>
                                             @if (Auth::user()->temPermissao('User', 'Exclusão') == 1)
                                                 <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuario->id }}"><i class="fas fa-trash"></i></button>
