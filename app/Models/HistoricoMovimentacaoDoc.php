@@ -12,7 +12,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'parecer', 'id_documento', 'id_usuario', 'id_status', 'id_departamento', 'ativo'
+        'parecer', 'id_documento', 'id_usuario', 'id_status', 'id_departamento', 'atualDepartamento', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -21,6 +21,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
+    const ATUAL_DEPARTAMENTO = 1;
 
     public function status()
     {
@@ -28,7 +29,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     }
     public function departamento()
     {
-        return $this->hasMany(Departamento::class, 'id_departamento')->where('ativo', '=', Departamento::ATIVO);
+        return $this->belongsTo(Departamento::class, 'id_departamento')->where('ativo', '=', Departamento::ATIVO);
     }
     public function documento()
     {
@@ -38,7 +39,10 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'id_usuario');
     }
-
+    public function obterDepartamentoAtual()
+    {
+        $historicos = HistoricoMovimentacaoDoc::where('id_documento', $this->id)->get();
+    }
 
     public static function retornaHistoricoMovAtivo($id)
     {

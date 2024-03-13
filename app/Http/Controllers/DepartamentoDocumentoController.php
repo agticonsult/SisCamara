@@ -87,6 +87,7 @@ class DepartamentoDocumentoController extends Controller
 
             //registrando histórico de movimentação do documento
             HistoricoMovimentacaoDoc::create([
+                'id_status' => DepartamentoDocumento::CRIACAO_DOC,
                 'id_documento' => $depDoc->id,
                 'id_usuario' => Auth::user()->id
             ]);
@@ -164,16 +165,16 @@ class DepartamentoDocumentoController extends Controller
             HistoricoMovimentacaoDoc::create($request->validated() + [
                 'id_documento' => $departamentoDocumentoUpdate->id,
                 'id_usuario' => Auth::user()->id,
-                'id_departamento' => $proximoDep->id_departamento
+                'id_departamento' => $proximoDep->id_departamento,
+                'atualDepartamento' => HistoricoMovimentacaoDoc::ATUAL_DEPARTAMENTO
             ]);
 
             return redirect()->back()->with('success', 'Alteração realizado com sucesso.');
 
         }
         catch(\Exception $ex) {
-            return $ex->getMessage();
-            // ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'update');
-            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'update');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 

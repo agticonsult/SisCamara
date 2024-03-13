@@ -25,6 +25,7 @@ class CreateHistoricoMovimentacaoDocsTable extends Migration
             $table->foreign('id_status')->references('id')->on('status_departamento_documentos');
             $table->integer('id_departamento')->unsigned()->nullable();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
+            $table->integer('atualDepartamento')->nullable();
             $table->boolean('ativo')->default(HistoricoMovimentacaoDoc::ATIVO);
             $table->timestamps();
         });

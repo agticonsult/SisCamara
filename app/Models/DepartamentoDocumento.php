@@ -21,6 +21,7 @@ class DepartamentoDocumento extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
+    const CRIACAO_DOC = 1;
 
     public function cad_usuario()
     {
@@ -29,10 +30,6 @@ class DepartamentoDocumento extends Model implements Auditable
     public function tipoDocumento()
     {
         return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
-    }
-    public function obterDepartamentoAtual()
-    {
-        $historicos = HistoricoMovimentacaoDoc::where('id_documento', $this->id)->get();
     }
 
     public static function retornaDocumentosDepAtivos()

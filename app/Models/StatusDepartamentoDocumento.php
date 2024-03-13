@@ -29,6 +29,15 @@ class StatusDepartamentoDocumento extends Model implements Auditable
 
     public static function retornaStatusAtivos()
     {
-        return StatusDepartamentoDocumento::where('ativo', '=', StatusDepartamentoDocumento::ATIVO)->get();
+        // return StatusDepartamentoDocumento::where('ativo', '=', StatusDepartamentoDocumento::ATIVO)->get();
+
+        $ignorarId = 3; // ID do registro que você deseja ignorar (criação)
+
+        $status = StatusDepartamentoDocumento::where('ativo', '=', StatusDepartamentoDocumento::ATIVO)
+            ->whereNotIn('id', [$ignorarId])
+            ->get();
+
+        return $status;
+
     }
 }
