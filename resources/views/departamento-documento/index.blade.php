@@ -35,7 +35,10 @@
                         @foreach ($departamentoDocumentos as $depDoc)
                             <tr>
                                 <td>{{ $depDoc->titulo }}</td>
-                                <td>{{ $depDoc->id_tipo_documento != null ? $depDoc->tipoDocumento->nome : 'não informado' }}</td>
+                                <td>
+                                    {{ $depDoc->id_tipo_documento != null ? $depDoc->tipoDocumento->nome : 'não informado' }} <br>
+                                    <strong>{{ $depDoc->id_tipo_workflow != null ? $depDoc->tipoWorkflow->descricao : 'não informado' }}</strong>
+                                </td>
                                 <td>
                                     <strong>{{ $depDoc->cadastradoPorUsuario != null ? $depDoc->cad_usuario->pessoa->nome : 'não informado' }}</strong>
                                     em <strong>{{ $depDoc->created_at != null ? $depDoc->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>

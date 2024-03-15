@@ -30,14 +30,14 @@
                 @method('POST')
 
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Título</label>
                         <input type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" placeholder="Título do documento" value="{{ old('titulo') }}">
                         @error('titulo')
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Tipo de Documento</label>
                         <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control @error('id_tipo_documento') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
@@ -49,8 +49,18 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                </div>
-                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Workflow de tramitação</label>
+                        <select name="id_tipo_workflow" id="id_tipo_workflow" class="select2 form-control @error('id_tipo_workflow') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($tipo_workflows as $tw)
+                                <option value="{{ $tw->id }}">{{ $tw->descricao }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_tipo_workflow')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
+                    </div>
                     <div class="col-md-12">
                         <label class="form-label" for="body">Conteúdo</label>
                         <textarea name="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="20" id="conteudo">{{ old("conteudo") }}</textarea>

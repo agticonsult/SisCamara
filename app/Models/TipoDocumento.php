@@ -12,7 +12,7 @@ class TipoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome', 'tipoDocumento', 'nivel', 'cadastradoPorUsuario', 'alteradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'nome', 'tipoDocumento', 'nivel', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -29,7 +29,9 @@ class TipoDocumento extends Model implements Auditable
     }
     public function departamentoVinculados()
     {
-        return $this->belongsToMany(Departamento::class, 'departamento_tramitacaos', 'id_tipo_documento', 'id_departamento')->wherePivot('ativo', '=', DepartamentoTramitacao::ATIVO);
+        return $this->hasMany(DepartamentoTramitacao::class, 'id_tipo_documento', 'id')
+            ->where('ativo', '=', DepartamentoTramitacao::ATIVO)
+            ->orderBy('ordem');
     }
 
     public static function retornaTipoDocumentosAtivos()

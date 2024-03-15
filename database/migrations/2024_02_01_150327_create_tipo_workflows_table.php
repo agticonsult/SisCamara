@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\DepartamentoDocumento;
+use App\Models\TipoWorkflow;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepartamentoDocumentosTable extends Migration
+class CreateTipoWorkflowsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,22 +14,16 @@ class CreateDepartamentoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('departamento_documentos', function (Blueprint $table) {
+        Schema::create('tipo_workflows', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('titulo')->nullable();
-            $table->text('conteudo')->nullable();
-            $table->text('protocolo')->nullable();
-            $table->integer('id_tipo_documento')->unsigned()->nullable();
-            $table->foreign('id_tipo_documento')->references('id')->on('tipo_documentos');
-            $table->integer('id_tipo_workflow')->unsigned()->nullable();
-            $table->foreign('id_tipo_workflow')->references('id')->on('tipo_workflows');
+            $table->string('descricao')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->default(DepartamentoDocumento::ATIVO);
+            $table->boolean('ativo')->default(TipoWorkflow::ATIVO);
             $table->timestamps();
         });
     }
@@ -41,6 +35,6 @@ class CreateDepartamentoDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departamento_documentos');
+        Schema::dropIfExists('tipo_workflows');
     }
 }

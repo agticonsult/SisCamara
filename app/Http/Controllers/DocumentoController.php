@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Documento;
 use App\Models\ErrorLog;
 use App\Models\ModeloDocumento;
+use App\Models\TipoWorkflow;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -40,7 +41,7 @@ class DocumentoController extends Controller
 
             $modelos = ModeloDocumento::where('ativo', '=', Documento::ATIVO)->get();
 
-            return view('documento.create', compact('modelos'));
+            return view('documento.create', compact('modelos', 'tipo_workflows'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'create');

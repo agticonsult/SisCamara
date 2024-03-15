@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoDocumentoRequest;
+use App\Http\Requests\TipoDocumentoUpdateRequest;
 use App\Models\Departamento;
 use App\Models\DepartamentoTramitacao;
 use App\Models\Perfil;
@@ -72,18 +73,14 @@ class TipoDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $niveis = count($request->id_departamento);
-            if (!is_int($niveis)) {
-                return redirect()->back()->with('erro', 'Houve erro ao verificar o Nível do Tipo de Documento.');
-            }
+            $validated = $request->validated();
 
-            $tipoDocumento = TipoDocumento::create($request->validated() + [
-                'cadastradoPorUsuario' => Auth::user()->id,
-                'nivel' => $niveis
+            $tipoDocumento = TipoDocumento::create($validated + [
+                'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            $departamentos = $request->id_departamento;
-            for ($i = 0 ; $i < $niveis; $i++) {
+            $departamentos = $validated['id_departamento'];
+            for ($i = 0 ; $i < count($departamentos); $i++) {
                 DepartamentoTramitacao::create([
                     'id_tipo_documento' => $tipoDocumento->id,
                     'id_departamento' => $departamentos[$i],
@@ -124,6 +121,7 @@ class TipoDocumentoController extends Controller
             if(Auth::user()->temPermissao('TipoDocumento', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
+
             $tipoDocumento = TipoDocumento::retornaTipoDocumentoAtivo($id);
             if (!$tipoDocumento) {
                 return redirect()->back()->with('erro', 'Não foi encontrado tipo de documento!');
@@ -144,9 +142,26 @@ class TipoDocumentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TipoDocumentoUpdateRequest $request, $id)
     {
-        //
+        try{
+            if(Auth::user()->temPermissao('TipoDocumento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $tipoDocumento = TipoDocumento::retornaTipoDocumentoAtivo($id);
+            if (!$tipoDocumento) {
+                return redirect()->back()->with('erro', 'Não foi encontrado tipo de documento!');
+            }
+
+            $tipoDocumento->update($request->validated());
+
+            return redirect()->route('configuracao.tipo_documento.index')->with('success', 'Alteração realizada com sucesso.');
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'TipoDocumentoController', 'update');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
     }
 
     /**

@@ -378,7 +378,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/create', [TipoDocumentoController::class, 'create'])->name('create');
             Route::post('/store', [TipoDocumentoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
-            // Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
+            Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
             // Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
         });
 

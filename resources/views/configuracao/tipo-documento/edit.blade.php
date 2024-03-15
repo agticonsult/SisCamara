@@ -16,7 +16,7 @@
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">
-            <form action="#" id="form" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('configuracao.tipo_documento.update', $tipoDocumento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 

@@ -60,13 +60,13 @@
                                         </div>
                                         <div class="modal-body">
                                            @if (count($tp->departamentoVinculados) != null)
-                                                @foreach ($tp->departamentoVinculados as $dpVinc)
-                                                    <ul>
+                                                <ol>
+                                                    @foreach ($tp->departamentoVinculados as $dpVinc)
                                                         <li>
-                                                            {{ $dpVinc->descricao }}
+                                                            {{ $dpVinc->departamento->descricao }}
                                                         </li>
-                                                    </ul>
-                                                @endforeach
+                                                    @endforeach
+                                                </ol>
                                            @else
                                                 Sem tramitações
                                            @endif

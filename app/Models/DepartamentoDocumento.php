@@ -12,7 +12,7 @@ class DepartamentoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'conteudo', 'protocolo', 'id_tipo_documento','cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
+        'titulo', 'conteudo', 'protocolo', 'id_tipo_documento', 'id_tipo_workflow','cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -30,6 +30,10 @@ class DepartamentoDocumento extends Model implements Auditable
     public function tipoDocumento()
     {
         return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
+    }
+    public function tipoWorkflow()
+    {
+        return $this->belongsTo(TipoWorkflow::class, 'id_tipo_workflow');
     }
 
     public static function retornaDocumentosDepAtivos()

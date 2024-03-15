@@ -18,7 +18,8 @@ class DepartamentoDocumentoRequest extends FormRequest
             'titulo' => 'required|max:200',
             'conteudo' => 'required',
             // 'id_status' => 'required|integer',
-            'id_tipo_documento' => ['required', new TipoDocumentoule]
+            'id_tipo_documento' => ['required', new TipoDocumentoule],
+            'id_tipo_workflow' => 'required'
         ];
     }
 
@@ -39,6 +40,8 @@ class DepartamentoDocumentoRequest extends FormRequest
             // 'id_status.integer' => 'Requer número inteiro',
 
             'id_tipo_documento.required' => 'Seleção TIPO DE DOCUMENTO obrigatório',
+
+            'id_tipo_workflow.required' => 'O workflow de tramitação é obrigatório'
         ];
     }
 }

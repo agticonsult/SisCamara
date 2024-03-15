@@ -10,6 +10,7 @@ use App\Models\DepartamentoTramitacao;
 use App\Models\HistoricoMovimentacaoDoc;
 use App\Models\StatusDepartamentoDocumento;
 use App\Models\TipoDocumento;
+use App\Models\TipoWorkflow;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -54,8 +55,9 @@ class DepartamentoDocumentoController extends Controller
 
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
+            $tipo_workflows = TipoWorkflow::where('ativo', '=', TipoWorkflow::ATIVO)->get();
 
-            return view('departamento-documento.create', compact('tipoDocumentos', 'statusDepDocs'));
+            return view('departamento-documento.create', compact('tipoDocumentos', 'statusDepDocs', 'tipo_workflows'));
 
         }
         catch(\Exception $ex) {
