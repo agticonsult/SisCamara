@@ -21,7 +21,7 @@ class DepartamentoDocumento extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
-    const CRIACAO_DOC = 1;
+    const CRIACAO_DOC = 3;
 
     public function cad_usuario()
     {
