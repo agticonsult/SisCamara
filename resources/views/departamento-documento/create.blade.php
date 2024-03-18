@@ -38,6 +38,18 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-4">
+                        <label class="form-label">*Workflow de tramitação</label>
+                        <select name="id_tipo_workflow" id="id_tipo_workflow" class="form-control @error('id_tipo_workflow') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($tipo_workflows as $tw)
+                                <option value="{{ $tw->id }}">{{ $tw->descricao }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_tipo_workflow')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-4">
                         <label class="form-label">*Tipo de Documento</label>
                         <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control @error('id_tipo_documento') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
@@ -49,15 +61,12 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
-                    <div class="form-group col-md-4">
-                        <label class="form-label">*Workflow de tramitação</label>
-                        <select name="id_tipo_workflow" id="id_tipo_workflow" class="select2 form-control @error('id_tipo_workflow') is-invalid @enderror">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($tipo_workflows as $tw)
-                                <option value="{{ $tw->id }}">{{ $tw->descricao }}</option>
-                            @endforeach
+                    <div class="form-group col-md-4" style="display: none;" id="dep">
+                        <label class="form-label">*Selecione o primeiro departamento</label>
+                        <select name="id_departamento" id="id_departamento" class="select2 form-control @error('id_departamento') is-invalid @enderror">
+                            <option value="" selected disabled>-- Selecione --</option>
                         </select>
-                        @error('id_tipo_workflow')
+                        @error('id_departamento')
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
@@ -110,6 +119,34 @@
             },
             closeOnSelect: true,
             width: '100%',
+        });
+
+        $('#id_tipo_workflow').on('change', function() {
+            var selected = $(this).val();
+
+            if (selected == 2) {
+                $('#dep').show(300);
+            }
+            else{
+                $('#dep').hide(300);
+            }
+        });
+
+        $('#id_tipo_documento').on('change', function(e){
+            var id_tipo_documento = $('#id_tipo_documento').select2("val");
+            console.log(id_tipo_documento);
+            var verifica = true;
+
+            $.get("{{ route('departamento_documento.getDepartamentos', '') }}" + "/" + id_tipo_documento, function(departamentos){
+                $('select[name=id_departamento]').empty();
+                $.each(departamentos, function(key, value) {
+                    if (verifica) {
+                        $('select[name=id_departamento]').append('<option value="" selected disabled> Selecione o departamento</option>');
+                    }
+                    verifica = false;
+                    $('select[name=id_departamento]').append('<option value=' + value.id + '>' + value.descricao + '</option>');
+                });
+            });
         });
 
     });

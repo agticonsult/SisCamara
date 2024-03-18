@@ -219,6 +219,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('/acompanhar-doc/{id}', [DepartamentoDocumentoController::class, 'acompanharDoc'])->name('acompanharDoc');
         Route::post('/store', [DepartamentoDocumentoController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [DepartamentoDocumentoController::class, 'edit'])->name('edit');
+        Route::get('/get-departamentos/{id}', [DepartamentoDocumentoController::class, 'getDepartamentos'])->name('getDepartamentos');
         Route::post('/update/{id}', [DepartamentoDocumentoController::class, 'update'])->name('update');
         Route::post('/destroy/{id}', [DepartamentoDocumentoController::class, 'destroy'])->name('destroy');
     });

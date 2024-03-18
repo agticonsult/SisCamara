@@ -56,8 +56,9 @@ class DepartamentoDocumentoController extends Controller
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
             $tipo_workflows = TipoWorkflow::where('ativo', '=', TipoWorkflow::ATIVO)->get();
+            $departamentos = DepartamentoTramitacao::where('ativo', '=', DepartamentoTramitacao::ATIVO)->get();
 
-            return view('departamento-documento.create', compact('tipoDocumentos', 'statusDepDocs', 'tipo_workflows'));
+            return view('departamento-documento.create', compact('tipoDocumentos', 'statusDepDocs', 'tipo_workflows', 'departamentos'));
 
         }
         catch(\Exception $ex) {
@@ -189,6 +190,35 @@ class DepartamentoDocumentoController extends Controller
     public function destroy(DepartamentoDocumento $departamentoDocumento)
     {
         //
+    }
+
+    public function getDepartamentos(Request $request, $id)
+    {
+        try{
+            if(Auth::user()->temPermissao('DepartamentoDocumento', 'Cadastro') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            if ($request->ajax()) {
+                $departamentos = DepartamentoTramitacao::where('id_tipo_documento', '=', $id)->get();
+                $array = [];
+
+                foreach ($departamentos as $dep) {
+                    array_push($array, [
+                        'id' => $dep->id_departamento,
+                        'descricao' => $dep->departamento->descricao
+                    ]);
+                }
+
+                return response()->json($array);
+            }
+
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'getDepartamentos');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+
     }
 
 }
