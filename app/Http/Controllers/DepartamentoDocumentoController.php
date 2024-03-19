@@ -129,15 +129,36 @@ class DepartamentoDocumentoController extends Controller
             }
 
             $departamentoDocumentoEdit = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
-            $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaUltimoHistoricoMovStatusAtivo($departamentoDocumentoEdit->id);
-            $todoHistoricoMovDocumento = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
-            $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
-            $departamentoTramitacao = DepartamentoTramitacao::retornaDepartamentoTramitacoes($departamentoDocumentoEdit->id_tipo_documento);
-            $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoEdit->id_tipo_documento);
-            $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
+
             if (!$departamentoDocumentoEdit) {
                 return redirect()->back()->with('erro', 'Documento inválido.');
             }
+
+            $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaUltimoHistoricoMovStatusAtivo($departamentoDocumentoEdit->id);
+            $todoHistoricoMovDocumento = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
+            $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
+
+            $aptoFinalizar = true;
+            if ($departamentoDocumentoEdit->id_tipo_workflow == 1) {
+                $departamentoTramitacao = DepartamentoTramitacao::where('id_documento', $departamentoDocumentoEdit->id)
+                    ->where('ordem', '>', $departamentoDocumentoEdit->departamento_atual()->ordem)
+                    ->orderBy('ordem')
+                    ->get();
+
+                if (count($departamentoTramitacao) > 0) {
+                    $aptoFinalizar = false;
+                }
+            } else {
+                $departamentoTramitacao = DepartamentoTramitacao::where('id_documento', $departamentoDocumentoEdit->id)
+                    ->whereNull('ordem')
+                    ->where('atual', 0)
+                    ->get();
+            }
+
+            // $departamentoTramitacao = DepartamentoTramitacao::retornaDepartamentoTramitacoes($departamentoDocumentoEdit->id_tipo_documento);
+
+            $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoEdit->id_tipo_documento);
+            $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
 
             return view('departamento-documento.edit', compact('departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos', 'departamentoTramitacao', 'statusDepDocs', 'proximoDep', 'todoHistoricoMovDocumento'));
 
