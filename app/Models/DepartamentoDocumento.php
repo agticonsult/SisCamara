@@ -50,8 +50,15 @@ class DepartamentoDocumento extends Model implements Auditable
         return $this->hasMany(AuxiliarDocumentoDepartamento::class, 'id_documento', 'id')->where('ativo', 1)->orderBy('ordem');
     }
 
-    // retorna o item da tabela AuxiliarDocumentoDepartamento de departamento atual
+    // retorna o item da tabela AuxiliarDocumentoDepartamento do departamento atual
     public function departamento_atual() {
-        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('atual', AuxiliarDocumentoDepartamento::ATIVO)->first();
+        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('atual', 1)->where('ativo', 1)->first();
+    }
+
+    // retorna o item da tabela AuxiliarDocumentoDepartamento do próximo departamento
+    public function proximo_dep() {
+        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->departamento_atual()->ordem + 1))
+            ->where('ativo', 1)
+            ->first();
     }
 }
