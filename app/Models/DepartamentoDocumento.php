@@ -44,4 +44,9 @@ class DepartamentoDocumento extends Model implements Auditable
     {
         return DepartamentoDocumento::where('id', '=', $id)->where('ativo', '=', DepartamentoDocumento::ATIVO)->first();
     }
+
+    // retorna itens da tabela AuxiliarDocumentoDepartamento que correspondem ao documento
+    public function tramitacao() {
+        return $this->hasMany(AuxiliarDocumentoDepartamento::class, 'id_documento', 'id')->where('ativo', 1)->orderBy('ordem');
+    }
 }
