@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartamentoDocumentoRequest;
 use App\Http\Requests\StatusDepartamentoDocRequest;
+use App\Models\AuxiliarDocumentoDepartamento;
 use App\Models\Departamento;
 use App\Models\DepartamentoDocumento;
 use App\Models\DepartamentoTramitacao;
@@ -95,6 +96,13 @@ class DepartamentoDocumentoController extends Controller
                 'id_usuario' => Auth::user()->id
             ]);
 
+            AuxiliarDocumentoDepartamento::create([
+                'id_documento' => $depDoc->id,
+                'id_departamento' => $request->id_departamento,
+                'ordem' => 1,
+                'atual' => true
+            ]);
+
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
 
         }
@@ -164,8 +172,9 @@ class DepartamentoDocumentoController extends Controller
 
         }
         catch(\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            return $ex->getMessage();
+            // ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
+            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
