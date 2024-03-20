@@ -99,12 +99,21 @@ class DepartamentoDocumentoController extends Controller
             $departamentos = DepartamentoTramitacao::where('id_tipo_documento', '=', $request->id_tipo_documento)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->get();
             if ($depDoc->id_tipo_workflow == 1) { //automática
                 foreach ($departamentos as $key => $departamento) {
-                    AuxiliarDocumentoDepartamento::create([
-                        'id_documento' => $depDoc->id,
-                        'id_departamento' => $departamento->id_departamento,
-                        'ordem' => $key + 1,
-                        'atual' => false
-                    ]);
+                    if ($key == 0) {
+                        AuxiliarDocumentoDepartamento::create([
+                            'id_documento' => $depDoc->id,
+                            'id_departamento' => $departamento->id_departamento,
+                            'ordem' => $key + 1,
+                            'atual' => true
+                        ]);
+                    }else {
+                        AuxiliarDocumentoDepartamento::create([
+                            'id_documento' => $depDoc->id,
+                            'id_departamento' => $departamento->id_departamento,
+                            'ordem' => $key + 1,
+                            'atual' => false
+                        ]);
+                    }
                 }
             }
 
