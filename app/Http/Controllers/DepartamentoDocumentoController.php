@@ -106,7 +106,8 @@ class DepartamentoDocumentoController extends Controller
                             'ordem' => $key + 1,
                             'atual' => true
                         ]);
-                    }else {
+                    }
+                    else {
                         AuxiliarDocumentoDepartamento::create([
                             'id_documento' => $depDoc->id,
                             'id_departamento' => $departamento->id_departamento,
@@ -122,7 +123,7 @@ class DepartamentoDocumentoController extends Controller
                     if ($departamento->id_departamento == $request->id_departamento) {
                         AuxiliarDocumentoDepartamento::create([
                             'id_documento' => $depDoc->id,
-                            'id_departamento' => $request->id_departamento,
+                            'id_departamento' => $departamento->id_departamento,
                             'ordem' => 1,
                             'atual' => true
                         ]);
@@ -130,7 +131,7 @@ class DepartamentoDocumentoController extends Controller
                     else{
                         AuxiliarDocumentoDepartamento::create([
                             'id_documento' => $depDoc->id,
-                            'id_departamento' => $request->id_departamento,
+                            'id_departamento' => $departamento->id_departamento,
                             // 'ordem' => 1,
                             'atual' => false
                         ]);
