@@ -96,12 +96,14 @@ class DepartamentoDocumentoController extends Controller
                 'id_usuario' => Auth::user()->id
             ]);
 
-            AuxiliarDocumentoDepartamento::create([
-                'id_documento' => $depDoc->id,
-                'id_departamento' => $request->id_departamento,
-                'ordem' => 1,
-                'atual' => true
-            ]);
+            if ($depDoc->id_tipo_workflow == 2) {
+                AuxiliarDocumentoDepartamento::create([
+                    'id_documento' => $depDoc->id,
+                    'id_departamento' => $request->id_departamento,
+                    'ordem' => 1,
+                    'atual' => true
+                ]);
+            }
 
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');
 
@@ -154,7 +156,8 @@ class DepartamentoDocumentoController extends Controller
                 if ($proximoDep) {
                     $aptoFinalizar = false;
                 }
-            } if ($departamentoDocumentoEdit->id_tipo_workflow == 2) {
+            }
+            if ($departamentoDocumentoEdit->id_tipo_workflow == 2) {
                 $departamentoTramitacao = AuxiliarDocumentoDepartamento::where('id_documento', $departamentoDocumentoEdit->id)
                     ->whereNull('ordem')
                     ->where('atual', 0)
@@ -163,14 +166,13 @@ class DepartamentoDocumentoController extends Controller
 
             return view('departamento-documento.edit', compact(
                 'departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos',
-                'departamentoTramitacao', 'statusDepDocs', 'proximoDep', 'todoHistoricoMovDocumento'
+                'departamentoTramitacao', 'statusDepDocs', 'todoHistoricoMovDocumento'
             ));
 
         }
         catch(\Exception $ex) {
-            return $ex->getMessage();
-            // ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
-            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
