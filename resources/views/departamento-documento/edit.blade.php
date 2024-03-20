@@ -68,20 +68,12 @@
                 </h5>
             </div>
             <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion2">
-                <div class="card-body">
-                    <div class="col-md-12">
-                        <strong><h4>Departamento(s)</h4></strong>
-                        @foreach ($departamentoTramitacao as $tramitacao)
-                            <ul>
-                                <li>
-                                    <h5>
-                                        {{ $tramitacao->departamento->descricao }}
-                                    </h5>
-                                </li>
-                            </ul>
-                        @endforeach
-                    </div>
-                </div>
+                @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
+                    @include('departamento-documento.departamentos-auto')
+                @endif
+                @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
+                    @include('departamento-documento.departamentos-manual')
+                @endif
             </div>
         </div>
     </div>
@@ -96,102 +88,49 @@
                 </h5>
             </div>
             <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion3">
-                <div class="card-body">
-                    {{-- workflow automático --}}
-                    @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">*Status</label>
-                                    <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                                        <option value="" selected disabled>--Selecione--</option>
-                                        @foreach ($statusDepDocs as $status)
-                                            <option value="{{ $status->id }}">{{ $status->descricao }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_status')
-                                        <div class="invalid-feedback">{{ $message }}</div><br>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">Parecer</label>
-                                    <input type="text" class="form-control" value="{{ $historicoMovimentacao->parecer }}">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">Departamento</label>
-                                    <input type="text" class="form-control"  value="{{ $proximoDep->departamento->descricao }}">
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                    {{-- workflow manual --}}
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">*Status</label>
-                                    <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                                        <option value="" selected disabled>--Selecione--</option>
-                                        @foreach ($statusDepDocs as $status)
-                                            <option value="{{ $status->id }}">{{ $status->descricao }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_status')
-                                        <div class="invalid-feedback">{{ $message }}</div><br>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">Parecer</label>
-                                    <input type="text" class="form-control" value="{{ $historicoMovimentacao->parecer }}">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">Departamento</label>
-                                    <select name="id_departamento" class="form-control @error('id_departamento') is-invalid @enderror select2">
-                                        <option value="" selected disabled>-- Selecione --</option>
-                                        @foreach ($departamentoTramitacao as $dep)
-                                            <option value="{{ $dep->id_departamento }}">{{ $dep->departamento->descricao }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
 
-                        {{-- <form action="{{ route('departamento_documento.update', $departamentoDocumentoEdit->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
-                            @csrf
-                            @method('POST')
+                @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
+                    @include('departamento-documento.tramitacao-auto')
+                @endif
+                @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
+                    @include('departamento-documento.tramitacao-manual')
+                @endif
 
+                {{-- <form action="{{ route('departamento_documento.update', $departamentoDocumentoEdit->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="form-label">*Status</label>
+                                <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
+                                    <option value="" selected disabled>--Selecione--</option>
+                                    @foreach ($statusDepDocs as $status)
+                                        <option value="{{ $status->id }}">{{ $status->descricao }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_status')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Parecer</label>
+                                <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
+                                @error('parecer')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label">Próximo departamento na tramitação do documento</label>
+                                <input type="text" class="form-control" value="{{ $proximoDep->departamento->descricao }}" readonly>
+                            </div>
                             <div class="col-md-12">
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label">*Status</label>
-                                        <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                                            <option value="" selected disabled>--Selecione--</option>
-                                            @foreach ($statusDepDocs as $status)
-                                                <option value="{{ $status->id }}">{{ $status->descricao }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('id_status')
-                                            <div class="invalid-feedback">{{ $message }}</div><br>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label">Parecer</label>
-                                        <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
-                                        @error('parecer')
-                                            <div class="invalid-feedback">{{ $message }}</div><br>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="form-label">Próximo departamento na tramitação do documento</label>
-                                        <input type="text" class="form-control" value="{{ $proximoDep->departamento->descricao }}" readonly>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> --}}
-                </div>
+                                <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div> --}}
             </div>
         </div>
     </div>

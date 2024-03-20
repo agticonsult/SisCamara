@@ -182,8 +182,15 @@ class DepartamentoDocumentoController extends Controller
             $todoHistoricoMovDocumento = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
+            $departamentos = AuxiliarDocumentoDepartamento::where('id_documento', $departamentoDocumentoEdit->id)
+                ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
+                ->orderByRaw('ISNULL(ordem), ordem')
+                ->get();
 
+            $proximoDep = null;
+            $departamentoTramitacao = [];
             $aptoFinalizar = true;
+
             if ($departamentoDocumentoEdit->id_tipo_workflow == 1) {
                 $proximoDep = $departamentoDocumentoEdit->proximo_dep();
 
@@ -195,12 +202,13 @@ class DepartamentoDocumentoController extends Controller
                 $departamentoTramitacao = AuxiliarDocumentoDepartamento::where('id_documento', $departamentoDocumentoEdit->id)
                     ->whereNull('ordem')
                     ->where('atual', 0)
+                    ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                     ->get();
             }
 
             return view('departamento-documento.edit', compact(
-                'departamentoDocumentoEdit', 'historicoMovimentacao', 'tipoDocumentos',
-                'departamentoTramitacao', 'statusDepDocs', 'todoHistoricoMovDocumento'
+                'departamentoDocumentoEdit', 'historicoMovimentacao', 'todoHistoricoMovDocumento',
+                'tipoDocumentos', 'statusDepDocs', 'departamentos', 'proximoDep', 'departamentoTramitacao', 'aptoFinalizar'
             ));
 
         }
