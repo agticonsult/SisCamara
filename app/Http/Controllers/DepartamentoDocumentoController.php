@@ -96,13 +96,37 @@ class DepartamentoDocumentoController extends Controller
                 'id_usuario' => Auth::user()->id
             ]);
 
-            if ($depDoc->id_tipo_workflow == 2) {
-                AuxiliarDocumentoDepartamento::create([
-                    'id_documento' => $depDoc->id,
-                    'id_departamento' => $request->id_departamento,
-                    'ordem' => 1,
-                    'atual' => true
-                ]);
+            $departamentos = DepartamentoTramitacao::where('id_tipo_documento', '=', $request->id_tipo_documento)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->get();
+            if ($depDoc->id_tipo_workflow == 1) { //automática
+                foreach ($departamentos as $key => $departamento) {
+                    AuxiliarDocumentoDepartamento::create([
+                        'id_documento' => $depDoc->id,
+                        'id_departamento' => $departamento->id_departamento,
+                        'ordem' => $key + 1,
+                        'atual' => false
+                    ]);
+                }
+            }
+
+            if ($depDoc->id_tipo_workflow == 2) { //manual
+                foreach ($departamentos as $departamento) {
+                    if ($departamento->id_departamento == $request->id_departamento) {
+                        AuxiliarDocumentoDepartamento::create([
+                            'id_documento' => $depDoc->id,
+                            'id_departamento' => $request->id_departamento,
+                            'ordem' => 1,
+                            'atual' => true
+                        ]);
+                    }
+                    else{
+                        AuxiliarDocumentoDepartamento::create([
+                            'id_documento' => $depDoc->id,
+                            'id_departamento' => $request->id_departamento,
+                            // 'ordem' => 1,
+                            'atual' => false
+                        ]);
+                    }
+                }
             }
 
             return redirect()->route('departamento_documento.index')->with('success', 'Cadastro realizado com sucesso.');

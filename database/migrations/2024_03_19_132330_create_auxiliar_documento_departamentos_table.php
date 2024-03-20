@@ -21,7 +21,7 @@ class CreateAuxiliarDocumentoDepartamentosTable extends Migration
             $table->integer('id_departamento')->unsigned();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
             $table->integer('ordem')->nullable();
-            $table->boolean('atual');
+            $table->boolean('atual')->nullable();
             $table->boolean('ativo')->default(AuxiliarDocumentoDepartamento::ATIVO);
             $table->timestamps();
         });
