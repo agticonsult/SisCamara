@@ -182,33 +182,46 @@ class DepartamentoDocumentoController extends Controller
             $todoHistoricoMovDocumento = HistoricoMovimentacaoDoc::retornaHistoricoMovAtivo($departamentoDocumentoEdit->id);
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
             $statusDepDocs = StatusDepartamentoDocumento::retornaStatusAtivos();
+
+            // lista departamentos da tramitação
             $departamentos = AuxiliarDocumentoDepartamento::where('id_documento', $departamentoDocumentoEdit->id)
                 ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                 ->orderByRaw('ISNULL(ordem), ordem')
                 ->get();
 
-            $proximoDep = null;
-            $departamentoTramitacao = [];
-            $aptoFinalizar = true;
+            $proximoDep = null; // próximo departamento
+            $depAnterior = $departamentoDocumentoEdit->dep_anterior(); // departamento anterior
+            $departamentoTramitacao = []; // lista de departamentos para enviar ao Aprovar, no caso de tramitação manual
+            $aptoFinalizar = true; // documento está apto a finalizar
+            $aptoAprovar = true; // documento está apto a aprovar
 
-            if ($departamentoDocumentoEdit->id_tipo_workflow == 1) {
+            if ($departamentoDocumentoEdit->id_tipo_workflow == 1) { // tramitação automática
+
                 $proximoDep = $departamentoDocumentoEdit->proximo_dep();
 
+                // se houver proximo departamento, não é possível Finalizar
                 if ($proximoDep) {
                     $aptoFinalizar = false;
                 }
             }
-            if ($departamentoDocumentoEdit->id_tipo_workflow == 2) {
+            if ($departamentoDocumentoEdit->id_tipo_workflow == 2) { // tramitação manual
+
+                // seleciona departamentos para o select de Aprovação, somente departamentos sem ordem definida e que não seja o atual
                 $departamentoTramitacao = AuxiliarDocumentoDepartamento::where('id_documento', $departamentoDocumentoEdit->id)
                     ->whereNull('ordem')
                     ->where('atual', 0)
                     ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                     ->get();
+
+                // se não houver próximo departamento, não é possível Aprovar, somente Finalizar e Reprovar
+                if (count($departamentoTramitacao) == 0) {
+                    $aptoAprovar = false;
+                }
             }
 
             return view('departamento-documento.edit', compact(
-                'departamentoDocumentoEdit', 'historicoMovimentacao', 'todoHistoricoMovDocumento',
-                'tipoDocumentos', 'statusDepDocs', 'departamentos', 'proximoDep', 'departamentoTramitacao', 'aptoFinalizar'
+                'departamentoDocumentoEdit', 'historicoMovimentacao', 'todoHistoricoMovDocumento', 'tipoDocumentos',
+                'statusDepDocs', 'departamentos', 'proximoDep', 'depAnterior', 'departamentoTramitacao', 'aptoFinalizar', 'aptoAprovar'
             ));
 
         }

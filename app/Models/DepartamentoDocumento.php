@@ -64,4 +64,12 @@ class DepartamentoDocumento extends Model implements Auditable
             ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
             ->first();
     }
+
+    // retorna o item da tabela AuxiliarDocumentoDepartamento do departamento anterior
+    public function dep_anterior()
+    {
+        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->departamento_atual()->ordem - 1))
+            ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
+            ->first();
+    }
 }
