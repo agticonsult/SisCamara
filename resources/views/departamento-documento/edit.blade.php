@@ -18,15 +18,34 @@
         background-color: rgba(255, 94, 0, 0.795);
         color: white;
         margin-bottom: 1rem;
-        height: 38px !important;
+        padding: 0.5rem 0.5rem !important;
+        text-transform: uppercase;
+    }
+
+    .closed {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.726);
+        color: white;
+        margin-bottom: 1rem;
+        padding: 0.5rem 0.5rem !important;
+        text-transform: uppercase;
     }
 </style>
 @include('errors.alerts')
 @include('errors.errors')
 
 @if ($departamentoDocumentoEdit->reprovado_em_tramitacao)
-    <div class="col-md-12 px-0 warn">
+    <div class="col-md-12 warn">
         ESTE DOCUMENTO FOI REPROVADO EM TRAMITAÇÃO E ENCAMINHADO AO AUTOR
+    </div>
+@endif
+
+@if ($departamentoDocumentoEdit->finalizado)
+    <div class="col-md-12 closed">
+        ESTE DOCUMENTO FOI FINALIZADO
     </div>
 @endif
 
@@ -93,7 +112,7 @@
     </div>
 </div>
 
-@if (!$departamentoDocumentoEdit->reprovado_em_tramitacao)
+@if (!$departamentoDocumentoEdit->reprovado_em_tramitacao && !$departamentoDocumentoEdit->finalizado)
     <div id="accordion3">
         <div class="card">
             <div class="card-header" id="heading3">

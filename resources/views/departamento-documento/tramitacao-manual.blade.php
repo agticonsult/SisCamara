@@ -37,7 +37,8 @@
 <div class="modal fade" id="finalizar" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('departamento_documento.finalizar', $departamentoDocumentoEdit->id) }}"
+                method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 

@@ -24,6 +24,7 @@ class CreateDepartamentoDocumentosTable extends Migration
             $table->integer('id_tipo_workflow')->unsigned()->nullable();
             $table->foreign('id_tipo_workflow')->references('id')->on('tipo_workflows');
             $table->boolean('reprovado_em_tramitacao')->default(false);
+            $table->boolean('finalizado')->default(false);
             $table->uuid('cadastradoPorUsuario')->nullable();
             $table->foreign('cadastradoPorUsuario')->references('id')->on('users');
             $table->uuid('inativadoPorUsuario')->nullable();

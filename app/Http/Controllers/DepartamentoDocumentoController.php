@@ -455,51 +455,23 @@ class DepartamentoDocumentoController extends Controller
                 return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
             }
 
-            $departamento_anterior = $documento->dep_anterior();
+            $departamento_atual->update([
+                'atual' => false
+            ]);
 
-            if (!$departamento_anterior) { // se não houver departamento anterior reprova o documento e devolve para o autor
+            $documento->update([
+                'finalizado' => true
+            ]);
 
-                $departamento_atual->update([
-                    'ordem' => null,
-                    'atual' => false
-                ]);
+            HistoricoMovimentacaoDoc::create([
+                'parecer' => $request->parecer,
+                'id_documento' => $documento->id,
+                'id_usuario' => Auth::user()->id,
+                'id_status' => 4,
+                'id_departamento' => $departamento_atual->id_departamento
+            ]);
 
-                $documento->update([
-                    'reprovado_em_tramitacao' => true
-                ]);
-
-                HistoricoMovimentacaoDoc::create([
-                    'parecer' => $request->parecer,
-                    'id_documento' => $documento->id,
-                    'id_usuario' => Auth::user()->id,
-                    'id_status' => 2,
-                    'id_departamento' => $departamento_atual->id_departamento
-                ]);
-
-                return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
-
-            }else { // se houver departamento anterior tramita normalmente
-
-                $departamento_atual->update([
-                    'ordem' => null,
-                    'atual' => false
-                ]);
-
-                $departamento_anterior->update([
-                    'atual' => true
-                ]);
-
-                HistoricoMovimentacaoDoc::create([
-                    'parecer' => $request->parecer,
-                    'id_documento' => $documento->id,
-                    'id_usuario' => Auth::user()->id,
-                    'id_status' => 2,
-                    'id_departamento' => $departamento_atual->id_departamento
-                ]);
-
-                return back()->with('success',
-                    'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_anterior->departamento->descricao . '.');
-            }
+            return back()->with('success', 'O documento foi finalizado com sucesso.');
         }
         catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator->errors())->withInput();

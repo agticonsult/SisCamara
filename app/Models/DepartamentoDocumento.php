@@ -46,6 +46,15 @@ class DepartamentoDocumento extends Model implements Auditable
             ->first();
     }
 
+    public function finalizacao()
+    {
+        return HistoricoMovimentacaoDoc::where('id_documento', $this->id)
+            ->where('ativo', HistoricoMovimentacaoDoc::ATIVO)
+            ->where('id_status', 4)
+            ->lastest()
+            ->first();
+    }
+
     public static function retornaDocumentosDepAtivos()
     {
         return DepartamentoDocumento::where('ativo', '=', DepartamentoDocumento::ATIVO)->get();
