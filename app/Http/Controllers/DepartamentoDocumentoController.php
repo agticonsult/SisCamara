@@ -16,14 +16,12 @@ use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class DepartamentoDocumentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         try{
@@ -42,11 +40,6 @@ class DepartamentoDocumentoController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         try{
@@ -68,12 +61,6 @@ class DepartamentoDocumentoController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(DepartamentoDocumentoRequest $request)
     {
         try{
@@ -148,23 +135,11 @@ class DepartamentoDocumentoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DepartamentoDocumento  $departamentoDocumento
-     * @return \Illuminate\Http\Response
-     */
     public function show(DepartamentoDocumento $departamentoDocumento)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\DepartamentoDocumento  $departamentoDocumento
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         try{
@@ -231,45 +206,310 @@ class DepartamentoDocumentoController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DepartamentoDocumento  $departamentoDocumento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(StatusDepartamentoDocRequest $request, $id)
+    public function aprovar(Request $request, $id, $id_tipo_workflow)
     {
         try{
             if(Auth::user()->temPermissao('DepartamentoDocumento', 'Alteração') != 1){
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $departamentoDocumentoUpdate = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
-            $proximoDep = DepartamentoTramitacao::retornaProximoDocumento($departamentoDocumentoUpdate->id_tipo_documento);
+            $input = [
+                'id_departamento' => $request->id_departamento,
+                'parecer' => $request->parecer
+            ];
+            $rules = [
+                'id_departamento' => Rule::requiredIf($id_tipo_workflow == 2),
+                'parecer' => 'nullable|max:255'
+            ];
+            $messages = [
+                'id_departamento.required' => 'Selecione o departamento.',
 
-            HistoricoMovimentacaoDoc::create($request->validated() + [
-                'id_documento' => $departamentoDocumentoUpdate->id,
-                'id_usuario' => Auth::user()->id,
-                'id_departamento' => $proximoDep->id_departamento,
-                'atualDepartamento' => HistoricoMovimentacaoDoc::ATUAL_DEPARTAMENTO
-            ]);
+                'parecer.max' => 'O parecer deve ter no máximo 255 caracteres.'
+            ];
 
-            return redirect()->back()->with('success', 'Alteração realizado com sucesso.');
+            $validar = Validator::make($input, $rules, $messages);
+            $validar->validate();
 
+            $documento = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
+
+            if (!$documento) {
+                return back()->with('erro', 'Documento não encontrado.');
+            }
+
+            if ($id_tipo_workflow == 1) { // tramitação automática
+
+                $departamento_atual = $documento->dep_atual();
+
+                if (!$departamento_atual) {
+                    ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DepartamentoDocumentoController', 'aprovar');
+                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                }
+
+                $proximo_departamento = $documento->proximo_dep();
+
+                if (!$proximo_departamento) {
+                    ErrorLogService::salvar('Erro ao encontrar o próximo departamento do documento', 'DepartamentoDocumentoController', 'aprovar');
+                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                }
+
+                $departamento_atual->update([
+                    'atual' => false
+                ]);
+
+                $proximo_departamento->update([
+                    'atual' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 1,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+            }
+
+            if ($id_tipo_workflow == 2) { // tramitação manual
+
+                $departamento_atual = $documento->dep_atual();
+
+                if (!$departamento_atual) {
+                    ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DepartamentoDocumentoController', 'aprovar');
+                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                }
+
+                $proximo_departamento = AuxiliarDocumentoDepartamento::where('id_documento', $documento->id)
+                    ->where('id_departamento', $request->id_departamento)
+                    ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
+                    ->first();
+
+                if (!$proximo_departamento) {
+                    ErrorLogService::salvar('Erro ao encontrar o próximo departamento do documento', 'DepartamentoDocumentoController', 'aprovar');
+                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                }
+
+                $departamento_atual->update([
+                    'atual' => false
+                ]);
+
+                $proximo_departamento->update([
+                    'ordem' => $departamento_atual->ordem + 1,
+                    'atual' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 1,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+            }
+
+            return back()->with('success',
+                'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '.');
+        }
+        catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
         }
         catch(\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'update');
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'aprovar');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\DepartamentoDocumento  $departamentoDocumento
-     * @return \Illuminate\Http\Response
-     */
+    public function reprovar(Request $request, $id)
+    {
+        try{
+            if(Auth::user()->temPermissao('DepartamentoDocumento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'parecer' => $request->parecer
+            ];
+            $rules = [
+                'parecer' => 'nullable|max:255'
+            ];
+            $messages = [
+                'parecer.max' => 'O parecer deve ter no máximo 255 caracteres.'
+            ];
+
+            $validar = Validator::make($input, $rules, $messages);
+            $validar->validate();
+
+            $documento = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
+
+            if (!$documento) {
+                return back()->with('erro', 'Documento não encontrado.');
+            }
+
+            $departamento_atual = $documento->dep_atual();
+
+            if (!$departamento_atual) {
+                ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DepartamentoDocumentoController', 'reprovar');
+                return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+            }
+
+            $departamento_anterior = $documento->dep_anterior();
+
+            if (!$departamento_anterior) { // se não houver departamento anterior reprova o documento e devolve para o autor
+
+                if ($documento->id_tipo_workflow == 1) {
+                    $departamento_atual->update([
+                        'atual' => false
+                    ]);
+                }
+
+                if ($documento->id_tipo_workflow == 2) {
+                    $departamento_atual->update([
+                        'ordem' => null,
+                        'atual' => false
+                    ]);
+                }
+
+                $documento->update([
+                    'reprovado_em_tramitacao' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 2,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+
+                return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
+
+            }else { // se houver departamento anterior tramita normalmente
+
+                if ($documento->id_tipo_workflow == 1) {
+                    $departamento_atual->update([
+                        'atual' => false
+                    ]);
+                }
+
+                if ($documento->id_tipo_workflow == 2) {
+                    $departamento_atual->update([
+                        'ordem' => null,
+                        'atual' => false
+                    ]);
+                }
+
+                $departamento_anterior->update([
+                    'atual' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 2,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+
+                return back()->with('success',
+                    'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_anterior->departamento->descricao . '.');
+            }
+        }
+        catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'reprovar');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function finalizar(Request $request, $id)
+    {
+        try{
+            if(Auth::user()->temPermissao('DepartamentoDocumento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $input = [
+                'parecer' => $request->parecer
+            ];
+            $rules = [
+                'parecer' => 'nullable|max:255'
+            ];
+            $messages = [
+                'parecer.max' => 'O parecer deve ter no máximo 255 caracteres.'
+            ];
+
+            $validar = Validator::make($input, $rules, $messages);
+            $validar->validate();
+
+            $documento = DepartamentoDocumento::retornaDocumentoDepAtivo($id);
+
+            if (!$documento) {
+                return back()->with('erro', 'Documento não encontrado.');
+            }
+
+            $departamento_atual = $documento->dep_atual();
+
+            if (!$departamento_atual) {
+                ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DepartamentoDocumentoController', 'finalizar');
+                return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+            }
+
+            $departamento_anterior = $documento->dep_anterior();
+
+            if (!$departamento_anterior) { // se não houver departamento anterior reprova o documento e devolve para o autor
+
+                $departamento_atual->update([
+                    'ordem' => null,
+                    'atual' => false
+                ]);
+
+                $documento->update([
+                    'reprovado_em_tramitacao' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 2,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+
+                return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
+
+            }else { // se houver departamento anterior tramita normalmente
+
+                $departamento_atual->update([
+                    'ordem' => null,
+                    'atual' => false
+                ]);
+
+                $departamento_anterior->update([
+                    'atual' => true
+                ]);
+
+                HistoricoMovimentacaoDoc::create([
+                    'parecer' => $request->parecer,
+                    'id_documento' => $documento->id,
+                    'id_usuario' => Auth::user()->id,
+                    'id_status' => 2,
+                    'id_departamento' => $departamento_atual->id_departamento
+                ]);
+
+                return back()->with('success',
+                    'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_anterior->departamento->descricao . '.');
+            }
+        }
+        catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator->errors())->withInput();
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'finalizar');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
     public function destroy(DepartamentoDocumento $departamentoDocumento)
     {
         //

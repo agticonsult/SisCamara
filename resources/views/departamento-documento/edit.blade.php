@@ -9,75 +9,91 @@
     .error{
         color:red
     }
+
+    .warn {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 94, 0, 0.795);
+        color: white;
+        margin-bottom: 1rem;
+        height: 38px !important;
+    }
 </style>
 @include('errors.alerts')
+@include('errors.errors')
 
-{{-- <h1 class="h3 mb-3">Dados do documento</h1> --}}
-<div class="card" style="background-color:white">
+@if ($departamentoDocumentoEdit->reprovado_em_tramitacao)
+    <div class="col-md-12 px-0 warn">
+        ESTE DOCUMENTO FOI REPROVADO EM TRAMITAÇÃO E ENCAMINHADO AO AUTOR
+    </div>
+@endif
 
-    <div id="accordion1">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Dados do documento
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion1">
-                <div class="card-body">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Título</label>
-                                <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}" readonly>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Tipo de Documento</label>
-                                <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control" disabled>
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($tipoDocumentos as $tipoDocumento)
-                                        <option value="{{ $tipoDocumento->id }}" {{ $departamentoDocumentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Protocolo</label>
-                                <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->protocolo }}" readonly>
-                            </div>
+<div id="accordion1">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Dados do documento
+                </button>
+            </h5>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion1">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Título</label>
+                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}" readonly>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label class="form-label" for="body">Conteúdo</label>
-                                <textarea name="conteudo" class="form-control" cols="30" rows="30" id="conteudo">{{ $departamentoDocumentoEdit->conteudo }}</textarea>
-                            </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Tipo de Documento</label>
+                            <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control" disabled>
+                                <option value="" selected disabled>--Selecione--</option>
+                                @foreach ($tipoDocumentos as $tipoDocumento)
+                                    <option value="{{ $tipoDocumento->id }}" {{ $departamentoDocumentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Protocolo</label>
+                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->protocolo }}" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label" for="body">Conteúdo</label>
+                            <textarea name="conteudo" class="form-control" cols="30" rows="30" id="conteudo">{{ $departamentoDocumentoEdit->conteudo }}</textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="accordion2">
-        <div class="card">
-            <div class="card-header" id="heading2">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
-                        Departamento(s) vinculado(s) ao documento
-                    </button>
-                </h5>
-            </div>
-            <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion2">
-                @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
-                    @include('departamento-documento.departamentos-auto')
-                @endif
-                @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
-                    @include('departamento-documento.departamentos-manual')
-                @endif
-            </div>
+<div id="accordion2">
+    <div class="card">
+        <div class="card-header" id="heading2">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                    Departamento(s) vinculado(s) ao documento
+                </button>
+            </h5>
+        </div>
+        <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion2">
+            @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
+                @include('departamento-documento.departamentos-auto')
+            @endif
+            @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
+                @include('departamento-documento.departamentos-manual')
+            @endif
         </div>
     </div>
+</div>
 
+@if (!$departamentoDocumentoEdit->reprovado_em_tramitacao)
     <div id="accordion3">
         <div class="card">
             <div class="card-header" id="heading3">
@@ -95,87 +111,50 @@
                 @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
                     @include('departamento-documento.tramitacao-manual')
                 @endif
-
-                {{-- <form action="{{ route('departamento_documento.update', $departamentoDocumentoEdit->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
-                    @csrf
-                    @method('POST')
-
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">*Status</label>
-                                <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($statusDepDocs as $status)
-                                        <option value="{{ $status->id }}">{{ $status->descricao }}</option>
-                                    @endforeach
-                                </select>
-                                @error('id_status')
-                                    <div class="invalid-feedback">{{ $message }}</div><br>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Parecer</label>
-                                <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
-                                @error('parecer')
-                                    <div class="invalid-feedback">{{ $message }}</div><br>
-                                @enderror
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Próximo departamento na tramitação do documento</label>
-                                <input type="text" class="form-control" value="{{ $proximoDep->departamento->descricao }}" readonly>
-                            </div>
-                            <div class="col-md-12">
-                                <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div> --}}
             </div>
         </div>
     </div>
+@endif
 
-    <div id="accordion4">
-        <div class="card">
-            <div class="card-header" id="heading4">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="true" aria-controls="collapse4">
-                        Histórico de movimentações
-                    </button>
-                </h5>
-            </div>
-            <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordion4">
-                <div class="card-body">
-                    <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                        <thead class="table-light">
+<div id="accordion4">
+    <div class="card">
+        <div class="card-header" id="heading4">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="true" aria-controls="collapse4">
+                    Histórico de movimentações
+                </button>
+            </h5>
+        </div>
+        <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordion4">
+            <div class="card-body">
+                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Status</th>
+                            <th scope="col">Usuário</th>
+                            <th scope="col">Departamento</th>
+                            <th scope="col">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($todoHistoricoMovDocumento as $historico)
                             <tr>
-                                <th scope="col">Status</th>
-                                <th scope="col">Usuário</th>
-                                <th scope="col">Departamento</th>
-                                <th scope="col">Data</th>
+                                <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
+                                <td>{{ $historico->id_usuario != null ? $historico->usuario->pessoa->nome : '-' }}</td>
+                                <td>{{ $historico->id_departamento != null ? $historico->departamento->descricao : '-' }}</td>
+                                {{-- <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td> --}}
+                                <td>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($todoHistoricoMovDocumento as $historico)
-                                <tr>
-                                    <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
-                                    <td>{{ $historico->id_usuario != null ? $historico->usuario->pessoa->nome : '-' }}</td>
-                                    <td>{{ $historico->id_departamento != null ? $historico->departamento->descricao : '-' }}</td>
-                                    {{-- <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td> --}}
-                                    <td>{{ $historico->created_at != null ? $historico->created_at->format('d/m/Y H:i:s') : 'não informado' }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="card-body">
-        <a href="{{ route('departamento_documento.index') }}" class="btn btn-light">Voltar</a>
-    </div>
-
+<div class="col-md-12">
+    <a href="{{ route('departamento_documento.index') }}" class="btn btn-secondary">Voltar</a>
 </div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

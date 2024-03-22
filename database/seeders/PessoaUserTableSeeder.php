@@ -71,13 +71,17 @@ class PessoaUserTableSeeder extends Seeder
             ['id_user' => $uuid2, 'id_tipo_perfil' => 2, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid3, 'id_tipo_perfil' => 3, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid4, 'id_tipo_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid1, 'id_tipo_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid2, 'id_tipo_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
         ]);
 
         DB::table('permissaos')->insert([
             ['id_user' => $uuid1, 'id_perfil' => 1, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid2, 'id_perfil' => 2, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid3, 'id_perfil' => 3, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid4, 'id_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
+            ['id_user' => $uuid4, 'id_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid1, 'id_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid2, 'id_perfil' => 4, 'ativo' => 1, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
         ]);
     }
 }

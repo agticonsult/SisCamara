@@ -12,7 +12,8 @@ class DepartamentoDocumento extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'titulo', 'conteudo', 'protocolo', 'id_tipo_documento', 'id_tipo_workflow','cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
+        'titulo', 'conteudo', 'protocolo', 'id_tipo_documento', 'id_tipo_workflow', 'reprovado_em_tramitacao', 'finalizado',
+        'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -36,6 +37,15 @@ class DepartamentoDocumento extends Model implements Auditable
         return $this->belongsTo(TipoWorkflow::class, 'id_tipo_workflow');
     }
 
+    public function reprovacao()
+    {
+        return HistoricoMovimentacaoDoc::where('id_documento', $this->id)
+            ->where('ativo', HistoricoMovimentacaoDoc::ATIVO)
+            ->where('id_status', 2)
+            ->lastest()
+            ->first();
+    }
+
     public static function retornaDocumentosDepAtivos()
     {
         return DepartamentoDocumento::where('ativo', '=', DepartamentoDocumento::ATIVO)->get();
@@ -52,7 +62,7 @@ class DepartamentoDocumento extends Model implements Auditable
     }
 
     // retorna o item da tabela AuxiliarDocumentoDepartamento do departamento atual
-    public function departamento_atual()
+    public function dep_atual()
     {
         return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('atual', 1)->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)->first();
     }
@@ -60,16 +70,24 @@ class DepartamentoDocumento extends Model implements Auditable
     // retorna o item da tabela AuxiliarDocumentoDepartamento do próximo departamento
     public function proximo_dep()
     {
-        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->departamento_atual()->ordem + 1))
-            ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-            ->first();
+        if ($this->dep_atual() != null) {
+            return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->dep_atual()->ordem + 1))
+                ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
+                ->first();
+        }else {
+            return null;
+        }
     }
 
     // retorna o item da tabela AuxiliarDocumentoDepartamento do departamento anterior
     public function dep_anterior()
     {
-        return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->departamento_atual()->ordem - 1))
-            ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-            ->first();
+        if ($this->dep_atual() != null) {
+            return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->dep_atual()->ordem - 1))
+                ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
+                ->first();
+        }else {
+            return null;
+        }
     }
 }

@@ -51,10 +51,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Parecer</label>
-                            <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
-                            @error('parecer')
-                                <div class="invalid-feedback">{{ $message }}</div><br>
-                            @enderror
+                            <input type="text" class="form-control" name="parecer">
                         </div>
                     </div>
                 </div>
@@ -69,50 +66,53 @@
     </div>
 </div>
 
-<div class="modal fade" id="aprovar" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action="" method="POST" class="form_prevent_multiple_submits">
-                @csrf
-                @method('POST')
+@if ($aptoAprovar)
 
-                <div class="modal-header btn-primary">
-                    Aprovar documento
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 mb-2">
-                            <label class="form-label">Próximo departamento na tramitação do documento</label>
-                            <select class="form-control select2" name="id_departamento" id="id_departamento" required>
-                                @foreach ($departamentoTramitacao as $dep)
-                                    <option value="{{ $dep->id_departamento }}">{{ $dep->departamento->descricao }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Parecer</label>
-                            <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
-                            @error('parecer')
-                                <div class="invalid-feedback">{{ $message }}</div><br>
-                            @enderror
+    <div class="modal fade" id="aprovar" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{{ route('departamento_documento.aprovar', [$departamentoDocumentoEdit->id, $departamentoDocumentoEdit->id_tipo_workflow]) }}"
+                    method="POST" class="form_prevent_multiple_submits">
+                    @csrf
+                    @method('POST')
+
+                    <div class="modal-header btn-primary">
+                        Aprovar documento
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label">Próximo departamento na tramitação do documento</label>
+                                <select class="form-control select2" name="id_departamento" id="id_departamento" required>
+                                    @foreach ($departamentoTramitacao as $dep)
+                                        <option value="{{ $dep->id_departamento }}">{{ $dep->departamento->descricao }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Parecer</label>
+                                <input type="text" class="form-control" name="parecer" >
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Cancelar
-                    </button>
-                    <button type="submit" class="button_submit btn btn-success">Salvar</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Cancelar
+                        </button>
+                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+@endif
 
 <div class="modal fade" id="reprovar" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="" method="POST" class="form_prevent_multiple_submits">
+            <form action="{{ route('departamento_documento.reprovar', $departamentoDocumentoEdit->id) }}"
+                method="POST" class="form_prevent_multiple_submits">
                 @csrf
                 @method('POST')
 
@@ -126,15 +126,12 @@
                                 <label class="form-label">Departamento anterior na tramitação do documento</label>
                                 <input type="text" class="form-control" value="{{ $depAnterior->departamento->descricao }}" readonly>
                             @else
-                                <p class="mb-2" style="color: black">Não há departamento anterior na tramitação! O documento será reprovado e não ficará mais ativo para alterações.</p>
+                                <p class="mb-2" style="color: black">Não há departamento anterior na tramitação! O documento será reprovado e retornará ao autor.</p>
                             @endif
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Parecer</label>
-                            <input type="text" class="form-control @error('parecer') is-invalid @enderror" name="parecer" >
-                            @error('parecer')
-                                <div class="invalid-feedback">{{ $message }}</div><br>
-                            @enderror
+                            <input type="text" class="form-control" name="parecer">
                         </div>
                     </div>
                 </div>
@@ -142,41 +139,9 @@
                     <button type="button" class="btn btn-secondary"
                         data-dismiss="modal">Cancelar
                     </button>
-                    <button type="submit" class="button_submit btn btn-success">Salvar</button>
+                    <button type="submit" class="button_submit btn btn-danger">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-{{-- <div class="card-body">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="form-group col-md-4">
-                <label class="form-label">*Status</label>
-                <select name="id_status" id="id_status" class="form-control @error('id_status') is-invalid @enderror">
-                    <option value="" selected disabled>--Selecione--</option>
-                    @foreach ($statusDepDocs as $status)
-                        <option value="{{ $status->id }}">{{ $status->descricao }}</option>
-                    @endforeach
-                </select>
-                @error('id_status')
-                    <div class="invalid-feedback">{{ $message }}</div><br>
-                @enderror
-            </div>
-            <div class="form-group col-md-4">
-                <label class="form-label">Parecer</label>
-                <input type="text" class="form-control" value="{{ $historicoMovimentacao->parecer }}">
-            </div>
-            <div class="form-group col-md-4">
-                <label class="form-label">Departamento</label>
-                <select name="id_departamento" class="form-control @error('id_departamento') is-invalid @enderror select2">
-                    <option value="" selected disabled>-- Selecione --</option>
-                    @foreach ($departamentoTramitacao as $dep)
-                        <option value="{{ $dep->id_departamento }}">{{ $dep->departamento->descricao }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </div>
-</div> --}}
