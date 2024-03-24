@@ -135,12 +135,7 @@ class DepartamentoDocumentoController extends Controller
         }
     }
 
-    public function show(DepartamentoDocumento $departamentoDocumento)
-    {
-        //
-    }
-
-    public function edit($id)
+    public function show($id)
     {
         try{
             if(Auth::user()->temPermissao('DepartamentoDocumento', 'Alteração') != 1){
@@ -194,7 +189,7 @@ class DepartamentoDocumentoController extends Controller
                 }
             }
 
-            return view('departamento-documento.edit', compact(
+            return view('departamento-documento.acompanhar', compact(
                 'departamentoDocumentoEdit', 'historicoMovimentacao', 'todoHistoricoMovDocumento', 'tipoDocumentos',
                 'statusDepDocs', 'departamentos', 'proximoDep', 'depAnterior', 'departamentoTramitacao', 'aptoFinalizar', 'aptoAprovar'
             ));
@@ -204,6 +199,11 @@ class DepartamentoDocumentoController extends Controller
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
+    }
+
+    public function edit($id)
+    {
+        //
     }
 
     public function aprovar(Request $request, $id, $id_tipo_workflow)

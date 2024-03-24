@@ -218,6 +218,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', [DepartamentoDocumentoController::class, 'create'])->name('create');
         // Route::get('/acompanhar-doc/{id}', [DepartamentoDocumentoController::class, 'acompanharDoc'])->name('acompanharDoc');
         Route::post('/store', [DepartamentoDocumentoController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [DepartamentoDocumentoController::class, 'show'])->name('show');
         Route::get('/edit/{id}', [DepartamentoDocumentoController::class, 'edit'])->name('edit');
         Route::get('/get-departamentos/{id}', [DepartamentoDocumentoController::class, 'getDepartamentos'])->name('getDepartamentos');
         Route::post('/aprovar/{id}/{id_tipo_workflow}', [DepartamentoDocumentoController::class, 'aprovar'])->name('aprovar');

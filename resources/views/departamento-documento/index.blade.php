@@ -44,7 +44,7 @@
                                     em <strong>{{ $depDoc->created_at != null ? $depDoc->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('departamento_documento.edit', $depDoc->id) }}" class="btn btn-info m-1"><i class="fas fa-eye"></i></a>
+                                    <a href="{{ route('departamento_documento.show', $depDoc->id) }}" class="btn btn-info m-1"><i class="fas fa-eye"></i></a>
                                     <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $depDoc->id }}"><i class="fas fa-trash"></i></button>
                                     {{-- <a href="{{ route('departamento_documento.acompanharDoc', $depDoc->id) }}" class="btn btn-info m-1">Acompanhar documento</a> --}}
                                 </td>
