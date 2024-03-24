@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\StatusDepartamentoDocumento;
+use App\Models\StatusDocumento;
 use Illuminate\Contracts\Validation\Rule;
 
-class StatusDepartamentoDocRule implements Rule
+class StatusDocRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,7 +26,7 @@ class StatusDepartamentoDocRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $status = StatusDepartamentoDocumento::where('id', '=', $value)->where('ativo', '=', StatusDepartamentoDocumento::ATIVO)->first();
+        $status = StatusDocumento::where('id', '=', $value)->where('ativo', '=', StatusDocumento::ATIVO)->first();
         if (!$status){
             return false;
         }

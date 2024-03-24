@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\TipoDocumentoule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DepartamentoDocumentoRequest extends FormRequest
+class DocumentoRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

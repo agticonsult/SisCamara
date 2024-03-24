@@ -25,7 +25,7 @@
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">
-            <form action="{{ route('departamento_documento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
+            <form action="{{ route('documento.store') }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -82,7 +82,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                        <a href="{{ route('departamento_documento.index') }}" class="btn btn-light">Voltar</a>
+                        <a href="{{ route('documento.index') }}" class="btn btn-light">Voltar</a>
                     </div>
                 </div>
             </form>
@@ -137,7 +137,7 @@
             console.log(id_tipo_documento);
             var verifica = true;
 
-            $.get("{{ route('departamento_documento.getDepartamentos', '') }}" + "/" + id_tipo_documento, function(departamentos){
+            $.get("{{ route('documento.getDepartamentos', '') }}" + "/" + id_tipo_documento, function(departamentos){
                 $('select[name=id_departamento]').empty();
                 $.each(departamentos, function(key, value) {
                     if (verifica) {

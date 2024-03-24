@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\StatusDepartamentoDocRule;
+use App\Rules\StatusDocRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StatusDepartamentoDocRequest extends FormRequest
+class StatusDocRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,7 +15,7 @@ class StatusDepartamentoDocRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_status' => ['required', 'integer', new StatusDepartamentoDocRule],
+            'id_status' => ['required', 'integer', new StatusDocRule],
             'parecer' => 'required'
         ];
     }

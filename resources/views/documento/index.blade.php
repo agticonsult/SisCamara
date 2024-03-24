@@ -15,8 +15,8 @@
 
 <div class="card" style="background-color:white">
     <div class="card-body">
-        <h5 class="card-title mb-0">Departamento Documento</h5><br>
-        @if (Count($departamentoDocumentos) == 0)
+        <h5 class="card-title mb-0">Documento</h5><br>
+        @if (Count($documentos) == 0)
             <div>
                 <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>
             </div>
@@ -32,21 +32,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($departamentoDocumentos as $depDoc)
+                        @foreach ($documentos as $documento)
                             <tr>
-                                <td>{{ $depDoc->titulo }}</td>
+                                <td>{{ $documento->titulo }}</td>
                                 <td>
-                                    {{ $depDoc->id_tipo_documento != null ? $depDoc->tipoDocumento->nome : 'não informado' }} <br>
-                                    <strong>{{ $depDoc->id_tipo_workflow != null ? $depDoc->tipoWorkflow->descricao : 'não informado' }}</strong>
+                                    {{ $documento->id_tipo_documento != null ? $documento->tipoDocumento->nome : 'não informado' }} <br>
+                                    <strong>{{ $documento->id_tipo_workflow != null ? $documento->tipoWorkflow->descricao : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <strong>{{ $depDoc->cadastradoPorUsuario != null ? $depDoc->cad_usuario->pessoa->nome : 'não informado' }}</strong>
-                                    em <strong>{{ $depDoc->created_at != null ? $depDoc->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    <strong>{{ $documento->cadastradoPorUsuario != null ? $documento->cad_usuario->pessoa->nome : 'não informado' }}</strong>
+                                    em <strong>{{ $documento->created_at != null ? $documento->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <a href="{{ route('departamento_documento.show', $depDoc->id) }}" class="btn btn-info m-1"><i class="fas fa-eye"></i></a>
-                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $depDoc->id }}"><i class="fas fa-trash"></i></button>
-                                    {{-- <a href="{{ route('departamento_documento.acompanharDoc', $depDoc->id) }}" class="btn btn-info m-1">Acompanhar documento</a> --}}
+                                    @if ($documento->reprovado_em_tramitacao)
+                                        @if ($documento->cadastradoPorUsuario == auth()->user()->id)
+                                            <a href="{{ route('documento.edit', $documento->id) }}" class="btn btn-warning m-1">Editar</a>
+                                        @endif
+                                    @endif
+                                    <a href="{{ route('documento.show', $documento->id) }}" class="btn btn-info m-1"><i class="fas fa-eye"></i></a>
+                                    <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $documento->id }}"><i class="fas fa-trash"></i></button>
+                                    {{-- <a href="{{ route('documento.acompanharDoc', $documento->id) }}" class="btn btn-info m-1">Acompanhar documento</a> --}}
                                 </td>
                             </tr>
 
@@ -86,7 +91,7 @@
     </div>
 
     <div class="card-footer">
-        <a href="{{ route('departamento_documento.create') }}" class="btn btn-primary">Cadastrar documento</a>
+        <a href="{{ route('documento.create') }}" class="btn btn-primary">Cadastrar documento</a>
     </div>
 
 </div>

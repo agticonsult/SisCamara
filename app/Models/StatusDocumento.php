@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class StatusDepartamentoDocumento extends Model implements Auditable
+class StatusDocumento extends Model implements Auditable
 {
     use HasFactory;
 
@@ -17,7 +17,7 @@ class StatusDepartamentoDocumento extends Model implements Auditable
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'status_departamento_documentos';
+    protected $table = 'status_documentos';
 
     const ATIVO = 1;
     const INATIVO = 0;
@@ -29,11 +29,11 @@ class StatusDepartamentoDocumento extends Model implements Auditable
 
     public static function retornaStatusAtivos()
     {
-        // return StatusDepartamentoDocumento::where('ativo', '=', StatusDepartamentoDocumento::ATIVO)->get();
+        // return StatusDocumento::where('ativo', '=', StatusDocumento::ATIVO)->get();
 
         $ignorarId = 3; // ID do registro que você deseja ignorar (criação)
 
-        $status = StatusDepartamentoDocumento::where('ativo', '=', StatusDepartamentoDocumento::ATIVO)
+        $status = StatusDocumento::where('ativo', '=', StatusDocumento::ATIVO)
             ->whereNotIn('id', [$ignorarId])
             ->get();
 

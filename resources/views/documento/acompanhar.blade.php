@@ -2,9 +2,6 @@
 
 @section('content')
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
     .error{
         color:red
@@ -33,17 +30,49 @@
         padding: 0.5rem 0.5rem !important;
         text-transform: uppercase;
     }
+
+    .td-aprovado {
+        background-color: rgba(0, 0, 255, 0.6);
+        color: white;
+        text-align: center;
+    }
+
+    .td-reprovado {
+        background-color: rgba(255, 0, 0, 0.6);
+        color: white;
+        text-align: center;
+    }
+
+    .td-criado {
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        text-align: center;
+    }
+
+    .td-finalizado {
+        background-color: rgba(0, 255, 0, 0.6);
+        color: white;
+        text-align: center;
+    }
 </style>
 @include('errors.alerts')
 @include('errors.errors')
 
-@if ($departamentoDocumentoEdit->reprovado_em_tramitacao)
-    <div class="col-md-12 warn">
-        ESTE DOCUMENTO FOI REPROVADO EM TRAMITAÇÃO E ENCAMINHADO AO AUTOR
-    </div>
+@if ($documentoEdit->reprovado_em_tramitacao)
+    @if ($documentoEdit->cadastradoPorUsuario == auth()->user()->id)
+        <a href="{{ route('documento.edit', $documentoEdit->id) }}" style="text-decoration: none">
+            <div class="col-md-12 warn">
+                ESTE DOCUMENTO FOI REPROVADO EM TRAMITAÇÃO E ENCAMINHADO AO AUTOR
+            </div>
+        </a>
+    @else
+        <div class="col-md-12 warn">
+            ESTE DOCUMENTO FOI REPROVADO EM TRAMITAÇÃO E ENCAMINHADO AO AUTOR
+        </div>
+    @endif
 @endif
 
-@if ($departamentoDocumentoEdit->finalizado)
+@if ($documentoEdit->finalizado)
     <div class="col-md-12 closed">
         ESTE DOCUMENTO FOI FINALIZADO
     </div>
@@ -64,26 +93,26 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label class="form-label">Título</label>
-                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->titulo }}" readonly>
+                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $documentoEdit->titulo }}" readonly>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="form-label">Tipo de Documento</label>
                             <select name="id_tipo_documento" id="id_tipo_documento" class="select2 form-control" disabled>
                                 <option value="" selected disabled>--Selecione--</option>
                                 @foreach ($tipoDocumentos as $tipoDocumento)
-                                    <option value="{{ $tipoDocumento->id }}" {{ $departamentoDocumentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
+                                    <option value="{{ $tipoDocumento->id }}" {{ $documentoEdit->id_tipo_documento == $tipoDocumento->id ? 'selected' : '' }}>{{ $tipoDocumento->nome }} - Nível: {{ $tipoDocumento->nivel }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label class="form-label">Protocolo</label>
-                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $departamentoDocumentoEdit->protocolo }}" readonly>
+                            <input type="text" class="form-control" placeholder="Título do documento" value="{{ $documentoEdit->protocolo }}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label class="form-label" for="body">Conteúdo</label>
-                            <textarea name="conteudo" class="form-control" cols="30" rows="30" id="conteudo">{{ $departamentoDocumentoEdit->conteudo }}</textarea>
+                            <textarea name="conteudo" class="form-control" cols="30" rows="30" id="conteudo">{{ $documentoEdit->conteudo }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -102,37 +131,43 @@
             </h5>
         </div>
         <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#accordion2">
-            @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
-                @include('departamento-documento.departamentos-auto')
+            @if ($documentoEdit->id_tipo_workflow == 1)
+                @include('documento.departamentos-auto')
             @endif
-            @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
-                @include('departamento-documento.departamentos-manual')
+            @if ($documentoEdit->id_tipo_workflow == 2)
+                @include('documento.departamentos-manual')
             @endif
         </div>
     </div>
 </div>
 
-@if (!$departamentoDocumentoEdit->reprovado_em_tramitacao && !$departamentoDocumentoEdit->finalizado)
-    <div id="accordion3">
-        <div class="card">
-            <div class="card-header" id="heading3">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
-                        Aprovar e encaminhar ao próximo departamento
-                    </button>
-                </h5>
-            </div>
-            <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion3">
+{{-- só mostra a tramitação se o usuario estiver presente no departamento atual --}}
+@if ($documentoEdit->podeTramitar(auth()->user()->id))
 
-                @if ($departamentoDocumentoEdit->id_tipo_workflow == 1)
-                    @include('departamento-documento.tramitacao-auto')
-                @endif
-                @if ($departamentoDocumentoEdit->id_tipo_workflow == 2)
-                    @include('departamento-documento.tramitacao-manual')
-                @endif
+    {{-- só mostra a tramitação se não estiver reprovado e finalizado --}}
+    @if (!$documentoEdit->reprovado_em_tramitacao && !$documentoEdit->finalizado)
+        <div id="accordion3">
+            <div class="card">
+                <div class="card-header" id="heading3">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
+                           Tramitação do documento
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion3">
+
+                    @if ($documentoEdit->id_tipo_workflow == 1)
+                        @include('documento.tramitacao-auto')
+                    @endif
+                    @if ($documentoEdit->id_tipo_workflow == 2)
+                        @include('documento.tramitacao-manual')
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
+    @endif
+
 @endif
 
 <div id="accordion4">
@@ -149,16 +184,31 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Status</th>
-                            <th scope="col">Usuário</th>
-                            <th scope="col">Departamento</th>
-                            <th scope="col">Data</th>
+                            <th class="text-center">Status</th>
+                            <th>Usuário</th>
+                            <th>Departamento</th>
+                            <th>Data</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($todoHistoricoMovDocumento as $historico)
                             <tr>
-                                <td>{{ $historico->id_status != null ? $historico->status->descricao : '-' }}</td>
+                                @if ($historico->id_status != null)
+                                    @if ($historico->id_status == 1)
+                                        <td class="td-aprovado">{{ $historico->status->descricao }}</td>
+                                    @endif
+                                    @if ($historico->id_status == 2)
+                                        <td class="td-reprovado">{{ $historico->status->descricao }}</td>
+                                    @endif
+                                    @if ($historico->id_status == 3)
+                                        <td class="td-criado">{{ $historico->status->descricao }}</td>
+                                    @endif
+                                    @if ($historico->id_status == 4)
+                                        <td class="td-finalizado">{{ $historico->status->descricao }}</td>
+                                    @endif
+                                @else
+                                    <td class="text-center">-</td>
+                                @endif
                                 <td>{{ $historico->id_usuario != null ? $historico->usuario->pessoa->nome : '-' }}</td>
                                 <td>{{ $historico->id_departamento != null ? $historico->departamento->descricao : '-' }}</td>
                                 {{-- <td>{{ $historico->dataReprovado != null ? date('d/m/Y H:i:s', strtotime($historico->dataReprovado)) : '-' }}</td> --}}
@@ -173,14 +223,14 @@
 </div>
 
 <div class="col-md-12">
-    <a href="{{ route('departamento_documento.index') }}" class="btn btn-secondary">Voltar</a>
+    <a href="{{ route('documento.index') }}" class="btn btn-secondary">Voltar</a>
 </div>
 
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="{{asset('js/jquery.validate.js')}}"></script>
-<script src="{{ asset('js/datatables.js') }}"></script>
-<script src="{{ asset('js/datatables.min.js') }}"></script>
-<script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
+@endsection
+
+@section('scripts')
+
+{{-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> --}}
 <script src="https://cdn.tiny.cloud/1/hh6dctatzptohe71nfevw76few6kevzc4i1q1utarze7tude/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
@@ -197,19 +247,23 @@
     });
 
     $(document).ready(function() {
-        $('#datatables-reponsive').dataTable({
-            "oLanguage": {
-                "sLengthMenu": "Mostrar _MENU_ registros por página",
-                "sZeroRecords": "Nenhum registro encontrado",
-                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
-                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
-                "sInfoFiltered": "(filtrado de _MAX_ registros)",
-                "sSearch": "Pesquisar: ",
-                "oPaginate": {
-                    "sFirst": "Início",
-                    "sPrevious": "Anterior",
-                    "sNext": "Próximo",
-                    "sLast": "Último"
+        $('#datatables-reponsive').DataTable({
+            order: [],
+            columnDefs: [
+                { orderable: false, targets: '_all' }
+            ],
+            oLanguage: {
+                sLengthMenu: "Mostrar _MENU_ registros por página",
+                sZeroRecords: "Nenhum registro encontrado",
+                sInfo: "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                sInfoEmpty: "Mostrando 0 / 0 de 0 registros",
+                sInfoFiltered: "(filtrado de _MAX_ registros)",
+                sSearch: "Pesquisar: ",
+                oPaginate: {
+                    sFirst: "Início",
+                    sPrevious: "Anterior",
+                    sNext: "Próximo",
+                    sLast: "Último"
                 }
             },
         });
@@ -227,5 +281,4 @@
     });
 
 </script>
-
 @endsection

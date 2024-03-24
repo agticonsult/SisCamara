@@ -41,7 +41,7 @@ class FuncionalidadeTableSeeder extends Seeder
             ['descricao'=>'Votação Eletrônica', 'nomeEntidade'=>'VotacaoEletronica', 'ativo'=>1],
             ['descricao'=>'Vereador Votação', 'nomeEntidade'=>'VereadorVotacao', 'ativo'=>1],
             ['descricao'=>'Tipo Documento', 'nomeEntidade'=>'TipoDocumento', 'ativo'=>1],
-            ['descricao'=>'Departamento Documento', 'nomeEntidade'=>'DepartamentoDocumento', 'ativo'=>1]
+            ['descricao'=>'Documento', 'nomeEntidade'=>'Documento', 'ativo'=>1]
         ]);
 
         DB::table('tipo_funcionalidades')->insert([

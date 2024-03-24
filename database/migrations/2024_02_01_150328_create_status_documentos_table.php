@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\StatusDepartamentoDocumento;
+use App\Models\StatusDocumento;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusDepartamentoDocumentosTable extends Migration
+class CreateStatusDocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateStatusDepartamentoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_departamento_documentos', function (Blueprint $table) {
+        Schema::create('status_documentos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descricao')->nullable();
             $table->uuid('cadastradoPorUsuario')->nullable();
@@ -23,7 +23,7 @@ class CreateStatusDepartamentoDocumentosTable extends Migration
             $table->foreign('inativadoPorUsuario')->references('id')->on('users');
             $table->timestamp('dataInativado')->nullable();
             $table->text('motivoInativado')->nullable();
-            $table->boolean('ativo')->default(StatusDepartamentoDocumento::ATIVO);
+            $table->boolean('ativo')->default(StatusDocumento::ATIVO);
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ class CreateStatusDepartamentoDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_departamento_documentos');
+        Schema::dropIfExists('status_documentos');
     }
 }

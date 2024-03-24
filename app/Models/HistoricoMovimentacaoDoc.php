@@ -25,7 +25,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
 
     public function status()
     {
-        return $this->belongsTo(StatusDepartamentoDocumento::class, 'id_status');
+        return $this->belongsTo(StatusDocumento::class, 'id_status');
     }
     public function departamento()
     {
@@ -33,7 +33,7 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     }
     public function documento()
     {
-        return $this->belongsTo(DepartamentoDocumento::class, 'id_documento');
+        return $this->belongsTo(Documento::class, 'id_documento');
     }
     public function usuario()
     {

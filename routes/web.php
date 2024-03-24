@@ -13,7 +13,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
 use App\Http\Controllers\DepartamentoController;
-use App\Http\Controllers\DepartamentoDocumentoController;
+use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\ProposicaoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
@@ -212,19 +212,20 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
     });
 
-    // Departamento documento
-    Route::group(['prefix' => '/departamento-documento', 'as' => 'departamento_documento.'], function() {
-        Route::get('/', [DepartamentoDocumentoController::class, 'index'])->name('index');
-        Route::get('/create', [DepartamentoDocumentoController::class, 'create'])->name('create');
-        // Route::get('/acompanhar-doc/{id}', [DepartamentoDocumentoController::class, 'acompanharDoc'])->name('acompanharDoc');
-        Route::post('/store', [DepartamentoDocumentoController::class, 'store'])->name('store');
-        Route::get('/show/{id}', [DepartamentoDocumentoController::class, 'show'])->name('show');
-        Route::get('/edit/{id}', [DepartamentoDocumentoController::class, 'edit'])->name('edit');
-        Route::get('/get-departamentos/{id}', [DepartamentoDocumentoController::class, 'getDepartamentos'])->name('getDepartamentos');
-        Route::post('/aprovar/{id}/{id_tipo_workflow}', [DepartamentoDocumentoController::class, 'aprovar'])->name('aprovar');
-        Route::post('/reprovar/{id}', [DepartamentoDocumentoController::class, 'reprovar'])->name('reprovar');
-        Route::post('/finalizar/{id}', [DepartamentoDocumentoController::class, 'finalizar'])->name('finalizar');
-        Route::post('/destroy/{id}', [DepartamentoDocumentoController::class, 'destroy'])->name('destroy');
+    // Documento
+    Route::group(['prefix' => '/documento', 'as' => 'documento.'], function() {
+        Route::get('/', [DocumentoController::class, 'index'])->name('index');
+        Route::get('/create', [DocumentoController::class, 'create'])->name('create');
+        // Route::get('/acompanhar-doc/{id}', [DocumentoController::class, 'acompanharDoc'])->name('acompanharDoc');
+        Route::post('/store', [DocumentoController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [DocumentoController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [DocumentoController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [DocumentoController::class, 'update'])->name('update');
+        Route::get('/get-departamentos/{id}', [DocumentoController::class, 'getDepartamentos'])->name('getDepartamentos');
+        Route::post('/aprovar/{id}/{id_tipo_workflow}', [DocumentoController::class, 'aprovar'])->name('aprovar');
+        Route::post('/reprovar/{id}', [DocumentoController::class, 'reprovar'])->name('reprovar');
+        Route::post('/finalizar/{id}', [DocumentoController::class, 'finalizar'])->name('finalizar');
+        Route::post('/destroy/{id}', [DocumentoController::class, 'destroy'])->name('destroy');
     });
 
     // Votação Eletrônica

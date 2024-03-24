@@ -191,7 +191,7 @@ class TipoDocumentoController extends Controller
 
         }
         catch(\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoDocumentoController', 'get');
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'get');
             return $this->error('Erro', 'Contate o administrador do sistema', 500);
         }
     }

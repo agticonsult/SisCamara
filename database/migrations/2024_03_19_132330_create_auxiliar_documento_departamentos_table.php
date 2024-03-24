@@ -17,7 +17,7 @@ class CreateAuxiliarDocumentoDepartamentosTable extends Migration
         Schema::create('auxiliar_documento_departamentos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_documento')->unsigned();
-            $table->foreign('id_documento')->references('id')->on('departamento_documentos');
+            $table->foreign('id_documento')->references('id')->on('documentos');
             $table->integer('id_departamento')->unsigned();
             $table->foreign('id_departamento')->references('id')->on('departamentos');
             $table->integer('ordem')->nullable();

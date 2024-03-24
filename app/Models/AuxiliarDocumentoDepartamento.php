@@ -24,7 +24,7 @@ class AuxiliarDocumentoDepartamento extends Model implements Auditable
 
     public function documento()
     {
-        return $this->belongsTo(DepartamentoDocumento::class, 'id_documento');
+        return $this->belongsTo(Documento::class, 'id_documento');
     }
 
     public function departamento()
