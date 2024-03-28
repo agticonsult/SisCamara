@@ -25,10 +25,11 @@
                 <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Título</th>
-                            <th scope="col">Tipo de documento</th>
-                            <th scope="col">Cadastrado por</th>
-                            <th scope="col">Ações</th>
+                            <th>Título</th>
+                            <th>Tipo de documento</th>
+                            <th>Status</th>
+                            <th>Cadastrado por</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,8 +41,19 @@
                                     <strong>{{ $documento->id_tipo_workflow != null ? $documento->tipoWorkflow->descricao : 'não informado' }}</strong>
                                 </td>
                                 <td>
-                                    <strong>{{ $documento->cadastradoPorUsuario != null ? $documento->cad_usuario->pessoa->nome : 'não informado' }}</strong>
-                                    em <strong>{{ $documento->created_at != null ? $documento->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
+                                    @if ($documento->reprovado_em_tramitacao)
+                                        O documento foi reprovado em tramitação
+                                    @else
+                                        @if ($documento->finalizado)
+                                            O documento foi finalizado
+                                        @else
+                                            O documento está em tramitação
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    <strong>{{ $documento->cadastradoPorUsuario != null ? $documento->cad_usuario->pessoa->nome : 'não informado' }}</strong> em <br>
+                                    <strong>{{ $documento->created_at != null ? $documento->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                 </td>
                                 <td>
                                     @if ($documento->reprovado_em_tramitacao)

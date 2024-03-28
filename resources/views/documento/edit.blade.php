@@ -31,6 +31,15 @@
             <p><strong>Usuário:</strong> {{ $documento->reprovacao()->id_usuario != null ? $documento->reprovacao()->usuario->pessoa->nome : ' não informado' }}</p>
             <p><strong>Data:</strong> {{ $documento->reprovacao()->created_at != null ? $documento->reprovacao()->created_at->format('d/m/Y H:i:s')  : ' não informado' }}</p>
             <p><strong>Parecer:</strong> {{ $documento->reprovacao()->parecer }}</p>
+            @if ($documento->reprovacao()->anexo != null)
+                <p class="text-left">
+                    <strong>Anexo:</strong>
+                    <a href="{{ route('documento.obterAnexo', $documento->reprovacao()->anexo->id) }}" class="mx-2">
+                        <i class="fas fa-file link"></i>
+                        {{ $documento->reprovacao()->anexo->nome_original }}
+                    </a>
+                </p>
+            @endif
         </div>
     </div>
 @endif

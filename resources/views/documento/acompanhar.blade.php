@@ -255,7 +255,7 @@
                                                 <p class="text-left mb-1">
                                                     <strong>Anexo:</strong>
                                                     <a href="{{ route('documento.obterAnexo', $historico->anexo->id) }}" class="mx-2">
-                                                        <i class="fas fa-file fa-lg link"></i>
+                                                        <i class="fas fa-file link"></i>
                                                         {{ $historico->anexo->nome_original }}
                                                     </a>
                                                 </p>
