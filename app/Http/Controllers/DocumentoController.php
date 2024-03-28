@@ -4,21 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentoRequest;
 use App\Http\Requests\StatusDocRequest;
+use App\Models\AnexoHistoricoMovimentacao;
 use App\Models\AuxiliarDocumentoDepartamento;
 use App\Models\Departamento;
 use App\Models\Documento;
 use App\Models\DepartamentoTramitacao;
+use App\Models\Filesize;
 use App\Models\HistoricoMovimentacaoDoc;
 use App\Models\StatusDocumento;
 use App\Models\TipoDocumento;
 use App\Models\TipoWorkflow;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
+use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Ramsey\Uuid\Uuid;
+
+use function RingCentral\Psr7\mimetype_from_filename;
 
 class DocumentoController extends Controller
 {
@@ -349,7 +356,7 @@ class DocumentoController extends Controller
                     'atual' => true
                 ]);
 
-                HistoricoMovimentacaoDoc::create([
+                $movimentacao = HistoricoMovimentacaoDoc::create([
                     'parecer' => $request->parecer,
                     'id_documento' => $documento->id,
                     'id_usuario' => Auth::user()->id,
@@ -386,7 +393,7 @@ class DocumentoController extends Controller
                     'atual' => true
                 ]);
 
-                HistoricoMovimentacaoDoc::create([
+                $movimentacao = HistoricoMovimentacaoDoc::create([
                     'parecer' => $request->parecer,
                     'id_documento' => $documento->id,
                     'id_usuario' => Auth::user()->id,
@@ -395,8 +402,86 @@ class DocumentoController extends Controller
                 ]);
             }
 
-            return back()->with('success',
-                'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '.');
+            $anexo = $request->file('anexo');
+            $respostaAnexo = array();
+
+            // se houver anexo faz o tratamento, se não houver finaliza a função
+            if ($anexo) {
+
+                $max_filesize = Filesize::where('id_tipo_filesize', '=', 3)->where('ativo', '=', Filesize::ATIVO)->first();
+                if ($max_filesize){
+                    if ($max_filesize->mb != null){
+                        if (is_int($max_filesize->mb)){
+                            $mb = $max_filesize->mb;
+                        }else{
+                            $mb = 2;
+                        }
+                    }else{
+                        $mb = 2;
+                    }
+                }else{
+                    $mb = 2;
+                }
+
+                if ($anexo->isValid()) {
+                    if (filesize($anexo) <= 1048576 * $mb){
+
+                        $nome_original = $anexo->getClientOriginalName();
+                        $extensao = $anexo->getClientOriginalExtension();
+
+                        if (
+                            $extensao == 'txt' ||
+                            $extensao == 'pdf' ||
+                            $extensao == 'xls' ||
+                            $extensao == 'xlsx' ||
+                            $extensao == 'doc' ||
+                            $extensao == 'docx' ||
+                            $extensao == 'odt'
+                        ) {
+
+                            // $nome_hash = Carbon::now()->timestamp;
+                            $nome_hash = Uuid::uuid4();
+                            $nome_hash = $nome_hash . '.' . $extensao;
+                            $upload = $anexo->storeAs('public/anexos-historico-movimentacao-doc/', $nome_hash);
+
+                            if ($upload) {
+                                $file = new AnexoHistoricoMovimentacao();
+                                $file->nome_original = $nome_original;
+                                $file->nome_hash = $nome_hash;
+                                $file->diretorio = 'public/anexos-historico-movimentacao-doc';
+                                $file->id_movimentacao = $movimentacao->id;
+                                $file->ativo = 1;
+                                $file->save();
+
+                                $respostaAnexo['sucesso'] = true;
+                            }else {
+                                $respostaAnexo['sucesso'] = false;
+                                $respostaAnexo['mensagem'] = 'falha ao salvar o arquivo';
+                            }
+                        }else {
+                            $respostaAnexo['sucesso'] = false;
+                            $respostaAnexo['mensagem'] = 'extensão inválida';
+                        }
+                    }else{
+                        $respostaAnexo['sucesso'] = false;
+                        $respostaAnexo['mensagem'] = 'arquivo maior que ' . $mb . 'MB';
+                    }
+                }else {
+                    $respostaAnexo['sucesso'] = false;
+                    $respostaAnexo['mensagem'] = 'arquivo inválido';
+                }
+            }else {
+                $respostaAnexo['sucesso'] = true;
+            }
+
+            // se deu erro no anexo, mostra o erro
+            if ($respostaAnexo['sucesso']) {
+                return back()->with('success',
+                    'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '.');
+            }else {
+                return back()->with('warning',
+                    'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+            }
         }
         catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator->errors())->withInput();
@@ -452,7 +537,7 @@ class DocumentoController extends Controller
                     'reprovado_em_tramitacao' => true
                 ]);
 
-                HistoricoMovimentacaoDoc::create([
+                $movimentacao = HistoricoMovimentacaoDoc::create([
                     'parecer' => $request->parecer,
                     'id_documento' => $documento->id,
                     'id_usuario' => Auth::user()->id,
@@ -460,7 +545,7 @@ class DocumentoController extends Controller
                     'id_departamento' => $departamento_atual->id_departamento
                 ]);
 
-                return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
+                $departamento_destino = null;
 
             }else { // se houver departamento anterior tramita normalmente
 
@@ -481,7 +566,7 @@ class DocumentoController extends Controller
                     'atual' => true
                 ]);
 
-                HistoricoMovimentacaoDoc::create([
+                $movimentacao = HistoricoMovimentacaoDoc::create([
                     'parecer' => $request->parecer,
                     'id_documento' => $documento->id,
                     'id_usuario' => Auth::user()->id,
@@ -489,8 +574,98 @@ class DocumentoController extends Controller
                     'id_departamento' => $departamento_atual->id_departamento
                 ]);
 
-                return back()->with('success',
-                    'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_anterior->departamento->descricao . '.');
+                $departamento_destino = $departamento_anterior->departamento->descricao;
+            }
+
+            $anexo = $request->file('anexo');
+            $respostaAnexo = array();
+
+            // se houver anexo faz o tratamento, se não houver finaliza a função
+            if ($anexo) {
+
+                $max_filesize = Filesize::where('id_tipo_filesize', '=', 3)->where('ativo', '=', Filesize::ATIVO)->first();
+                if ($max_filesize){
+                    if ($max_filesize->mb != null){
+                        if (is_int($max_filesize->mb)){
+                            $mb = $max_filesize->mb;
+                        }else{
+                            $mb = 2;
+                        }
+                    }else{
+                        $mb = 2;
+                    }
+                }else{
+                    $mb = 2;
+                }
+
+                if ($anexo->isValid()) {
+                    if (filesize($anexo) <= 1048576 * $mb){
+
+                        $nome_original = $anexo->getClientOriginalName();
+                        $extensao = $anexo->getClientOriginalExtension();
+
+                        if (
+                            $extensao == 'txt' ||
+                            $extensao == 'pdf' ||
+                            $extensao == 'xls' ||
+                            $extensao == 'xlsx' ||
+                            $extensao == 'doc' ||
+                            $extensao == 'docx' ||
+                            $extensao == 'odt'
+                        ) {
+
+                            // $nome_hash = Carbon::now()->timestamp;
+                            $nome_hash = Uuid::uuid4();
+                            $nome_hash = $nome_hash . '.' . $extensao;
+                            $upload = $anexo->storeAs('public/anexos-historico-movimentacao-doc/', $nome_hash);
+
+                            if ($upload) {
+                                $file = new AnexoHistoricoMovimentacao();
+                                $file->nome_original = $nome_original;
+                                $file->nome_hash = $nome_hash;
+                                $file->diretorio = 'public/anexos-historico-movimentacao-doc';
+                                $file->id_movimentacao = $movimentacao->id;
+                                $file->ativo = 1;
+                                $file->save();
+
+                                $respostaAnexo['sucesso'] = true;
+                            }else {
+                                $respostaAnexo['sucesso'] = false;
+                                $respostaAnexo['mensagem'] = 'falha ao salvar o arquivo';
+                            }
+                        }else {
+                            $respostaAnexo['sucesso'] = false;
+                            $respostaAnexo['mensagem'] = 'extensão inválida';
+                        }
+                    }else{
+                        $respostaAnexo['sucesso'] = false;
+                        $respostaAnexo['mensagem'] = 'arquivo maior que ' . $mb . 'MB';
+                    }
+                }else {
+                    $respostaAnexo['sucesso'] = false;
+                    $respostaAnexo['mensagem'] = 'arquivo inválido';
+                }
+            }else {
+                $respostaAnexo['sucesso'] = true;
+            }
+
+            // se deu erro no anexo, mostra o erro
+            if ($respostaAnexo['sucesso']) {
+
+                if ($departamento_destino == null) {
+                    return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
+                }else {
+                    return back()->with('success',
+                        'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '.');
+                }
+
+            }else {
+                if ($departamento_destino == null) {
+                    return back()->with('warning', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+                }else {
+                    return back()->with('warning',
+                        'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+                }
             }
         }
         catch(\Exception $ex) {
@@ -531,7 +706,7 @@ class DocumentoController extends Controller
                 'finalizado' => true
             ]);
 
-            HistoricoMovimentacaoDoc::create([
+            $movimentacao = HistoricoMovimentacaoDoc::create([
                 'parecer' => $request->parecer,
                 'id_documento' => $documento->id,
                 'id_usuario' => Auth::user()->id,
@@ -539,7 +714,84 @@ class DocumentoController extends Controller
                 'id_departamento' => $departamento_atual->id_departamento
             ]);
 
-            return back()->with('success', 'O documento foi finalizado com sucesso.');
+            $anexo = $request->file('anexo');
+            $respostaAnexo = array();
+
+            // se houver anexo faz o tratamento, se não houver finaliza a função
+            if ($anexo) {
+
+                $max_filesize = Filesize::where('id_tipo_filesize', '=', 3)->where('ativo', '=', Filesize::ATIVO)->first();
+                if ($max_filesize){
+                    if ($max_filesize->mb != null){
+                        if (is_int($max_filesize->mb)){
+                            $mb = $max_filesize->mb;
+                        }else{
+                            $mb = 2;
+                        }
+                    }else{
+                        $mb = 2;
+                    }
+                }else{
+                    $mb = 2;
+                }
+
+                if ($anexo->isValid()) {
+                    if (filesize($anexo) <= 1048576 * $mb){
+
+                        $nome_original = $anexo->getClientOriginalName();
+                        $extensao = $anexo->getClientOriginalExtension();
+
+                        if (
+                            $extensao == 'txt' ||
+                            $extensao == 'pdf' ||
+                            $extensao == 'xls' ||
+                            $extensao == 'xlsx' ||
+                            $extensao == 'doc' ||
+                            $extensao == 'docx' ||
+                            $extensao == 'odt'
+                        ) {
+
+                            // $nome_hash = Carbon::now()->timestamp;
+                            $nome_hash = Uuid::uuid4();
+                            $nome_hash = $nome_hash . '.' . $extensao;
+                            $upload = $anexo->storeAs('public/anexos-historico-movimentacao-doc/', $nome_hash);
+
+                            if ($upload) {
+                                $file = new AnexoHistoricoMovimentacao();
+                                $file->nome_original = $nome_original;
+                                $file->nome_hash = $nome_hash;
+                                $file->diretorio = 'public/anexos-historico-movimentacao-doc';
+                                $file->id_movimentacao = $movimentacao->id;
+                                $file->ativo = 1;
+                                $file->save();
+
+                                $respostaAnexo['sucesso'] = true;
+                            }else {
+                                $respostaAnexo['sucesso'] = false;
+                                $respostaAnexo['mensagem'] = 'falha ao salvar o arquivo';
+                            }
+                        }else {
+                            $respostaAnexo['sucesso'] = false;
+                            $respostaAnexo['mensagem'] = 'extensão inválida';
+                        }
+                    }else{
+                        $respostaAnexo['sucesso'] = false;
+                        $respostaAnexo['mensagem'] = 'arquivo maior que ' . $mb . 'MB';
+                    }
+                }else {
+                    $respostaAnexo['sucesso'] = false;
+                    $respostaAnexo['mensagem'] = 'arquivo inválido';
+                }
+            }else {
+                $respostaAnexo['sucesso'] = true;
+            }
+
+            // se deu erro no anexo, mostra o erro
+            if ($respostaAnexo['sucesso']) {
+                return back()->with('success', 'O documento foi finalizado com sucesso.');
+            }else {
+                return back()->with('warning', 'O documento foi finalizado com sucesso. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+            }
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'finalizar');
@@ -581,4 +833,31 @@ class DocumentoController extends Controller
 
     }
 
+    public function obterAnexo($id_anexo)
+    {
+        try {
+            if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $file = AnexoHistoricoMovimentacao::where('ativo', 1)->find($id_anexo);
+
+            if (!$file) {
+                return back()->with('erro', 'Arquivo não encontrado.');
+            }
+
+            $path = $file->diretorio.'/'.$file->nome_hash;
+            $existe = Storage::disk()->exists($path);
+
+            if ($existe){
+                return Storage::download($path, $file->nome_original);
+            }else {
+                return back()->with('erro', 'Arquivo não encontrado, no diretório.');
+            }
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'obterAnexo');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
 }

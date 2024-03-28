@@ -38,7 +38,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="{{ route('documento.finalizar', $documentoEdit->id) }}"
-                method="POST" class="form_prevent_multiple_submits">
+                method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -50,9 +50,13 @@
                         <div class="col-md-12 mb-2">
                             <p class="mb-2" style="color: black">O documento será finalizado e não ficará mais ativo para alterações.</p>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
                             <label class="form-label">Parecer</label>
                             <input type="text" class="form-control" name="parecer">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label w-100">Anexo</label>
+                            <input type="file" name="anexo">
                         </div>
                     </div>
                 </div>
@@ -73,7 +77,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <form action="{{ route('documento.aprovar', [$documentoEdit->id, $documentoEdit->id_tipo_workflow]) }}"
-                    method="POST" class="form_prevent_multiple_submits">
+                    method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
 
@@ -90,9 +94,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 mb-2">
                                 <label class="form-label">Parecer</label>
                                 <input type="text" class="form-control" name="parecer" >
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label w-100">Anexo</label>
+                                <input type="file" name="anexo">
                             </div>
                         </div>
                     </div>
@@ -113,7 +121,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form action="{{ route('documento.reprovar', $documentoEdit->id) }}"
-                method="POST" class="form_prevent_multiple_submits">
+                method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
@@ -130,9 +138,13 @@
                                 <p class="mb-2" style="color: black">Não há departamento anterior na tramitação! O documento será reprovado e retornará ao autor.</p>
                             @endif
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 mb-2">
                             <label class="form-label">Parecer</label>
                             <input type="text" class="form-control" name="parecer">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label w-100">Anexo</label>
+                            <input type="file" name="anexo">
                         </div>
                     </div>
                 </div>

@@ -6,19 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class AnexoDocumento extends Model implements Auditable
+class AnexoHistoricoMovimentacao extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome_original', 'nome_hash', 'id_usuario', 'id_historico_movimentacao'
+        'nome_original', 'nome_hash', 'diretorio', 'id_movimentacao', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
 
-    protected $table = 'anexo_documentos';
+    protected $table = 'anexo_historico_movimentacaos';
 
     const ATIVO = 1;
     const INATIVO = 0;
 
+    public function movimentacao()
+    {
+        return $this->belongsTo(HistoricoMovimentacaoDoc::class, 'id_movimentacao');
+    }
 }

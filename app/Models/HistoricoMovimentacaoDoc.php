@@ -35,13 +35,13 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     {
         return $this->belongsTo(Documento::class, 'id_documento');
     }
+    public function anexo()
+    {
+        return $this->hasOne(AnexoHistoricoMovimentacao::class, 'id_movimentacao', 'id');
+    }
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_usuario');
-    }
-    public function obterDepartamentoAtual()
-    {
-        $historicos = HistoricoMovimentacaoDoc::where('id_documento', $this->id)->get();
     }
 
     public static function retornaHistoricoMovAtivo($id)

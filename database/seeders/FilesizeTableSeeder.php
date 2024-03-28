@@ -18,12 +18,14 @@ class FilesizeTableSeeder extends Seeder
     {
         DB::table('tipo_filesizes')->insert([
             ['descricao'=>'Anexo do Ato', 'ativo'=> TipoFilesize::ATIVO],
-            ['descricao'=>'Foto de Perfil', 'ativo'=> TipoFilesize::ATIVO]
+            ['descricao'=>'Foto de Perfil', 'ativo'=> TipoFilesize::ATIVO],
+            ['descricao'=>'Anexo do parecer na tramitação do documento', 'ativo'=> TipoFilesize::ATIVO]
         ]);
 
         DB::table('filesizes')->insert([
             ['mb' => 10, 'id_tipo_filesize' => 1, 'ativo' => Filesize::ATIVO],
-            ['mb' => 10, 'id_tipo_filesize' => 2, 'ativo' => Filesize::ATIVO]
+            ['mb' => 10, 'id_tipo_filesize' => 2, 'ativo' => Filesize::ATIVO],
+            ['mb' => 10, 'id_tipo_filesize' => 3, 'ativo' => Filesize::ATIVO]
         ]);
     }
 }
