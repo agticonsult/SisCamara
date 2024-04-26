@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\HomeUpdatePJRequest;
 use App\Http\Requests\HomeUpdateRequest;
 use App\Models\DepartamentoUsuario;
 use App\Models\Distrito;
@@ -30,11 +31,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         try{
-            $user = User::where('id', '=', auth()->user()->id)
-                ->select(
-                    'id', 'cpf', 'email', 'telefone_celular', 'telefone_celular2',
-                    'id_pessoa'
-                )->first();
+            $user = User::where('id', '=', Auth::user()->id)
+                ->where('ativo', '=', User::ATIVO)
+                ->first();
 
             $departamentos = DepartamentoUsuario::where('id_user', '=', $user->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
             $foto_perfil = FotoPerfil::where('id_user', '=', auth()->user()->id)->where('ativo', '=', User::ATIVO)->first();
@@ -100,6 +99,59 @@ class HomeController extends Controller
         }
     }
 
+    public function updatePj(HomeUpdatePJRequest $request, $id)
+    {
+        try {
+            //Busca o usuário no BD
+            $user = User::find($id);
+            $user->update($request->validated());
+
+            if ($request->password != null){
+
+                //verificar se a senha antiga está correta
+                if (!Hash::check($request->senha_antiga, $user->password)){
+                    return redirect()->back()->with('erro', 'A senha antiga está incorreta.')->withInput();
+                }
+
+                //verifica se a confirmação de senha estão ok
+                if($request->password != $request->confirmacao){
+                    return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
+                }
+
+                $tamanho_senha = strlen($request->password);
+                if ($tamanho_senha < 6 || $tamanho_senha > 35){
+                    return redirect()->back()->with('erro', 'Senha inválida.')->withInput();
+                }
+
+                $user->password = Hash::make($request->password);
+            }
+
+            //Dados de Pessoa
+            if($user->id_pessoa){
+                // $pessoa = Pessoa::where('id', '=', $user->id_pessoa)->first();
+                $pessoa = Pessoa::find($user->id_pessoa);
+                $pessoa->update($request->validated());
+            }
+            return redirect()->route('home')->with('success', 'Cadastro alterado com sucesso.');
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'updatePj');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+        }
+    }
+
+    public function information()
+    {
+        try{
+            return view('information');
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'information');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
     // public function alterarPerfil(Request $request)
     // {
     //     try {
@@ -138,14 +190,4 @@ class HomeController extends Controller
     //     }
     // }
 
-    public function information()
-    {
-        try{
-            return view('information');
-        }
-        catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'information');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
-        }
-    }
 }

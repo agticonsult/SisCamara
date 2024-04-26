@@ -80,8 +80,8 @@
                                             @include('errors.alerts')
                                             @include('errors.errors')
                                             <div class="mb-3">
-                                                <label for="cpf">CPF</label>
-                                                <input type="text" name="cpf" id="cpf" class="form-control form-control-lg" placeholder="Digite seu CPF" value="{{ old('cpf') }}">
+                                                <label for="email">E-mail</label>
+                                                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu e-mail" value="{{ old('email') }}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password">Senha</label>
@@ -94,7 +94,7 @@
                                                 <button type="submit" class="btn btn-lg btn-primary" style="width: 100%; margin-bottom: 0.7rem">Entrar</button>
                                             </div>
                                             <small>
-                                                <a href="{{ route('registrar_usuario') }}">Cadastrar-se</a>
+                                                <a href="{{ route('selecionar_pessoa') }}">Cadastrar-se</a>
                                             </small>
                                             <small>
                                                 <a href="{{ route('passwordReset1') }}" style="float: right">Esqueceu a senha?</a>

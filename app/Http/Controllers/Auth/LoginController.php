@@ -18,15 +18,16 @@ use Illuminate\Support\Facades\Route;
 class LoginController extends Controller
 {
     use ApiResponser;
-    public function index() {
+    public function index()
+    {
         return view('auth.login');
     }
 
-    public function autenticacao(Request $request) {
-
-        $user = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
+    public function autenticacao(Request $request)
+    {
+        $user = User::where('email', '=', $request->email)
             ->where('ativo', '=', 1)
-            ->select('id', 'cpf', 'email', 'bloqueadoPorTentativa', 'tentativa_senha', 'confirmacao_email')
+            ->select('id', 'cpf', 'cnpj','email', 'bloqueadoPorTentativa', 'tentativa_senha', 'confirmacao_email')
             ->first();
 
         if($user){
@@ -37,7 +38,8 @@ class LoginController extends Controller
                 return redirect()->back()->with('erro', 'Não foi confirmado o cadastro pelo link enviado no email.')->withInput();
             }
 
-            $array = ['cpf' => preg_replace('/[^0-9]/', '', $request->cpf), 'password' => $request->password];
+            // $array = ['cpf' => preg_replace('/[^0-9]/', '', $request->cpf), 'password' => $request->password];
+            $array = ['email' => $request->email, 'password' => $request->password];
 
             // Se o acesso ao sistema exceder a 3 tentativas no campo senha, será bloqueado o usuário
 
@@ -50,7 +52,7 @@ class LoginController extends Controller
                 }
                 $user->save();
 
-                return redirect()->back()->with('erro', 'CPF de usuário ou Senha com dados incorretos')->withInput();
+                return redirect()->back()->with('erro', 'E-mail de usuário ou Senha com dados incorretos')->withInput();
             };
 
             //Caso não seja excedido as tentativas de acesso, será zerado ou nulos os atributos abaixo e salva
@@ -58,65 +60,7 @@ class LoginController extends Controller
             $user->bloqueadoPorTentativa = 0;
             $user->dataBloqueadoPorTentativa = null;
             $user->save();
-
-            // $redirect = BUSCA DA URL;
-            // if ($redirect == "acervos"){
-            //     return redirect()->route(SUA ROTA ACERVOS CLIENTE);
-            // }
-
-            // $redirect = $_POST['redirect'];
-            // dd(url());
-            // dd($currentURL);
-            // dd(Route::current());
-
-
-            // if ($user->id_perfil == 3){
-            //     return redirect('/acesso-externo/home');
-            // }
-            //    $url= request('redirect');
-            //    dd( request('redirect'));
-
-            $currentURL = url()->previous();
-            $urlQuebrada = explode('?', $currentURL);
-            if (Count($urlQuebrada) == 3){
-
-                $txt = $urlQuebrada[2];
-                if ($txt == 'eventos'){
-                    if ($user->ehCliente() == 1){
-                        return redirect()->route('acesso_externo.evento.index');
-                    }
-
-                    return redirect()->route('home')->with('warning', 'A inscrição nos eventos é destinada apenas aos clientes (agricultores).');
-                }
-                else{
-                    if ($txt == 'acervo'){
-
-                        if ($user->ehCliente() == 1){
-                            return redirect()->route('acesso_externo.acervo.index');
-                        }
-
-                        return redirect()->route('home');
-                    }
-                }
-            }
-
-            // dd(
-            //     $currentURL,
-            //     $urlQuebrada,
-            //     $txt
-            // );
-
-
-
-            // if ($_SERVER['HTTP_REFERER']=='http://localhost:8000/?link?acervo'|| $_SERVER['HTTP_REFERER']=='http://127.0.0.1:8000/?link?acervo') {
-
-            //     return  redirect('/acervo/indexlog');
-            // }
-            // if ($_SERVER['HTTP_REFERER']=='http://localhost:8000/?link?eventos'|| $_SERVER['HTTP_REFERER']=='http://127.0.0.1:8000/?link?eventos') {
-
-            //
-            // }
-
+            
             return redirect('/home');
 
         }

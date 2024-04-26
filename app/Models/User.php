@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'cpf', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'importado', 'id_importacao', 'tentativa_senha',
+        'cpf', 'cnpj', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'importado', 'id_importacao', 'tentativa_senha',
         'bloqueadoPorTentativa', 'dataBloqueadoPorTentativa', 'envio_email_recuperacao', 'envio_email_confirmacaoApi',
         'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'validado', 'validadoPorUsuario',
         'validadoEm', 'incluso', 'incluidoPorUsuario', 'incluidoEm', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
@@ -92,13 +92,17 @@ class User extends Authenticatable
     {
         $this->attributes['cpf'] = preg_replace('/[^0-9]/', '', $value);
     }
+    public function setCnpjAttribute($value)
+    {
+        $this->attributes['cnpj'] = preg_replace('/[^0-9]/', '', $value);
+    }
 
     //métodos estáticos
     public static function retornaUsuariosAtivos()
     {
         $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
                 ->select(
-                    'users.id', 'users.cpf', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
+                    'users.id', 'users.cpf', 'users.cnpj', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
                     'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
                     'users.dataInativado', 'users.motivoInativado'
                 )

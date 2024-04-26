@@ -51,12 +51,14 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-sm-4">
-                                        <form action="{{route('registrar_store')}}" method="POST" id="form" class="form_prevent_multiple_submits">
+
+                                        <form action="{{route('pessoa_fisica_store')}}" method="POST" id="form" class="form_prevent_multiple_submits">
                                             @csrf
                                             @method('POST')
                                             @include('errors.alerts')
-                                            {{-- @include('errors.errors') --}}
+
                                             <div class="m-sm-4">
+                                                <h5 class="card-title mb-0">Pessoa Física</h5><hr>
                                                 <div class="mb-3">
                                                     <label class="form-label">*Nome</label>
                                                     <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ old('nome') }}">
@@ -182,73 +184,6 @@
     }
     maskInputs();
 
-    // $("#form").validate({
-    //     rules : {
-    //         name:{
-    //             required:true,
-    //             maxlength:255,
-    //         },
-    //         cpf:{
-    //             required:true,
-    //             maxlength:14,
-    //         },
-    //         email:{
-    //             required:true,
-    //             maxlength:255,
-    //         },
-    //         id_municipio:{
-    //             required:true
-    //         },
-    //         dt_nascimento_fundacao:{
-    //             required:true,
-    //             maxlength:255,
-    //         },
-    //         password:{
-    //             required:true,
-    //             minlength:6,
-    //             maxlength:35
-    //         },
-    //         confirmacao:{
-    //             required:true,
-    //             minlength:6,
-    //             maxlength:35
-    //         },
-    //     },
-    //     messages:{
-    //         name:{
-    //             required:"Campo obrigatório",
-    //             maxlength:"Máximo de 255 caracteres"
-    //         },
-    //         cpf:{
-    //             required:"Campo obrigatório",
-    //             maxlength:"Máximo de 14 caracteres"
-    //         },
-    //         email:{
-    //             required:"Campo obrigatório",
-    //             maxlength:"Máximo de 255 caracteres"
-    //         },
-    //         id_municipio:{
-    //             required:"Campo obrigatório"
-    //         },
-    //         dt_nascimento_fundacao:{
-    //             required:"Campo obrigatório",
-    //             maxlength:"Máximo de  caracteres 15",
-    //             min:"Data mínima: 01/01/1899",
-    //             max:"Data máxima: data de hoje",
-    //         },
-    //         password:{
-    //             required:"Campo obrigatório",
-    //             minlength:"Minímo 6 caracteres",
-    //             maxlength:"Máximo 35 caracteres"
-    //         },
-    //         confirmacao:{
-    //             required:"Campo obrigatório",
-    //             minlength:"Minímo 6 caracteres",
-    //             maxlength:"Máximo 35 caracteres"
-    //         },
-    //     }
-    // });
-
     $(document).ready(function() {
 
         $('.select2').select2({
@@ -260,23 +195,6 @@
             closeOnSelect: true,
             width: '100%',
         });
-
-        // $('#uf').on('change', function() {
-        //     var b = true;
-        //     var idEstado = $('#uf').select2("val");
-        //     $.get("" + "/" + idEstado, function(municipios) {
-        //         $('select[name=id_municipio]').empty();
-        //         $.each(municipios,
-        //         function(key, value) {
-        //             if (b){
-        //                 $('select[name=id_municipio]').append('<option value="" selected disabled>Selecione um município</option>');
-        //             }
-        //             b = false;
-        //             $('select[name=id_municipio]').append('<option value=' + value.id +
-        //                 '>' + value.descricao + '</option>');
-        //         });
-        //     });
-        // });
     });
 </script>
 </body>

@@ -20,7 +20,8 @@ class CreateUsersTable extends Migration
             $table->uuid('id')->primary();
 
             // dados pessoais
-            $table->string('cpf')->unique();
+            $table->string('cpf')->nullable();
+            $table->string('cnpj')->nullable();
             $table->string('password');
             $table->string('email')->nullable();
             $table->string('telefone_celular')->nullable();

@@ -66,8 +66,11 @@ Route::post('/autenticacao', [LoginController::class, 'autenticacao'])->name('lo
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 //registrar usuário
-Route::get('registrar-usuario', [RegistrarController::class, 'registrar'])->name('registrar_usuario');
-Route::post('registrar-store', [RegistrarController::class, 'registrarStore'])->name('registrar_store');
+Route::get('selecionar-pessoa', [RegistrarController::class, 'selecionarPessoa'])->name('selecionar_pessoa');
+Route::get('registrar-pessoa-fisica', [RegistrarController::class, 'registrarPessoaFisica'])->name('registrar_pessoa_fisica');
+Route::post('pessoa-fisica-store', [RegistrarController::class, 'pessoaFisicaStore'])->name('pessoa_fisica_store');
+Route::post('pessoa-juridica-store', [RegistrarController::class, 'pessoaJuridicaStore'])->name('pessoa_juridica_store');
+Route::get('registrar-pessoa-juridica', [RegistrarController::class, 'registrarPessoaJuridica'])->name('registrar_pessoa_juridica');
 
 //Alteração de senha
 Route::get('/passwordReset1', [PasswordResetController::class, 'passwordReset1'])->name('passwordReset1');
@@ -86,6 +89,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/alterar-perfil', [HomeController::class, 'alterarPerfil'])->name('home.alterarPerfil');
     Route::post('/update/{id}', [HomeController::class, 'update'])->name('home.update');
+    Route::post('/update-pj/{id}', [HomeController::class, 'updatePj'])->name('home.updatePj');
     Route::post('/foto', [FotoPerfilController::class, 'store'])->name('upload_foto');
 
     // Ato

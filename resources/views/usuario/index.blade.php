@@ -29,7 +29,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">Nome</th>
-                                <th scope="col">CPF</th>
+                                <th scope="col">CPF/CNPJ</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Perfis ativos</th>
                                 {{-- <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão)</th> --}}
@@ -41,7 +41,13 @@
                             @foreach ($usuarios as $usuario)
                                 <tr>
                                     <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
-                                    <td class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</td>
+                                    <td class="masc">
+                                        @if ($usuario->pessoa->pessoaJuridica == 1)
+                                            <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
+                                        @else
+                                            <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
                                     <td>
                                         <ul>
@@ -184,6 +190,7 @@
 
     <script>
         $('.cpf').mask('000.000.000-00');
+        $('.cnpj').mask('00.000.000/0000-00');
 
         $(document).ready(function() {
 
