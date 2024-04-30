@@ -49,16 +49,16 @@ class ConfirmacaoEmailController extends Controller
         try {
             //validação dos campos
             $input = [
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
+                // 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'email' => $request->email
             ];
             $rules = [
-                'cpf' => 'required|min:11|max:11',
+                // 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email'
             ];
             $messages = [
-                'cpf.required' => 'O CPF é obrigatório.',
-                'cpf.max' => 'CPF: Máximo 11 caracteres.',
+                // 'cpf.required' => 'O CPF é obrigatório.',
+                // 'cpf.max' => 'CPF: Máximo 11 caracteres.',
 
                 'email.required' => 'O email é obrigatório.',
                 'email.max' => 'Máximo 255 caracteres.'
@@ -68,8 +68,7 @@ class ConfirmacaoEmailController extends Controller
             $validacao->validate();
 
             //realiza a busca no BD o email informado
-            $user = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-                    ->where('email', '=', $request->email)
+            $user = User::where('email', '=', $request->email)
                     ->where('ativo', '=', 1)
                     ->select('id', 'email', 'id_pessoa', 'confirmacao_email', 'envio_email_confirmacao', 'envio_email_recuperacao')
                     ->first();
@@ -196,16 +195,16 @@ class ConfirmacaoEmailController extends Controller
         try {
             //Validação dos campos
             $input = [
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
+                // 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'email' => $request->email
             ];
             $rules = [
-                'cpf' => 'required|min:11|max:11',
+                // 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email'
             ];
             $messages = [
-                'cpf.required' => 'O CPF é obrigatório.',
-                'cpf.max' => 'CPF: Máximo 11 caracteres.',
+                // 'cpf.required' => 'O CPF é obrigatório.',
+                // 'cpf.max' => 'CPF: Máximo 11 caracteres.',
 
                 'email.required' => 'O email é obrigatório.',
                 'email.max' => 'Máximo 255 caracteres.'
@@ -215,14 +214,12 @@ class ConfirmacaoEmailController extends Controller
             $validacao->validate();
 
             //busca id e nome no bd
-            $user = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-                ->where('email', '=', $request->email)
+            $user = User::where('email', '=', $request->email)
                 ->where('ativo', '=', 1)
                 ->select('id', 'email', 'id_pessoa', 'envio_email_confirmacaoApi', 'confirmacao_email')
                 ->first();
 
             if($user){
-
                 if($user->confirmacao_email == 1 || $user->confirmacao_email == true){
                     return $this->error('Usuário já foi confirmado por e-mail e as credencias já estão válidas para acessar o sistema.', 403);
                 }

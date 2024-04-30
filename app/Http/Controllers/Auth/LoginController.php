@@ -60,12 +60,12 @@ class LoginController extends Controller
             $user->bloqueadoPorTentativa = 0;
             $user->dataBloqueadoPorTentativa = null;
             $user->save();
-            
+
             return redirect('/home');
 
         }
         else{
-            return redirect()->route('login')->with('erro', 'CPF de usuário ou Senha com dados incorretos.')->withInput();
+            return redirect()->route('login')->with('erro', 'E-mail de usuário ou Senha com dados incorretos.')->withInput();
         }
 
     }

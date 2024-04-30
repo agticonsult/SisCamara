@@ -44,9 +44,9 @@
                                 <h1 class="h2">
                                     Recuperar senha
                                 </h1>
-                                <p class="lead">
+                                {{-- <p class="lead">
 									Insira seu email e CPF para recuperar a senha
-								</p>
+								</p> --}}
                                 <p class="lead">
 									(Por favor! Cheque sua caixa de spam!)
 								</p>
@@ -60,10 +60,10 @@
 
                                             @include('errors.alerts')
                                             @include('errors.errors')
-                                            <div class="mb-3">
+                                            {{-- <div class="mb-3">
                                                 <label for="cpf">CPF</label>
                                                 <input type="text" name="cpf" id="cpf" class="form-control form-control-lg" placeholder="Digite seu CPF">
-                                            </div>
+                                            </div> --}}
                                             <div class="mb-3">
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu email">

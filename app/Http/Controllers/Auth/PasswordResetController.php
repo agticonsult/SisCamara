@@ -25,8 +25,8 @@ class PasswordResetController extends Controller
 {
     use ApiResponser;
 
-    public function passwordReset1(){
-
+    public function passwordReset1()
+    {
         try {
             return view('auth.passwordReset1');
 
@@ -45,19 +45,20 @@ class PasswordResetController extends Controller
         }
     }
 
-    public function passwordReset2(Request $request){
+    public function passwordReset2(Request $request)
+    {
         try {
             $input = [
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
+                // 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'email' => $request->email
             ];
             $rules = [
-                'cpf' => 'required|min:11|max:11',
+                // 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email'
             ];
             $messages = [
-                'cpf.required' => 'O CPF é obrigatório.',
-                'cpf.max' => 'CPF: Máximo 11 caracteres.',
+                // 'cpf.required' => 'O CPF é obrigatório.',
+                // 'cpf.max' => 'CPF: Máximo 11 caracteres.',
 
                 'email.required' => 'O email é obrigatório.',
                 'email.max' => 'Máximo 255 caracteres.'
@@ -67,14 +68,12 @@ class PasswordResetController extends Controller
             $validacao->validate();
 
             //busca id e nome no bd
-            $user = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-                ->where('email', '=', $request->email)
+            $user = User::where('email', '=', $request->email)
                 ->where('ativo', '=', 1)
                 ->select('id', 'id_pessoa', 'email', 'envio_email_recuperacao', 'bloqueadoPorTentativa')
                 ->first();
 
             if($user){
-
                 if ($user->envio_email_recuperacao == 3){
                     return redirect()->back()->with('erro', 'Já foram enviados 3 emails para recuperar a senha. Não é permitido enviar mais.')->withInput();
                 }
@@ -101,20 +100,6 @@ class PasswordResetController extends Controller
                 }
 
                 $link = URL::temporarySignedRoute('passwordReset3', now()->addMinutes(20), [Crypt::encrypt($user->id)]);
-
-                // $nova_senha = random_int(100000, 999999);
-
-                // $user->password = Hash::make("123456");
-                // $user->save();
-
-                // $nova_senha = "123456";
-
-                // $details = [
-                //     'assunto' => 'Alteração de senha',
-                //     'body' => 'Nova senha: ' . $nova_senha,
-                //     'cliente' => $user->name
-                //     // 'link' => $link,
-                // ];
 
                 $details = [
                     'assunto' => 'Alteração de senha',
@@ -155,19 +140,20 @@ class PasswordResetController extends Controller
 
     }
 
-    public function passwordReset2API(Request $request){
+    public function passwordReset2API(Request $request)
+    {
         try {
             $input = [
-                'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
+                // 'cpf' => preg_replace('/[^0-9]/', '', $request->cpf),
                 'email' => $request->email
             ];
             $rules = [
-                'cpf' => 'required|min:11|max:11',
+                // 'cpf' => 'required|min:11|max:11',
                 'email' => 'required|email'
             ];
             $messages = [
-                'cpf.required' => 'O CPF é obrigatório.',
-                'cpf.max' => 'CPF: Máximo 11 caracteres.',
+                // 'cpf.required' => 'O CPF é obrigatório.',
+                // 'cpf.max' => 'CPF: Máximo 11 caracteres.',
 
                 'email.required' => 'O email é obrigatório.',
                 'email.max' => 'Máximo 255 caracteres.'
@@ -177,14 +163,12 @@ class PasswordResetController extends Controller
             $validacao->validate();
 
             //busca id e nome no bd
-            $user = User::where('cpf', '=', preg_replace('/[^0-9]/', '', $request->cpf))
-                ->where('email', '=', $request->email)
+            $user = User::where('email', '=', $request->email)
                 ->where('ativo', '=', 1)
                 ->select('id', 'id_pessoa', 'email', 'envio_email_recuperacao', 'bloqueadoPorTentativa')
                 ->first();
 
             if($user){
-
                 if ($user->envio_email_recuperacao == 3){
                     return $this->error('Já foram enviados 3 emails para recuperar a senha. Não é permitido enviar mais.', 403);
                 }
@@ -253,14 +237,14 @@ class PasswordResetController extends Controller
 
     }
 
-    public function passwordReset3(Request $request, $id){
+    public function passwordReset3(Request $request, $id)
+    {
         try{
             $currentURL = URL::full();
             $route = Route::current();
 
             $email = Email::where('link', 'LIKE', $currentURL)
                 ->first();
-
 
             if ($email){
                 if ($email->expirado == 1 || ! $request->hasValidSignature()){
