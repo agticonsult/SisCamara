@@ -197,8 +197,8 @@
                                     <a class="sidebar-link" href="{{ route('usuario.index') }}">Listagem</a>
                                 </li>
                                 <li
-                                    class="sidebar-item {{ Route::current()->uri == 'usuario/create' ? 'active' : null }}">
-                                    <a class="sidebar-link" href="{{ route('usuario.create') }}">Cadastro</a>
+                                    class="sidebar-item {{ Route::current()->uri == 'usuario/selecionar' ? 'active' : null }}">
+                                    <a class="sidebar-link" href="{{ route('usuario.selecionarPessoa') }}">Cadastro</a>
                                 </li>
                                 <li
                                     class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">

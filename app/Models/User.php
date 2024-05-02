@@ -116,6 +116,10 @@ class User extends Authenticatable
     {
         return User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
     }
+    public static function retornaUsuarioInativo($id)
+    {
+        return User::where('id', '=', $id)->where('ativo', '=', User::INATIVO)->first();
+    }
 
     //relações
     public function departamentos()

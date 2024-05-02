@@ -60,7 +60,7 @@
                                             <div class="m-sm-4">
                                                 <h5 class="card-title mb-0">Pessoa Jurídica</h5><hr>
                                                 <div class="mb-3">
-                                                    <label class="form-label">*Nome Fantasia</label>
+                                                    <label class="form-label">*Nome</label>
                                                     <input class="form-control @error('nome') is-invalid @enderror" type="text" name="nome" id="nome" placeholder="Informe seu nome" value="{{ old('nome') }}">
                                                     @error('nome')
                                                         <div class="invalid-feedback">{{ $message }}</div><br>

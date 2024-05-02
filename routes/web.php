@@ -286,16 +286,22 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {
-        Route::get('/index', [UserController::class, 'index'])->name('index');
-        Route::get('/create', [UserController::class, 'create'])->name('create');
-        Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::get('/create-pessoa-fisica', [UserController::class, 'createPessoaFisica'])->name('createPessoaFisica');
+        Route::post('/store-pessoa-fisica', [UserController::class, 'storePessoaFisica'])->name('storePessoaFisica');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::post('/update-pessoa-fisica/{id}', [UserController::class, 'updatePessoaFisica'])->name('updatePessoaFisica');
+
+        Route::get('/create-pessoa-juridica', [UserController::class, 'createPessoaJuridica'])->name('createPessoaJuridica');
+        Route::post('/store-pessoa-juridica', [UserController::class, 'storePessoaJuridica'])->name('storePessoaJuridica');
+        Route::post('/update-pessoa-juridica/{id}', [UserController::class, 'updatePessoaJuridica'])->name('updatePessoaJuridica');
+
+        Route::get('/index', [UserController::class, 'index'])->name('index');
         Route::post('/desbloquear/{id}', [UserController::class, 'desbloquear'])->name('desbloquear');
         Route::post('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
         Route::post('/restore/{id}', [UserController::class, 'restore'])->name('restore');
         // Route::get('/edit-perfil/{id}', [UserController::class, 'editPerfil'])->name('editPerfil');
         Route::post('/desativa-perfil/{id}', [UserController::class, 'desativaPerfil'])->name('desativaPerfil');
+        Route::get('/selecionar', [UserController::class, 'selecionarPessoa'])->name('selecionarPessoa');
     });
 
     // Audits

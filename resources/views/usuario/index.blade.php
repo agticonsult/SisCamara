@@ -181,7 +181,7 @@
             @endif
         </div>
         <div class="card-footer">
-            <a href=" {{ route('usuario.create') }} " class="btn btn-primary">Cadastrar novo usuário</a>
+            <a href=" {{ route('usuario.selecionarPessoa') }} " class="btn btn-primary">Cadastrar novo usuário</a>
         </div>
     </div>
 
