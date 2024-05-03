@@ -4,27 +4,10 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-{{-- script referente ao mapa --}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
-integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
-crossorigin=""/>
-<script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
-<link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
 <style>
     .error{
         color:red
-    }
-    #map{
-        background: #fff;
-        border: none;
-        height: 540px;
-        width: 100%;
-
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
     }
 </style>
 @include('errors.alerts')
@@ -78,14 +61,6 @@ crossorigin=""/>
                     <div class="form-group col-md-6">
                         <label class="form-label">*Perfil</label>
                         <input type="text" name="descricao" class="form-control" value="{{ $perfil->descricao != null ? $perfil->descricao : old('descricao') }}">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label">*Abrangência</label>
-                        <select name="id_abrangencia" class="form-control select2">
-                            @foreach ($abrangencias as $a)
-                                <option value="{{ $a->id }}" {{ $a->id == $perfil->id_abrangencia ? 'selected' : '' }}>{{ $a->descricao }}</option>
-                            @endforeach
-                        </select>
                     </div>
                 </div>
 

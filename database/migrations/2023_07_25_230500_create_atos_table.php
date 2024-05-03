@@ -30,8 +30,8 @@ class CreateAtosTable extends Migration
             $table->foreign('id_orgao')->references('id')->on('orgao_atos');
             $table->integer('id_assunto')->unsigned()->nullable();
             $table->foreign('id_assunto')->references('id')->on('assunto_atos');
-            $table->integer('id_grupo')->unsigned()->nullable();
-            $table->foreign('id_grupo')->references('id')->on('grupos');
+            // $table->integer('id_grupo')->unsigned()->nullable();
+            // $table->foreign('id_grupo')->references('id')->on('grupos');
             $table->integer('id_tipo_ato')->unsigned()->nullable();
             $table->foreign('id_tipo_ato')->references('id')->on('tipo_atos');
             $table->uuid('cadastradoPorUsuario')->nullable();

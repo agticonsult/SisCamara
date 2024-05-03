@@ -42,7 +42,7 @@ class AtoStoreRequest extends FormRequest
             'id_classificacao' => ['required', 'integer', 'exists:classificacao_atos,id', new ClassificacaoAtoRule],
             'ano' => 'required|integer',
             'numero' => 'required',
-            'id_grupo' => ['required', 'integer', 'exists:grupos,id', new GrupoRule],
+            // 'id_grupo' => ['required', 'integer', 'exists:grupos,id', new GrupoRule],
             'id_tipo_ato' => ['required', 'integer', 'exists:tipo_atos,id', new TipoAtoRule],
             'id_assunto' => 'required|integer|exists:assunto_atos,id',
             'id_orgao' => ['required', 'integer', 'exists:orgao_atos,id', new OrgaoRule],
@@ -70,9 +70,9 @@ class AtoStoreRequest extends FormRequest
             'id_classificacao.required' => 'Classificação do ato obrigatório',
             'id_classificacao.integer' => 'Classificação do ato é um número inteiro',
 
-            'id_grupo.required' => 'Grupo do ato obrigatório',
-            'id_grupo.integer' => 'Grupo do ato é um número inteiro',
-            'id_grupo.exists' => 'Grupo inválido.',
+            // 'id_grupo.required' => 'Grupo do ato obrigatório',
+            // 'id_grupo.integer' => 'Grupo do ato é um número inteiro',
+            // 'id_grupo.exists' => 'Grupo inválido.',
 
             'id_tipo_ato.required' => 'Tipo do ato obrigatório',
             'id_tipo_ato.integer' => 'Tipo do ato é um número inteiro',

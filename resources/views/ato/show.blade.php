@@ -19,9 +19,9 @@
 
     <div class="card-header">
         <h2 class="text-center">
-            <div>
+            {{-- <div>
                 <span><i class="fas fa-address-book"></i></span>
-            </div>
+            </div> --}}
             <strong>Visualização de Ato</strong>
         </h2>
     </div>

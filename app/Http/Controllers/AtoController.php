@@ -51,14 +51,14 @@ class AtoController extends Controller
             }
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
-            $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
+            // $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
             $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
             $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
             $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
             $filesize = Filesize::where('id_tipo_filesize', '=', 1)->where('ativo', '=', Filesize::ATIVO)->first();
 
-            return view('ato.create', compact('classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
+            return view('ato.create', compact('classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos', 'filesize'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'create');
@@ -352,13 +352,13 @@ class AtoController extends Controller
             }
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
-            $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
+            // $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
             $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
             $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
             $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
             $forma_publicacaos = FormaPublicacaoAto::where('ativo', '=', FormaPublicacaoAto::ATIVO)->get();
 
-            return view('ato.edit', compact('ato', 'atos_relacionados', 'classificacaos', 'grupos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
+            return view('ato.edit', compact('ato', 'atos_relacionados', 'classificacaos', 'assuntos', 'tipo_atos', 'orgaos', 'forma_publicacaos'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'editDadosGerais');

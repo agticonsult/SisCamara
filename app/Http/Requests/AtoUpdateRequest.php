@@ -36,7 +36,7 @@ class AtoUpdateRequest extends FormRequest
             'id_classificacao' => 'required|integer',
             'ano' => 'required|integer',
             'numero' => 'required',
-            'id_grupo' => ['required', 'integer', 'exists:grupos,id', new GrupoRule],
+            // 'id_grupo' => ['required', 'integer', 'exists:grupos,id', new GrupoRule],
             'id_tipo_ato' => ['required', 'integer', 'exists:tipo_atos,id', new TipoAtoRule],
             'id_assunto' => 'required|integer|exists:assunto_atos,id',
             'id_orgao' => ['required', 'integer', 'exists:orgao_atos,id', new OrgaoRule],
@@ -72,9 +72,9 @@ class AtoUpdateRequest extends FormRequest
             'id_assunto.integer' => 'Assunto do ato é um número inteiro',
             'id_assunto.exists' => 'Assunto inválido.',
 
-            'id_orgao.required' => 'Órgão do ato obrigatório',
-            'id_orgao.integer' => 'Órgão do ato é um número inteiro',
-            'id_orgao.exists' => 'Órgão inválido.',
+            // 'id_orgao.required' => 'Órgão do ato obrigatório',
+            // 'id_orgao.integer' => 'Órgão do ato é um número inteiro',
+            // 'id_orgao.exists' => 'Órgão inválido.',
 
             'id_forma_publicacao.nullable' => 'Forma de publicação não nulo',
             'id_forma_publicacao.integer' => 'Forma de publicação do ato é um número inteiro',

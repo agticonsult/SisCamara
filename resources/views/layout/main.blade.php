@@ -60,6 +60,7 @@
                         Páginas
                     </li>
 
+                    {{-- Home --}}
                     @if (Auth::user())
                         <li class="sidebar-item {{ Route::current()->uri == 'home' ? 'active' : null }}">
                             <a href="{{ route('home') }}" class="sidebar-link">
@@ -69,6 +70,7 @@
                         </li>
                     @endif
 
+                    {{-- Atos --}}
                     @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
                         <li class="sidebar-item {{ Route::current()->uri == 'ato' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
                             <a href="{{ route('ato.index') }}" class="sidebar-link">
@@ -78,6 +80,7 @@
                         </li>
                     @endif
 
+                    {{-- Votação Eletrônica --}}
                     @if (Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') == 1)
                         <li class="sidebar-item">
                             <a href="#votacaoEletronica" data-toggle="collapse" class="sidebar-link collapsed">
@@ -110,6 +113,7 @@
                         </li>
                     @endif
 
+                    {{-- Modelo de Proposição --}}
                     @if (Auth::user()->temPermissao('ModeloProposicao', 'Listagem') == 1 ||
                             Auth::user()->temPermissao('Proposicao', 'Listagem') == 1 ||
                             Auth::user()->temPermissao('Legislatura', 'Listagem') == 1 ||
@@ -153,6 +157,7 @@
                         </li>
                     @endif
 
+                    {{-- Agente Político --}}
                     @if (Auth::user()->temPermissao('AgentePolitico', 'Listagem') == 1)
                         <li
                             class="sidebar-item {{ Route::current()->uri == 'agente-politico' || Route::current()->uri == 'agente-politico/create' || Route::current()->uri == 'agente-politico/novo-agente-politico' || Route::current()->uri == 'agente-politico/vincular' || Route::current()->uri == 'agente-politico/edit/{id}'? 'active' : null }}">
@@ -163,6 +168,7 @@
                         </li>
                     @endif
 
+                    {{-- Repartição --}}
                     @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
                         <li class="sidebar-item {{ Route::current()->uri == 'reparticao/index' || Route::current()->uri == 'reparticao/create' || Route::current()->uri == 'reparticao/edit/{id}' ? 'active' : null }}">
                             <a href="{{ route('reparticao.index') }}" class="sidebar-link">
@@ -172,12 +178,31 @@
                         </li>
                     @endif
 
+                    {{-- Documentos --}}
                     @if (Auth::user()->temPermissao('Documento', 'Listagem') == 1)
                         <li class="sidebar-item {{ Route::current()->uri == 'documento' || Route::current()->uri == 'documento/create' || Route::current()->uri == 'documento/edit/{id}' ? 'active' : null }}">
                             <a href="{{ route('documento.index') }}" class="sidebar-link">
                                 <i class="fa fa-book" aria-hidden="true"></i>
                                 <span>Documentos</span>
                             </a>
+                        </li>
+                    @endif
+
+                    {{-- Perfils e Funcionalidades --}}
+                    @if (Auth::user()->temPermissao('Perfil', 'Listagem') == 1)
+                        <li class="sidebar-item">
+                            <a href="#perfis" data-toggle="collapse" class="sidebar-link collapsed">
+                                <i class="fas fa-user-cog"></i>
+                                Perfis
+                            </a>
+                            <ul id="perfis"
+                                class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/perfil-funcionalidade' ? 'active' : 'collapse' }}">
+                                <li
+                                    class="sidebar-item {{ Route::current()->getPrefix() == '/perfil-funcionalidade' ? 'active' : null }}">
+                                    <a class="sidebar-link " href="{{ route('perfil_funcionalidade.index') }}">Perfil
+                                        e Funcionalidade</a>
+                                </li>
+                            </ul>
                         </li>
                     @endif
 
@@ -270,6 +295,12 @@
                                         href="{{ route('configuracao.tipo_documento.index') }}">Tipo de Documento
                                     </a>
                                 </li>
+                                {{-- <li
+                                    class="sidebar-item ">
+                                    <a class="sidebar-link "
+                                        href="#">Aprovação de Usuários Externos
+                                    </a>
+                                </li> --}}
                             </ul>
                         </li>
                     @endif

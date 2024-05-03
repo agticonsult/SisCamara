@@ -32,13 +32,15 @@ class PerfilFuncionalidadeController extends Controller
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $pfs = Perfil::where('ativo', '=', 1)->get();
-            $perfis = Perfil::where('ativo', '=', 1)->get();
-            $funcionalidades = Funcionalidade::where('ativo', '=', 1)->get();
-            $entidades = Entidade::where('ativo', '=', 1)->get();
-            $tfs = TipoFuncionalidade::where('ativo', '=', 1)->get();
+            $pfs = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
+            $perfis = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
+            $funcionalidades = Funcionalidade::where('ativo', '=', Funcionalidade::ATIVO)->get();
+            $entidades = Entidade::where('ativo', '=', Entidade::ATIVO)->get();
+            // $tfs = TipoFuncionalidade::where('ativo', '=', TipoFuncionalidade::ATIVO)->get();
+            $tipo_perfis = Perfil::where('id', '!=', Perfil::USUARIO_ADM)->where('ativo', '=', Perfil::ATIVO)->get();
 
-            return view('perfil-funcionalidade.index', compact('pfs', 'perfis', 'funcionalidades', 'abrangencias', 'entidades', 'tfs', 'tipo_perfis'));
+            return view('perfil-funcionalidade.index', compact('pfs', 'perfis', 'funcionalidades', 'tipo_perfis'));
+
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'index');
@@ -84,21 +86,16 @@ class PerfilFuncionalidadeController extends Controller
             $funcionalidades = $request->id_funcionalidade;
 
             for ($i=0; $i < Count($funcionalidades); $i++) {
-
                 $func = Funcionalidade::where('id', '=', $funcionalidades[$i])->where('ativo', '=', 1)->first();
-
                 if ($func){
-
                     // se não for funcionalidade deste perfil, inclui
                     if ($func->ehFuncionalidadeDoPerfil($request->id_perfil) == 0){
-
                         $pf = new PerfilFuncionalidade();
                         $pf->id_perfil = $request->id_perfil;
                         $pf->id_funcionalidade = $funcionalidades[$i];
                         $pf->cadastradoPorUsuario = Auth::user()->id;
                         $pf->ativo = 1;
                         $pf->save();
-
                     }
                 }
             }
@@ -164,11 +161,12 @@ class PerfilFuncionalidadeController extends Controller
                 }
             }
 
-            return view('perfil-funcionalidade.edit', compact('perfil', 'funcs', 'abrangencias'));
+            return view('perfil-funcionalidade.edit', compact('perfil', 'funcs'));
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            return $ex->getMessage();
+            // ErrorLogService::salvar($ex->getMessage(), 'PerfilFuncionalidadeController', 'edit');
+            // return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
 
