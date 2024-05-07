@@ -25,13 +25,8 @@ class GestaoAdministrativaController extends Controller
             }
 
             $departamentos = Departamento::where('ativo', '=', Departamento::ATIVO)->get();
-            $perfis = Perfil::where('ativo', '=', Perfil::ATIVO)->get();
-            $funcionalidades = Funcionalidade::where('ativo', '=', Funcionalidade::ATIVO)->get();
-            $entidades = Entidade::where('ativo', '=', Entidade::ATIVO)->get();
-            // $tfs = TipoFuncionalidade::where('ativo', '=', TipoFuncionalidade::ATIVO)->get();
-            $tipo_perfis = Perfil::where('id', '!=', Perfil::USUARIO_ADM)->where('ativo', '=', Perfil::ATIVO)->get();
-
-            return view('configuracao.gestao-adiministrativa.index', compact('departamentos', 'perfis', 'funcionalidades', 'tipo_perfis'));
+            
+            return view('configuracao.gestao-adiministrativa.index', compact('departamentos'));
 
         }
         catch(\Exception $ex){

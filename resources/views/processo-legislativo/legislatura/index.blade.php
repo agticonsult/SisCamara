@@ -15,44 +15,86 @@
 <h1 class="h3 mb-3">Legislaturas</h1>
 <div class="card" style="background-color:white">
     <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="heading">
-                <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
-                    Cadastro
-                </button>
-                </h5>
-            </div>
-            <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#accordion">
-                <div class="card-body">
-                    <div class="col-md-12">
-                        <form action="{{ route('processo_legislativo.legislatura.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
-                            @csrf
-                            @method('POST')
+        <div class="card-header" id="heading">
+            <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                Cadastro
+            </button>
+            </h5>
+        </div>
+        <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#accordion">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <form action="{{ route('processo_legislativo.legislatura.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                        @csrf
+                        @method('POST')
 
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Início do mandato</label>
-                                    <input type="text" class="ano form-control @error('inicio_mandato') is-invalid @enderror" name="inicio_mandato" placeholder="somente ano(XXXX)" value="{{ old('inicio_mandato') }}">
-                                    @error('inicio_mandato')
-                                        <div class="invalid-feedback">{{ $message }}</div><br>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">*Fim do mandato</label>
-                                    <input type="text" class="ano form-control @error('fim_mandato') is-invalid @enderror" name="fim_mandato" placeholder="somente ano(XXXX)" value="{{ old('fim_mandato') }}">
-                                    @error('fim_mandato')
-                                        <div class="invalid-feedback">{{ $message }}</div><br>
-                                    @enderror
-                                </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label">*Início do mandato</label>
+                                <input type="text" class="ano form-control @error('inicio_mandato') is-invalid @enderror" name="inicio_mandato" placeholder="somente ano(XXXX)" value="{{ old('inicio_mandato') }}">
+                                @error('inicio_mandato')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
-                            <br>
-                            <div class="col-md-12">
-                                <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                            <div class="form-group col-md-6">
+                                <label class="form-label">*Fim do mandato</label>
+                                <input type="text" class="ano form-control @error('fim_mandato') is-invalid @enderror" name="fim_mandato" placeholder="somente ano(XXXX)" value="{{ old('fim_mandato') }}">
+                                @error('fim_mandato')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
                             </div>
-                            <br>
-                        </form>
-                    </div>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
+                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                        </div>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background-color:white">
+    <div id="accordion">
+        <div class="card-header" id="heading">
+            <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                Cadastro
+            </button>
+            </h5>
+        </div>
+        <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#accordion">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <form action="{{ route('processo_legislativo.legislatura.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                        @csrf
+                        @method('POST')
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-label">*Início do mandato</label>
+                                <input type="text" class="ano form-control @error('inicio_mandato') is-invalid @enderror" name="inicio_mandato" placeholder="somente ano(XXXX)" value="{{ old('inicio_mandato') }}">
+                                @error('inicio_mandato')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label">*Fim do mandato</label>
+                                <input type="text" class="ano form-control @error('fim_mandato') is-invalid @enderror" name="fim_mandato" placeholder="somente ano(XXXX)" value="{{ old('fim_mandato') }}">
+                                @error('fim_mandato')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
+                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                        </div>
+                        <br>
+                    </form>
                 </div>
             </div>
         </div>

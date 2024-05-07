@@ -44,6 +44,19 @@
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>
+                            <div class="form-group col-md-12">
+                                <label class="form-label">*Perfil</label>
+                                <select name="id_perfil[]" class="form-control select2 @error('id_perfil') is-invalid @enderror" multiple>
+                                    @foreach ($perfils as $pf)
+                                        <option value="{{ $pf->id }}">
+                                            {{ $pf->descricao }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('id_perfil')
+                                    <div class="invalid-feedback">{{ $message }}</div><br>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -69,25 +82,6 @@
                                 <label class="form-label">*Confirme a senha (mínimo 6 caracteres e máximo 35 caracteres)</label>
                                 <input class="form-control @error('confirmacao') is-invalid @enderror" type="password" name="confirmacao" id="confirmacao" placeholder="Confirme a senha">
                                 @error('confirmacao')
-                                    <div class="invalid-feedback">{{ $message }}</div><br>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-label">*Perfil</label>
-                                <select name="id_perfil[]" class="form-control select2 @error('id_perfil') is-invalid @enderror" multiple>
-                                    @foreach ($perfils as $pf)
-                                        <option value="{{ $pf->id }}">
-                                            {{ $pf->descricao }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('id_perfil')
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>

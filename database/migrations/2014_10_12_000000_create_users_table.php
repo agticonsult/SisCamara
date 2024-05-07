@@ -31,6 +31,10 @@ class CreateUsersTable extends Migration
             $table->bigInteger('id_pessoa')->unsigned()->nullable();
             $table->foreign('id_pessoa')->references('id')->on('pessoas');
 
+            // grupo
+            $table->integer('id_grupo')->unsigned()->nullable();
+            $table->foreign('id_grupo')->references('id')->on('grupos');
+
             // perfil
             // $table->integer('id_perfil')->unsigned();
             // $table->foreign('id_perfil')->references('id')->on('perfils');

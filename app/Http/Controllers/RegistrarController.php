@@ -8,6 +8,7 @@ use App\Mail\ConfirmacaoEmail;
 use App\Models\ComposicaoFamiliar;
 use App\Models\Email;
 use App\Models\ErrorLog;
+use App\Models\Grupo;
 use App\Models\Municipio;
 use App\Models\Perfil;
 use App\Models\PerfilUser;
@@ -88,6 +89,7 @@ class RegistrarController extends Controller
 
             $novoUsuario = User::create($request->validated() + [
                 'id_pessoa' => $novaPessoa->id,
+                'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
             ]);
@@ -130,6 +132,7 @@ class RegistrarController extends Controller
 
             $novoUsuario = User::create($request->validated() + [
                 'id_pessoa' => $novaPessoa->id,
+                'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
             ]);

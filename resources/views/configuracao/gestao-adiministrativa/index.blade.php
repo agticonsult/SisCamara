@@ -13,6 +13,16 @@
 @include('errors.alerts')
 {{-- @include('errors.errors') --}}
 
+@if (!isset($departamentos[0]))
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+        <div class="alert-message">
+            <strong>Sem DEPARTAMENTO(S) cadastrado!</strong>
+            <a href="{{ route('configuracao.departamento.index') }}">Clique aqui para cadastrar</a>
+        </div>
+    </div>
+@endif
+
 <h1 class="h3 mb-3">Gestão Administrativa</h1>
 
 <div id="accordion">

@@ -27,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'cpf', 'cnpj', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'importado', 'id_importacao', 'tentativa_senha',
+        'cpf', 'cnpj', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'id_grupo' ,'importado', 'id_importacao', 'tentativa_senha',
         'bloqueadoPorTentativa', 'dataBloqueadoPorTentativa', 'envio_email_recuperacao', 'envio_email_confirmacaoApi',
         'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'validado', 'validadoPorUsuario',
         'validadoEm', 'incluso', 'incluidoPorUsuario', 'incluidoEm', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
@@ -133,6 +133,10 @@ class User extends Authenticatable
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class, 'id_pessoa');
+    }
+    public function grupo()
+    {
+        return $this->belongsTo(Grupo::class, 'id_grupo');
     }
     public function inativadoPor()
     {

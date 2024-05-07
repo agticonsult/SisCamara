@@ -12,8 +12,7 @@ class Grupo extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'nome', 'id_finalidade', 'cadastradoPorUsuario',
-        'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'nome', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -22,6 +21,11 @@ class Grupo extends Model implements Auditable
 
     const ATIVO = 1;
     const INATIVO = 0;
+
+    const ADMINISTRADOR = 1;
+    const INTERNO = 2;
+    const EXTERNO = 3;
+    const POLITICO = 4;
 
     public function cad_usuario()
     {

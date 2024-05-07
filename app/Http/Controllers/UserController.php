@@ -9,6 +9,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\Agricultor;
 use App\Models\ErrorLog;
 use App\Models\Estado;
+use App\Models\Grupo;
 use App\Models\Municipio;
 use App\Models\Perfil;
 use App\Models\PerfilUser;

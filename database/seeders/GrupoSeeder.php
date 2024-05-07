@@ -16,9 +16,10 @@ class GrupoSeeder extends Seeder
     public function run()
     {
         DB::table('grupos')->insert([
+            ['nome' => 'Administrador', 'ativo' => Grupo::ATIVO],
             ['nome' => 'Interno', 'ativo' => Grupo::ATIVO],
             ['nome' => 'Externo', 'ativo' => Grupo::ATIVO],
-            ['nome' => 'Político', 'ativo' => Grupo::ATIVO],
+            ['nome' => 'Político', 'ativo' => Grupo::ATIVO]
         ]);
     }
 }
