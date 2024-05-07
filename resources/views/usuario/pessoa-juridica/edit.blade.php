@@ -86,7 +86,7 @@
                 @csrf
                 @method('POST')
 
-                <h5>Dados Pessoais</h5>
+                <h5>Dados Jurídico</h5>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">

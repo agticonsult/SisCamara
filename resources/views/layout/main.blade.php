@@ -189,7 +189,7 @@
                     @endif
 
                     {{-- Perfils e Funcionalidades --}}
-                    @if (Auth::user()->temPermissao('Perfil', 'Listagem') == 1)
+                    {{-- @if (Auth::user()->temPermissao('Perfil', 'Listagem') == 1)
                         <li class="sidebar-item">
                             <a href="#perfis" data-toggle="collapse" class="sidebar-link collapsed">
                                 <i class="fas fa-user-cog"></i>
@@ -204,7 +204,7 @@
                                 </li>
                             </ul>
                         </li>
-                    @endif
+                    @endif --}}
 
                     {{-- Usuários --}}
                     @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
@@ -251,7 +251,8 @@
                                 Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
                                 Route::current()->getPrefix() == 'configuracao/publicacao-ato' ||
                                 Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ||
-                                Route::current()->getPrefix() == 'configuracao/tipo-documento'
+                                Route::current()->getPrefix() == 'configuracao/tipo-documento' ||
+                                Route::current()->getPrefix() == 'configuracao/gestao-administrativa'
                                     ? 'active'
                                     : 'collapse' }}">
                                 <li
@@ -295,12 +296,13 @@
                                         href="{{ route('configuracao.tipo_documento.index') }}">Tipo de Documento
                                     </a>
                                 </li>
-                                {{-- <li
-                                    class="sidebar-item ">
+                                <li
+                                    class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/gestao-administrativa' ? 'active' : null }}">
                                     <a class="sidebar-link "
-                                        href="#">Aprovação de Usuários Externos
+                                        href="{{ route('configuracao.gestao_administrativa.index') }}">Gestão Administrativa
                                     </a>
-                                </li> --}}
+                                </li>
+
                             </ul>
                         </li>
                     @endif

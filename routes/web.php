@@ -20,6 +20,7 @@ use App\Http\Controllers\FinalidadeGrupoController;
 use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
 use App\Http\Controllers\GerenciamentoVotacaoController;
+use App\Http\Controllers\GestaoAdministrativaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\LegislaturaController;
@@ -396,6 +397,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
             // Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
+        });
+
+        //Gestão administrativa
+        Route::group(['prefix' => '/gestao-administrativa', 'as' => 'gestao_administrativa.'], function() {
+            Route::get('/', [GestaoAdministrativaController::class, 'index'])->name('index');
         });
 
     });
