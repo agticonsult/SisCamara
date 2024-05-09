@@ -39,22 +39,22 @@ class PessoaUserTableSeeder extends Seeder
             [
                 'id' => $uuid1, 'id_pessoa' => 1, 'id_grupo' => Grupo::ADMINISTRADOR, 'cpf' => '00000000000', 'cnpj' => NULL, 'email' => 'suporte@agile.inf.br', 'password' => Hash::make('sup2011@'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
-                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
             [
                 'id' => $uuid2, 'id_pessoa' => 2, 'id_grupo' => Grupo::POLITICO, 'cpf' => '11111111111', 'cnpj' => NULL, 'email' => 'funcionario1@funcionario.inf.br', 'password' => Hash::make('123456'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
-                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
             [
                 'id' => $uuid3, 'id_pessoa' => 3, 'id_grupo' => Grupo::EXTERNO, 'cpf' => '22222222222', 'cnpj' => NULL, 'email' => 'cliente1@cliente.inf.br', 'password' => Hash::make('123456'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
-                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
             [
                 'id' => $uuid4, 'id_pessoa' => 4, 'id_grupo' => Grupo::INTERNO, 'cpf' => NULL, 'cnpj' => '33333333333333', 'email' => 'suporte@empresa.inf.br', 'password' => Hash::make('123456'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
-                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO
+                'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ]
         ]);
 

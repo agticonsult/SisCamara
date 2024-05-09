@@ -51,4 +51,13 @@ class Departamento extends Model implements Auditable
     {
         return Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
     }
+    public function estaVinculadoGestaoAdm()
+    {
+        $pertence = GestaoAdministrativa::where('id_departamento', '=', $this->id)->where('ativo', '=', GestaoAdministrativa::ATIVO)->first();
+
+        if (!$pertence) {
+            return false;
+        }
+        return true;
+    }
 }

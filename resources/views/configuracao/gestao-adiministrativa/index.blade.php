@@ -25,103 +25,67 @@
 
 <h1 class="h3 mb-3">Gestão Administrativa</h1>
 
-<div id="accordion">
-    <div class="card">
-        <div class="card-header" id="heading">
-            <h5 class="mb-0">
-            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
-                Recebimento do documento do usuário externo
-            </button>
-            </h5>
-        </div>
-        <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#accordion">
-            <div class="card-body">
-                <form action="#" method="POST" class="form_prevent_multiple_submits">
-                    @csrf
-                    @method('POST')
+<div class="card">
+    <div class="card-body">
+        <form action="{{ route('configuracao.gestao_administrativa.store') }}" method="POST" class="form_prevent_multiple_submits">
+            @csrf
+            @method('POST')
 
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">*Departamento</label>
-                                <select name="id_departamento" class="form-control select2">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($departamentos as $departamento)
-                                        <option value="{{ $departamento->id }}">
-                                            {{ $departamento->descricao }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+            <div class="col-md-12">
+                <h5>Aprovação de cadastro e recebimento do documento de Usuário Externo</h5>
+                <hr>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Departamento</label>
+                        <select name="id_departamento" class="form-control select2 @error('id_departamento') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($departamentosArray as $dep)
+                                <option value="{{ $dep->id }}">
+                                    {{ $dep->descricao }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('id_departamento')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
-
-                    <div class="col-md-12">
-                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Aprovação de cadastro</label>
+                        <select name="aprovacaoCadastro" class="form-control @error('aprovacaoCadastro') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                        @error('aprovacaoCadastro')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
                     </div>
-                </form>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">*Recebimento de documento</label>
+                        <select name="recebimentoDocumento" class="form-control @error('recebimentoDocumento') is-invalid @enderror">
+                            <option value="" selected disabled>--Selecione--</option>
+                            <option value="1">Sim</option>
+                            <option value="0">Não</option>
+                        </select>
+                        @error('recebimentoDocumento')
+                            <div class="invalid-feedback">{{ $message }}</div><br>
+                        @enderror
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="col-md-12">
+                <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+            </div>
+        </form>
     </div>
 </div>
 
-<div id="accordion3">
-    <div class="card">
-        <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Aprovaçao de cadastro
-            </button>
-            </h5>
-        </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
-            <div class="card-body">
-                <form action="#" method="POST" class="form_prevent_multiple_submits">
-                    @csrf
-                    @method('POST')
-
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label class="form-label">*Departamento</label>
-                                    <select name="id_departamento_aprovacao" class="form-control select2">
-                                        <option value="" selected disabled>--Selecione--</option>
-                                        @foreach ($departamentos as $departamento)
-                                            <option value="{{ $departamento->id }}">
-                                                {{ $departamento->descricao }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{-- <div class="form-group col-md-8">
-                                    <label class="form-label">*Funcionalidade</label>
-                                    <select name="id_funcionalidade[]" id="id_funcionalidade" class="form-control" multiple>
-                                        @foreach ($funcionalidades as $f)
-                                            <option value="{{ $f->id }}">
-                                                {{ $f->entidade->descricao }} -
-                                                {{ $f->id_tipo_funcionalidade != null ? $f->tipo_funcionalidade->descricao : 'tipo de funcionalidade não informada' }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div> --}}
-                            </div>
-                        </div>
-
-                    <div class="col-md-12">
-                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-{{-- <div id="accordion2">
+<div id="accordion2">
     <div class="card">
         <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Listagem de Perfis
+                    Listagem
                 </button>
             </h5>
         </div>
@@ -131,23 +95,27 @@
                     <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                         <thead>
                             <tr>
-                                <th scope="col">Perfil</th>
+                                <th scope="col">Departamento</th>
+                                <th scope="col">Aprovação de cadastro</th>
+                                <th scope="col">Recebimento do documento</th>
                                 <th scope="col">Cadastrado por</th>
                                 <th scope="col">Editar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pfs as $pf)
+                            @foreach ($gestoesAdm as $gestaoAdm)
                                 <tr>
                                     <td>
-                                        {{ $pf->descricao != null ? $pf->descricao : 'não informado' }}
+                                        {{ $gestaoAdm->id_departamento != null ? $gestaoAdm->departamento->descricao : 'não informado' }}
+                                    </td>
+                                    <td>{{ $gestaoAdm->aprovacaoCadastro == 1 ? 'Sim' : 'Não' }}</td>
+                                    <td>{{ $gestaoAdm->recebimentoDocumento == 1 ? 'Sim' : 'Não' }}</td>
+                                    <td>
+                                        <strong>{{ $gestaoAdm->cadastradoPorUsuario != null ? $gestaoAdm->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
+                                        em <strong>{{ $gestaoAdm->created_at != null ? $gestaoAdm->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                     </td>
                                     <td>
-                                        <strong>{{ $pf->cadastradoPorUsuario != null ? $pf->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
-                                        em <strong>{{ $pf->created_at != null ? $pf->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('perfil_funcionalidade.edit', $pf->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                        <a href="#" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -157,7 +125,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 <script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>

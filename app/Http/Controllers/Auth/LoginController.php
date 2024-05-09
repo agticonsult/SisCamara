@@ -26,16 +26,19 @@ class LoginController extends Controller
     public function autenticacao(Request $request)
     {
         $user = User::where('email', '=', $request->email)
-            ->where('ativo', '=', 1)
-            ->select('id', 'cpf', 'cnpj','email', 'bloqueadoPorTentativa', 'tentativa_senha', 'confirmacao_email')
+            ->where('ativo', '=', User::ATIVO)
+            ->select('id', 'cpf', 'cnpj','email', 'bloqueadoPorTentativa', 'tentativa_senha', 'confirmacao_email', 'cadastroAprovado')
             ->first();
 
         if($user){
-            if($user->bloqueadoPorTentativa == 1){
+            if($user->bloqueadoPorTentativa == User::BLOQUEADO_TENTATIVA_EXCESSO){
                 return redirect()->route('login')->with('erro', 'Usuário bloqueado por excesso de tentativas.')->withInput();
             }
-            if($user->confirmacao_email == 0 || $user->confirmacao_email == false){
+            if($user->confirmacao_email == User::EMAIL_NAO_CONFIRMADO){
                 return redirect()->back()->with('erro', 'Não foi confirmado o cadastro pelo link enviado no email.')->withInput();
+            }
+            if($user->cadastroAprovado == User::USUARIO_REPROVADO){
+                return redirect()->back()->with('warning', 'Cadastro não foi aprovado ainda! Aguarde a confirmação.')->withInput();
             }
 
             // $array = ['cpf' => preg_replace('/[^0-9]/', '', $request->cpf), 'password' => $request->password];
@@ -47,7 +50,7 @@ class LoginController extends Controller
                 $user->tentativa_senha++;
 
                 if($user->tentativa_senha == 3){
-                    $user->bloqueadoPorTentativa = 1;
+                    $user->bloqueadoPorTentativa = User::BLOQUEADO_TENTATIVA_EXCESSO;
                     $user->dataBloqueadoPorTentativa = Carbon::now();
                 }
                 $user->save();
@@ -56,8 +59,8 @@ class LoginController extends Controller
             };
 
             //Caso não seja excedido as tentativas de acesso, será zerado ou nulos os atributos abaixo e salva
-            $user->tentativa_senha = 0;
-            $user->bloqueadoPorTentativa = 0;
+            $user->tentativa_senha = User::NAO_BLOQUEADO_TENTATIVA;
+            $user->bloqueadoPorTentativa = User::NAO_BLOQUEADO_TENTATIVA;
             $user->dataBloqueadoPorTentativa = null;
             $user->save();
 

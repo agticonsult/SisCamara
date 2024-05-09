@@ -188,24 +188,6 @@
                         </li>
                     @endif
 
-                    {{-- Perfils e Funcionalidades --}}
-                    {{-- @if (Auth::user()->temPermissao('Perfil', 'Listagem') == 1)
-                        <li class="sidebar-item">
-                            <a href="#perfis" data-toggle="collapse" class="sidebar-link collapsed">
-                                <i class="fas fa-user-cog"></i>
-                                Perfis
-                            </a>
-                            <ul id="perfis"
-                                class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/perfil-funcionalidade' ? 'active' : 'collapse' }}">
-                                <li
-                                    class="sidebar-item {{ Route::current()->getPrefix() == '/perfil-funcionalidade' ? 'active' : null }}">
-                                    <a class="sidebar-link " href="{{ route('perfil_funcionalidade.index') }}">Perfil
-                                        e Funcionalidade</a>
-                                </li>
-                            </ul>
-                        </li>
-                    @endif --}}
-
                     {{-- Usuários --}}
                     @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
                         <li class="sidebar-item">

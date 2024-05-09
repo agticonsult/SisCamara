@@ -153,9 +153,9 @@ class AgentePoliticoController extends Controller
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'id_pessoa' => $novaPessoa->id,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
-                'validado' => User::USUARIO_VALIDADO,
-                'validadoPorUsuario' => Auth::user()->id,
-                'validadoEm' => Carbon::now()
+                // 'validado' => User::USUARIO_VALIDADO,
+                // 'validadoPorUsuario' => Auth::user()->id,
+                // 'validadoEm' => Carbon::now()
             ]);
 
             PerfilUser::create([

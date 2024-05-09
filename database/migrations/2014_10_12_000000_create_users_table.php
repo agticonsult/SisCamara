@@ -40,8 +40,8 @@ class CreateUsersTable extends Migration
             // $table->foreign('id_perfil')->references('id')->on('perfils');
 
             // importacao
-            $table->boolean('importado')->nullable();
-            $table->bigInteger('id_importacao')->nullable();
+            // $table->boolean('importado')->nullable();
+            // $table->bigInteger('id_importacao')->nullable();
 
             // tentativa de login
             $table->integer('tentativa_senha')->nullable()->default(0); // realiza a contagem de tentativa de senha
@@ -57,15 +57,20 @@ class CreateUsersTable extends Migration
             $table->boolean('confirmacao_email')->nullable(); // cadastro confirmado ou nao
             $table->timestamp('dataHoraConfirmacaoEmail')->nullable(); // datahora de confirmacao
 
-            // validacao
-            $table->boolean('validado')->nullable();
-            $table->uuid('validadoPorUsuario')->nullable();
-            $table->timestamp('validadoEm')->nullable();
+            // // validacao
+            // $table->boolean('validado')->nullable();
+            // $table->uuid('validadoPorUsuario')->nullable();
+            // $table->timestamp('validadoEm')->nullable();
+
+            // aprovação de cadastro
+            $table->boolean('cadastroAprovado')->nullable();
+            $table->uuid('aprovadoPorUsuario')->nullable();
+            $table->timestamp('aprovadoEm')->nullable();
 
             // incluso por outro usuario
-            $table->boolean('incluso')->nullable();
-            $table->uuid('incluidoPorUsuario')->nullable();
-            $table->timestamp('incluidoEm')->nullable();
+            // $table->boolean('incluso')->nullable();
+            // $table->uuid('incluidoPorUsuario')->nullable();
+            // $table->timestamp('incluidoEm')->nullable();
 
             // ativo
             $table->uuid('inativadoPorUsuario')->nullable();

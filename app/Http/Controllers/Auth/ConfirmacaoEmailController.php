@@ -9,6 +9,7 @@ use App\Models\Email;
 use App\Models\ErrorLog;
 use App\Models\User;
 use App\Services\EmailService;
+use App\Services\ErrorLogService;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;

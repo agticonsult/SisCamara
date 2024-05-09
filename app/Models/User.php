@@ -27,10 +27,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'cpf', 'cnpj', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'id_grupo' ,'importado', 'id_importacao', 'tentativa_senha',
+        'cpf', 'cnpj', 'password', 'email', 'telefone_celular', 'telefone_celular2', 'id_pessoa', 'id_grupo', 'tentativa_senha',
         'bloqueadoPorTentativa', 'dataBloqueadoPorTentativa', 'envio_email_recuperacao', 'envio_email_confirmacaoApi',
-        'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'validado', 'validadoPorUsuario',
-        'validadoEm', 'incluso', 'incluidoPorUsuario', 'incluidoEm', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
+        'envio_email_confirmacao', 'confirmacao_email', 'dataHoraConfirmacaoEmail', 'cadastroAprovado', 'aprovadoPorUsuario', 'aprovadoEm', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     /**
@@ -48,8 +47,10 @@ class User extends Authenticatable
     const EMAIL_NAO_CONFIRMADO = 0;
     const NAO_BLOQUEADO_TENTATIVA = 0;
     const BLOQUEADO_TENTATIVA_EXCESSO = 1;
-    const USUARIO_VALIDADO = 1;
-    const USUARIO_NAO_VALIDADO = 0;
+    const USUARIO_APROVADO = 1;
+    const USUARIO_REPROVADO = 0;
+    // const USUARIO_VALIDADO = 1;
+    // const USUARIO_NAO_VALIDADO = 0;
 
     /**
      * The attributes that should be cast to native types.

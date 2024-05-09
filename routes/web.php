@@ -402,6 +402,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Gestão administrativa
         Route::group(['prefix' => '/gestao-administrativa', 'as' => 'gestao_administrativa.'], function() {
             Route::get('/', [GestaoAdministrativaController::class, 'index'])->name('index');
+            Route::post('/store', [GestaoAdministrativaController::class, 'store'])->name('store');
         });
 
     });

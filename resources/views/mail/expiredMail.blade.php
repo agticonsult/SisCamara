@@ -38,7 +38,7 @@
                             <div class="text-center mt-4">
                                 <h1 class="h2">Confirmação de e-mail com sucesso</h1>
                                 <p>Aguarde 10 segundos para ser redirecionado para página de Login</p>
-
+                                <p><strong>AGUARDE A CONFIRMAÇÃO DE ACESSO DO SISTEMA. O CADASTRO SERÁ APROVADO.</strong></p>
                                 <h2 id="timer"></h2>
 
                                 @if (session())

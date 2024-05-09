@@ -92,6 +92,7 @@ class RegistrarController extends Controller
                 'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
+                'cadastroAprovado' => User::USUARIO_REPROVADO,
             ]);
 
             PerfilUser::create([
@@ -135,6 +136,7 @@ class RegistrarController extends Controller
                 'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
+                'cadastroAprovado' => User::USUARIO_REPROVADO,
             ]);
 
             PerfilUser::create([
