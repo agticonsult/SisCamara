@@ -197,6 +197,15 @@ class User extends Authenticatable
 
         return false;
     }
+    public function permissaoAprovacaoUsuario()
+    {
+        $usuarioVinculadoDepartamento = DepartamentoUsuario::Where('id_user', $this->id)->where('ativo', DepartamentoUsuario::ATIVO)->first();
+
+        if (!$usuarioVinculadoDepartamento) {
+            return false;
+        }
+        return true;
+    }
     public function ehAgentePolitico()
     {
         $eh = AgentePolitico::where('id_user', '=', $this->id)->where('ativo', '=', AgentePolitico::ATIVO)->first();

@@ -311,14 +311,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('/buscar', [AuditController::class, 'buscar'])->name('buscar');
     });
 
-    // Pessoa
-    // Route::group(['prefix' => '/pessoa', 'as' => 'pessoa.'], function() {
-    //     Route::get('/index', [PessoaController::class, 'index'])->name('index');
-    //     Route::get('/create', [PessoaController::class, 'create'])->name('create');
-    //     Route::post('/store', [PessoaController::class, 'store'])->name('store');
-    //     Route::get('/edit/{id}', [PessoaController::class, 'edit'])->name('edit');
-    //     Route::post('/update/{id}', [PessoaController::class, 'update'])->name('update');
-    // });
+    // Aprovação de cadastros de usuários externos
+    Route::group(['prefix' => '/aprovacao-cadastro-usuario', 'as' => 'aprovacao_cadastro_usuario.'], function() {
+        Route::get('/usuarios', [GestaoAdministrativaController::class, 'aprovacaoCadastroUsuario'])->name('aprovacaoCadastroUsuario');
+        Route::post('/store', [GestaoAdministrativaController::class, 'storeCadastroUsuario'])->name('storeCadastroUsuario');
+    });
 
     // Configuração
     Route::group(['prefix' => '/configuracao', 'as' => 'configuracao.'], function() {
@@ -403,6 +400,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => '/gestao-administrativa', 'as' => 'gestao_administrativa.'], function() {
             Route::get('/', [GestaoAdministrativaController::class, 'index'])->name('index');
             Route::post('/store', [GestaoAdministrativaController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [GestaoAdministrativaController::class, 'edit'])->name('edit');
         });
 
     });

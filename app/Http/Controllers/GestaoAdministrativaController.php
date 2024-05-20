@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RecebimentoDocFormRequest;
-use App\Http\Requests\RecimentoDocFormRequest;
 use App\Models\Departamento;
-use App\Models\Entidade;
-use App\Models\Funcionalidade;
 use App\Models\GestaoAdministrativa;
-use App\Models\Perfil;
+use App\Models\User;
 use App\Services\ErrorLogService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,6 +73,80 @@ class GestaoAdministrativaController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'storeRecebimento');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function storeCadastroUsuario(Request $request)
+    {
+        try{
+            if(Auth::user()->temPermissao('GestaoAdministrativa', 'Cadastro') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            foreach ($request->usuario_selecionados as $usuario) {
+                $usuarioEncontrado = User::where('id', '=', $usuario)->where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->first();
+                if ($usuarioEncontrado) {
+                    $usuarioEncontrado->update([
+                        'cadastroAprovado' => User::USUARIO_APROVADO,
+                        'aprovadoPorUsuario' => Auth::user()->id,
+                        'aprovadoEm' => Carbon::now()
+                    ]);
+                }
+            }
+
+            return redirect()->route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario')->with('success', 'Seleção realizada com sucesso.');
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'store');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function aprovacaoCadastroUsuario()
+    {
+        try{
+            if(Auth::user()->temPermissao('GestaoAdministrativa', 'Listagem') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->get();
+
+            return view('configuracao.gestao-adiministrativa.aprovacao-cadastro.aprovacaoCadastro', compact('usuarios'));
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'aprovacaoCadastroUsuario');
+            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        }
+    }
+
+    public function edit($id)
+    {
+        try{
+            if(Auth::user()->temPermissao('GestaoAdministrativa', 'Alteração') != 1){
+                return redirect()->back()->with('erro', 'Acesso negado.');
+            }
+
+            $alterarGestaoAdm = GestaoAdministrativa::where('id', '=', $id)->where('ativo', '=', GestaoAdministrativa::ATIVO)->first();
+            if (!$alterarGestaoAdm) {
+                return redirect()->back()->with('erro', 'Não foi encontrado Gestão Administrativa.');
+            }
+
+            $departamentos = Departamento::where('ativo', '=', Departamento::ATIVO)->get();
+            $departamentosArray = array();
+            foreach ($departamentos as $departamento) {
+                if ($departamento->estaVinculadoGestaoAdm() == false) {
+                    array_push($departamentosArray, $departamento);
+                }
+            }
+
+            return view('configuracao.gestao-adiministrativa.edit', compact('alterarGestaoAdm', 'departamentosArray'));
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'edit');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }

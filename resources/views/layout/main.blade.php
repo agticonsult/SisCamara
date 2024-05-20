@@ -215,6 +215,15 @@
                         </li>
                     @endif
 
+                    @if(Auth::user()->permissaoAprovacaoUsuario())
+                        <li class="sidebar-item {{ Route::current()->uri == 'aprovacao-cadastro-usuario/usuarios' ? 'active' : null }}">
+                            <a href="{{ route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario') }}" class="sidebar-link">
+                                <i class="fas fa-fw fa-user"></i>
+                                Aprovação de cadastro de Usuários Externos
+                            </a>
+                        </li>
+                    @endif
+
                     {{-- Configuração --}}
                     @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||
                             Auth::user()->temPermissao('Filesize', 'Listagem') == 1 ||

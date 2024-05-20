@@ -115,7 +115,7 @@
                                         em <strong>{{ $gestaoAdm->created_at != null ? $gestaoAdm->created_at->format('d/m/Y H:i:s') : 'não informado' }}</strong>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                        <a href="{{ route('configuracao.gestao_administrativa.edit', $gestaoAdm->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
