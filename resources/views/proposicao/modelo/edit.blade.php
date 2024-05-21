@@ -5,6 +5,11 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <style>
     .error{
         color:red
@@ -29,21 +34,22 @@
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12 mb-3">
                         <label class="form-label" for="body">Conteúdo</label>
-                        <textarea name="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="15">{{ $modelo_proposicao->conteudo }}</textarea>
+                        <textarea name="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="15" id="summernote">{{ $modelo_proposicao->conteudo }}</textarea>
                         @error('conteudo')
                             <div class="invalid-feedback">{{ $message }}</div><br>
                         @enderror
                     </div>
                 </div>
-
-                <br>
-                <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('proposicao.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                        <a href="{{ route('proposicao.modelo.index') }}" class="btn btn-light m-1">Voltar</a>
+                    </div>
                 </div>
-                <br>
             </form>
         </div>
     </div>
@@ -52,38 +58,24 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="{{asset('js/jquery.validate.js')}}"></script>
-<script src="{{ asset('js/datatables.js') }}"></script>
-<script src="{{ asset('js/datatables.min.js') }}"></script>
-<script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
-<script src="https://cdn.tiny.cloud/1/hh6dctatzptohe71nfevw76few6kevzc4i1q1utarze7tude/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
 <script>
-    tinymce.init({
-        selector: 'textarea',
-        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-        toolbar_mode: 'floating',
-        entity_encoding : "raw",
-        force_br_newlines : false,
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        spellchecker_language: 'br',
-        language: 'pt_BR',
+    $('#summernote').summernote({
+        height: 500,
+        minHeight: null,
+        maxHeight: null,
+        focus: true,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['insert', ['table', 'hr']],
+            // ['view', ['fullscreen']],
+            ['help', ['help']],
+        ]
     });
-
-    $(document).ready(function() {
-
-        $('.select2').select2({
-            language: {
-                noResults: function() {
-                    return "Nenhum resultado encontrado";
-                }
-            },
-            closeOnSelect: true,
-            width: '100%',
-        });
-
-    });
-
 </script>
-
 @endsection
