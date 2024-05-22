@@ -2,16 +2,6 @@
 
 @section('content')
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css"
-        integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ=="
-        crossorigin="anonymous" />
-    <style>
-        .error {
-            color: red
-        }
-    </style>
     @include('errors.alerts')
     @include('errors.errors')
 
@@ -185,9 +175,9 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/datatables.min.js') }}"></script>
-    <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
+@endsection
 
+@section('scripts')
     <script>
         $('.cpf').mask('000.000.000-00');
         $('.cnpj').mask('00.000.000/0000-00');
@@ -212,5 +202,4 @@
             });
         });
     </script>
-
 @endsection

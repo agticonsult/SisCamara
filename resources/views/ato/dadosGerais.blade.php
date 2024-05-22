@@ -1,7 +1,5 @@
-<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="card" style="background-color:white">
-
     <div class="card-body">
         <div class="col-md-12">
             <form action="{{ route('ato.dados_gerais.update', $ato->id) }}" id="form" method="POST" class="form_prevent_multiple_submits" enctype="multipart/form-data">

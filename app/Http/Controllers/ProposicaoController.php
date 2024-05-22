@@ -54,10 +54,6 @@ class ProposicaoController extends Controller
         }
     }
 
-    public function show($id){
-
-    }
-
     public function store(ProposicaoStoreRequest $request)
     {
         try {

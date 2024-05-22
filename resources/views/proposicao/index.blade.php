@@ -2,16 +2,8 @@
 
 @section('content')
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.4/select2-bootstrap.min.css" integrity="sha512-eNfdYTp1nlHTSXvQD4vfpGnJdEibiBbCmaXHQyizI93wUnbCZTlrs1bUhD7pVnFtKRChncH5lpodpXrLpEdPfQ==" crossorigin="anonymous" />
-<style>
-    .error{
-        color:red
-    }
-</style>
 @include('errors.alerts')
-@include('errors.errors')
+{{-- @include('errors.errors') --}}
 
 <h1 class="h3 mb-3">Proposições</h1>
 <div class="card" style="background-color:white">
@@ -89,33 +81,31 @@
 
 </div>
 
-<script src="{{ asset('js/datatables.min.js') }}"></script>
-<script src="{{asset('jquery-mask/src/jquery.mask.js')}}"></script>
+@endsection
 
-<script>
+@section('scripts')
+    <script>
 
-    $('.cpf').mask('000.000.000-00');
+        $('.cpf').mask('000.000.000-00');
 
-    $(document).ready(function() {
-
-        $('#datatables-reponsive').dataTable({
-            "oLanguage": {
-                "sLengthMenu": "Mostrar _MENU_ registros por página",
-                "sZeroRecords": "Nenhum registro encontrado",
-                "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
-                "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
-                "sInfoFiltered": "(filtrado de _MAX_ registros)",
-                "sSearch": "Pesquisar: ",
-                "oPaginate": {
-                    "sFirst": "Início",
-                    "sPrevious": "Anterior",
-                    "sNext": "Próximo",
-                    "sLast": "Último"
-                }
-            },
+        $(document).ready(function() {
+            $('#datatables-reponsive').dataTable({
+                "oLanguage": {
+                    "sLengthMenu": "Mostrar _MENU_ registros por página",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                    "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                    "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                    "sSearch": "Pesquisar: ",
+                    "oPaginate": {
+                        "sFirst": "Início",
+                        "sPrevious": "Anterior",
+                        "sNext": "Próximo",
+                        "sLast": "Último"
+                    }
+                },
+            });
         });
-    });
 
-</script>
-
+    </script>
 @endsection
