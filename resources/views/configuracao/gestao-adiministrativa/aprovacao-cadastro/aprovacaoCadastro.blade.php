@@ -1,5 +1,19 @@
 @extends('layout.main')
 
+<style>
+    /* Define a classe para o estado selecionado */
+    .selected {
+        background-color: blue;
+        color: white;
+    }
+    /* Opcional: Ajustar a cor do texto para branco quando selecionado */
+    .selected td {
+        color: white;
+    }
+    .selectable td {
+        cursor: pointer;
+    }
+</style>
 @section('content')
 
     @include('errors.alerts')
@@ -21,7 +35,7 @@
                     <div class="table-responsive">
                         <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
                             <thead class="table-light">
-                                <tr>
+                                <tr class="selectable">
                                     <th scope="col">Nome</th>
                                     <th scope="col">CPF/CNPJ</th>
                                     <th scope="col">Email</th>
@@ -33,7 +47,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($usuarios as $usuario)
-                                    <tr>
+                                    <tr class="selectable">
                                         <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
                                         <td class="masc">
                                             @if ($usuario->pessoa->pessoaJuridica == 1)
@@ -48,14 +62,14 @@
                                         <td>
                                             <strong>{{ $usuario->created_at != null ? $usuario->created_at->format('d/m/Y H:i:s') : 'sem registro' }}</strong>
                                         </td>
-                                        <td>
+                                        <td style="text-align: center">
                                             <input type="checkbox" name="usuario_selecionados[]" value="{{ $usuario->id }}">
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
+                    </div><br>
                     <div class="row">
                         <div class="col-md-12">
                             <button type="submit" class="button_submit btn btn-primary">Salvar</button>
@@ -74,6 +88,26 @@
         $('.cnpj').mask('00.000.000/0000-00');
 
         $(document).ready(function() {
+
+            // Evento de clique no <td> dentro de uma linha
+            $('.selectable').on('click', 'td', function() {
+                var tr = $(this).closest('tr');
+                var checkbox = tr.find('input[type="checkbox"]');
+
+                // Alternar estado do checkbox
+                checkbox.prop('checked', !checkbox.prop('checked'));
+
+                // Alternar a classe 'selected' na linha <tr>
+                tr.toggleClass('selected', checkbox.prop('checked'));
+            });
+
+            // Para garantir que o clique direto no checkbox também funcione
+            $('input[type="checkbox"]').on('click', function(e) {
+                e.stopPropagation(); // Previne que o clique no checkbox também acione o clique no <tr>
+
+                var tr = $(this).closest('tr');
+                tr.toggleClass('selected', this.checked);
+            });
 
             $('.select2').select2({
                 language: {

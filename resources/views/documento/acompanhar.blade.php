@@ -282,45 +282,44 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $('#conteudo').trumbowyg({
+            lang: 'pt_br',
+        }).trumbowyg('disable'); // Desabilita a edição, deixando apenas leitura
 
-<script>
-    $('#conteudo').trumbowyg({
-        lang: 'pt_br',
-    }).trumbowyg('disable'); // Desabilita a edição, deixando apenas leitura
+        $(document).ready(function() {
+            $('#datatables-reponsive').DataTable({
+                order: [],
+                columnDefs: [
+                    { orderable: false, targets: '_all' }
+                ],
+                oLanguage: {
+                    sLengthMenu: "Mostrar _MENU_ registros por página",
+                    sZeroRecords: "Nenhum registro encontrado",
+                    sInfo: "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                    sInfoEmpty: "Mostrando 0 / 0 de 0 registros",
+                    sInfoFiltered: "(filtrado de _MAX_ registros)",
+                    sSearch: "Pesquisar: ",
+                    oPaginate: {
+                        sFirst: "Início",
+                        sPrevious: "Anterior",
+                        sNext: "Próximo",
+                        sLast: "Último"
+                    }
+                },
+            });
 
-    $(document).ready(function() {
-        $('#datatables-reponsive').DataTable({
-            order: [],
-            columnDefs: [
-                { orderable: false, targets: '_all' }
-            ],
-            oLanguage: {
-                sLengthMenu: "Mostrar _MENU_ registros por página",
-                sZeroRecords: "Nenhum registro encontrado",
-                sInfo: "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
-                sInfoEmpty: "Mostrando 0 / 0 de 0 registros",
-                sInfoFiltered: "(filtrado de _MAX_ registros)",
-                sSearch: "Pesquisar: ",
-                oPaginate: {
-                    sFirst: "Início",
-                    sPrevious: "Anterior",
-                    sNext: "Próximo",
-                    sLast: "Último"
-                }
-            },
+            $('.select2').select2({
+                language: {
+                    noResults: function() {
+                        return "Nenhum resultado encontrado";
+                    }
+                },
+                closeOnSelect: true,
+                width: '100%',
+            });
+
         });
 
-        $('.select2').select2({
-            language: {
-                noResults: function() {
-                    return "Nenhum resultado encontrado";
-                }
-            },
-            closeOnSelect: true,
-            width: '100%',
-        });
-
-    });
-
-</script>
+    </script>
 @endsection
