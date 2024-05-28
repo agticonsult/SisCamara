@@ -401,6 +401,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', [GestaoAdministrativaController::class, 'index'])->name('index');
             Route::post('/store', [GestaoAdministrativaController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [GestaoAdministrativaController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [GestaoAdministrativaController::class, 'update'])->name('update');
         });
 
     });

@@ -107,6 +107,7 @@ class User extends Authenticatable
                     'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
                     'users.dataInativado', 'users.motivoInativado'
                 )
+                ->where('cadastroAprovado', User::USUARIO_APROVADO)
                 ->orderBy('users.ativo', 'asc')
                 ->orderBy('pessoas.nome', 'asc')
                 ->get();
@@ -160,15 +161,6 @@ class User extends Authenticatable
         }
         return true;
     }
-    // public function ehMembroDeGrupo($id_grupo)
-    // {
-    //     $pertence = MembroGrupo::where('id_grupo', '=', $id_grupo)->where('id_user', '=', $this->id)->where('ativo', '=', 1)->first();
-
-    //     if (!$pertence){
-    //         return false;
-    //     }
-    //     return true;
-    // }
     public function temPermissao($entidade, $tipoFuncionalidade)
     {
         $e = Entidade::where('nomeEntidade', '=', $entidade)->first();
@@ -199,12 +191,18 @@ class User extends Authenticatable
     }
     public function permissaoAprovacaoUsuario()
     {
-        $usuarioVinculadoDepartamento = DepartamentoUsuario::Where('id_user', $this->id)->where('ativo', DepartamentoUsuario::ATIVO)->first();
+        $usuarioVinculadoDepartamento = DepartamentoUsuario::Where('id_user', $this->id)
+            ->where('ativo', DepartamentoUsuario::ATIVO)
+            ->first();
 
-        if (!$usuarioVinculadoDepartamento) {
-            return false;
+        if ($usuarioVinculadoDepartamento) {
+            $gestaoAdministrativa = GestaoAdministrativa::where('aprovacaoCadastro', GestaoAdministrativa::APROVACAO_CADASTRO)
+                ->where('id_departamento', $usuarioVinculadoDepartamento->id_departamento)
+                ->where('ativo', GestaoAdministrativa::ATIVO)
+                ->first();
+
+            return $gestaoAdministrativa;
         }
-        return true;
     }
     public function ehAgentePolitico()
     {

@@ -221,6 +221,7 @@
                             </li>
                         @endif
 
+                        {{-- Aprovação de cadastros externos --}}
                         @if(Auth::user()->permissaoAprovacaoUsuario())
                             <li class="sidebar-item {{ Route::current()->uri == 'aprovacao-cadastro-usuario/usuarios' ? 'active' : null }}">
                                 <a href="{{ route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario') }}" class="sidebar-link">

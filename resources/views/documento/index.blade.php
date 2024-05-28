@@ -4,10 +4,9 @@
 
     @include('errors.alerts')
     {{-- @include('errors.errors') --}}
-
+    <h1 class="h3 mb-3">Documentos</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
-            <h5 class="card-title mb-0">Documentos</h5><br>
             @if (Count($documentos) == 0)
                 <div>
                     <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros no sistema.</h1>

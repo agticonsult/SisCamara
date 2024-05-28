@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\RecebimentoDocFormRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RecebimentoDocFormRequest extends FormRequest
+class GestaoAdmRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
