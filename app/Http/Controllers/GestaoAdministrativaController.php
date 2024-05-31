@@ -116,8 +116,11 @@ class GestaoAdministrativaController extends Controller
             }
 
             $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->get();
+            if (Auth::user()->permissaoAprovacaoUsuario()) {
+                return view('usuario.aprovacao-cadastro.aprovacaoCadastro', compact('usuarios'));
+            }
 
-            return view('configuracao.gestao-adiministrativa.aprovacao-cadastro.aprovacaoCadastro', compact('usuarios'));
+            return redirect()->route('home');
 
         }
         catch(\Exception $ex){

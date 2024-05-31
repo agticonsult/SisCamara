@@ -217,19 +217,27 @@
                                         class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">
                                         <a class="sidebar-link" href="{{ route('auditoria.index') }}">Auditoria</a>
                                     </li>
+                                    @if(Auth::user()->permissaoAprovacaoUsuario())
+                                        <li class="sidebar-item {{ Route::current()->uri == 'usuario/aprovacao-cadastros-externos' ? 'active' : null }}">
+                                            <a href="{{ route('usuario.aprovacaoCadastroUsuario') }}" class="sidebar-link">
+                                                Aprovação de cadastro de Usuários Externos
+                                            </a>
+                                        </li>
+                                    @endif
+
                                 </ul>
                             </li>
                         @endif
 
                         {{-- Aprovação de cadastros externos --}}
-                        @if(Auth::user()->permissaoAprovacaoUsuario())
+                        {{-- @if(Auth::user()->permissaoAprovacaoUsuario())
                             <li class="sidebar-item {{ Route::current()->uri == 'aprovacao-cadastro-usuario/usuarios' ? 'active' : null }}">
                                 <a href="{{ route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario') }}" class="sidebar-link">
                                     <i class="fas fa-fw fa-user"></i>
                                     Aprovação de cadastro de Usuários Externos
                                 </a>
                             </li>
-                        @endif
+                        @endif --}}
 
                         {{-- Configuração --}}
                         @if (Auth::user()->temPermissao('FinalidadeGrupo', 'Listagem') == 1 ||

@@ -303,6 +303,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('/edit-perfil/{id}', [UserController::class, 'editPerfil'])->name('editPerfil');
         Route::post('/desativa-perfil/{id}', [UserController::class, 'desativaPerfil'])->name('desativaPerfil');
         Route::get('/selecionar', [UserController::class, 'selecionarPessoa'])->name('selecionarPessoa');
+
+        Route::get('/aprovacao-cadastros-externos', [GestaoAdministrativaController::class, 'aprovacaoCadastroUsuario'])->name('aprovacaoCadastroUsuario');
+        Route::post('/store/aprovacao-cadastros-externos', [GestaoAdministrativaController::class, 'storeCadastroUsuario'])->name('storeCadastroUsuario');
     });
 
     // Audits
@@ -312,10 +315,10 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Aprovação de cadastros de usuários externos
-    Route::group(['prefix' => '/aprovacao-cadastro-usuario', 'as' => 'aprovacao_cadastro_usuario.'], function() {
-        Route::get('/usuarios', [GestaoAdministrativaController::class, 'aprovacaoCadastroUsuario'])->name('aprovacaoCadastroUsuario');
-        Route::post('/store', [GestaoAdministrativaController::class, 'storeCadastroUsuario'])->name('storeCadastroUsuario');
-    });
+    // Route::group(['prefix' => '/aprovacao-cadastro-usuario', 'as' => 'aprovacao_cadastro_usuario.'], function() {
+    //     Route::get('/usuarios', [GestaoAdministrativaController::class, 'aprovacaoCadastroUsuario'])->name('aprovacaoCadastroUsuario');
+    //     Route::post('/store', [GestaoAdministrativaController::class, 'storeCadastroUsuario'])->name('storeCadastroUsuario');
+    // });
 
     // Configuração
     Route::group(['prefix' => '/configuracao', 'as' => 'configuracao.'], function() {
