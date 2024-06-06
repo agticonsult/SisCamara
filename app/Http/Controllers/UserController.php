@@ -6,11 +6,6 @@ use App\Http\Requests\UserStorePJRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdatePJRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Agricultor;
-use App\Models\ErrorLog;
-use App\Models\Estado;
-use App\Models\Grupo;
-use App\Models\Municipio;
 use App\Models\Perfil;
 use App\Models\PerfilUser;
 use App\Models\Permissao;
@@ -20,12 +15,6 @@ use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use App\Services\ValidadorCPFService;
-use Exception;
-use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {

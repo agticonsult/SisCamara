@@ -113,19 +113,12 @@ class DepartamentoController extends Controller
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->with('usuarios')->first();
-            $usuariosDep = DepartamentoUsuario::where('id', '=', $id)->get();
             if (!$departamento) {
                 return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível alterar este departamento.');
             }
             $users = User::where('ativo', '=', User::ATIVO)->get();
-            $usuarios = array();
-            foreach ($users as $user) {
-                if ($user->usuarioInterno() == 1) {
-                    array_push($usuarios, $user);
-                }
-            }
 
-            return view('configuracao.departamento.edit', compact('departamento', 'usuarios', 'usuariosDep'));
+            return view('configuracao.departamento.edit', compact('departamento', 'users'));
 
         }
         catch(\Exception $ex){
@@ -151,15 +144,12 @@ class DepartamentoController extends Controller
             $departamento = Departamento::retornaDepartamentoAtivo($id);
             $departamento->update($request->validated());
 
-            if (isset($request->id_user)) {
-                $id_usuarios = $request->id_user;
+            if (isset($request->usuario_selecionados)) {
+                $id_usuarios = $request->usuario_selecionados;
                 foreach($id_usuarios as $usuario) {
-                    $estaDepartamento = DepartamentoUsuario::where('id_user', '=', $usuario)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
-                    if (!$estaDepartamento) {
-                        $departamento->usuarios()->attach($usuario, [
-                            'created_at' => Carbon::now()
-                        ]);
-                    }
+                    $departamento->usuarios()->attach($usuario, [
+                        'created_at' => Carbon::now()
+                    ]);
                 }
             }
 
@@ -237,7 +227,7 @@ class DepartamentoController extends Controller
                 'dataInativado' => Carbon::now()
             ]);
 
-            return redirect()->back()->with('success', 'Departamento excluído com sucesso.');
+            return redirect()->back()->with('success', 'Usuário desvinculado com sucesso.');
 
         }
         catch(\Exception $ex){

@@ -28,7 +28,7 @@
                     <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há cadastros para realizar a aprovação.</h1>
                 </div>
             @else
-                <form action="{{ route('usuario.aprovacaoCadastroUsuario') }}" method="post">
+                <form action="{{ route('aprovacao_cadastro_usuario.storeCadastroUsuario') }}" method="post">
                     @csrf
                     @method('POST')
 

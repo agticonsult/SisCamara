@@ -1,5 +1,20 @@
 @extends('layout.main')
 
+<style>
+    /* Define a classe para o estado selecionado */
+    .selected {
+        background-color: blue;
+        color: white;
+    }
+    /* Opcional: Ajustar a cor do texto para branco quando selecionado */
+    .selected td {
+        color: white;
+    }
+    .selectable td {
+        cursor: pointer;
+    }
+</style>
+
 @section('content')
 
     @include('errors.alerts')
@@ -24,17 +39,25 @@
                                 <label for="id_coordenador">Coordenador</label>
                                 <select name="id_coordenador" class="form-control @error('id_coordenador') is-invalid @enderror select2">
                                     <option value="" selected disabled>-- Selecione --</option>
-                                    @foreach ($usuarios as $usuario)
+                                    @php
+                                        $coordenadores = array();
+                                        foreach ($users as $user) {
+                                            if ($user->usuarioInterno() == 1) {
+                                                array_push($coordenadores, $user);
+                                            }
+                                        }
+                                    @endphp
+                                    @foreach ($coordenadores as $coordenador)
                                         @php
                                             $temCoordenador = 0;
-                                            if ($departamento->id_coordenador == $usuario->id) {
+                                            if ($departamento->id_coordenador == $coordenador->id) {
                                                 $temCoordenador = 1;
                                             }
                                         @endphp
                                         @if ($temCoordenador == 1)
-                                            <option value="{{ $usuario->id }}" selected>{{ $usuario->pessoa->nome }}</option>
+                                            <option value="{{ $coordenador->id }}" selected>{{ $coordenador->pessoa->nome }}</option>
                                         @else
-                                            <option value="{{ $usuario->id }}">{{ $usuario->pessoa->nome }}</option>
+                                            <option value="{{ $coordenador->id }}">{{ $coordenador->pessoa->nome }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -42,25 +65,50 @@
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label">Usuário</label>
-                                <select name="id_user[]" class="form-control @error('id_user') is-invalid @enderror select2" multiple>
-                                    @foreach ($usuarios as $usuario)
-                                        @php
-                                            $temUsuario = 0;
-                                            foreach ($departamento->usuarios as $usuarioDepartamento) {
-                                                if ($usuarioDepartamento->id == $usuario->id){
-                                                    $temUsuario = 1;
+                            <div class=".form-group col-md-12">
+                                <hr>
+                                <h4>Usuário(s) não vinculado(s)</h4>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="table-responsive">
+                                    <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                                        <thead class="table-light">
+                                            <tr class="selectable">
+                                                <th scope="col">Nome</th>
+                                                <th scope="col">CPF/CNPJ</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Selecionar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $usuarios = array();
+                                                foreach ($users as $user) {
+                                                    if ($user->usuarioInterno() == 1 && $user->estaVinculadoDep($departamento->id)) {
+                                                        array_push($usuarios, $user);
+                                                    }
                                                 }
-                                            }
-                                        @endphp
-                                        @if ($temUsuario == 1)
-                                            <option value="{{ $usuario->id }}" selected>{{ $usuario->pessoa->nome }}</option>
-                                        @else
-                                            <option value="{{ $usuario->id }}">{{ $usuario->pessoa->nome }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                            @endphp
+                                            @foreach ($usuarios as $usuario)
+                                                <tr class="selectable">
+                                                    <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
+                                                    <td class="masc">
+                                                        @if ($usuario->pessoa->pessoaJuridica == 1)
+                                                            <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
+                                                        @else
+                                                            <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
+
+                                                    <td style="text-align: center">
+                                                        <input type="checkbox" name="usuario_selecionados[]" value="{{ $usuario->id }}">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 <button type="submit" class="button_submit btn btn-primary">Salvar</button>
@@ -71,14 +119,15 @@
                 </form>
             </div>
         </div>
+    </div>
 
+    <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">
-                <hr><br>
-                <h3>Usuários vinculados ao departamento</h3>
+                <h4>Usuário(s) vinculado(s) ao departamento</h4>
                 <br>
                 <div class="table-responsive">
-                    <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                    <table id="datatables-reponsive2" class="table table-bordered" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th scope="col">Nome</th>
@@ -93,14 +142,18 @@
                                     <td >
                                         {{ $usuarioDepartamento->pessoa->nome }}
                                     </td>
-                                    <td class="cpf">
-                                        {{ $usuarioDepartamento->cpf }}
+                                    <td class="masc">
+                                        @if ($usuarioDepartamento->pessoa->pessoaJuridica == 1)
+                                            <span class="cnpj">{{ $usuarioDepartamento->cnpj != null ? $usuarioDepartamento->cnpj : 'não informado' }}</span>
+                                        @else
+                                            <span class="cpf">{{ $usuarioDepartamento->cpf != null ? $usuarioDepartamento->cpf : 'não informado' }}</span>
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $usuarioDepartamento->email }}
                                     </td>
                                     <td>
-                                        <button type="button" class="desativar btn btn-danger" name="{{ $usuarioDepartamento->id_user }}" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}" style="width: 100%">
+                                        <button type="button" class="desativar btn btn-danger" name="{{ $usuarioDepartamento->id_user }}" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}">
                                             <i class="align-middle me-2 fas fa-fw fa-trash"></i>
                                         </button>
                                         {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button> --}}
@@ -145,8 +198,29 @@
 @section('scripts')
     <script>
         $('.cpf').mask('000.000.000-00');
-        
+        $('.cnpj').mask('00.000.000/0000-00');
+
         $(document).ready(function() {
+            // Evento de clique no <td> dentro de uma linha
+            $('.selectable').on('click', 'td', function() {
+                var tr = $(this).closest('tr');
+                var checkbox = tr.find('input[type="checkbox"]');
+
+                // Alternar estado do checkbox
+                checkbox.prop('checked', !checkbox.prop('checked'));
+
+                // Alternar a classe 'selected' na linha <tr>
+                tr.toggleClass('selected', checkbox.prop('checked'));
+            });
+
+            // Para garantir que o clique direto no checkbox também funcione
+            $('input[type="checkbox"]').on('click', function(e) {
+                e.stopPropagation(); // Previne que o clique no checkbox também acione o clique no <tr>
+
+                var tr = $(this).closest('tr');
+                tr.toggleClass('selected', this.checked);
+            });
+
             $('.select2').select2({
                 language: {
                     noResults: function() {
@@ -158,6 +232,23 @@
             });
 
             $('#datatables-reponsive').dataTable({
+                "oLanguage": {
+                    "sLengthMenu": "Mostrar _MENU_ registros por página",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                    "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                    "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                    "sSearch": "Pesquisar: ",
+                    "oPaginate": {
+                        "sFirst": "Início",
+                        "sPrevious": "Anterior",
+                        "sNext": "Próximo",
+                        "sLast": "Último"
+                    }
+                },
+            });
+
+            $('#datatables-reponsive2').dataTable({
                 "oLanguage": {
                     "sLengthMenu": "Mostrar _MENU_ registros por página",
                     "sZeroRecords": "Nenhum registro encontrado",

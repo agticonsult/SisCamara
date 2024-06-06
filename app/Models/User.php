@@ -191,17 +191,19 @@ class User extends Authenticatable
     }
     public function permissaoAprovacaoUsuario()
     {
-        $usuarioVinculadoDepartamento = DepartamentoUsuario::Where('id_user', $this->id)
+        $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)
             ->where('ativo', DepartamentoUsuario::ATIVO)
-            ->first();
+            ->get();
 
-        if ($usuarioVinculadoDepartamento) {
-            $gestaoAdministrativa = GestaoAdministrativa::where('aprovacaoCadastro', GestaoAdministrativa::APROVACAO_CADASTRO)
-                ->where('id_departamento', $usuarioVinculadoDepartamento->id_departamento)
-                ->where('ativo', GestaoAdministrativa::ATIVO)
-                ->first();
-
-            return $gestaoAdministrativa;
+        if ($usuarioVinculadoDepartamentos) {
+            foreach ($usuarioVinculadoDepartamentos as $usuarioVinculado) {
+                $gestaoAdministrativa = GestaoAdministrativa::where('aprovacaoCadastro', GestaoAdministrativa::APROVACAO_CADASTRO)
+                    ->where('id_departamento', $usuarioVinculado->id_departamento)
+                    ->where('ativo', GestaoAdministrativa::ATIVO)
+                    ->first();
+                    
+                return $gestaoAdministrativa;
+            }
         }
     }
     public function ehAgentePolitico()
@@ -249,5 +251,17 @@ class User extends Authenticatable
             ];
         }
         return $resposta;
+    }
+    public function estaVinculadoDep($id_departamento)
+    {
+        $sim = DepartamentoUsuario::where('id_user', $this->id)
+            ->where('id_departamento', $id_departamento)
+            ->where('ativo', DepartamentoUsuario::ATIVO)
+            ->first();
+
+        if (!$sim) {
+            return true;
+        }
+        return false;
     }
 }

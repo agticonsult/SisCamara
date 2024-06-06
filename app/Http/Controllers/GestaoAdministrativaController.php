@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GestaoAdmRequest;
 use App\Models\Departamento;
+use App\Models\DepartamentoUsuario;
 use App\Models\GestaoAdministrativa;
 use App\Models\User;
 use App\Services\ErrorLogService;
@@ -80,9 +81,9 @@ class GestaoAdministrativaController extends Controller
     public function storeCadastroUsuario(Request $request)
     {
         try{
-            if(Auth::user()->temPermissao('GestaoAdministrativa', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
+            // if(Auth::user()->temPermissao('GestaoAdministrativa', 'Cadastro') != 1){
+            //     return redirect()->back()->with('erro', 'Acesso negado.');
+            // }
 
             if ($request->usuario_selecionados == null) {
                 return redirect()->back()->with('warning', 'Necessário selecionar 1 usuário.');
@@ -103,7 +104,7 @@ class GestaoAdministrativaController extends Controller
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'store');
+            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'storeCadastroUsuario');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
     }
@@ -111,9 +112,9 @@ class GestaoAdministrativaController extends Controller
     public function aprovacaoCadastroUsuario()
     {
         try{
-            if(Auth::user()->temPermissao('GestaoAdministrativa', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
-            }
+            // if(Auth::user()->temPermissao('GestaoAdministrativa', 'Listagem') != 1){
+            //     return redirect()->back()->with('erro', 'Acesso negado.');
+            // }
 
             $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->get();
             if (Auth::user()->permissaoAprovacaoUsuario()) {
