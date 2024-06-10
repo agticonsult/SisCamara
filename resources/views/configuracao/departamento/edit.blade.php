@@ -211,10 +211,11 @@
 
                 tr.toggleClass('selected', checkbox2.prop('checked'));
 
-                if (checkbox2) {
+                var anyCheckBoxChecked = $("input[name='vincular_usuarios[]']:checked");
+
+                if (anyCheckBoxChecked.length > 0) {
                     $('#saveButton').show();
-                }
-                else {
+                }else {
                     $('#saveButton').hide();
                 }
             });
