@@ -144,12 +144,25 @@ class DepartamentoController extends Controller
             $departamento = Departamento::retornaDepartamentoAtivo($id);
             $departamento->update($request->validated());
 
+            // if (isset($request->usuario_selecionados)) {
+            //     $id_usuarios = $request->usuario_selecionados;
+            //     foreach($id_usuarios as $usuario) {
+            //         $departamento->usuarios()->attach($usuario, [
+            //             'created_at' => Carbon::now()
+            //         ]);
+            //     }
+            // }
             if (isset($request->usuario_selecionados)) {
-                $id_usuarios = $request->usuario_selecionados;
-                foreach($id_usuarios as $usuario) {
-                    $departamento->usuarios()->attach($usuario, [
-                        'created_at' => Carbon::now()
-                    ]);
+                foreach ($request->usuario_selecionados as $Idusuario) {
+                    $desvincularUsuario = DepartamentoUsuario::where('id_user', '=', $Idusuario)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
+                    if ($desvincularUsuario) {
+                        $desvincularUsuario->update([
+                            'ativo' => DepartamentoUsuario::INATIVO,
+                            'inativadoPorUsuario' => Auth::user()->id,
+                            'dataInativado' => Carbon::now()
+                        ]);
+                    }
+
                 }
             }
 

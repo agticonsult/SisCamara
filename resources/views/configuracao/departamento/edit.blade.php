@@ -13,6 +13,10 @@
     .selectable td {
         cursor: pointer;
     }
+
+    .selectableTwo td {
+        cursor: pointer;
+    }
 </style>
 
 @section('content')
@@ -67,7 +71,7 @@
                             </div>
                             <div class=".form-group col-md-12">
                                 <hr>
-                                <h4>Usuário(s) não vinculado(s)</h4>
+                                <h4>Usuário(s) vinculado(s)</h4>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="table-responsive">
@@ -77,32 +81,27 @@
                                                 <th scope="col">Nome</th>
                                                 <th scope="col">CPF/CNPJ</th>
                                                 <th scope="col">Email</th>
-                                                <th scope="col">Selecionar</th>
+                                                <th scope="col">Desvincular</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @php
-                                                $usuarios = array();
-                                                foreach ($users as $user) {
-                                                    if ($user->usuarioInterno() == 1 && $user->estaVinculadoDep($departamento->id)) {
-                                                        array_push($usuarios, $user);
-                                                    }
-                                                }
-                                            @endphp
-                                            @foreach ($usuarios as $usuario)
+                                            @foreach ($departamento->usuarios as $usuarioDepartamento)
                                                 <tr class="selectable">
-                                                    <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
+                                                    <td >
+                                                        {{ $usuarioDepartamento->pessoa->nome }}
+                                                    </td>
                                                     <td class="masc">
-                                                        @if ($usuario->pessoa->pessoaJuridica == 1)
-                                                            <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
+                                                        @if ($usuarioDepartamento->pessoa->pessoaJuridica == 1)
+                                                            <span class="cnpj">{{ $usuarioDepartamento->cnpj != null ? $usuarioDepartamento->cnpj : 'não informado' }}</span>
                                                         @else
-                                                            <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
+                                                            <span class="cpf">{{ $usuarioDepartamento->cpf != null ? $usuarioDepartamento->cpf : 'não informado' }}</span>
                                                         @endif
                                                     </td>
-                                                    <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
-
+                                                    <td>
+                                                        {{ $usuarioDepartamento->email }}
+                                                    </td>
                                                     <td style="text-align: center">
-                                                        <input type="checkbox" name="usuario_selecionados[]" value="{{ $usuario->id }}">
+                                                        <input type="checkbox" name="usuario_selecionados[]" value="{{ $usuarioDepartamento->id }}">
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -110,7 +109,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="form-group col-md-12">
                                 <button type="submit" class="button_submit btn btn-primary">Salvar</button>
                                 <a href="{{ route('configuracao.departamento.index') }}" class="btn btn-light">Voltar</a>
                             </div>
@@ -123,71 +122,54 @@
 
     <div class="card" style="background-color:white">
         <div class="card-body">
-            <div class="col-md-12">
-                <h4>Usuário(s) vinculado(s) ao departamento</h4>
-                <br>
-                <div class="table-responsive">
-                    <table id="datatables-reponsive2" class="table table-bordered" style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">CPF</th>
-                                <th scope="col">E-mail</th>
-                                <th scope="col">Desvincular</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($departamento->usuarios as $usuarioDepartamento)
-                                <tr>
-                                    <td >
-                                        {{ $usuarioDepartamento->pessoa->nome }}
-                                    </td>
-                                    <td class="masc">
-                                        @if ($usuarioDepartamento->pessoa->pessoaJuridica == 1)
-                                            <span class="cnpj">{{ $usuarioDepartamento->cnpj != null ? $usuarioDepartamento->cnpj : 'não informado' }}</span>
-                                        @else
-                                            <span class="cpf">{{ $usuarioDepartamento->cpf != null ? $usuarioDepartamento->cpf : 'não informado' }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $usuarioDepartamento->email }}
-                                    </td>
-                                    <td>
-                                        <button type="button" class="desativar btn btn-danger" name="{{ $usuarioDepartamento->id_user }}" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}">
-                                            <i class="align-middle me-2 fas fa-fw fa-trash"></i>
-                                        </button>
-                                        {{-- <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $usuarioDepartamento->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></button> --}}
-                                    </td>
+            <div class="form-group col-md-12">
+                <form action="{{ route('configuracao.departamento.update', $departamento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                    @csrf
+                    @method('POST')
+
+                    <h4>Usuário(s) não vinculado(s) ao departamento</h4>
+                    <br>
+                    <div class="table-responsive">
+                        <table id="datatables-reponsive2" class="table table-bordered" style="width: 100%;">
+                            <thead>
+                                <tr class="selectableTwo">
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">CPF</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Vincular</th>
                                 </tr>
-                                <div class="modal fade" id="exampleModalExcluir{{ $usuarioDepartamento->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('configuracao.departamento.desvincularUsuario', $usuarioDepartamento->id) }}">
-                                                @csrf
-                                                @method('POST')
-                                                <div class="modal-header btn-danger">
-                                                    <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                        Desvincular do departamento: <strong>{{ $usuarioDepartamento->pessoa->nome }} - {{ $usuarioDepartamento->email }}</strong>?
-                                                    </h5>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="motivo" class="form-label">Motivo</label>
-                                                        <input type="text" class="form-control" name="motivo">
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                                    </button>
-                                                    <button type="submit" class="button_submit btn btn-danger">Excluir</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $usuarios = array();
+                                    foreach ($users as $user) {
+                                        if ($user->usuarioInterno() == 1 && $user->estaVinculadoDep($departamento->id)) {
+                                            array_push($usuarios, $user);
+                                        }
+                                    }
+                                @endphp
+                                @foreach ($usuarios as $usuario)
+                                    <tr class="selectableTwo">
+                                        <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
+                                        <td class="masc">
+                                            @if ($usuario->pessoa->pessoaJuridica == 1)
+                                                <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
+                                            @else
+                                                <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
+                                        <td style="text-align: center">
+                                            <input type="checkbox" name="vincular_usuarios[]" value="{{ $usuario->id }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="form-group col-md-12">
+                    <button type="submit" class="button_submit btn btn-primary" id="saveButton" style="display: none;">Salvar</button>
                 </div>
             </div>
         </div>
@@ -219,6 +201,35 @@
 
                 var tr = $(this).closest('tr');
                 tr.toggleClass('selected', this.checked);
+            });
+
+            $('.selectableTwo').on('click', 'td', function() {
+                var tr = $(this).closest('tr');
+                var checkbox2 = tr.find('input[type="checkbox"]');
+
+                checkbox2.prop('checked', !checkbox2.prop('checked'));
+
+                tr.toggleClass('selected', checkbox2.prop('checked'));
+
+                if (checkbox2) {
+                    $('#saveButton').show();
+                }
+                else {
+                    $('#saveButton').hide();
+                }
+            });
+
+            $('input[type="checkbox"]').on('click', function(e) {
+                e.stopPropagation();
+
+                var tr = $(this).closest('tr');
+                tr.toggleClass('selected', this.checked);
+                if (tr) {
+                    $('#saveButton').show();
+                }
+                else {
+                    $('#saveButton').hide();
+                }
             });
 
             $('.select2').select2({

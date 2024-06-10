@@ -90,7 +90,11 @@ class GestaoAdministrativaController extends Controller
             }
 
             foreach ($request->usuario_selecionados as $usuario) {
-                $usuarioEncontrado = User::where('id', '=', $usuario)->where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->first();
+                $usuarioEncontrado = User::where('id', '=', $usuario)
+                    ->where('cadastroAprovado', '=', User::USUARIO_REPROVADO)
+                    ->where('ativo', '=', User::ATIVO)
+                ->first();
+
                 if ($usuarioEncontrado) {
                     $usuarioEncontrado->update([
                         'cadastroAprovado' => User::USUARIO_APROVADO,
@@ -116,7 +120,10 @@ class GestaoAdministrativaController extends Controller
             //     return redirect()->back()->with('erro', 'Acesso negado.');
             // }
 
-            $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)->where('ativo', '=', User::ATIVO)->get();
+            $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)
+                ->where('confirmacao_email', '=', User::EMAIL_CONFIRMADO)
+                ->where('ativo', '=', User::ATIVO)
+            ->get();
             if (Auth::user()->permissaoAprovacaoUsuario()) {
                 return view('usuario.aprovacao-cadastro.aprovacaoCadastro', compact('usuarios'));
             }

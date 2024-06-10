@@ -119,7 +119,8 @@ class Funcionalidade extends Model implements Auditable
             ->where(function (Builder $query) {
                 return
                     $query->where('entidades.nomeEntidade', '=', 'Ato')
-                        ->orWhere('entidades.nomeEntidade', '=', 'Perfil');
+                        ->orWhere('entidades.nomeEntidade', '=', 'Perfil')
+                        ->orWhere('entidades.nomeEntidade', '=', 'Documento');
                 })
             ->where(function (Builder $query) {
                 return
