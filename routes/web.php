@@ -331,7 +331,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}', [DepartamentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [DepartamentoController::class, 'update'])->name('update');
             Route::post('/destroy/{id}', [DepartamentoController::class, 'destroy'])->name('destroy');
-            Route::post('/desvincular-usuario/{id}', [DepartamentoController::class, 'desvincularUsuario'])->name('desvincularUsuario');
+            Route::post('/vincular-usuario/{id}', [DepartamentoController::class, 'vincularUsuario'])->name('vincularUsuario');
         });
 
         //Assunto do Ato

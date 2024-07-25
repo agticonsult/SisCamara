@@ -1,5 +1,24 @@
 @extends('layout.main')
 
+<style>
+    /* Define a classe para o estado selecionado */
+    .selected {
+        background-color: blue;
+        color: white;
+    }
+    /* Opcional: Ajustar a cor do texto para branco quando selecionado */
+    .selected td {
+        color: white;
+    }
+    .selectable td {
+        cursor: pointer;
+    }
+
+    .selectableTwo td {
+        cursor: pointer;
+    }
+</style>
+
 @section('content')
     @include('errors.alerts')
 
@@ -41,8 +60,12 @@
                                         <div class="invalid-feedback">{{ $message }}</div><br>
                                     @enderror
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Usuário</label>
+                                <div class="form-group col-md-12">
+                                    <hr>
+                                    <h4>Usuário(s)</h4>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    {{-- <label class="form-label">Usuário</label>
                                     <select name="id_user[]" class="form-control @error('id_user') is-invalid @enderror select2" multiple>
                                         @foreach ($usuarios as $usuario)
                                             <option value="{{ $usuario->id }}" {{ old('id_user') == $usuario->id ? 'selected' : '' }}>{{ $usuario->pessoa->nome }}</option>
@@ -50,7 +73,41 @@
                                     </select>
                                     @error('id_user')
                                         <div class="invalid-feedback">{{ $message }}</div><br>
-                                    @enderror
+                                    @enderror --}}
+                                    <div class="table-responsive">
+                                        <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                                            <thead class="table-light">
+                                                <tr class="selectable">
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">CPF/CNPJ</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Vincular</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($usuarios as $usuario)
+                                                    <tr class="selectable">
+                                                        <td >
+                                                            {{ $usuario->pessoa->nome }}
+                                                        </td>
+                                                        <td class="masc">
+                                                            @if ($usuario->pessoa->pessoaJuridica == 1)
+                                                                <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
+                                                            @else
+                                                                <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            {{ $usuario->email }}
+                                                        </td>
+                                                        <td style="text-align: center">
+                                                            <input type="checkbox" name="usuario_selecionados[]" value="{{ $usuario->id }}">
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +134,7 @@
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                        <table id="datatables-reponsive2" class="table table-bordered" style="width: 100%;">
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">Nome do Assunto</th>
@@ -172,7 +229,25 @@
 
 @section('scripts')
     <script>
+        $('.cpf').mask('000.000.000-00');
+        $('.cnpj').mask('00.000.000/0000-00');
+
         $(document).ready(function() {
+
+            $('.selectable').on('click', 'td', function() {
+                var tr = $(this).closest('tr');
+                var checkbox = tr.find('input[type="checkbox"]');
+
+                checkbox.prop('checked', !checkbox.prop('checked'));
+                tr.toggleClass('selected', checkbox.prop('checked'));
+            });
+
+            $('input[type="checkbox"]').on('click', function(e) {
+                e.stopPropagation(); // Previne que o clique no checkbox também acione o clique no <tr>
+
+                var tr = $(this).closest('tr');
+                tr.toggleClass('selected', this.checked);
+            });
 
             $('.select2').select2({
                 language: {
@@ -185,6 +260,23 @@
             });
 
             $('#datatables-reponsive').dataTable({
+                "oLanguage": {
+                    "sLengthMenu": "Mostrar _MENU_ registros por página",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando _START_ / _END_ de _TOTAL_ registro(s)",
+                    "sInfoEmpty": "Mostrando 0 / 0 de 0 registros",
+                    "sInfoFiltered": "(filtrado de _MAX_ registros)",
+                    "sSearch": "Pesquisar: ",
+                    "oPaginate": {
+                        "sFirst": "Início",
+                        "sPrevious": "Anterior",
+                        "sNext": "Próximo",
+                        "sLast": "Último"
+                    }
+                },
+            });
+
+            $('#datatables-reponsive2').dataTable({
                 "oLanguage": {
                     "sLengthMenu": "Mostrar _MENU_ registros por página",
                     "sZeroRecords": "Nenhum registro encontrado",

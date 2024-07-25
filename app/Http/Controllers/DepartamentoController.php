@@ -74,7 +74,7 @@ class DepartamentoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            $id_usuarios = $request->id_user;
+            $id_usuarios = $request->usuario_selecionados;
             $departamento->usuarios()->attach($id_usuarios, [
                 'created_at' => Carbon::now()
             ]);
@@ -144,14 +144,6 @@ class DepartamentoController extends Controller
             $departamento = Departamento::retornaDepartamentoAtivo($id);
             $departamento->update($request->validated());
 
-            // if (isset($request->usuario_selecionados)) {
-            //     $id_usuarios = $request->usuario_selecionados;
-            //     foreach($id_usuarios as $usuario) {
-            //         $departamento->usuarios()->attach($usuario, [
-            //             'created_at' => Carbon::now()
-            //         ]);
-            //     }
-            // }
             if (isset($request->usuario_selecionados)) {
                 foreach ($request->usuario_selecionados as $Idusuario) {
                     $desvincularUsuario = DepartamentoUsuario::where('id_user', '=', $Idusuario)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
@@ -162,7 +154,6 @@ class DepartamentoController extends Controller
                             'dataInativado' => Carbon::now()
                         ]);
                     }
-
                 }
             }
 
@@ -226,21 +217,23 @@ class DepartamentoController extends Controller
         }
     }
 
-    public function desvincularUsuario($id)
+    public function vincularUsuario(Request $request, $id)
     {
         try{
             if(Auth::user()->temPermissao('Departamento', 'Exclusão') != 1) {
                 return redirect()->back()->with('erro', 'Acesso negado.');
             }
 
-            $desvincularUsuario = DepartamentoUsuario::where('id_user', '=', $id)->Where('ativo', '=', DepartamentoUsuario::ATIVO)->first();
-            $desvincularUsuario->update([
-                'ativo' => DepartamentoUsuario::INATIVO,
-                'inativadoPorUsuario' => Auth::user()->id,
-                'dataInativado' => Carbon::now()
-            ]);
+            $departamento = Departamento::retornaDepartamentoAtivo($id);
+            if (isset($request->vincular_usuarios)) {
+                foreach($request->vincular_usuarios as $vincularUsuario) {
+                    $departamento->usuarios()->attach($vincularUsuario, [
+                        'created_at' => Carbon::now()
+                    ]);
+                }
+            }
 
-            return redirect()->back()->with('success', 'Usuário desvinculado com sucesso.');
+            return redirect()->back()->with('success', 'Usuário vinculado com sucesso.');
 
         }
         catch(\Exception $ex){

@@ -69,7 +69,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                 @enderror
                             </div>
-                            <div class=".form-group col-md-12">
+                            <div class="form-group col-md-12">
                                 <hr>
                                 <h4>Usuário(s) vinculado(s)</h4>
                             </div>
@@ -123,7 +123,7 @@
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="form-group col-md-12">
-                <form action="{{ route('configuracao.departamento.update', $departamento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('configuracao.departamento.vincularUsuario', $departamento->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 
@@ -131,7 +131,7 @@
                     <br>
                     <div class="table-responsive">
                         <table id="datatables-reponsive2" class="table table-bordered" style="width: 100%;">
-                            <thead>
+                            <thead class="table-light">
                                 <tr class="selectableTwo">
                                     <th scope="col">Nome</th>
                                     <th scope="col">CPF</th>
@@ -160,17 +160,20 @@
                                         </td>
                                         <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
                                         <td style="text-align: center">
-                                            <input type="checkbox" name="vincular_usuarios[]" value="{{ $usuario->id }}">
+                                            <input type="checkbox" id="checkboxVincular" name="vincular_usuarios[]" value="{{ $usuario->id }}">
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="button_submit btn btn-primary" id="saveButton" style="display: none;">Salvar</button>
+                        </div>
+                    </div>
                 </form>
-                <div class="form-group col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary" id="saveButton" style="display: none;">Salvar</button>
-                </div>
             </div>
         </div>
     </div>
@@ -225,10 +228,12 @@
 
                 var tr = $(this).closest('tr');
                 tr.toggleClass('selected', this.checked);
-                if (tr) {
+
+                var anyCheckBoxChecked = $("input[name='vincular_usuarios[]']:checked");
+
+                if (anyCheckBoxChecked.length > 0) {
                     $('#saveButton').show();
-                }
-                else {
+                }else {
                     $('#saveButton').hide();
                 }
             });

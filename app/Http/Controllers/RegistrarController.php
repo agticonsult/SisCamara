@@ -91,7 +91,7 @@ class RegistrarController extends Controller
                 'id_pessoa' => $novaPessoa->id,
                 'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
-                'confirmacao_email' => User::EMAIL_CONFIRMADO,
+                'confirmacao_email' => User::EMAIL_NAO_CONFIRMADO,
                 'cadastroAprovado' => User::USUARIO_REPROVADO,
             ]);
 
@@ -135,7 +135,7 @@ class RegistrarController extends Controller
                 'id_pessoa' => $novaPessoa->id,
                 'id_grupo' => Grupo::EXTERNO,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
-                'confirmacao_email' => User::EMAIL_CONFIRMADO,
+                'confirmacao_email' => User::EMAIL_NAO_CONFIRMADO,
                 'cadastroAprovado' => User::USUARIO_REPROVADO,
             ]);
 
