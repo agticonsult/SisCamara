@@ -141,11 +141,12 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                        <a href="{{ route('usuario.index') }}" class="btn btn-secondary">Voltar</a>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                            <a href="{{ route('usuario.index') }}" class="btn btn-secondary">Voltar</a>
+                        </div>
                     </div>
-                    <br>
                 </form>
             </div>
         </div>

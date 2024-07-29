@@ -193,16 +193,33 @@ class User extends Authenticatable
     {
         $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)
             ->where('ativo', DepartamentoUsuario::ATIVO)
-            ->get();
+        ->get();
 
         if ($usuarioVinculadoDepartamentos) {
             foreach ($usuarioVinculadoDepartamentos as $usuarioVinculado) {
-                $gestaoAdministrativa = GestaoAdministrativa::where('aprovacaoCadastro', GestaoAdministrativa::APROVACAO_CADASTRO)
+                $permissaoAprovacaoUsuario = GestaoAdministrativa::where('aprovacaoCadastro', GestaoAdministrativa::APROVACAO_CADASTRO)
                     ->where('id_departamento', $usuarioVinculado->id_departamento)
                     ->where('ativo', GestaoAdministrativa::ATIVO)
-                    ->first();
-                    
-                return $gestaoAdministrativa;
+                ->first();
+
+                return $permissaoAprovacaoUsuario;
+            }
+        }
+    }
+    public function permissaoReceberDocExterno()
+    {
+        $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)
+            ->where('ativo', DepartamentoUsuario::ATIVO)
+        ->get();
+
+        if ($usuarioVinculadoDepartamentos) {
+            foreach ($usuarioVinculadoDepartamentos as $usuarioVinculado) {
+                $permissaoReceberDocExterno = GestaoAdministrativa::where('recebimentoDocumento', GestaoAdministrativa::RECEBIMENTO_DOCUMENTO)
+                    ->where('id_departamento', $usuarioVinculado->id_departamento)
+                    ->where('ativo', GestaoAdministrativa::ATIVO)
+                ->first();
+
+                return $permissaoReceberDocExterno;
             }
         }
     }

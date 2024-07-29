@@ -28,7 +28,7 @@ class LoginController extends Controller
         $user = User::where('email', '=', $request->email)
             ->where('ativo', '=', User::ATIVO)
             ->select('id', 'cpf', 'cnpj','email', 'bloqueadoPorTentativa', 'tentativa_senha', 'confirmacao_email', 'cadastroAprovado')
-            ->first();
+        ->first();
 
         if($user){
             if($user->bloqueadoPorTentativa == User::BLOQUEADO_TENTATIVA_EXCESSO){

@@ -35,21 +35,21 @@ use function GuzzleHttp\Promise\all;
 
 class RegistrarController extends Controller
 {
-    public function selecionarPessoa()
-    {
-        try {
-            return view('auth.cadastro.selecionarCadastro');
-        }
-        catch (\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'selecionarPessoa');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
-        }
-    }
+    // public function selecionarPessoa()
+    // {
+    //     try {
+    //         return view('auth.cadastro.selecionarCadastro');
+    //     }
+    //     catch (\Exception $ex) {
+    //         ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'selecionarPessoa');
+    //         return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+    //     }
+    // }
 
-    public function registrarPessoaFisica()
+    public function registrar()
     {
         try {
-            return view('auth.cadastro.pessoa-fisica.create');
+            return view('auth.create');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'registrarPessoaFisica');
@@ -57,16 +57,16 @@ class RegistrarController extends Controller
         }
     }
 
-    public function registrarPessoaJuridica()
-    {
-        try {
-            return view('auth.cadastro.pessoa-juridica.create');
-        }
-        catch (\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'registrarPessoaJuridica');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
-        }
-    }
+    // public function registrarPessoaJuridica()
+    // {
+    //     try {
+    //         return view('auth.cadastro.pessoa-juridica.create');
+    //     }
+    //     catch (\Exception $ex) {
+    //         ErrorLogService::salvar($ex->getMessage(), 'RegistrarController', 'registrarPessoaJuridica');
+    //         return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+    //     }
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -119,45 +119,45 @@ class RegistrarController extends Controller
     }
 
     //cadastro de novo usuário PJ
-    public function pessoaJuridicaStore(RegistrarUserPJRequest $request)
-    {
-        try {
-            //verifica se a confirmação de senha estão ok
-            if($request->password != $request->confirmacao){
-                return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
-            }
+    // public function pessoaJuridicaStore(RegistrarUserPJRequest $request)
+    // {
+    //     try {
+    //         //verifica se a confirmação de senha estão ok
+    //         if($request->password != $request->confirmacao){
+    //             return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
+    //         }
 
-            $novaPessoa = Pessoa::create($request->validated() + [
-                'pessoaJuridica' => Pessoa::PESSOA_JURIDICA,
-            ]);
+    //         $novaPessoa = Pessoa::create($request->validated() + [
+    //             'pessoaJuridica' => Pessoa::PESSOA_JURIDICA,
+    //         ]);
 
-            $novoUsuario = User::create($request->validated() + [
-                'id_pessoa' => $novaPessoa->id,
-                'id_grupo' => Grupo::EXTERNO,
-                'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
-                'confirmacao_email' => User::EMAIL_NAO_CONFIRMADO,
-                'cadastroAprovado' => User::USUARIO_REPROVADO,
-            ]);
+    //         $novoUsuario = User::create($request->validated() + [
+    //             'id_pessoa' => $novaPessoa->id,
+    //             'id_grupo' => Grupo::EXTERNO,
+    //             'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
+    //             'confirmacao_email' => User::EMAIL_NAO_CONFIRMADO,
+    //             'cadastroAprovado' => User::USUARIO_REPROVADO,
+    //         ]);
 
-            PerfilUser::create([
-                'id_user' => $novoUsuario->id,
-                'id_tipo_perfil' => Perfil::USUARIO_EXTERNO,
-                'cadastradoPorUsuario' => $novoUsuario->id,
-            ]);
+    //         PerfilUser::create([
+    //             'id_user' => $novoUsuario->id,
+    //             'id_tipo_perfil' => Perfil::USUARIO_EXTERNO,
+    //             'cadastradoPorUsuario' => $novoUsuario->id,
+    //         ]);
 
-            Permissao::create([
-                'id_user' => $novoUsuario->id,
-                'id_perfil' => Perfil::USUARIO_EXTERNO,
-                'cadastradoPorUsuario' => $novoUsuario->id,
-            ]);
+    //         Permissao::create([
+    //             'id_user' => $novoUsuario->id,
+    //             'id_perfil' => Perfil::USUARIO_EXTERNO,
+    //             'cadastradoPorUsuario' => $novoUsuario->id,
+    //         ]);
 
-            // manda e-mail de confirmação através do UserObserver na pasta Observers, configurado no App\Providers\EventServiceProvider
-            return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso! Encaminhado link de confirmação no seu email, cheque sua caixa de spam.');
+    //         // manda e-mail de confirmação através do UserObserver na pasta Observers, configurado no App\Providers\EventServiceProvider
+    //         return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso! Encaminhado link de confirmação no seu email, cheque sua caixa de spam.');
 
-        }
-        catch(\Exception $ex){
-            ErrorLogService::salvarPublico($ex->getMessage(), 'RegistrarController', 'pessoaJuridicaStore');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
-        }
-    }
+    //     }
+    //     catch(\Exception $ex){
+    //         ErrorLogService::salvarPublico($ex->getMessage(), 'RegistrarController', 'pessoaJuridicaStore');
+    //         return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+    //     }
+    // }
 }

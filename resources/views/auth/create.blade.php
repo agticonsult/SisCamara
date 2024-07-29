@@ -52,7 +52,7 @@
                                 <div class="card-body">
                                     <div class="m-sm-4">
 
-                                        <form action="{{route('pessoa_fisica_store')}}" method="POST" id="form" class="form_prevent_multiple_submits">
+                                        <form action="{{route('registrar_store')}}" method="POST" id="form" class="form_prevent_multiple_submits">
                                             @csrf
                                             @method('POST')
                                             @include('errors.alerts')

@@ -31,12 +31,15 @@
                             @foreach ($usuarios as $usuario)
                                 <tr>
                                     <td>{{ $usuario->pessoa->nome != null ? $usuario->pessoa->nome : 'não informado' }}</td>
-                                    <td class="masc">
+                                    {{-- <td class="masc">
                                         @if ($usuario->pessoa->pessoaJuridica == 1)
                                             <span class="cnpj">{{ $usuario->cnpj != null ? $usuario->cnpj : 'não informado' }}</span>
                                         @else
                                             <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
                                         @endif
+                                    </td> --}}
+                                    <td class="masc">
+                                        <span class="cpf">{{ $usuario->cpf != null ? $usuario->cpf : 'não informado' }}</span>
                                     </td>
                                     <td>{{ $usuario->email != null ? $usuario->email : 'não informado' }}</td>
                                     <td>
@@ -171,7 +174,7 @@
             @endif
         </div>
         <div class="card-footer">
-            <a href=" {{ route('usuario.selecionarPessoa') }} " class="btn btn-primary">Cadastrar novo usuário</a>
+            <a href=" {{ route('usuario.create') }} " class="btn btn-primary">Cadastrar novo usuário</a>
         </div>
     </div>
 
@@ -180,7 +183,7 @@
 @section('scripts')
     <script>
         $('.cpf').mask('000.000.000-00');
-        $('.cnpj').mask('00.000.000/0000-00');
+        // $('.cnpj').mask('00.000.000/0000-00');
 
         $(document).ready(function() {
 

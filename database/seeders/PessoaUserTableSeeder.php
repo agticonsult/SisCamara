@@ -32,7 +32,7 @@ class PessoaUserTableSeeder extends Seeder
             ['pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA, 'nome' => 'Agile', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-01-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now(), 'ativo' => Pessoa::ATIVO],
             ['pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA, 'nome' => 'Fulano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-02-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now(), 'ativo' => Pessoa::ATIVO],
             ['pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA, 'nome' => 'Ciclano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-03-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now(), 'ativo' => Pessoa::ATIVO],
-            ['pessoaJuridica' => Pessoa::PESSOA_JURIDICA, 'nome' => 'Empresa X', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => NULL,  'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now(), 'ativo' => Pessoa::ATIVO]
+            ['pessoaJuridica' => Pessoa::NAO_PESSOA_JURIDICA, 'nome' => 'Beltrano', 'apelidoFantasia' => NULL, 'dt_nascimento_fundacao' => '2001-04-01', 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now(), 'ativo' => Pessoa::ATIVO]
         ]);
 
         DB::table('users')->insert([
@@ -52,7 +52,7 @@ class PessoaUserTableSeeder extends Seeder
                 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
             [
-                'id' => $uuid4, 'id_pessoa' => 4, 'id_grupo' => Grupo::INTERNO, 'cpf' => NULL, 'cnpj' => '33333333333333', 'email' => 'suporte@empresa.inf.br', 'password' => Hash::make('123456'),
+                'id' => $uuid4, 'id_pessoa' => 4, 'id_grupo' => Grupo::EXTERNO, 'cpf' => '33333333333', 'cnpj' => NULL, 'email' => 'cliente2@cliente.inf.br', 'password' => Hash::make('123456'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
                 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ]

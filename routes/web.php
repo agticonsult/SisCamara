@@ -67,11 +67,8 @@ Route::post('/autenticacao', [LoginController::class, 'autenticacao'])->name('lo
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 //registrar usuário
-Route::get('selecionar-pessoa', [RegistrarController::class, 'selecionarPessoa'])->name('selecionar_pessoa');
-Route::get('registrar-pessoa-fisica', [RegistrarController::class, 'registrarPessoaFisica'])->name('registrar_pessoa_fisica');
-Route::post('pessoa-fisica-store', [RegistrarController::class, 'pessoaFisicaStore'])->name('pessoa_fisica_store');
-Route::post('pessoa-juridica-store', [RegistrarController::class, 'pessoaJuridicaStore'])->name('pessoa_juridica_store');
-Route::get('registrar-pessoa-juridica', [RegistrarController::class, 'registrarPessoaJuridica'])->name('registrar_pessoa_juridica');
+Route::get('/registrar', [RegistrarController::class, 'registrar'])->name('registrar');
+Route::post('/store', [RegistrarController::class, 'store'])->name('registrar_store');
 
 //Alteração de senha
 Route::get('/passwordReset1', [PasswordResetController::class, 'passwordReset1'])->name('passwordReset1');
@@ -287,23 +284,16 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Usuarios/Clientes
     Route::group(['prefix' => '/usuario', 'as' => 'usuario.'], function() {
-        Route::get('/create-pessoa-fisica', [UserController::class, 'createPessoaFisica'])->name('createPessoaFisica');
-        Route::post('/store-pessoa-fisica', [UserController::class, 'storePessoaFisica'])->name('storePessoaFisica');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/store', [UserController::class, 'store'])->name('store');
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::post('/update-pessoa-fisica/{id}', [UserController::class, 'updatePessoaFisica'])->name('updatePessoaFisica');
-
-        Route::get('/create-pessoa-juridica', [UserController::class, 'createPessoaJuridica'])->name('createPessoaJuridica');
-        Route::post('/store-pessoa-juridica', [UserController::class, 'storePessoaJuridica'])->name('storePessoaJuridica');
-        Route::post('/update-pessoa-juridica/{id}', [UserController::class, 'updatePessoaJuridica'])->name('updatePessoaJuridica');
-
+        Route::post('/update/{id}', [UserController::class, 'update'])->name('update');
         Route::get('/index', [UserController::class, 'index'])->name('index');
         Route::post('/desbloquear/{id}', [UserController::class, 'desbloquear'])->name('desbloquear');
         Route::post('/destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
         Route::post('/restore/{id}', [UserController::class, 'restore'])->name('restore');
         // Route::get('/edit-perfil/{id}', [UserController::class, 'editPerfil'])->name('editPerfil');
         Route::post('/desativa-perfil/{id}', [UserController::class, 'desativaPerfil'])->name('desativaPerfil');
-        Route::get('/selecionar', [UserController::class, 'selecionarPessoa'])->name('selecionarPessoa');
-
         // Route::get('/aprovacao-cadastros-externos', [GestaoAdministrativaController::class, 'aprovacaoCadastroUsuario'])->name('aprovacaoCadastroUsuario');
         // Route::post('/store/aprovacao-cadastros-externos', [GestaoAdministrativaController::class, 'storeCadastroUsuario'])->name('storeCadastroUsuario');
     });

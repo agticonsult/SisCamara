@@ -94,7 +94,7 @@
                                                 <button type="submit" class="btn btn-lg btn-primary" style="width: 100%; margin-bottom: 0.7rem">Entrar</button>
                                             </div>
                                             <small>
-                                                <a href="{{ route('selecionar_pessoa') }}">Cadastrar-se</a>
+                                                <a href="{{ route('registrar') }}">Cadastrar-se</a>
                                             </small>
                                             <small>
                                                 <a href="{{ route('passwordReset1') }}" style="float: right">Esqueceu a senha?</a>

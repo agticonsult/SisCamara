@@ -8,7 +8,7 @@
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">
-                <form action="{{ route('usuario.storePessoaJuridica') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('usuario.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 
@@ -23,9 +23,16 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="form-label">*CNPJ</label>
-                                    <input class="form-control @error('cnpj') is-invalid @enderror" type="text" name="cnpj" id="cnpj" placeholder="Informe CNPJ" value="{{ old('cnpj') }}">
-                                    @error('cnpj')
+                                    <label class="form-label">*CPF</label>
+                                    <input class="cpf form-control @error('cpf') is-invalid @enderror" type="text" name="cpf" id="cpf" placeholder="Informe o CPF" value="{{ old('cpf') }}">
+                                    @error('cpf')
+                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">*Data de Nascimento</label>
+                                    <input class="dataFormat form-control @error('dt_nascimento_fundacao') is-invalid @enderror" type="date" min="1899-01-01" max="2000-13-13" name="dt_nascimento_fundacao" id="dt_nascimento_fundacao" value="{{ old('dt_nascimento_fundacao') }}">
+                                    @error('dt_nascimento_fundacao')
                                         <div class="invalid-feedback">{{ $message }}</div><br>
                                     @enderror
                                 </div>
@@ -88,7 +95,24 @@
 
 @section('scripts')
     <script>
-        $('#cnpj').mask('00.000.000/0000-00');
+        $('#cep').mask('00.000-000');
+        $('.cpf').mask('000.000.000-00');
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+        dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+        mm = '0' + mm;
+        }
+
+        today = yyyy + '-' + mm + '-' + dd;
+        $('.dataFormat').attr('max', today);
 
         function togglePasswordVisibility() {
             var passwordInput = document.getElementById('password');
@@ -112,6 +136,7 @@
         });
 
         $(document).ready(function() {
+
             $('.select2').select2({
                 language: {
                     noResults: function() {
