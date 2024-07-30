@@ -75,7 +75,7 @@ class RegistrarController extends Controller
      * @return \Illuminate\Http\Response
      */
     //cadastro de novo usuário PF
-    public function pessoaFisicaStore(RegistrarUserRequest $request)
+    public function store(RegistrarUserRequest $request)
     {
         try {
             //verifica se a confirmação de senha estão ok

@@ -27,14 +27,17 @@ class PerfilGrupo extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function grupo()
     {
         return $this->belongsTo(Grupo::class,'id_grupo');
     }
+
     public function perfil()
     {
         return $this->belongsTo(Perfil::class,'id_perfil');
     }
+    
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');

@@ -26,10 +26,12 @@ class PerfilUser extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+    
     public function tipo_perfil()
     {
         return $this->belongsTo(PerfilUser::class, 'id_tipo_perfil');

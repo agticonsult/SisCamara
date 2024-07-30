@@ -30,6 +30,7 @@ class ModeloDocumento extends Model implements Auditable
     {
         return ModeloDocumento::where('ativo', '=', ModeloDocumento::ATIVO)->get();
     }
+    
     public static function retornaModeloAtivo($id)
     {
         return ModeloDocumento::where('id', '=', $id)->where('ativo', '=', ModeloDocumento::ATIVO)->first();

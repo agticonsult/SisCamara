@@ -27,22 +27,27 @@ class AgentePolitico extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
     public function legislatura()
     {
         return $this->belongsTo(Legislatura::class, 'id_legislatura');
     }
+
     public function pleito_eleitoral()
     {
         return $this->belongsTo(PleitoEleitoral::class, 'id_pleito_eleitoral');
     }
+
     public function cargo_eletivo()
     {
         return $this->belongsTo(CargoEletivo::class, 'id_cargo_eletivo');
     }
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function imagem()
     {
         $resposta = array();

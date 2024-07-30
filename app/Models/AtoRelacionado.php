@@ -25,10 +25,12 @@ class AtoRelacionado extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function ato_principal()
     {
         return $this->belongsTo(Ato::class ,'id_ato_principal');
     }
+    
     public function ato_relacionado()
     {
         return $this->belongsTo(Ato::class ,'id_ato_relacionado');

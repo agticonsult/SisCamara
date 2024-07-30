@@ -27,70 +27,84 @@ class Ato extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function orgao()
     {
         return $this->belongsTo(OrgaoAto::class ,'id_orgao');
     }
+
     public function classificacao()
     {
         return $this->belongsTo(ClassificacaoAto::class ,'id_classificacao');
     }
+
     public function forma_publicacao()
     {
         return $this->belongsTo(FormaPublicacaoAto::class ,'id_forma_publicacao');
     }
+
     public function assunto()
     {
         return $this->belongsTo(AssuntoAto::class ,'id_assunto');
     }
-    // public function grupo()
-    // {
-    //     return $this->belongsTo(Grupo::class ,'id_grupo');
-    // }
+
     public function tipo_ato()
     {
         return $this->belongsTo(TipoAto::class ,'id_tipo_ato');
     }
+
     public function linhas_originais_ativas()
     {
-        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('id_tipo_linha', '=', 1)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem')->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)
+            ->where('id_tipo_linha', '=', 1)
+            ->where('ativo', '=', LinhaAto::ATIVO)
+            ->orderBy('ordem')
+        ->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('id_tipo_linha', '=', 1)->where('ativo', '=', 1);
     }
+
     public function todas_linhas_ativas()
     {
         $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem')->get();
         return $linhas;
         // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+
     public function linhas_inalteradas_ativas()
     {
-        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)->where('alterado', '=', 0)->where('ativo', '=', LinhaAto::ATIVO)->orderBy('ordem', 'asc')->orderBy('sub_ordem', 'asc')->get();
+        $linhas = LinhaAto::where('id_ato_principal', '=', $this->id)
+            ->where('alterado', '=', 0)
+            ->where('ativo', '=', LinhaAto::ATIVO)
+            ->orderBy('ordem', 'asc')
+            ->orderBy('sub_ordem', 'asc')
+        ->get();
         return $linhas;
-        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+
     public function anexos_ativos()
     {
         $anexos = AnexoAto::where('id_ato', '=', $this->id)->where('ativo', '=', AnexoAto::ATIVO)->get();
         return $anexos;
-        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+
     public function atos_relacionados_ativos()
     {
         $atos = AtoRelacionado::where('id_ato_principal', '=', $this->id)->where('ativo', '=', AtoRelacionado::ATIVO)->get();
         return $atos;
-        // return $this->hasMany(LinhaAto::class, 'id_ato', 'id')->where('ativo', '=', 1);
     }
+
     public function linha_atos()
     {
         return $this->hasMany(LinhaAto::class, 'id_ato_principal', 'id');
     }
+
     public function buscar($filtro = null)
     {
         $resultados = $this->leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
-        ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
-        ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
-        ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
+            ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
+            ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
+            ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
         ->where(function($query) use($filtro){
 
             if(empty(collect($filtro)->except('_token', '_method') === null)){
@@ -153,21 +167,23 @@ class Ato extends Model implements Auditable
     public static function retornaAtosPublicosAtivos()
     {
         $atos = Ato::leftJoin('assunto_atos', 'atos.id_assunto', '=', 'assunto_atos.id')
-                ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
-                ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
-                ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
-                ->where('atos.ativo', '=', 1)
-                ->select(
-                    'atos.*', 'assunto_atos.descricao as assunto', 'tipo_atos.descricao as tipo_ato',
-                    'orgao_atos.descricao as orgao', 'forma_publicacao_atos.descricao as forma_publicacao',
-                )
-                ->get();
+            ->leftJoin('tipo_atos', 'atos.id_tipo_ato', '=', 'tipo_atos.id')
+            ->leftJoin('orgao_atos', 'atos.id_orgao', '=', 'orgao_atos.id')
+            ->leftJoin('forma_publicacao_atos', 'atos.id_forma_publicacao', '=', 'forma_publicacao_atos.id')
+            ->where('atos.ativo', '=', 1)
+            ->select(
+                'atos.*', 'assunto_atos.descricao as assunto', 'tipo_atos.descricao as tipo_ato',
+                'orgao_atos.descricao as orgao', 'forma_publicacao_atos.descricao as forma_publicacao',
+            )
+        ->get();
         return $atos;
     }
+
     public static function retornaAtoAtivo($id)
     {
         return Ato::where('id', '=', $id)->where('ativo', '=', Ato::ATIVO)->first();
     }
+
     public static function retornaAtosRelacionadosAtivos()
     {
         return Ato::where('altera_dispositivo', '=', 1)->where('ativo', '=', Ato::ATIVO)->get();

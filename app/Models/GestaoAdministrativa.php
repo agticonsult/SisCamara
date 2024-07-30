@@ -28,6 +28,7 @@ class GestaoAdministrativa extends Model implements Auditable
     {
         return $this->belongsTo(Departamento::class, 'id_departamento');
     }
+    
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');

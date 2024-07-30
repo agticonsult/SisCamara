@@ -19,7 +19,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th scope="col">Nome</th>
-                                <th scope="col">CPF/CNPJ</th>
+                                <th scope="col">CPF</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Perfis ativos</th>
                                 {{-- <th scope="col">Bloqueado (para desbloquear o usuário, clique no botão)</th> --}}
@@ -183,8 +183,6 @@
 @section('scripts')
     <script>
         $('.cpf').mask('000.000.000-00');
-        // $('.cnpj').mask('00.000.000/0000-00');
-
         $(document).ready(function() {
 
             $('#datatables-reponsive').dataTable({

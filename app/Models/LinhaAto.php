@@ -31,14 +31,17 @@ class LinhaAto extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function ato_principal()
     {
         return $this->belongsTo(Ato::class, 'id_ato_principal');
     }
+
     public function ato_add()
     {
         return $this->belongsTo(Ato::class, 'id_ato_add');
     }
+    
     public function tipo_linha()
     {
         return $this->belongsTo(TipoLinhaAto::class, 'id_tipo_linha');

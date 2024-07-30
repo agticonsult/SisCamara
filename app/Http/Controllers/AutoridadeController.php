@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Autoridade;
-use App\Models\ErrorLog;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,16 +32,6 @@ class AutoridadeController extends Controller
             ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'index');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -87,17 +76,6 @@ class AutoridadeController extends Controller
             ErrorLogService::salvar($ex->getMessage(), 'AutoridadeController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

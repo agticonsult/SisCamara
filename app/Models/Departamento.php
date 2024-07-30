@@ -25,19 +25,23 @@ class Departamento extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function coordenador()
     {
         return $this->belongsTo(User::class, 'id_coordenador');
     }
+
     public function usuarios()
     {
         // return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->withPivot('cadastradoPorUsuario');
         return $this->belongsToMany(User::class, 'departamento_usuarios', 'id_departamento', 'id_user')->wherePivot('ativo', '=', DepartamentoUsuario::ATIVO);
     }
+
     public function tipoDocumentos()
     {
         return $this->belongsToMany(TipoDocumento::class, 'departamento_tramitacaos', 'id_departamento', 'id_tipo_documento');
     }
+
     public function historicoMovimentacao()
     {
         return $this->belongsTo(HistoricoMovimentacaoDoc::class, 'id_departamento');
@@ -47,10 +51,12 @@ class Departamento extends Model implements Auditable
     {
         return Departamento::where('ativo', '=', Departamento::ATIVO)->with('usuarios')->get();
     }
+
     public static function retornaDepartamentoAtivo($id)
     {
         return Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->first();
     }
+    
     public function estaVinculadoGestaoAdm()
     {
         $pertence = GestaoAdministrativa::where('id_departamento', '=', $this->id)->where('ativo', '=', GestaoAdministrativa::ATIVO)->first();

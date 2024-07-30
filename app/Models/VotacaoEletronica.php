@@ -28,31 +28,38 @@ class VotacaoEletronica extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function inativado_usuario()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
+
     public function tipo_votacao()
     {
         return $this->belongsTo(TipoVotacao::class, 'id_tipo_votacao');
     }
+
     public function proposicao()
     {
         return $this->belongsTo(Proposicao::class, 'id_proposicao');
     }
+
     public function legislatura()
     {
         return $this->belongsTo(Legislatura::class, 'id_legislatura');
     }
+
     public function status()
     {
         return $this->belongsTo(StatusVotacao::class, 'id_status_votacao');
     }
+
     public function horarios_ativos()
     {
         $horarios = HorarioVotacao::where('id_votacao', '=', $this->id)->where('ativo', '=', 1)->get();
         return $horarios;
     }
+    
     public function vereadores_ativos()
     {
         $vereadores = VereadorVotacao::where('id_votacao', '=', $this->id)->where('ativo', '=', 1)->get();

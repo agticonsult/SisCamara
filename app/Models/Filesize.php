@@ -29,6 +29,7 @@ class Filesize extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function tipo_filesize()
     {
         return $this->belongsTo(TipoFilesize::class, 'id_tipo_filesize');

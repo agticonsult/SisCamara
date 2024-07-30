@@ -26,22 +26,22 @@ class Permissao extends Model implements Auditable
     {
         return $this->belongsTo(Perfil::class, 'id_perfil');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-    // public function municipio()
-    // {
-    //     return $this->belongsTo(Municipio::class, 'lotacao');
-    // }
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
+    
     public function grupo()
     {
         return $this->belongsTo(Grupo::class, 'id_grupo');

@@ -48,16 +48,6 @@ class DepartamentoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,17 +76,6 @@ class DepartamentoController extends Controller
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'store');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Departamento  $departamento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Departamento $departamento)
-    {
-        //
     }
 
     /**

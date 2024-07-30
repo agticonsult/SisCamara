@@ -27,14 +27,17 @@ class Funcionalidade extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function tipo_funcionalidade()
     {
         return $this->belongsTo(TipoFuncionalidade::class, 'id_tipo_funcionalidade');
     }
+
     public function entidade()
     {
         return $this->belongsTo(Entidade::class, 'id_entidade');
     }
+
     public function ehFuncionalidadeDoPerfil($id_perfil)
     {
         $eh = PerfilFuncionalidade::where('id_perfil', '=', $id_perfil)->where('id_funcionalidade', '=', $this->id)->where('ativo', '=', 1)->first();
@@ -48,7 +51,6 @@ class Funcionalidade extends Model implements Auditable
     /*
     ** funcionalidades político, usuários interno e externo
     */
-
     public static function funcionalidadesPolitico()
     {
         $funcionalidadesPolitico = Funcionalidade::leftJoin('entidades', 'entidades.id', '=', 'funcionalidades.id_entidade')
@@ -66,17 +68,17 @@ class Funcionalidade extends Model implements Auditable
                         ->orWhere('entidades.nomeEntidade', '=', 'Legislatura')
                         ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral')
                         ->orWhere('entidades.nomeEntidade', '=', 'VotacaoEletronica')
-                        ->orWhere('entidades.nomeEntidade', '=', 'VereadorVotacao');
+                    ->orWhere('entidades.nomeEntidade', '=', 'VereadorVotacao');
                 })
             ->where(function (Builder $query) {
                 return
                     $query->where('tipo_funcionalidades.descricao', '=', 'Listagem')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Alteração')
-                        ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
+                    ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
             })
             ->select('funcionalidades.id')
-            ->get();
+        ->get();
 
         return $funcionalidadesPolitico;
     }
@@ -97,17 +99,17 @@ class Funcionalidade extends Model implements Auditable
                         ->orWhere('entidades.nomeEntidade', '=', 'AgentePolitico')
                         ->orWhere('entidades.nomeEntidade', '=', 'Legislatura')
                         ->orWhere('entidades.nomeEntidade', '=', 'Documento')
-                        ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral');
+                    ->orWhere('entidades.nomeEntidade', '=', 'PleitoEleitoral');
                 })
             ->where(function (Builder $query) {
                 return
                     $query->where('tipo_funcionalidades.descricao', '=', 'Listagem')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Alteração')
-                        ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
+                    ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
             })
             ->select('funcionalidades.id')
-            ->get();
+        ->get();
 
         return $funcionalidadesUsuarioInterno;
     }
@@ -120,17 +122,17 @@ class Funcionalidade extends Model implements Auditable
                 return
                     $query->where('entidades.nomeEntidade', '=', 'Ato')
                         ->orWhere('entidades.nomeEntidade', '=', 'Perfil')
-                        ->orWhere('entidades.nomeEntidade', '=', 'Documento');
+                    ->orWhere('entidades.nomeEntidade', '=', 'Documento');
                 })
             ->where(function (Builder $query) {
                 return
                     $query->where('tipo_funcionalidades.descricao', '=', 'Listagem')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Cadastro')
                         ->orWhere('tipo_funcionalidades.descricao', '=', 'Alteração')
-                        ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
+                    ->orWhere('tipo_funcionalidades.descricao', '=', 'Exclusão');
             })
             ->select('funcionalidades.id')
-            ->get();
+        ->get();
 
         return $funcionalidadesUsuarioExterno;
     }

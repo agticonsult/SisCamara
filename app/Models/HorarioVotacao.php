@@ -26,10 +26,12 @@ class HorarioVotacao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function tipo_horario()
     {
         return $this->belongsTo(TipoHorarioVotacao::class, 'id_tipo_horario');
     }
+    
     public function votacao()
     {
         return $this->belongsTo(VotacaoEletronica::class, 'id_votacao');

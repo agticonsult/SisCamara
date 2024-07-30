@@ -26,14 +26,17 @@ class PleitoCargo extends Model implements Auditable
     {
         return $this->belongsTo(PleitoEleitoral::class, 'id_pleito_eleitoral');
     }
+
     public function cargo_eletivo()
     {
         return $this->belongsTo(CargoEletivo::class, 'id_cargo_eletivo');
     }
+
     public function cad_usuario()
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');

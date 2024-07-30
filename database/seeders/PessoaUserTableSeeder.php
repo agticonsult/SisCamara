@@ -47,7 +47,7 @@ class PessoaUserTableSeeder extends Seeder
                 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
             [
-                'id' => $uuid3, 'id_pessoa' => 3, 'id_grupo' => Grupo::EXTERNO, 'cpf' => '22222222222', 'cnpj' => NULL, 'email' => 'cliente1@cliente.inf.br', 'password' => Hash::make('123456'),
+                'id' => $uuid3, 'id_pessoa' => 3, 'id_grupo' => Grupo::INTERNO, 'cpf' => '22222222222', 'cnpj' => NULL, 'email' => 'cliente1@cliente.inf.br', 'password' => Hash::make('123456'),
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA, 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA, 'ativo' => User::ATIVO,
                 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(), 'confirmacao_email' => User::EMAIL_CONFIRMADO, 'cadastroAprovado' => User::USUARIO_APROVADO
             ],
@@ -61,8 +61,8 @@ class PessoaUserTableSeeder extends Seeder
         DB::table('perfil_users')->insert([
             ['id_user' => $uuid1, 'id_tipo_perfil' => Perfil::USUARIO_ADM, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid2, 'id_tipo_perfil' => Perfil::USUARIO_POLITICO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid3, 'id_tipo_perfil' => Perfil::USUARIO_EXTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid4, 'id_tipo_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid3, 'id_tipo_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid4, 'id_tipo_perfil' => Perfil::USUARIO_EXTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid1, 'id_tipo_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid2, 'id_tipo_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => PerfilUser::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
         ]);
@@ -70,8 +70,8 @@ class PessoaUserTableSeeder extends Seeder
         DB::table('permissaos')->insert([
             ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_ADM, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_POLITICO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid3, 'id_perfil' => Perfil::USUARIO_EXTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid4, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid3, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid4, 'id_perfil' => Perfil::USUARIO_EXTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
             ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
         ]);

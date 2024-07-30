@@ -29,15 +29,10 @@ class StatusDocumento extends Model implements Auditable
 
     public static function retornaStatusAtivos()
     {
-        // return StatusDocumento::where('ativo', '=', StatusDocumento::ATIVO)->get();
-
         $ignorarId = 3; // ID do registro que você deseja ignorar (criação)
-
         $status = StatusDocumento::where('ativo', '=', StatusDocumento::ATIVO)
             ->whereNotIn('id', [$ignorarId])
-            ->get();
-
+        ->get();
         return $status;
-
     }
 }

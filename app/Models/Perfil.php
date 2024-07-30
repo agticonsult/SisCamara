@@ -32,12 +32,15 @@ class Perfil extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function funcionalidades_ativas(){
         return $this->hasMany(PerfilFuncionalidade::class, 'id_perfil', 'id')->where('ativo', '=', 1);
     }
+
     public function funcionalidades(){
         return $this->hasMany(PerfilFuncionalidade::class, 'id_perfil', 'id')->orderBy('ativo', 'desc');
     }
+    
     public function temFuncionalidade(Funcionalidade $funcionalidade)
     {
         $resposta = array();

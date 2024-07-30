@@ -26,14 +26,17 @@ class PerfilFuncionalidade extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function perfil()
     {
         return $this->belongsTo(Perfil::class, 'id_perfil');
     }
+
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
+    
     public function funcionalidade()
     {
         return $this->belongsTo(Funcionalidade::class, 'id_funcionalidade');

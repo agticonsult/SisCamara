@@ -27,6 +27,7 @@ class FotoPerfil extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_user');

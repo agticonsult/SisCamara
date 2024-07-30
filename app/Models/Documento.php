@@ -47,7 +47,7 @@ class Documento extends Model implements Auditable
             ->where('ativo', HistoricoMovimentacaoDoc::ATIVO)
             ->where('id_status', 2)
             ->latest()
-            ->first();
+        ->first();
     }
 
     public function finalizacao()
@@ -56,13 +56,14 @@ class Documento extends Model implements Auditable
             ->where('ativo', HistoricoMovimentacaoDoc::ATIVO)
             ->where('id_status', 4)
             ->lastest()
-            ->first();
+        ->first();
     }
 
     public static function retornaDocumentosDepAtivos()
     {
         return Documento::where('ativo', '=', Documento::ATIVO)->get();
     }
+
     public static function retornaDocumentoAtivo($id)
     {
         return Documento::where('id', '=', $id)->where('ativo', '=', Documento::ATIVO)->first();
@@ -86,7 +87,7 @@ class Documento extends Model implements Auditable
         if ($this->dep_atual() != null) {
             return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->dep_atual()->ordem + 1))
                 ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-                ->first();
+            ->first();
         }else {
             return null;
         }
@@ -98,25 +99,24 @@ class Documento extends Model implements Auditable
         if ($this->dep_atual() != null) {
             return AuxiliarDocumentoDepartamento::where('id_documento', $this->id)->where('ordem', ($this->dep_atual()->ordem - 1))
                 ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-                ->first();
+            ->first();
         }else {
             return null;
         }
     }
 
-    public function podeTramitar($id_user) {
+    public function podeTramitar($id_user)
+    {
         if ($this->dep_atual() == null) {
             return false;
         }
 
         $departamento = Departamento::find($this->dep_atual()->id_departamento);
-
         foreach ($departamento->usuarios as $user) {
             if ($user->id == $id_user) {
                 return true;
             }
         }
-
         return false;
     }
 }

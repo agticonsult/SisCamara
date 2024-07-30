@@ -2,17 +2,12 @@
 
 namespace App\Models;
 
-use App\Services\ValidadorCPFService;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
-use PhpParser\Node\Expr\Cast\String_;
-use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 use Ramsey\Uuid\Uuid;
 
 class User extends Authenticatable
@@ -61,11 +56,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // protected static function booted()
-    // {
-    //     static::creating(fn(User $user) => $user->id = (string) Uuid::uuid4());
-    // }
-
     protected static function boot()
     {
         parent::boot();
@@ -81,18 +71,22 @@ class User extends Authenticatable
     {
         $this->attributes['telefone_celular'] = preg_replace('/[^0-9]/', '', $value);
     }
+
     public function setTelefoneCelular2Attribute($value)
     {
         $this->attributes['telefone_celular2'] = preg_replace('/[^0-9]/', '', $value);
     }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
     public function setCpfAttribute($value)
     {
         $this->attributes['cpf'] = preg_replace('/[^0-9]/', '', $value);
     }
+
     public function setCnpjAttribute($value)
     {
         $this->attributes['cnpj'] = preg_replace('/[^0-9]/', '', $value);
@@ -114,10 +108,12 @@ class User extends Authenticatable
 
         return $usuarios;
     }
+
     public static function retornaUsuarioAtivo($id)
     {
         return User::where('id', '=', $id)->where('ativo', '=', User::ATIVO)->first();
     }
+
     public static function retornaUsuarioInativo($id)
     {
         return User::where('id', '=', $id)->where('ativo', '=', User::INATIVO)->first();
@@ -128,39 +124,46 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Departamento::class);
     }
+
     public function coordenadorDepartamentos()
     {
         return $this->hasMany(Departamento::class, 'id_coordenador', 'id');
     }
+
     public function pessoa()
     {
         return $this->belongsTo(Pessoa::class, 'id_pessoa');
     }
+
     public function grupo()
     {
         return $this->belongsTo(Grupo::class, 'id_grupo');
     }
+
     public function inativadoPor()
     {
         return $this->belongsTo(User::class, 'inativadoPorUsuario');
     }
+
     public function permissoes()
     {
         return $this->hasMany(Permissao::class, 'id_user', 'id')->orderBy('ativo', 'desc');
     }
+
     public function permissoes_ativas()
     {
         return $this->hasMany(Permissao::class, 'id_user', 'id')->where('ativo', '=', Permissao::ATIVO);
     }
+
     public function temPerfil($id_perfil)
     {
         $tem = Permissao::where('id_perfil', '=', $id_perfil)->where('id_user', '=', $this->id)->where('ativo', '=', Permissao::ATIVO)->first();
-
         if (!$tem){
             return false;
         }
         return true;
     }
+
     public function temPermissao($entidade, $tipoFuncionalidade)
     {
         $e = Entidade::where('nomeEntidade', '=', $entidade)->first();
@@ -170,25 +173,24 @@ class User extends Authenticatable
             return false;
         }
 
-        $funcionalidade = Funcionalidade::where('id_entidade', '=', $e->id)->where('id_tipo_funcionalidade', '=', $tp->id)->where('ativo', '=', Funcionalidade::ATIVO)->first();
-
+        $funcionalidade = Funcionalidade::where('id_entidade', '=', $e->id)
+            ->where('id_tipo_funcionalidade', '=', $tp->id)
+            ->where('ativo', '=', Funcionalidade::ATIVO)
+        ->first();
         if (!$funcionalidade){
             return false;
         }
 
         $permissoes = Permissao::where('id_user', '=', $this->id)->where('ativo', '=', Permissao::ATIVO)->get();
-
         foreach ($permissoes as $permissao){
-
             $tem = $permissao->perfil->temFuncionalidade($funcionalidade);
-
             if ($tem[0] == true){
                 return true;
             }
         }
-
         return false;
     }
+
     public function permissaoAprovacaoUsuario()
     {
         $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)
@@ -201,11 +203,11 @@ class User extends Authenticatable
                     ->where('id_departamento', $usuarioVinculado->id_departamento)
                     ->where('ativo', GestaoAdministrativa::ATIVO)
                 ->first();
-
                 return $permissaoAprovacaoUsuario;
             }
         }
     }
+
     public function permissaoReceberDocExterno()
     {
         $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)
@@ -218,29 +220,29 @@ class User extends Authenticatable
                     ->where('id_departamento', $usuarioVinculado->id_departamento)
                     ->where('ativo', GestaoAdministrativa::ATIVO)
                 ->first();
-
                 return $permissaoReceberDocExterno;
             }
         }
     }
+
     public function ehAgentePolitico()
     {
         $eh = AgentePolitico::where('id_user', '=', $this->id)->where('ativo', '=', AgentePolitico::ATIVO)->first();
-
         if (!$eh){
             return false;
         }
         return true;
     }
+
     public function usuarioInterno()
     {
         $eh = PerfilUser::where('id_user', '=', $this->id)->where('id_tipo_perfil', '=', 4)->where('ativo', '=', PerfilUser::ATIVO)->first();
-
         if (!$eh){
             return false;
         }
         return true;
     }
+
     public function foto()
     {
         $resposta = array();
@@ -269,13 +271,13 @@ class User extends Authenticatable
         }
         return $resposta;
     }
+
     public function estaVinculadoDep($id_departamento)
     {
         $sim = DepartamentoUsuario::where('id_user', $this->id)
             ->where('id_departamento', $id_departamento)
             ->where('ativo', DepartamentoUsuario::ATIVO)
-            ->first();
-
+        ->first();
         if (!$sim) {
             return true;
         }

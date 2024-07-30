@@ -37,6 +37,7 @@ use App\Http\Controllers\TipoAtoController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoFilesizeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsuarioExternoController;
 use App\Http\Controllers\VereadorController;
 use App\Http\Controllers\VereadorVotacaoController;
 use App\Http\Controllers\VotacaoEletronicaController;
@@ -426,6 +427,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [PerfilFuncionalidadeController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [PerfilFuncionalidadeController::class, 'update'])->name('update');
         Route::post('/inativar-funcionalidade/{id}', [PerfilFuncionalidadeController::class, 'inativarFuncionalidade'])->name('inativarFuncionalidade');
+    });
+
+    //cadastro de usuário externo
+    Route::group(['prefix' => '/usuario-externo', 'as' => 'usuario_externo.'], function() {
+        Route::get('/create', [UsuarioExternoController::class, 'create'])->name('create');
     });
 
 });

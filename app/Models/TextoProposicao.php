@@ -30,16 +30,9 @@ class TextoProposicao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function proposicao()
     {
         return $this->belongsTo(Proposicao::class, 'id_proposicao');
     }
-    // public function ato_add()
-    // {
-    //     return $this->belongsTo(Ato::class, 'id_ato_add');
-    // }
-    // public function tipo_linha()
-    // {
-    //     return $this->belongsTo(TipoLinhaAto::class, 'id_tipo_linha');
-    // }
 }

@@ -26,6 +26,7 @@ class Reparticao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function tipo_reparticao()
     {
         return $this->belongsTo(TipoReparticao::class, 'id_tipo_reparticao');

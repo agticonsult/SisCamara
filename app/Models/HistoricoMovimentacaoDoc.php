@@ -27,18 +27,22 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
     {
         return $this->belongsTo(StatusDocumento::class, 'id_status');
     }
+
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'id_departamento')->where('ativo', '=', Departamento::ATIVO);
     }
+
     public function documento()
     {
         return $this->belongsTo(Documento::class, 'id_documento');
     }
+
     public function anexo()
     {
         return $this->hasOne(AnexoHistoricoMovimentacao::class, 'id_movimentacao', 'id');
     }
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_usuario');
@@ -49,14 +53,15 @@ class HistoricoMovimentacaoDoc extends Model implements Auditable
         return HistoricoMovimentacaoDoc::where('id_documento', '=', $id)
             ->where('ativo', '=', HistoricoMovimentacaoDoc::ATIVO)
             ->orderByDesc('created_at')
-            ->get();
+        ->get();
     }
+    
     public static function retornaUltimoHistoricoMovStatusAtivo($id)
     {
         return HistoricoMovimentacaoDoc::where('id_documento', '=', $id)
             ->where('ativo', '=', HistoricoMovimentacaoDoc::ATIVO)
             ->latest()
-            ->first();
+        ->first();
     }
 
 }

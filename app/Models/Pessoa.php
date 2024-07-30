@@ -30,25 +30,15 @@ class Pessoa extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function setNomeAttribute($value)
     {
         $this->attributes['nome'] = trim($value);
     }
+    
     public function setCepAttribute($value)
     {
         $this->attributes['cep'] = preg_replace('/[^0-9]/', '', $value);
     }
-
-    // public function municipio()
-    // {
-    //     return $this->belongsTo(Municipio::class, 'id_municipio');
-    // }
-    // public function usuario(){
-    //     return $this->hasOne(User::class, 'id_pessoa', 'id');
-    // }
-    // public function organizacao(){
-    //     return $this->hasOne(Organizacao::class, 'id_pj', 'id');
-    // }
-
 }
 

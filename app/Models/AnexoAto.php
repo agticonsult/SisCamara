@@ -26,6 +26,7 @@ class AnexoAto extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+    
     public function ato()
     {
         return $this->belongsTo(Ato::class ,'id_ato');

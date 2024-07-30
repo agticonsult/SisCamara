@@ -27,11 +27,12 @@ class TipoDocumento extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function departamentoVinculados()
     {
         return $this->hasMany(DepartamentoTramitacao::class, 'id_tipo_documento', 'id')
             ->where('ativo', '=', DepartamentoTramitacao::ATIVO)
-            ->orderBy('ordem');
+        ->orderBy('ordem');
     }
 
     public static function retornaTipoDocumentosAtivos()

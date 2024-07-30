@@ -28,14 +28,17 @@ class VereadorVotacao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function autorizadaPor()
     {
         return $this->belongsTo(User::class, 'autorizadaPorUsuario');
     }
+
     public function vereador()
     {
         return $this->belongsTo(AgentePolitico::class, 'id_vereador');
     }
+    
     public function votacao()
     {
         return $this->belongsTo(VotacaoEletronica::class, 'id_votacao');

@@ -29,7 +29,9 @@ class Auditoria extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function buscar($filtro = null){
+    
+    public function buscar($filtro = null)
+    {
 
         $resultados = $this->where(function($query) use($filtro){
 

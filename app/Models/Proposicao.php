@@ -27,14 +27,17 @@ class Proposicao extends Model implements Auditable
     {
         return $this->belongsTo(User::class, 'cadastradoPorUsuario');
     }
+
     public function modelo()
     {
         return $this->belongsTo(ModeloProposicao::class, 'id_modelo');
     }
+
     public function localizacao()
     {
         return $this->belongsTo(LocalizacaoProposicao::class, 'id_localizacao');
     }
+    
     public function status()
     {
         return $this->belongsTo(StatusProposicao::class, 'id_status');
