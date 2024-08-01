@@ -2,29 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\HomeUpdatePJRequest;
 use App\Http\Requests\HomeUpdateRequest;
 use App\Models\DepartamentoUsuario;
-use App\Models\Distrito;
-use App\Models\ErrorLog;
-use App\Models\Estado;
 use App\Models\Filesize;
 use App\Models\FotoPerfil;
-use App\Models\Municipio;
-use App\Models\Perfil;
-use App\Models\PerfilUser;
 use App\Models\Pessoa;
-use App\Models\TipoPerfil;
 use App\Models\User;
 use App\Services\ErrorLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use App\Services\ValidadorCPFService;
 
 class HomeController extends Controller
 {
@@ -95,48 +83,6 @@ class HomeController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
-        }
-    }
-
-    public function updatePj(HomeUpdatePJRequest $request, $id)
-    {
-        try {
-            //Busca o usuário no BD
-            $user = User::find($id);
-            $user->update($request->validated());
-
-            if ($request->password != null){
-
-                //verificar se a senha antiga está correta
-                if (!Hash::check($request->senha_antiga, $user->password)){
-                    return redirect()->back()->with('erro', 'A senha antiga está incorreta.')->withInput();
-                }
-
-                //verifica se a confirmação de senha estão ok
-                if($request->password != $request->confirmacao){
-                    return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
-                }
-
-                $tamanho_senha = strlen($request->password);
-                if ($tamanho_senha < 6 || $tamanho_senha > 35){
-                    return redirect()->back()->with('erro', 'Senha inválida.')->withInput();
-                }
-
-                $user->password = Hash::make($request->password);
-            }
-
-            //Dados de Pessoa
-            if($user->id_pessoa){
-                // $pessoa = Pessoa::where('id', '=', $user->id_pessoa)->first();
-                $pessoa = Pessoa::find($user->id_pessoa);
-                $pessoa->update($request->validated());
-            }
-            return redirect()->route('home')->with('success', 'Cadastro alterado com sucesso.');
-
-        }
-        catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'updatePj');
             return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
         }
     }

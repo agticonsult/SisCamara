@@ -228,6 +228,28 @@
                             </li>
                         @endif
 
+                        @if(Auth::user()->permissaoCadastrarUsuario())
+                            <li class="sidebar-item">
+                                <a href="#usuariosExternos" data-toggle="collapse" class="sidebar-link collapsed">
+                                    <i class="fas fa-users"></i>
+                                    Usuários
+                                </a>
+                                <ul id="usuariosExternos"
+                                    class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == '/usuario-externo'
+                                        ? 'active'
+                                        : 'collapse' }}">
+                                    {{-- <li
+                                        class="sidebar-item {{ Route::current()->uri == 'usuario/index' || Route::current()->uri == 'usuario/edit/{id}' ? 'active' : null }}">
+                                        <a class="sidebar-link" href="{{ route('usuario.index') }}">Listagem</a>
+                                    </li> --}}
+                                    <li
+                                        class="sidebar-item {{ Route::current()->uri == 'usuario-externo/create' ? 'active' : null }}">
+                                        <a class="sidebar-link" href="{{ route('usuario_externo.create') }}">Cadastro</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+
                         {{-- Aprovação de cadastros externos --}}
                         @if(Auth::user()->permissaoAprovacaoUsuario())
                             <li class="sidebar-item {{ Route::current()->uri == 'aprovacao-cadastro-usuario/usuarios' ? 'active' : null }}">

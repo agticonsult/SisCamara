@@ -68,12 +68,12 @@ class PessoaUserTableSeeder extends Seeder
         ]);
 
         DB::table('permissaos')->insert([
-            ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_ADM, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_POLITICO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid3, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid4, 'id_perfil' => Perfil::USUARIO_EXTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
-            ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
+            ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_ADM, 'id_grupo' => Grupo::ADMINISTRADOR, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_POLITICO, 'id_grupo' => Grupo::POLITICO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid3, 'id_perfil' => Perfil::USUARIO_INTERNO, 'id_grupo' => Grupo::INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid4, 'id_perfil' => Perfil::USUARIO_EXTERNO, 'id_grupo' => Grupo::EXTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid1, 'id_perfil' => Perfil::USUARIO_INTERNO, 'id_grupo' => Grupo::INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()],
+            ['id_user' => $uuid2, 'id_perfil' => Perfil::USUARIO_INTERNO, 'id_grupo' => Grupo::INTERNO, 'ativo' => Permissao::ATIVO, 'cadastradoPorUsuario' => $uuid1, 'created_at' => Carbon::now()]
         ]);
     }
 }

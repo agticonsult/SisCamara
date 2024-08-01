@@ -208,6 +208,11 @@ class User extends Authenticatable
         }
     }
 
+    public function permissaoCadastrarUsuario()
+    {
+        return Permissao::where('id_grupo', $this->id_grupo)->where('id_perfil', Perfil::USUARIO_EXTERNO)->where('ativo', Permissao::ATIVO)->first();
+    }
+
     public function permissaoReceberDocExterno()
     {
         $usuarioVinculadoDepartamentos = DepartamentoUsuario::Where('id_user', $this->id)

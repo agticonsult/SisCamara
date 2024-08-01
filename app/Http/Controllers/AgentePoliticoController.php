@@ -6,7 +6,6 @@ use App\Http\Requests\AgentePoliticoStoreRequest;
 use App\Http\Requests\AgentePoliticoUpdateRequest;
 use App\Http\Requests\AgentePoliticoVincularRequest;
 use App\Models\AgentePolitico;
-use App\Models\ErrorLog;
 use App\Models\Filesize;
 use App\Models\FotoPerfil;
 use App\Models\Perfil;
@@ -17,16 +16,11 @@ use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
 use App\Models\User;
 use App\Services\ErrorLogService;
-use App\Services\ValidadorCPFService;
+use App\Utils\UploadFotoUtil;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Ramsey\Uuid\Uuid;
 
 class AgentePoliticoController extends Controller
 {
@@ -76,7 +70,7 @@ class AgentePoliticoController extends Controller
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
                 ->orderBy('pessoas.nome', 'asc')
-                ->get();
+            ->get();
 
             $usuarios = array();
             foreach ($users as $user) {
@@ -106,7 +100,7 @@ class AgentePoliticoController extends Controller
                 ->where('users.ativo', '=', 1)
                 ->select('users.id', 'users.id_pessoa')
                 ->orderBy('pessoas.nome', 'asc')
-                ->get();
+            ->get();
 
             $usuarios = array();
             foreach ($users as $user) {
@@ -134,7 +128,7 @@ class AgentePoliticoController extends Controller
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', PleitoCargo::ATIVO)
-                ->first();
+            ->first();
             if (!$pleito_cargo){
                 return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
             }
@@ -170,70 +164,8 @@ class AgentePoliticoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            //verifica se o arquivo é válido
-            if($request->hasFile('fImage') && $request->file('fImage')->isValid()){
-
-                $max_filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
-                if ($max_filesize){
-                    if ($max_filesize->mb != null){
-                        if (is_int($max_filesize->mb)){
-                            $mb = $max_filesize->mb;
-                        }
-                        else{
-                            $mb = 2;
-                        }
-                    }
-                    else{
-                        $mb = 2;
-                    }
-                }
-                else{
-                    $mb = 2;
-                }
-
-                if (filesize($request->file('fImage')) <= 1048576 * $mb){
-                    $nome_original = $request->fImage->getClientOriginalName();
-                    $extensao = $request->fImage->extension();
-
-                    //validação de extensão de imagens
-                    if(
-                        $extensao != 'jpg' &&
-                        $extensao != 'jpeg' &&
-                        $extensao != 'png'
-                    ) {
-                        return redirect()->back()->with('erro', 'Extensão de imagem inválida. Extensões permitidas .png, .jpg e .jpeg')->withInput();
-                    }
-
-                    $nome_hash = Uuid::uuid4();
-                    $datahora = Carbon::now()->timestamp;
-                    $nome_hash = $nome_hash . '-' . $datahora . '.' . $extensao;
-                    //diretório onde estará as fotos de perfil
-                    $upload = $request->fImage->storeAs('public/foto-perfil/', $nome_hash);
-                    if(!$upload){
-                        return redirect()->back()->with('erro', 'Ocorreu um erro ao salvar a foto de perfil.')->withInput();
-                    }
-                    else{
-                        // $fotos = FotoPerfil::where('id_user', '=', $novoUsuario->id)->where('ativo', '=', FotoPerfil::ATIVO)->get();
-                        // foreach ($fotos as $foto) {
-                        //     $foto->update([
-                        //         'ativo' => FotoPerfil::INATIVO,
-                        //         'inativadoPorUsuario' => Auth::user()->id,
-                        //         'dataInativado' => Carbon::now(),
-                        //         'motivoInativado' => "Alteração de foto de perfil pelo usuário"
-                        //     ]);
-                        // }
-
-                        FotoPerfil::create([
-                            'nome_original' => $nome_original,
-                            'nome_hash' => $nome_hash,
-                            'id_user' => $novoUsuario->id,
-                            'cadastradoPorUsuario' => Auth::user()->id
-                        ]);
-                    }
-                }
-                else{
-                    return redirect()->back()->with('erro', 'Arquivo maior que ' . $mb . 'MB');
-                }
+            if ($request->fImage) {
+                UploadFotoUtil::identificadorFileUpload($request, $novoUsuario);
             }
 
             AgentePolitico::create($request->validated() + [
@@ -264,7 +196,7 @@ class AgentePoliticoController extends Controller
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', PleitoCargo::ATIVO)
-                ->first();
+            ->first();
             if (!$pleito_cargo){
                 return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
             }
@@ -371,7 +303,7 @@ class AgentePoliticoController extends Controller
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', PleitoCargo::ATIVO)
-                ->first();
+            ->first();
             if (!$pleito_cargo){
                 return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
             }
@@ -384,68 +316,8 @@ class AgentePoliticoController extends Controller
             $usuario = User::find($agente_politico->id_user);
             $usuario->update($request->validated());
 
-            //verifica se o arquivo é válido
-            if($request->hasFile('fImage') && $request->file('fImage')->isValid()) {
-                $max_filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
-                if ($max_filesize){
-                    if ($max_filesize->mb != null){
-                        if (is_int($max_filesize->mb)){
-                            $mb = $max_filesize->mb;
-                        }
-                        else{
-                            $mb = 2;
-                        }
-                    }
-                    else{
-                        $mb = 2;
-                    }
-                }
-                else{
-                    $mb = 2;
-                }
-
-                if (filesize($request->file('fImage')) <= 1048576 * $mb){
-                    $nome_original = $request->fImage->getClientOriginalName();
-                    $extensao = $request->fImage->extension();
-                    //validação de extensão de imagens
-                    if(
-                        $extensao != 'jpg' &&
-                        $extensao != 'jpeg' &&
-                        $extensao != 'png'
-                    ) {
-                        return redirect()->back()->with('erro', 'Extensão de imagem inválida. Extensões permitidas .png, .jpg e .jpeg')->withInput();
-                    }
-
-                    $nome_hash = Uuid::uuid4();
-                    $datahora = Carbon::now()->timestamp;
-                    $nome_hash = $nome_hash . '-' . $datahora . '.' . $extensao;
-                    //diretório onde estará as fotos de perfil
-                    $upload = $request->fImage->storeAs('public/foto-perfil/', $nome_hash);
-                    if(!$upload){
-                        return redirect()->back()->with('erro', 'Ocorreu um erro ao salvar a foto de perfil.')->withInput();
-                    }
-                    else{
-                        $fotos = FotoPerfil::where('id_user', '=', $agente_politico->id_user)->where('ativo', '=', FotoPerfil::ATIVO)->get();
-                        foreach ($fotos as $foto) {
-                            $foto->update([
-                                'ativo' => FotoPerfil::INATIVO,
-                                'inativadoPorUsuario' => Auth::user()->id,
-                                'dataInativado' => Carbon::now(),
-                                'motivoInativado' => "Alteração de foto de perfil pelo usuário"
-                            ]);
-                        }
-
-                        FotoPerfil::create([
-                            'nome_original' => $nome_original,
-                            'nome_hash' => $nome_hash,
-                            'id_user' => $agente_politico->id_user,
-                            'cadastradoPorUsuario' => Auth::user()->id
-                        ]);
-                    }
-                }
-                else{
-                    return redirect()->back()->with('erro', 'Arquivo maior que ' . $mb . 'MB');
-                }
+            if ($request->fImage) {
+                UploadFotoUtil::identificadorFileUpload($request, $usuario);
             }
 
             // Político
