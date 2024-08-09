@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReparticaoRequest;
-use App\Models\ErrorLog;
 use App\Models\Reparticao;
 use App\Models\TipoReparticao;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ReparticaoController extends Controller
 {
@@ -19,7 +17,8 @@ class ReparticaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Reparticao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $reparticaos = Reparticao::where('ativo', '=', Reparticao::ATIVO)->get();
@@ -28,7 +27,8 @@ class ReparticaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -36,7 +36,8 @@ class ReparticaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Reparticao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $tipo_reparticaos = TipoReparticao::where('ativo', '=', TipoReparticao::ATIVO)->get();
@@ -45,7 +46,8 @@ class ReparticaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -53,19 +55,22 @@ class ReparticaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Reparticao', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             Reparticao::create($request->validated() + [
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('reparticao.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso.','success');
+            return redirect()->route('reparticao.index');
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -73,12 +78,14 @@ class ReparticaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Reparticao', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', Reparticao::ATIVO)->first();
             if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+                Alert::toast('Repartição inválida.','error');
+                return redirect()->back();
             }
 
             $tipo_reparticaos = TipoReparticao::where('ativo', '=', TipoReparticao::ATIVO)->get();
@@ -87,7 +94,8 @@ class ReparticaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -95,22 +103,26 @@ class ReparticaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Reparticao', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', Reparticao::ATIVO)->first();
             if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+                Alert::toast('Repartição inválida.','error');
+                return redirect()->back();
             }
 
             $reparticao->update($request->validated());
 
-            return redirect()->route('reparticao.edit', $reparticao->id)->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizada com sucesso.','success');
+            return redirect()->route('reparticao.edit', $reparticao->id);
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -118,7 +130,8 @@ class ReparticaoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('Reparticao', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -128,7 +141,8 @@ class ReparticaoController extends Controller
 
             $reparticao = Reparticao::where('id', '=', $id)->where('ativo', '=', Reparticao::ATIVO)->first();
             if (!$reparticao){
-                return redirect()->back()->with('erro', 'Repartição inválida.');
+                Alert::toast('Repartição inválida.','error');
+                return redirect()->back();
             }
 
             $reparticao->update([
@@ -138,12 +152,14 @@ class ReparticaoController extends Controller
                 'ativo' => Reparticao::INATIVO,
             ]);
 
-            return redirect()->route('reparticao.index')->with('success', 'Exclusão realizada com sucesso.');
-            
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('reparticao.index');
+
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ReparticaoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

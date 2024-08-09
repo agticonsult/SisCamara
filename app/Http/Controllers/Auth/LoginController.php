@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\ErrorLog;
 use App\Models\FotoPerfil;
-use App\Models\PerfilUser;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Traits\ApiResponser;
-use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -32,13 +31,16 @@ class LoginController extends Controller
 
         if($user){
             if($user->bloqueadoPorTentativa == User::BLOQUEADO_TENTATIVA_EXCESSO){
-                return redirect()->route('login')->with('erro', 'Usuário bloqueado por excesso de tentativas.')->withInput();
+                Alert::toast('Usuário bloqueado por excesso de tentativas.','error');
+                return redirect()->route('login');
             }
             if($user->confirmacao_email == User::EMAIL_NAO_CONFIRMADO){
-                return redirect()->back()->with('erro', 'Não foi confirmado o cadastro pelo link enviado no email.')->withInput();
+                Alert::toast('Não foi confirmado o cadastro pelo link enviado no email.','error');
+                return redirect()->back();
             }
             if($user->cadastroAprovado == User::USUARIO_REPROVADO){
-                return redirect()->back()->with('warning', 'Cadastro não foi aprovado ainda! Aguarde a confirmação.')->withInput();
+                Alert::toast('Cadastro não foi aprovado ainda! Aguarde a confirmação.','warning');
+                return redirect()->back();
             }
 
             // $array = ['cpf' => preg_replace('/[^0-9]/', '', $request->cpf), 'password' => $request->password];
@@ -55,7 +57,8 @@ class LoginController extends Controller
                 }
                 $user->save();
 
-                return redirect()->back()->with('erro', 'E-mail de usuário ou Senha com dados incorretos')->withInput();
+                Alert::toast('E-mail de usuário ou Senha com dados incorretos.','error');
+                return redirect()->back();
             };
 
             //Caso não seja excedido as tentativas de acesso, será zerado ou nulos os atributos abaixo e salva
@@ -68,7 +71,8 @@ class LoginController extends Controller
 
         }
         else{
-            return redirect()->route('login')->with('erro', 'E-mail de usuário ou Senha com dados incorretos.')->withInput();
+            Alert::toast('E-mail de usuário ou Senha com dados incorretos.','error');
+            return redirect()->route('login');
         }
 
     }

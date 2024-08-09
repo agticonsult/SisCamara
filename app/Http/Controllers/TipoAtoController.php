@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoAtoRequest;
-use App\Models\ErrorLog;
 use App\Models\TipoAto;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TipoAtoController extends Controller
 {
@@ -23,7 +21,8 @@ class TipoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $tipoAtos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
@@ -32,18 +31,9 @@ class TipoAtoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -56,31 +46,23 @@ class TipoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             TipoAto::create($request->validated() + [
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Cadastro realizado com sucesso.');
+            Alert::toast('Cadastro realizado com sucesso.','success');
+            return redirect()->route('configuracao.tipo_ato.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -93,12 +75,14 @@ class TipoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
             if (!$tipoAto){
-                return redirect()->route('configuracao.tipo_ato.index')->with('erro', 'Não é possível alterar este tipo de ato.');
+                Alert::toast('Não é possível alterar este tipo de ato.','error');
+                return redirect()->route('configuracao.tipo_ato.index');
             }
 
             return view('configuracao.tipo-ato.edit', compact('tipoAto'));
@@ -106,7 +90,8 @@ class TipoAtoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -121,18 +106,21 @@ class TipoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('TipoAto', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
             $tipoAto->update($request->validated());
 
-            return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizada com sucesso.','success');
+            return redirect()->route('configuracao.tipo_ato.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -146,7 +134,8 @@ class TipoAtoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('TipoAto', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -157,7 +146,8 @@ class TipoAtoController extends Controller
 
             $tipoAto = TipoAto::where('id', '=', $id)->where('ativo', '=', TipoAto::ATIVO)->first();
             if (!$tipoAto){
-                return redirect()->back()->with('erro', 'Não é possível excluir este tipo de ato.')->withInput();
+                Alert::toast('Não é possível excluir este tipo de ato.','error');
+                return redirect()->back();
             }
 
             $tipoAto->update([
@@ -167,12 +157,14 @@ class TipoAtoController extends Controller
                 'ativo' => TipoAto::ATIVO
             ]);
 
-            return redirect()->route('configuracao.tipo_ato.index')->with('success', 'Exclusão realizada com sucesso.');
-            
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('configuracao.tipo_ato.index');
+
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'TipoAtoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

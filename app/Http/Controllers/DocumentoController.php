@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DocumentoRequest;
-use App\Http\Requests\StatusDocRequest;
 use App\Models\AnexoHistoricoMovimentacao;
 use App\Models\AuxiliarDocumentoDepartamento;
-use App\Models\Departamento;
 use App\Models\Documento;
 use App\Models\DepartamentoTramitacao;
 use App\Models\Filesize;
@@ -14,9 +12,9 @@ use App\Models\HistoricoMovimentacaoDoc;
 use App\Models\StatusDocumento;
 use App\Models\TipoDocumento;
 use App\Models\TipoWorkflow;
+use App\Services\DepartamentoTramitacaoService;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
-use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -24,8 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Uuid;
-
-use function RingCentral\Psr7\mimetype_from_filename;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DocumentoController extends Controller
 {
@@ -33,7 +30,8 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documentos = Documento::retornaDocumentosDepAtivos();
@@ -43,7 +41,8 @@ class DocumentoController extends Controller
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -51,7 +50,8 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $tipoDocumentos = TipoDocumento::retornaTipoDocumentosAtivos();
@@ -62,7 +62,8 @@ class DocumentoController extends Controller
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -70,7 +71,8 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $timestamp = Carbon::now()->timestamp;
@@ -89,54 +91,20 @@ class DocumentoController extends Controller
             ]);
 
             $departamentos = DepartamentoTramitacao::where('id_tipo_documento', '=', $request->id_tipo_documento)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->get();
-            if ($documento->id_tipo_workflow == 1) { //automática
-                foreach ($departamentos as $key => $departamento) {
-                    if ($key == 0) {
-                        AuxiliarDocumentoDepartamento::create([
-                            'id_documento' => $documento->id,
-                            'id_departamento' => $departamento->id_departamento,
-                            'ordem' => $key + 1,
-                            'atual' => true
-                        ]);
-                    }
-                    else {
-                        AuxiliarDocumentoDepartamento::create([
-                            'id_documento' => $documento->id,
-                            'id_departamento' => $departamento->id_departamento,
-                            'ordem' => $key + 1,
-                            'atual' => false
-                        ]);
-                    }
-                }
+            if ($documento->id_tipo_workflow == 1) {
+                DepartamentoTramitacaoService::tramitacaoAutomatica($documento, $departamentos);
+            }
+            if ($documento->id_tipo_workflow == 2) {
+                DepartamentoTramitacaoService::tramitacaoManual($documento, $departamentos, $request->id_departamento);
             }
 
-            if ($documento->id_tipo_workflow == 2) { //manual
-                foreach ($departamentos as $departamento) {
-                    if ($departamento->id_departamento == $request->id_departamento) {
-                        AuxiliarDocumentoDepartamento::create([
-                            'id_documento' => $documento->id,
-                            'id_departamento' => $departamento->id_departamento,
-                            'ordem' => 1,
-                            'atual' => true
-                        ]);
-                    }
-                    else{
-                        AuxiliarDocumentoDepartamento::create([
-                            'id_documento' => $documento->id,
-                            'id_departamento' => $departamento->id_departamento,
-                            // 'ordem' => 1,
-                            'atual' => false
-                        ]);
-                    }
-                }
-            }
-
-            return redirect()->route('documento.index')->with('success', 'Cadastro realizado com sucesso.');
-
+            Alert::toast('Cadastro realizado com sucesso!', 'success');
+            return redirect()->route('documento.index');
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -144,13 +112,15 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documentoEdit = Documento::retornaDocumentoAtivo($id);
 
             if (!$documentoEdit) {
-                return redirect()->back()->with('erro', 'Documento inválido.');
+                Alert::toast('Documento inválido.','error');
+                return redirect()->back();
             }
 
             $historicoMovimentacao = HistoricoMovimentacaoDoc::retornaUltimoHistoricoMovStatusAtivo($documentoEdit->id);
@@ -162,7 +132,7 @@ class DocumentoController extends Controller
             $departamentos = AuxiliarDocumentoDepartamento::where('id_documento', $documentoEdit->id)
                 ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                 ->orderByRaw('ISNULL(ordem), ordem')
-                ->get();
+            ->get();
 
             $proximoDep = null; // próximo departamento
             $depAnterior = $documentoEdit->dep_anterior(); // departamento anterior
@@ -186,7 +156,7 @@ class DocumentoController extends Controller
                     ->whereNull('ordem')
                     ->where('atual', 0)
                     ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-                    ->get();
+                ->get();
 
                 // se não houver próximo departamento, não é possível Aprovar, somente Finalizar e Reprovar
                 if (count($departamentoTramitacao) == 0) {
@@ -202,38 +172,41 @@ class DocumentoController extends Controller
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
     public function edit($id)
     {
-
         try{
             if(Auth::user()->temPermissao('Documento', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documento = Documento::retornaDocumentoAtivo($id);
-
             if (!$documento) {
-                return back()->with('erro', 'Documento não encontrado.');
+                Alert::toast('Documento não encontrado','error');
+                return back();
             }
 
             if(!$documento->reprovado_em_tramitacao){
-                return redirect()->back()->with('erro', 'O documento só pode ser editado se for reprovado em tramitação.');
+                Alert::toast('O documento só pode ser editado se for reprovado em tramitação.','error');
+                return redirect()->back();
             }
 
             $departamentos = AuxiliarDocumentoDepartamento::where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                 ->where('id_documento', '=', $id)
-                ->get();
+            ->get();
 
             return view('documento.edit', compact('documento', 'departamentos'));
 
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -241,17 +214,19 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documento = Documento::retornaDocumentoAtivo($id);
-
             if (!$documento) {
-                return back()->with('erro', 'Documento não encontrado.');
+                Alert::toast('Documento não encontrado.','error');
+                return redirect()->back();
             }
 
             if(!$documento->reprovado_em_tramitacao){
-                return redirect()->back()->with('erro', 'O documento só pode ser editado se for reprovado em tramitação.');
+                Alert::toast('O documento só pode ser editado se for reprovado em tramitação.','error');
+                return redirect()->back();
             }
 
             $validated = $request->validated();
@@ -282,23 +257,23 @@ class DocumentoController extends Controller
             }
 
             if ($documento->id_tipo_workflow == 2) { // tramitação manual
-
                 $depAuxiliar = AuxiliarDocumentoDepartamento::where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
                     ->where('id_documento', $id)
                     ->where('id_departamento', $validated['id_departamento'])
-                    ->first();
+                ->first();
 
                 $depAuxiliar->update([
                     'atual' => true,
                     'ordem' => 1
                 ]);
             }
-
-            return redirect()->route('documento.index')->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizado com sucesso!', 'success');
+            return redirect()->route('documento.index');
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'aprovar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -306,7 +281,8 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -323,13 +299,14 @@ class DocumentoController extends Controller
             $validar->validate();
 
             $documento = Documento::retornaDocumentoAtivo($id);
-
             if (!$documento) {
-                return back()->with('erro', 'Documento não encontrado.');
+                Alert::toast('Documento não encontrado.','error');
+                return redirect()->back();
             }
 
             if($documento->podeTramitar(auth()->user()->id) == false){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             if ($id_tipo_workflow == 1) { // tramitação automática
@@ -338,14 +315,15 @@ class DocumentoController extends Controller
 
                 if (!$departamento_atual) {
                     ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DocumentoController', 'aprovar');
-                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                    Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                    return redirect()->back();
                 }
 
                 $proximo_departamento = $documento->proximo_dep();
-
                 if (!$proximo_departamento) {
                     ErrorLogService::salvar('Erro ao encontrar o próximo departamento do documento', 'DocumentoController', 'aprovar');
-                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                    Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                    return redirect()->back();
                 }
 
                 $departamento_atual->update([
@@ -368,20 +346,21 @@ class DocumentoController extends Controller
             if ($id_tipo_workflow == 2) { // tramitação manual
 
                 $departamento_atual = $documento->dep_atual();
-
                 if (!$departamento_atual) {
                     ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DocumentoController', 'aprovar');
-                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                    Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                    return redirect()->back();
                 }
 
                 $proximo_departamento = AuxiliarDocumentoDepartamento::where('id_documento', $documento->id)
                     ->where('id_departamento', $request->id_departamento)
                     ->where('ativo', AuxiliarDocumentoDepartamento::ATIVO)
-                    ->first();
+                ->first();
 
                 if (!$proximo_departamento) {
                     ErrorLogService::salvar('Erro ao encontrar o próximo departamento do documento', 'DocumentoController', 'aprovar');
-                    return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                    Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                    return redirect()->back();
                 }
 
                 $departamento_atual->update([
@@ -470,17 +449,17 @@ class DocumentoController extends Controller
                     $respostaAnexo['sucesso'] = false;
                     $respostaAnexo['mensagem'] = 'arquivo inválido';
                 }
-            }else {
+            }
+            else {
                 $respostaAnexo['sucesso'] = true;
             }
 
             // se deu erro no anexo, mostra o erro
             if ($respostaAnexo['sucesso']) {
-                return back()->with('success',
-                    'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '.');
-            }else {
-                return back()->with('warning',
-                    'Aprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $proximo_departamento->departamento->descricao . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+                Alert::toast('Aprovação realizada com sucesso, o documento foi encaminhado ao departamento '. $proximo_departamento->departamento->descricao . '.' ,'success')->autoClose(5000);
+            }
+            else {
+                Alert::toast('Aprovação realizada com sucesso, o documento foi encaminhado ao departamento '. $proximo_departamento->departamento->descricao . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem'] ,'warning')->autoClose(5000);
             }
         }
         catch (ValidationException $e) {
@@ -488,7 +467,8 @@ class DocumentoController extends Controller
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'aprovar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -496,28 +476,29 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documento = Documento::retornaDocumentoAtivo($id);
-
             if (!$documento) {
-                return back()->with('erro', 'Documento não encontrado.');
+                Alert::toast('Documento não encontrado.','error');
+                return redirect()->back();
             }
 
             if($documento->podeTramitar(auth()->user()->id) == false){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $departamento_atual = $documento->dep_atual();
-
             if (!$departamento_atual) {
                 ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DocumentoController', 'reprovar');
-                return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                return redirect()->back();
             }
 
             $departamento_anterior = $documento->dep_anterior();
-
             if (!$departamento_anterior) { // se não houver departamento anterior reprova o documento e devolve para o autor
 
                 if ($documento->id_tipo_workflow == 1) {
@@ -547,8 +528,8 @@ class DocumentoController extends Controller
 
                 $departamento_destino = null;
 
-            }else { // se houver departamento anterior tramita normalmente
-
+            }
+            else { // se houver departamento anterior tramita normalmente
                 if ($documento->id_tipo_workflow == 1) {
                     $departamento_atual->update([
                         'atual' => false
@@ -653,24 +634,30 @@ class DocumentoController extends Controller
             if ($respostaAnexo['sucesso']) {
 
                 if ($departamento_destino == null) {
-                    return back()->with('success', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor.');
-                }else {
-                    return back()->with('success',
-                        'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '.');
+                    Alert::toast('Reprovação realizada com sucesso, o documento foi encaminhado ao autor.','warning')->autoClose(5000);
+                    return redirect()->back();
+                }
+                else {
+                    Alert::toast('Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '.','success')->autoClose(5000);
+                    return redirect()->back();
                 }
 
-            }else {
+            }
+            else {
                 if ($departamento_destino == null) {
-                    return back()->with('warning', 'Reprovação realizada com sucesso, o documento foi encaminhado ao autor. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
-                }else {
-                    return back()->with('warning',
-                        'Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+                    Alert::toast('Reprovação realizada com sucesso, o documento foi encaminhado ao autor. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem'],'warning')->autoClose(5000);
+                    return redirect()->back();
+                }
+                else {
+                    Alert::toast('Reprovação realizada com sucesso, o documento foi encaminhado ao departamento ' . $departamento_destino . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem'] ,'warning')->autoClose(5000);
+                    return redirect()->back();
                 }
             }
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'reprovar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -678,24 +665,28 @@ class DocumentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $documento = Documento::retornaDocumentoAtivo($id);
 
             if (!$documento) {
-                return back()->with('erro', 'Documento não encontrado.');
+                Alert::toast('Documento não encontrado.','error');
+                return redirect()->back();
             }
 
             if($documento->podeTramitar(auth()->user()->id) == false){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $departamento_atual = $documento->dep_atual();
 
             if (!$departamento_atual) {
                 ErrorLogService::salvar('Erro ao encontrar o departamento atual do documento', 'DocumentoController', 'finalizar');
-                return redirect()->back()->with('erro', 'Houve um erro ao encontrar um departamento, atualize a página e tente novamente.');
+                Alert::toast('Houve um erro ao encontrar um departamento, atualize a página e tente novamente.','error');
+                return redirect()->back();
             }
 
             $departamento_atual->update([
@@ -782,33 +773,34 @@ class DocumentoController extends Controller
                     $respostaAnexo['sucesso'] = false;
                     $respostaAnexo['mensagem'] = 'arquivo inválido';
                 }
-            }else {
+            }
+            else {
                 $respostaAnexo['sucesso'] = true;
             }
 
             // se deu erro no anexo, mostra o erro
             if ($respostaAnexo['sucesso']) {
-                return back()->with('success', 'O documento foi finalizado com sucesso.');
-            }else {
-                return back()->with('warning', 'O documento foi finalizado com sucesso. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem']);
+                Alert::toast('O documento foi finalizado com sucesso.','success');
+                return redirect()->back();
+            }
+            else {
+                Alert::toast('O documento foi finalizado com sucesso. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem'] ,'warning');
+                return redirect()->back();
             }
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'finalizar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-    }
-
-    public function destroy(Documento $documento)
-    {
-        //
     }
 
     public function getDepartamentos(Request $request, $id)
     {
         try{
             if(Auth::user()->temPermissao('Documento', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             if ($request->ajax()) {
@@ -828,7 +820,8 @@ class DocumentoController extends Controller
         }
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'getDepartamentos');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
 
     }
@@ -837,13 +830,14 @@ class DocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Documento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $file = AnexoHistoricoMovimentacao::where('ativo', 1)->find($id_anexo);
-
             if (!$file) {
-                return back()->with('erro', 'Arquivo não encontrado.');
+                Alert::toast('Arquivo não encontrado.','error');
+                return redirect()->back();
             }
 
             $path = $file->diretorio.'/'.$file->nome_hash;
@@ -851,13 +845,16 @@ class DocumentoController extends Controller
 
             if ($existe){
                 return Storage::download($path, $file->nome_original);
-            }else {
-                return back()->with('erro', 'Arquivo não encontrado, no diretório.');
+            }
+            else {
+                Alert::toast('Arquivo não encontrado, no diretório.','error');
+                return redirect()->back();
             }
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'obterAnexo');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

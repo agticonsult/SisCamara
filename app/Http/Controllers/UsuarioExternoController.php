@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Filesize;
 use App\Services\ErrorLogService;
-use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsuarioExternoController extends Controller
 {
@@ -16,7 +16,8 @@ class UsuarioExternoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvarPublico($ex->getMessage(), 'UsuarioExternoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

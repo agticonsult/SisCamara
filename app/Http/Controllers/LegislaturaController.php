@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LegislaturaRequest;
-use App\Models\ErrorLog;
 use App\Models\Legislatura;
 use App\Services\ErrorLogService;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LegislaturaController extends Controller
 {
@@ -21,7 +19,8 @@ class LegislaturaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Legislatura', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $legislaturas = Legislatura::retornaLegislaturasAtivas();
@@ -30,7 +29,8 @@ class LegislaturaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -38,18 +38,21 @@ class LegislaturaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Legislatura', 'Cadastro') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             Legislatura::create($request->validated() + [
                 'cadastradoPorUsuario' =>  Auth::user()->id
             ]);
 
-            return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Cadastro realizado com sucesso.');
+            Alert::toast('Cadastro realizado com sucesso.','success');
+            return redirect()->route('processo_legislativo.legislatura.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -57,19 +60,22 @@ class LegislaturaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Legislatura', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
+                Alert::toast('Legislatura inválida.','error');
+                return redirect()->back();
             }
 
             return view('processo-legislativo.legislatura.edit', compact('legislatura'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -77,21 +83,25 @@ class LegislaturaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Legislatura', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
+                Alert::toast('Legislatura inválida.','error');
+                return redirect()->back();
             }
 
             $legislatura->update($request->validated());
 
-            return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizada com sucesso','success');
+            return redirect()->route('processo_legislativo.legislatura.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -99,7 +109,8 @@ class LegislaturaController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('Legislatura', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -109,7 +120,8 @@ class LegislaturaController extends Controller
 
             $legislatura = Legislatura::retornaLegislaturaAtiva($id);
             if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
+                Alert::toast('Legislatura inválida.','error');
+                return redirect()->back();
             }
 
             $legislatura->update([
@@ -119,11 +131,13 @@ class LegislaturaController extends Controller
                 'ativo' => Legislatura::INATIVO
             ]);
 
-            return redirect()->route('processo_legislativo.legislatura.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('processo_legislativo.legislatura.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'LegislaturaController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 }

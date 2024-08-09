@@ -2,10 +2,8 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
-    {{-- <div class="container box box-primary" style="padding: 3rem;"> --}}
-    {{-- <div class="container box box-primary"> --}}
     <h1 class="h3 mb-3">Alteração de Ato</h1>
     <div class="card">
         <br>

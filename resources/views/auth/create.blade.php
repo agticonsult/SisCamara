@@ -55,7 +55,7 @@
                                         <form action="{{route('registrar_store')}}" method="POST" id="form" class="form_prevent_multiple_submits">
                                             @csrf
                                             @method('POST')
-                                            @include('errors.alerts')
+                                            @include('sweetalert::alert')
 
                                             <div class="m-sm-4">
                                                 <h5 class="card-title mb-0">Pessoa Física</h5><hr>

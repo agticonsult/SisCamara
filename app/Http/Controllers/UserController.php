@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStorePJRequest;
 use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdatePJRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Perfil;
 use App\Models\PerfilUser;
@@ -12,9 +10,11 @@ use App\Models\Permissao;
 use App\Models\Pessoa;
 use App\Models\User;
 use App\Services\ErrorLogService;
+use App\Utils\PerfilUtil;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -22,17 +22,18 @@ class UserController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('User', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $usuarios = User::retornaUsuariosAtivos();
-
             return view('usuario.index', compact('usuarios'));
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -40,17 +41,18 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $perfils = Perfil::perfisAtivos();
-
             return view('usuario.create', compact('perfils'));
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -58,7 +60,8 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             //nova Pessoa
@@ -72,32 +75,19 @@ class UserController extends Controller
                 'id_pessoa' => $novaPessoa->id,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'confirmacao_email' => User::EMAIL_CONFIRMADO,
+                'cadastroAprovado' => User::USUARIO_APROVADO
             ]);
 
-            $id_perfils = $request->id_perfil;
-            foreach($id_perfils as $id_perf) {
-                $perfil = Perfil::where('id', '=', $id_perf)->where('ativo', '=', Perfil::ATIVO)->first();
-                if ($perfil) {
-                    PerfilUser::create([
-                        'id_user' => $novoUsuario->id,
-                        'id_tipo_perfil' => $id_perf,
-                        'cadastradoPorUsuario' => $novoUsuario->id,
-                    ]);
-
-                    Permissao::create([
-                        'id_user' => $novoUsuario->id,
-                        'id_perfil' => $id_perf,
-                        'cadastradoPorUsuario' => $novoUsuario->id,
-                    ]);
-                }
-            }
+            PerfilUtil::associarPerfis($request->id_perfil, $novoUsuario);
             // throw new Exception('forcando o erro');
-            return redirect()->route('usuario.index')->with('success', 'Cadastro realizado com sucesso.');
+            Alert::toast('Cadastro realizado com sucesso.', 'success');
+            return redirect()->route('usuario.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -105,13 +95,15 @@ class UserController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('User', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $perfils = Perfil::perfisAtivos();
             $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario) {
-                return redirect()->route('usuario.index')->with('erro', 'Não é possível alterar este usuário.');
+                Alert::toast('Não é possível alterar este usuário.','error');
+                return redirect()->route('usuario.index');
             }
 
             return view('usuario.edit', compact('usuario', 'perfils'));
@@ -119,7 +111,8 @@ class UserController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -127,7 +120,8 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             // $usuario = User::where('id', '=', $id)->Where('ativo', '=', User::ATIVO)->first();
@@ -144,7 +138,7 @@ class UserController extends Controller
                 $tem_este_perfil = Permissao::where('id_user', '=', $id)
                     ->where('id_perfil', '=', $id_perf)
                     ->where('ativo', '=', 1)
-                    ->first();
+                ->first();
 
                 if (!$tem_este_perfil){
                     $perf = Perfil::where('id', '=', $id_perf)->where('ativo', '=', Perfil::ATIVO)->first();
@@ -163,12 +157,14 @@ class UserController extends Controller
                     }
                 }
             }
-            return redirect()->back()->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizado com sucesso.', 'success');
+            return redirect()->back();
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -176,25 +172,28 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Alteração') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario){
-                return redirect()->back()->with('erro', 'Não é possível desbloquear este usuário.')->withInput();
+                Alert::toast('Não é possível desbloquear este usuário.','error');
+                return redirect()->back();
             }
             $usuario->update([
                 'tentativa_senha' => User::NAO_BLOQUEADO_TENTATIVA,
                 'bloqueadoPorTentativa' => User::NAO_BLOQUEADO_TENTATIVA,
                 'dataBloqueadoPorTentativa' => null,
             ]);
-
-            return redirect()->route('usuario.index')->with('success', 'Usuário desbloqueado com sucesso.');
+            Alert::toast('Usuário desbloqueado com sucesso.', 'success');
+            return redirect()->route('usuario.index');
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desbloquear');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
 
     }
@@ -203,7 +202,8 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -213,7 +213,8 @@ class UserController extends Controller
 
             $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario){
-                return redirect()->back()->with('erro', 'Não é possível excluir este usuário.')->withInput();
+                Alert::toast('Não é possível excluir este usuário.','error');
+                return redirect()->back();
             }
             $usuario->update([
                 'motivoInativado' => $motivo,
@@ -229,12 +230,13 @@ class UserController extends Controller
                 'dataInativado' => Carbon::now(),
                 'ativo' => Pessoa::INATIVO
             ]);
-
-            return redirect()->route('usuario.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.', 'success');
+            return redirect()->route('usuario.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -242,12 +244,14 @@ class UserController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $usuario = User::retornaUsuarioInativo($id);
             if (!$usuario){
-                return redirect()->back()->with('erro', 'Usuário não encontrado!.')->withInput();
+                Alert::toast('Usuário não encontrado!.','error');
+                return redirect()->back();
             }
 
             $usuario->update([
@@ -264,12 +268,13 @@ class UserController extends Controller
                 'motivoInativado' => null,
                 'ativo' => Pessoa::ATIVO
             ]);
-
-            return redirect()->route('usuario.index')->with('success', 'Recadastramento realizado com sucesso.');
+            Alert::toast('Recadastramento realizado com sucesso.', 'success');
+            return redirect()->route('usuario.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'restore');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -277,7 +282,8 @@ class UserController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('User', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -287,7 +293,8 @@ class UserController extends Controller
 
             $usuario = User::retornaUsuarioAtivo($id);
             if (!$usuario) {
-                return redirect()->route('usuario.index')->with('erro', 'Houve erro ao desativar o perfil do usuário.');
+                Alert::toast('Houve erro ao desativar o perfil do usuário.','error');
+                return redirect()->route('usuario.index');
             }
 
             $qtd_perfis = Permissao::where('id_user', '=', $usuario->id)->where('ativo', '=', Permissao::ATIVO)->count();
@@ -296,7 +303,8 @@ class UserController extends Controller
 
                 $permissao = Permissao::where('id_user', '=', $usuario->id)->where('ativo', '=', Permissao::ATIVO)->first();
                 if (!$permissao){
-                    return redirect()->route('usuario.edit', $request->id_user_desativa)->with('erro', 'Não é possível alterar este perfil.')->withInput();
+                    Alert::toast('Não é possível alterar este perfil.','error');
+                    return redirect()->route('usuario.edit', $request->id_user_desativa);
                 }
                 $perfilUser = PerfilUser::where('id_user', '=', $usuario->id)->where('ativo', '=', PerfilUser::ATIVO)->first();
 
@@ -316,20 +324,23 @@ class UserController extends Controller
 
                 $id_user = $permissao->id_user;
                 if ($id_user == Auth::user()->id && Auth::user()->temPermissao('User', 'Alteração') != 1){
-                    return redirect()->route('home')->with('success', 'Perfil desativado com sucesso.');
+                    Alert::toast('Perfil desativado com sucesso.', 'success');
+                    return redirect()->route('home');
                 }
                 else{
-                    return redirect()->back()->with('success', 'Perfil desativado com sucesso.');
+                    Alert::toast('Perfil desativado com sucesso.', 'success');
+                    return redirect()->back();
                 }
-
             }
             else{
-                return redirect()->route('usuario.edit', $request->id_user_desativa)->with('erro', 'É necessário pelo menos 1 perfil ativo para o usuário.')->withInput();
+                Alert::toast('É necessário pelo menos 1 perfil ativo para o usuário.', 'success');
+                return redirect()->route('usuario.edit', $request->id_user_desativa);
             }
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'UserController', 'desativaPerfil');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

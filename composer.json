@@ -19,7 +19,8 @@
         "laravel/tinker": "^2.0",
         "mpdf/mpdf": "^8.0.13",
         "owen-it/laravel-auditing": "^13.0",
-        "pusher/pusher-php-server": "3.*"
+        "pusher/pusher-php-server": "3.*",
+        "realrashid/sweet-alert": "^7.2"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

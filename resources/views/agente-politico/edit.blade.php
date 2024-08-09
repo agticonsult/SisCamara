@@ -29,8 +29,7 @@
             border: 5px solid #111;
         }
     </style>
-    @include('errors.alerts')
-    {{-- @include('errors.errors') --}}
+    @include('sweetalert::alert')
 
     <h1 class="h3 mb-3">Alteração de Agente Político</h1>
     <div class="card" style="background-color:white">

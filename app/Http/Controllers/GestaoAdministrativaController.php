@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GestaoAdmRequest;
 use App\Models\Departamento;
-use App\Models\DepartamentoUsuario;
 use App\Models\GestaoAdministrativa;
 use App\Models\User;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class GestaoAdministrativaController extends Controller
 {
@@ -23,7 +23,8 @@ class GestaoAdministrativaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('GestaoAdministrativa', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $gestoesAdm = GestaoAdministrativa::where('ativo', '=', GestaoAdministrativa::ATIVO)->get();
@@ -41,7 +42,8 @@ class GestaoAdministrativaController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -55,7 +57,8 @@ class GestaoAdministrativaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('GestaoAdministrativa', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             if ($request->aprovacaoCadastro == 1 && $request->aprovacaoCadastro == 0) {
@@ -69,24 +72,23 @@ class GestaoAdministrativaController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('configuracao.gestao_administrativa.index')->with('success', 'Cadastro realizada com sucesso.');
+            Alert::toast('Cadastro realizada com sucesso.','success');
+            return redirect()->route('configuracao.gestao_administrativa.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'storeRecebimento');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
     public function storeCadastroUsuario(Request $request)
     {
         try{
-            // if(Auth::user()->temPermissao('GestaoAdministrativa', 'Cadastro') != 1){
-            //     return redirect()->back()->with('erro', 'Acesso negado.');
-            // }
-
             if ($request->usuario_selecionados == null) {
-                return redirect()->back()->with('warning', 'Necessário selecionar 1 usuário.');
+                Alert::toast('Necessário selecionar 1 usuário.','warning');
+                return redirect()->back();
             }
 
             foreach ($request->usuario_selecionados as $usuario) {
@@ -103,23 +105,19 @@ class GestaoAdministrativaController extends Controller
                     ]);
                 }
             }
-
-            return redirect()->route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario')->with('success', 'Seleção realizada com sucesso.');
-
+            Alert::toast('Seleção realizada com sucesso.','success');
+            return redirect()->route('aprovacao_cadastro_usuario.aprovacaoCadastroUsuario');
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'storeCadastroUsuario');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
     public function aprovacaoCadastroUsuario()
     {
         try{
-            // if(Auth::user()->temPermissao('GestaoAdministrativa', 'Listagem') != 1){
-            //     return redirect()->back()->with('erro', 'Acesso negado.');
-            // }
-
             $usuarios = User::Where('cadastroAprovado', '=', User::USUARIO_REPROVADO)
                 ->where('confirmacao_email', '=', User::EMAIL_CONFIRMADO)
                 ->where('ativo', '=', User::ATIVO)
@@ -133,7 +131,8 @@ class GestaoAdministrativaController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'aprovacaoCadastroUsuario');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -141,14 +140,16 @@ class GestaoAdministrativaController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('GestaoAdministrativa', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $alterarGestaoAdm = GestaoAdministrativa::where('id', '=', $id)->where('ativo', '=', GestaoAdministrativa::ATIVO)->first();
             $departamentos = Departamento::where('ativo', '=', Departamento::ATIVO)->get();
 
             if (!$alterarGestaoAdm) {
-                return redirect()->back()->with('erro', 'Não foi encontrado Gestão Administrativa.');
+                Alert::toast('Não foi encontrado Gestão Administrativa.','error');
+                return redirect()->back();
             }
 
             return view('configuracao.gestao-adiministrativa.edit', compact('alterarGestaoAdm', 'departamentos'));
@@ -156,7 +157,8 @@ class GestaoAdministrativaController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -164,22 +166,24 @@ class GestaoAdministrativaController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('GestaoAdministrativa', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $alterarGestaoAdm = GestaoAdministrativa::where('id', '=', $id)->where('ativo', '=', GestaoAdministrativa::ATIVO)->first();
             if (!$alterarGestaoAdm) {
-                return redirect()->back()->with('erro', 'Não foi encontrado Gestão Administrativa.');
+                Alert::toast('Não foi encontrado Gestão Administrativa.','error');
+                return redirect()->back();
             }
 
             $alterarGestaoAdm->update($request->validated());
-
-            return redirect()->route('configuracao.gestao_administrativa.edit', $alterarGestaoAdm->id)->with('success', 'Gestão Administrativa alterado com sucesso.');
-
+            Alert::toast('Gestão Administrativa alterado com sucesso.','success');
+            return redirect()->route('configuracao.gestao_administrativa.edit', $alterarGestaoAdm->id);
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

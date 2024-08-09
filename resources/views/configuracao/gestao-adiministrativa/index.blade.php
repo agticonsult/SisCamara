@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     @if (!isset($departamentos[0]))
         <div class="alert alert-warning alert-dismissible" role="alert">

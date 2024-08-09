@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProposicaoRequest;
 use App\Http\Requests\ProposicaoStoreRequest;
 use App\Http\Requests\ProposicaoUpdateRequest;
 use App\Models\Proposicao;
-use App\Models\ErrorLog;
 use App\Models\LocalizacaoProposicao;
 use App\Models\ModeloProposicao;
 use App\Models\StatusProposicao;
@@ -15,8 +13,7 @@ use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ProposicaoController extends Controller
 {
@@ -24,7 +21,8 @@ class ProposicaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
@@ -33,7 +31,8 @@ class ProposicaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -41,7 +40,8 @@ class ProposicaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $modelos = ModeloProposicao::where('ativo', '=', ModeloProposicao::ATIVO)->get();
@@ -50,7 +50,8 @@ class ProposicaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -58,7 +59,8 @@ class ProposicaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $proposicao = Proposicao::create($request->validated() + [
@@ -82,12 +84,13 @@ class ProposicaoController extends Controller
                     ]);
                 }
             }
-
-            return redirect()->route('proposicao.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso.','success');
+            return redirect()->route('proposicao.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -95,12 +98,14 @@ class ProposicaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
-                return redirect()->back()->with('erro', 'Proposicao inválido.');
+                Alert::toast('Proposicao inválido.','error');
+                return redirect()->back();
             }
 
             $modelos = ModeloProposicao::where('ativo', '=', ModeloProposicao::ATIVO)->get();
@@ -111,7 +116,8 @@ class ProposicaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -119,21 +125,24 @@ class ProposicaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Proposicao', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
-                return redirect()->back()->with('erro', 'Proposicao inválido.');
+                Alert::toast('Proposicao inválido.','error');
+                return redirect()->back();
             }
 
             $proposicao->update($request->validated());
-
-            return redirect()->route('proposicao.index')->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizada com sucesso.','success');
+            return redirect()->route('proposicao.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -141,7 +150,8 @@ class ProposicaoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('Proposicao', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -151,7 +161,8 @@ class ProposicaoController extends Controller
 
             $proposicao = Proposicao::where('id', '=', $id)->where('ativo', '=', Proposicao::ATIVO)->first();
             if (!$proposicao){
-                return redirect()->back()->with('erro', 'Proposicao inválido.');
+                Alert::toast('Proposicao inválido.','error');
+                return redirect()->back();
             }
 
             $proposicao->update([
@@ -160,12 +171,13 @@ class ProposicaoController extends Controller
                 'motivoInativado' => $motivo,
                 'ativo' => Proposicao::isUnguarded()
             ]);
-
-            return redirect()->route('proposicao.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('proposicao.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ProposicaoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

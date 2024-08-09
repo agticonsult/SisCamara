@@ -56,13 +56,7 @@
                                     <div class="m-sm-4">
                                         <form action="{{route('link_encaminhado')}}" method="POST" id="form">
                                             @csrf
-                                            @method('POST')
-                                            @include('errors.alerts')
-                                            @include('errors.errors')
-                                            {{-- <div class="mb-3">
-                                                <label for="cpf">CPF</label>
-                                                <input type="text" name="cpf" id="cpf" class="form-control form-control-lg" placeholder="Digite seu CPF" value="{{ old('cpf') }}">
-                                            </div> --}}
+                                            @include('sweetalert::alert')
                                             <div class="mb-3">
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu email" value="{{ old('email') }}">

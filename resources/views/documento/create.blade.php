@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     <h1 class="h3 mb-3">Cadastro de documento</h1>
     @if (!isset($tipoDocumentos[0]))

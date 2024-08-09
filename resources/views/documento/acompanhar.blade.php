@@ -61,8 +61,7 @@
             cursor: pointer;
         }
     </style>
-    @include('errors.alerts')
-    {{-- @include('errors.errors') --}}
+     @include('sweetalert::alert')
 
     @if ($documentoEdit->reprovado_em_tramitacao)
         @if ($documentoEdit->cadastradoPorUsuario == auth()->user()->id)

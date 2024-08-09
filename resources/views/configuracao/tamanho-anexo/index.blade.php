@@ -10,9 +10,7 @@
         color:red
     }
 </style>
-@include('errors.alerts')
-@include('errors.errors')
-
+@include('sweetalert::alert')
 
 <h1 class="h3 mb-3">Tamanho dos Anexos</h1>
 <div class="card" style="background-color:white">

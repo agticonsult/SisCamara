@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\VotacaoEletronicaRequest;
+use App\Http\Requests\VotacaoEletronicaRequestStore;
+use App\Http\Requests\VotacaoEletronicaUpdateRequest;
 use App\Models\AgentePolitico;
-use App\Models\CargoEletivo;
-use App\Models\ErrorLog;
 use App\Models\Legislatura;
-use App\Models\ModeloProposicao;
 use App\Models\Proposicao;
 use App\Models\TipoVotacao;
-use App\Models\Vereador;
 use App\Models\VereadorVotacao;
 use App\Models\VotacaoEletronica;
 use App\Services\ErrorLogService;
@@ -19,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class VotacaoEletronicaController extends Controller
 {
@@ -26,7 +24,8 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacaos = VotacaoEletronica::where('ativo', '=', VotacaoEletronica::ATIVO)->get();
@@ -35,7 +34,8 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -43,7 +43,8 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $proposicaos = Proposicao::where('ativo', '=', Proposicao::ATIVO)->get();
@@ -55,25 +56,28 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
-    public function store(VotacaoEletronicaRequest $request)
+    public function store(VotacaoEletronicaRequestStore $request)
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $vereadores = AgentePolitico::leftJoin('pleito_eleitorals', 'pleito_eleitorals.id', '=', 'agente_politicos.id_pleito_eleitoral')
                 ->where('pleito_eleitorals.id_legislatura', '=', $request->id_legislatura)
                 ->where('agente_politicos.ativo', '=', 1)
                 ->select('agente_politicos.*')
-                ->get();
+            ->get();
 
             if (Count($vereadores) == 0){
-                return redirect()->back()->with('erro', 'Não há POLÍTICOS cadastrador para realizar a votação!');
+                Alert::toast('Não há POLÍTICOS cadastrador para realizar a votação!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::create($request->validated() + [
@@ -88,11 +92,13 @@ class VotacaoEletronicaController extends Controller
                 ]);
             }
 
-            return redirect()->route('votacao_eletronica.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso','success');
+            return redirect()->route('votacao_eletronica.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -100,12 +106,14 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
-            $votacao = VotacaoEletronica::where('id', $id)->where('ativo', '=', 1)->first();
+            $votacao = VotacaoEletronica::where('id', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida','error');
+                return redirect()->back();
             }
 
             $vereadorVotacaos = VereadorVotacao::where('id_votacao', $id)->where('ativo', '=', 1)->get();
@@ -117,7 +125,8 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'show');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -125,12 +134,14 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida','error');
+                return redirect()->back();
             }
 
             $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
@@ -141,72 +152,29 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(VotacaoEletronicaUpdateRequest $request, $id)
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
-            $input = [
-                'id' => $id,
-                'data' => $request->data,
-                'id_tipo_votacao' => $request->id_tipo_votacao,
-                'id_proposicao' => $request->id_proposicao,
-                'id_legislatura' => $request->id_legislatura
-            ];
-            $rules = [
-                'id' => 'required|integer',
-                'data' => 'required|date',
-                'id_tipo_votacao' => 'required|integer',
-                'id_proposicao' => 'required|integer',
-                'id_legislatura' => 'required|integer'
-            ];
+            $votacao = VotacaoEletronica::findOrFail($id);
+            $votacao->update($request->validated());
 
-            $validar = Validator::make($input, $rules);
-            $validar->validate();
-
-            $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
-            if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação eletrônica inválida.');
-            }
-
-            $tipo_votacao = TipoVotacao::where('id', '=', $request->id_tipo_votacao)->where('ativo', '=', TipoVotacao::ATIVO)->first();
-            if (!$tipo_votacao){
-                return redirect()->back()->with('erro', 'Tipo de votação inválido!');
-            }
-
-            $proposicao = Proposicao::where('id', '=', $request->id_proposicao)->where('ativo', '=', Proposicao::ATIVO)->first();
-            if (!$proposicao){
-                return redirect()->back()->with('erro', 'Proposição inválida!');
-            }
-
-            $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', Legislatura::ATIVO)->first();
-            if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
-            }
-
-            $votacao->data = $request->data;
-            $votacao->id_tipo_votacao = $request->id_tipo_votacao;
-            $votacao->id_proposicao = $request->id_proposicao;
-            $votacao->id_legislatura = $request->id_legislatura;
-            $votacao->save();
-
-            return redirect()->route('votacao_eletronica.index')->with('success', 'Alteração realizada com sucesso');
-        }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+            Alert::toast('Alteração realizada com sucesso','success');
+            return redirect()->route('votacao_eletronica.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -214,7 +182,8 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('VotacaoEletronica', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -235,7 +204,8 @@ class VotacaoEletronicaController extends Controller
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação eletrônica inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             $votacao->inativadoPorUsuario = Auth::user()->id;
@@ -244,17 +214,13 @@ class VotacaoEletronicaController extends Controller
             $votacao->ativo = 0;
             $votacao->save();
 
-            return redirect()->route('votacao_eletronica.index')->with('success', 'Exclusão realizada com sucesso.');
-        }
-        catch (ValidationException $e) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('votacao_eletronica.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -262,12 +228,14 @@ class VotacaoEletronicaController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             if ($votacao->votacaoIniciada != 1){
@@ -280,7 +248,8 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VotacaoEletronicaController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -294,7 +263,8 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'VotacaoEletronicaController', 'indexPublico');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -303,7 +273,8 @@ class VotacaoEletronicaController extends Controller
         try {
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             $vereadorVotacaos = VereadorVotacao::where('id_votacao','=', $id)->where('ativo', '=', 1)->get();
@@ -315,7 +286,8 @@ class VotacaoEletronicaController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'VotacaoEletronicaController', 'resultadoPublico');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 

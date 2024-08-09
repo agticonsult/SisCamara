@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     <h1 class="h3 mb-3">Cadastro de Ato</h1>
     <div class="card" style="background-color:white">
@@ -184,7 +184,7 @@
         </div>
 
     </div>
-    
+
 @endsection
 
 @section('scripts')

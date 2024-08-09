@@ -336,14 +336,14 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         //Autoridades
-        Route::group(['prefix' => '/autoridade', 'as' => 'autoridade.'], function() {
-            Route::get('/index', [AutoridadeController::class, 'index'])->name('index');
-            Route::get('/create', [AutoridadeController::class, 'create'])->name('create');
-            Route::post('/store', [AutoridadeController::class, 'store'])->name('store');
-            Route::get('/edit/{id}', [AutoridadeController::class, 'edit'])->name('edit');
-            Route::post('/update/{id}', [AutoridadeController::class, 'update'])->name('update');
-            Route::post('/destroy/{id}', [AutoridadeController::class, 'destroy'])->name('destroy');
-        });
+        // Route::group(['prefix' => '/autoridade', 'as' => 'autoridade.'], function() {
+        //     Route::get('/index', [AutoridadeController::class, 'index'])->name('index');
+        //     Route::get('/create', [AutoridadeController::class, 'create'])->name('create');
+        //     Route::post('/store', [AutoridadeController::class, 'store'])->name('store');
+        //     Route::get('/edit/{id}', [AutoridadeController::class, 'edit'])->name('edit');
+        //     Route::post('/update/{id}', [AutoridadeController::class, 'update'])->name('update');
+        //     Route::post('/destroy/{id}', [AutoridadeController::class, 'destroy'])->name('destroy');
+        // });
 
         //Tipos de Ato
         Route::group(['prefix' => '/tipo-ato', 'as' => 'tipo_ato.'], function() {

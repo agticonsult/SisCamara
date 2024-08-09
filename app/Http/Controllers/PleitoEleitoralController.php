@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PleitoEleitoralRequest;
 use App\Models\CargoEletivo;
-use App\Models\ErrorLog;
 use App\Models\Legislatura;
 use App\Models\PleitoCargo;
 use App\Models\PleitoEleitoral;
@@ -15,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PleitoEleitoralController extends Controller
 {
@@ -24,7 +24,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $pleitos = PleitoEleitoral::where('ativo', '=', PleitoEleitoral::ATIVO)->get();
@@ -33,7 +34,8 @@ class PleitoEleitoralController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -41,7 +43,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PleitoEleitoral', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $cargo_eletivos = CargoEletivo::where('ativo', '=', CargoEletivo::ATIVO)->get();
@@ -51,7 +54,8 @@ class PleitoEleitoralController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -59,11 +63,13 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PleitoEleitoral', 'Cadastro') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             if ($request->pleitoEspecial != 0 && $request->pleitoEspecial != 1){
-                return redirect()->back()->with('erro', 'Pleito especial inválido.');
+                Alert::toast('Pleito especial inválido.','error');
+                return redirect()->back();
             }
 
             $pleitoEleitoral = PleitoEleitoral::create($request->validated() + [
@@ -81,12 +87,13 @@ class PleitoEleitoralController extends Controller
                     ]);
                 }
             }
-
-            return redirect()->route('processo_legislativo.pleito_eleitoral.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso','success');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -94,14 +101,16 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PleitoEleitoral', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $cargo_eletivos = CargoEletivo::where('ativo', '=', CargoEletivo::ATIVO)->get();
             $legislaturas = Legislatura::where('ativo', '=', Legislatura::ATIVO)->get();
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
             if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+                Alert::toast('Pleito especial inválido.','error');
+                return redirect()->back();
             }
 
             return view('processo-legislativo.pleito-eleitoral.edit', compact('pleito_eleitoral', 'cargo_eletivos', 'legislaturas'));
@@ -109,7 +118,8 @@ class PleitoEleitoralController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -117,7 +127,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PleitoEleitoral', 'Alteração') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -142,12 +153,14 @@ class PleitoEleitoralController extends Controller
 
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
             if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+                Alert::toast('Pleito eleitoral inválido.','error');
+                return redirect()->back();
             }
 
             $legislatura = Legislatura::where('id', '=', $request->id_legislatura)->where('ativo', '=', 1)->first();
             if (!$legislatura){
-                return redirect()->back()->with('erro', 'Legislatura inválida.');
+                Alert::toast('Legislatura inválida.','error');
+                return redirect()->back();
             }
 
             $pleito_eleitoral->ano_pleito = $request->ano_pleito;
@@ -165,7 +178,7 @@ class PleitoEleitoralController extends Controller
                         $possuiCargo = PleitoCargo::where('id_pleito_eleitoral', '=', $id)
                             ->where('id_cargo_eletivo', '=', $id_cargo_eletivo)
                             ->where('ativo', '=', 1)
-                            ->first();
+                        ->first();
 
                         if (!$possuiCargo){
                             $pleito_cargo = new PleitoCargo();
@@ -178,12 +191,13 @@ class PleitoEleitoralController extends Controller
                     }
                 }
             }
-
-            return redirect()->route('processo_legislativo.pleito_eleitoral.edit', $pleito_eleitoral->id)->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizado com sucesso','success');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.edit', $pleito_eleitoral->id);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -191,7 +205,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('PleitoEleitoral', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -201,7 +216,8 @@ class PleitoEleitoralController extends Controller
 
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
             if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+                Alert::toast('Pleito eleitoral inválido.','error');
+                return redirect()->back();
             }
 
             $pleito_eleitoral->update([
@@ -212,7 +228,6 @@ class PleitoEleitoralController extends Controller
             ]);
 
             foreach ($pleito_eleitoral->cargos_eletivos_ativos() as $pleito_cargo_ativo) {
-
                 $pleito_cargo_ativo->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
@@ -221,12 +236,13 @@ class PleitoEleitoralController extends Controller
                 ]);
 
             }
-
-            return redirect()->route('processo_legislativo.pleito_eleitoral.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -234,7 +250,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
@@ -264,7 +281,8 @@ class PleitoEleitoralController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('PleitoEleitoral', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -285,7 +303,8 @@ class PleitoEleitoralController extends Controller
 
             $pleito_cargo = PleitoCargo::where('id', '=', $id)->where('ativo', '=', PleitoCargo::ATIVO)->first();
             if (!$pleito_cargo){
-                return redirect()->back()->with('erro', 'Cargo eletivo inválido.');
+                Alert::toast('Cargo eletivo inválido.','error');
+                return redirect()->back();
             }
 
             $pleito_cargo->inativadoPorUsuario = Auth::user()->id;
@@ -294,7 +313,8 @@ class PleitoEleitoralController extends Controller
             $pleito_cargo->ativo = 0;
             $pleito_cargo->save();
 
-            return redirect()->route('processo_legislativo.pleito_eleitoral.edit', $pleito_cargo->id_pleito_eleitoral)->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('processo_legislativo.pleito_eleitoral.edit', $pleito_cargo->id_pleito_eleitoral);
         }
         catch (ValidationException $e) {
             $message = $e->errors();
@@ -304,7 +324,8 @@ class PleitoEleitoralController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PleitoEleitoralController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

@@ -9,10 +9,8 @@ use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\AtoRelacionado;
 use App\Models\ClassificacaoAto;
-use App\Models\ErrorLog;
 use App\Models\Filesize;
 use App\Models\FormaPublicacaoAto;
-use App\Models\Grupo;
 use App\Models\LinhaAto;
 use App\Models\OrgaoAto;
 use App\Models\TipoAto;
@@ -23,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Uuid;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AtoController extends Controller
 {
@@ -30,7 +29,8 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $atos = Ato::retornaAtosAtivos();
@@ -39,7 +39,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -47,7 +48,8 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
@@ -62,7 +64,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -201,15 +204,17 @@ class AtoController extends Controller
                         array_push($result, $resultadoTexto);
                     }
 
-                    return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso')->with('info-anexo', $result);
+                    Alert::toast('Cadastro realizado com sucesso!', 'success');
+                    return redirect()->route('ato.index')->with('info-anexo', $result);
                 }
             }
-
-            return redirect()->route('ato.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso!', 'success');
+            return redirect()->route('ato.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -217,7 +222,8 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $ato = Ato::retornaAtoAtivo($id);
@@ -226,7 +232,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'show');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -234,12 +241,14 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
-                return redirect()->back()->with('erro', 'Ato inválido.');
+                Alert::toast('Ato inválido.','error');
+                return redirect()->back();
             }
 
             $atos_relacionados = Ato::retornaAtosRelacionadosAtivos();
@@ -248,7 +257,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -256,7 +266,8 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $ato = Ato::retornaAtoAtivo($id);
@@ -266,7 +277,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'editCorpoTexto');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -274,7 +286,8 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -295,12 +308,14 @@ class AtoController extends Controller
 
             $ato_add = Ato::where('id', '=', $request->id_ato_add)->where('ativo', '=', Ato::ATIVO)->first();
             if (!$ato_add){
-                return redirect()->back()->with('erro', 'Ato que contém a alteração inválido.');
+                Alert::toast('Ato que contém a alteração inválido.','error');
+                return redirect()->back();
             }
 
             $linha_antiga = LinhaAto::where('id', '=', $request->id_linha_ato)->where('id_ato_principal', '=', $id)->where('ativo', '=', LinhaAto::ATIVO)->first();
             if (!$linha_antiga){
-                return redirect()->back()->with('erro', 'Não é possível alterar esta linha.');
+                Alert::toast('Não é possível alterar esta linha.','error');
+                return redirect()->back();
             }
 
             $linha_antiga->update([
@@ -324,7 +339,8 @@ class AtoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id,
             ]);
 
-            return redirect()->route('ato.corpo_texto.edit', $linha_antiga->id_ato_principal)->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizado com sucesso!', 'success');
+            return redirect()->route('ato.corpo_texto.edit', $linha_antiga->id_ato_principal);
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -334,7 +350,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'alterarLinha');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -342,17 +359,18 @@ class AtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Ato', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $ato = Ato::retornaAtoAtivo($id);
             $atos_relacionados = Ato::retornaAtosRelacionadosAtivos();
             if (!$ato){
-                return redirect()->back()->with('erro', 'Ato inválido.');
+                Alert::toast('Ato inválido.','error');
+                return redirect()->back();
             }
 
             $classificacaos = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
-            // $grupos = Grupo::where('ativo', '=', Grupo::ATIVO)->get();
             $assuntos = AssuntoAto::where('ativo', '=', AssuntoAto::ATIVO)->get();
             $tipo_atos = TipoAto::where('ativo', '=', TipoAto::ATIVO)->get();
             $orgaos = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
@@ -362,7 +380,8 @@ class AtoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'editDadosGerais');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -379,31 +398,29 @@ class AtoController extends Controller
 
             $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
-                return redirect()->back()->with('erro', 'Ato inválido.');
+                Alert::toast('Ato inválido.','error');
+                return redirect()->back();
             }
 
             $ato->update($request->validated() + [
                 'altera_dispositivo' => $altera_dispositivo
             ]);
-
-            return redirect()->route('ato.dados_gerais.edit', $ato->id)->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizado com sucesso!', 'success');
+            return redirect()->route('ato.dados_gerais.edit', $ato->id);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'updateDadosGerais');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
-    }
-
-    public function update(Request $request)
-    {
-        //
     }
 
     public function destroy(Request $request, $id)
     {
         try {
             if (Auth::user()->temPermissao('Ato', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             if ($request->motivo == null || $request->motivo == "") {
@@ -412,7 +429,8 @@ class AtoController extends Controller
 
             $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
-                return redirect()->back()->with('erro', 'Não é possível excluir este assunto.')->withInput();
+                Alert::toast('Não é possível excluir este assunto.','error');
+                return redirect()->back()->withInput();
             }
 
             $ato->update([
@@ -452,13 +470,14 @@ class AtoController extends Controller
                     'ativo' => AnexoAto::INATIVO
                 ]);
             }
-
-            return redirect()->route('ato.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizado com sucesso!', 'success');
+            return redirect()->route('ato.index');
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AtoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 }

@@ -7,7 +7,7 @@ use App\Rules\ProposicaoRule;
 use App\Rules\TipoVotacaoRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class VotacaoEletronicaRequest extends FormRequest
+class VotacaoEletronicaRequestStore extends FormRequest
 {
 
     /**

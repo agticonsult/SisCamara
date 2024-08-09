@@ -35,18 +35,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    {{-- <div class="form-group col-md-4">
-                        <label class="form-label">*Grupo</label>
-                        <select name="id_grupo" class="select2 form-control @error('id_grupo') is-invalid @enderror">
-                            <option value="" selected disabled>--Selecione--</option>
-                            @foreach ($grupos as $grupo)
-                                <option value="{{ $grupo->id }}" {{ $grupo->id == $ato->id_grupo ? 'selected' : '' }}>{{ $grupo->nome }}</option>
-                            @endforeach
-                        </select>
-                        @error('id_grupo')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div> --}}
                     <div class="form-group col-md-4">
                         <label class="form-label">Data de Publicação</label>
                         <input type="date" class="form-control @error('data_publicacao') is-invalid @enderror" name="data_publicacao" value="{{ $ato->data_publicacao }}">

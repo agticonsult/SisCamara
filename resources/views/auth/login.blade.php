@@ -77,8 +77,7 @@
                                         <form action="{{ route('login.autenticacao') }}" method="POST">
                                             @csrf
                                             @method('POST')
-                                            @include('errors.alerts')
-                                            @include('errors.errors')
+                                            @include('sweetalert::alert')
                                             <div class="mb-3">
                                                 <label for="email">E-mail</label>
                                                 <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Digite seu e-mail" value="{{ old('email') }}">

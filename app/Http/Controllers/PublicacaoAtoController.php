@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PublicacaoAtoRequest;
-use App\Models\ErrorLog;
+
 use App\Models\PublicacaoAto;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PublicacaoAtoController extends Controller
 {
@@ -23,7 +22,8 @@ class PublicacaoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $publicacaos = PublicacaoAto::where('ativo', '=', PublicacaoAto::ATIVO)->get();
@@ -32,18 +32,9 @@ class PublicacaoAtoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -56,31 +47,23 @@ class PublicacaoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             PublicacaoAto::create($request->validated() + [
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Cadastro realizado com sucesso.');
+            Alert::toast('Cadastro realizada com sucesso.','success');
+            return redirect()->route('configuracao.publicacao_ato.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -93,12 +76,14 @@ class PublicacaoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
             if (!$publicacao){
-                return redirect()->route('configuracao.publicacao_ato.index')->with('erro', 'Não é possível alterar esta publicacao.');
+                Alert::toast('Não é possível alterar esta publicação.','error');
+                return redirect()->back();
             }
 
             return view('configuracao.publicacao-ato.edit', compact('publicacao'));
@@ -106,7 +91,8 @@ class PublicacaoAtoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -121,18 +107,21 @@ class PublicacaoAtoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('PublicacaoAto', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
             $publicacao->update($request->validated());
 
-            return redirect()->route('configuracao.publicacao_ato.edit', $publicacao->id)->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizada com sucesso.','success');
+            return redirect()->route('configuracao.publicacao_ato.edit', $publicacao->id);
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -146,7 +135,8 @@ class PublicacaoAtoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('PublicacaoAto', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -156,7 +146,8 @@ class PublicacaoAtoController extends Controller
 
             $publicacao = PublicacaoAto::where('id', '=', $id)->where('ativo', '=', PublicacaoAto::ATIVO)->first();
             if (!$publicacao){
-                return redirect()->back()->with('erro', 'Não é possível excluir esta publicação.')->withInput();
+                Alert::toast('Não é possível excluir esta publicação.','error');
+                return redirect()->back();
             }
 
             $publicacao->update([
@@ -165,12 +156,13 @@ class PublicacaoAtoController extends Controller
                 'motivoInativado' => $motivo,
                 'ativo' => PublicacaoAto::INATIVO
             ]);
-
-            return redirect()->route('configuracao.publicacao_ato.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('configuracao.publicacao_ato.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'PublicacaoAtoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

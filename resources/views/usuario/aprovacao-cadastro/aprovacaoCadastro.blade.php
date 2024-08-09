@@ -16,7 +16,7 @@
 </style>
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     <h1 class="h3 mb-3">Aprovação de cadastros Usuários Externos</h1>
 

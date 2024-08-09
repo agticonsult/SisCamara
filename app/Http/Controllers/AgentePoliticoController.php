@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AgentePoliticoController extends Controller
 {
@@ -28,7 +29,8 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $agente_politicos = AgentePolitico::where('ativo', '=', AgentePolitico::ATIVO)->get();
@@ -37,7 +39,8 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -45,15 +48,16 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             return view('agente-politico.create');
-
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -61,7 +65,8 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $filesize = Filesize::where('id_tipo_filesize', '=', Filesize::FOTO_PERFIL)->where('ativo', '=', Filesize::ATIVO)->first();
@@ -84,7 +89,8 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'novoAgentePolitico');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -92,7 +98,8 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $pleito_eleitorals = PleitoEleitoral::where('ativo', '=', PleitoEleitoral::ATIVO)->get();
@@ -114,7 +121,8 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'vincularUsuario');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -122,7 +130,8 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
@@ -130,12 +139,14 @@ class AgentePoliticoController extends Controller
                 ->where('ativo', '=', PleitoCargo::ATIVO)
             ->first();
             if (!$pleito_cargo){
-                return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
+                Alert::toast('Cargo eletivo inválido.','error');
+                return redirect()->back()->withInput();
             }
 
             //verifica se a confirmação de senha estão ok
             if($request->password != $request->confirmacao){
-                return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
+                Alert::toast('Senhas não conferem.','error');
+                return redirect()->back()->withInput();
             }
 
             $novaPessoa = Pessoa::create($request->validated() + [
@@ -174,11 +185,13 @@ class AgentePoliticoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('agente_politico.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso!', 'success');
+            return redirect()->route('agente_politico.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -190,7 +203,8 @@ class AgentePoliticoController extends Controller
                 ->select('id')
                 ->first();
             if (!$temUsuario){
-                return redirect()->back()->with('erro', 'Usuário não encontrado.')->withInput();
+                Alert::toast('Usuário não encontrado.','error');
+                return redirect()->back()->withInput();
             }
 
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
@@ -198,7 +212,8 @@ class AgentePoliticoController extends Controller
                 ->where('ativo', '=', PleitoCargo::ATIVO)
             ->first();
             if (!$pleito_cargo){
-                return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
+                Alert::toast('Cargo eletivo inválido.','error');
+                return redirect()->back()->withInput();
             }
 
             $perfilUserAlterar = PerfilUser::where('id_user', '=', $temUsuario->id)->where('ativo', '=', PerfilUser::ATIVO)->first();
@@ -223,12 +238,14 @@ class AgentePoliticoController extends Controller
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
-            return redirect()->route('agente_politico.index')->with('success', 'Vinculação realizado com sucesso');
+            Alert::toast('Vinculação realizado com sucesso!', 'success');
+            return redirect()->route('agente_politico.index');
 
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'storeVincular');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -236,12 +253,14 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado','error');
+                return redirect()->back();
             }
 
             $agente_politico = AgentePolitico::where('id_user', '=', $id)->where('ativo', '=', AgentePolitico::ATIVO)->first();
             if (!$agente_politico){
-                return redirect()->back()->with('erro', 'Agente Político inválido');
+                Alert::toast('Agente Político inválido.','error');
+                return redirect()->back();
             }
 
             $foto_perfil = FotoPerfil::where('id_user', '=', $agente_politico->id_user)->where('ativo', '=', FotoPerfil::ATIVO)->first();
@@ -284,7 +303,8 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -292,12 +312,14 @@ class AgentePoliticoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('AgentePolitico', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado','error');
+                return redirect()->back();
             }
 
             $agente_politico = AgentePolitico::where('id_user', '=', $id)->where('ativo', '=', AgentePolitico::ATIVO)->first();
             if (!$agente_politico){
-                return redirect()->back()->with('erro', 'Agente Político inválido.');
+                Alert::toast('Agente Político inválido.','error');
+                return redirect()->back();
             }
 
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
@@ -305,7 +327,8 @@ class AgentePoliticoController extends Controller
                 ->where('ativo', '=', PleitoCargo::ATIVO)
             ->first();
             if (!$pleito_cargo){
-                return redirect()->back()->with('erro', 'Cargo eletivo inválido.')->withInput();
+                Alert::toast('Cargo eletivo inválido.','error');
+                return redirect()->back();
             }
 
             //Pessoa
@@ -323,11 +346,13 @@ class AgentePoliticoController extends Controller
             // Político
             $agente_politico->update($request->validated());
 
-            return redirect()->route('agente_politico.edit', $agente_politico->id_user)->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizado com sucesso!', 'success');
+            return redirect()->route('agente_politico.edit', $agente_politico->id_user);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -335,7 +360,8 @@ class AgentePoliticoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('AgentePolitico', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado','error');
+                return redirect()->back();
             }
 
             if ($request->motivo == null || $request->motivo == "") {
@@ -344,7 +370,8 @@ class AgentePoliticoController extends Controller
 
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
             if (!$pleito_eleitoral){
-                return redirect()->back()->with('erro', 'Pleito eleitoral inválido.');
+                Alert::toast('Pleito eleitoral inválido.','error');
+                return redirect()->back();
             }
 
             $pleito_eleitoral->update([
@@ -363,11 +390,13 @@ class AgentePoliticoController extends Controller
                 ]);
             }
 
-            return redirect()->route('agente_politico.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizado com sucesso!', 'success');
+            return redirect()->route('agente_politico.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 }

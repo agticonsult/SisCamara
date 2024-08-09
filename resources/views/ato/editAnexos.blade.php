@@ -59,10 +59,8 @@
                                 </ul>
                                 Extensões permitidas
                                 <ul>
-                                    <li>Documento (txt,pdf,xls,xlsx,doc,docx,odt)</li>
-                                    <li>Imagem (jpg,jpeg,png)</li>
-                                    <li>Áudio (mp3)</li>
-                                    <li>Vídeo (mp4, mkv)</li>
+                                    <li>Documentos (txt,pdf,xls,xlsx,doc,docx,odt)</li>
+                                    <li>Imagens (jpg,jpeg,png)</li>
                                 </ul>
                             </div>
                             <div class="row">

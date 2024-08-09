@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class HomeController extends Controller
 {
@@ -41,7 +42,8 @@ class HomeController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -78,12 +80,14 @@ class HomeController extends Controller
                 $pessoa = Pessoa::find($user->id_pessoa);
                 $pessoa->update($request->validated());
             }
-            return redirect()->route('home')->with('success', 'Cadastro alterado com sucesso.');
+            Alert::toast('Cadastro alterado com sucesso.','success');
+            return redirect()->route('home');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -94,7 +98,8 @@ class HomeController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'HomeController', 'information');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 

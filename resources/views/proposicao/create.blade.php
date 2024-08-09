@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     <style>
         .form-control:focus {

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class FileSizeController extends Controller
 {
@@ -21,7 +22,8 @@ class FileSizeController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('Filesize', 'Listagem') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $files = Filesize::where('ativo', '=', Filesize::ATIVO)->with('tipo_filesize')->get();
@@ -30,7 +32,8 @@ class FileSizeController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'FilesizeController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -45,7 +48,8 @@ class FileSizeController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('Filesize', 'Alteração') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -63,19 +67,21 @@ class FileSizeController extends Controller
             $mb = (integer) $request->file_mb;
 
             if ($mb < 0 || $mb == 0) {
-                return redirect()->route('configuracao.tamanho_anexo.index')->with('erro', 'Tamanho inválido.');
+                Alert::toast('Tamanho inválido.','error');
+                return redirect()->route('configuracao.tamanho_anexo.index');
             }
 
             $filesize = Filesize::where('id', '=', $request->file_id)->where('ativo', '=', Filesize::ATIVO)->first();
-
             if (!$filesize) {
-                return redirect()->route('configuracao.tamanho_anexo.index')->with('erro', 'Não foi possível realizar esta alteração.');
+                Alert::toast('Não foi possível realizar esta alteração.','error');
+                return redirect()->route('configuracao.tamanho_anexo.index');
             }
 
             $filesize->mb = $request->file_mb;
             $filesize->save();
 
-            return redirect()->route('configuracao.tamanho_anexo.index')->with('success', 'Alteração realizada com sucesso.');
+            Alert::toast('Alteração realizada com sucesso.','success');
+            return redirect()->route('configuracao.tamanho_anexo.index');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -85,11 +91,9 @@ class FileSizeController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'FilesizeController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
-
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
-
-
 
     }
 }

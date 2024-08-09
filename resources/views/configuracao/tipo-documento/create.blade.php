@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('errors.alerts')
+    @include('sweetalert::alert')
 
     <h1 class="h3 mb-3">Cadastro Tipo de Documento</h1>
     @if (!isset($departamentos[0]))
@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('scripts')

@@ -12,8 +12,7 @@
         color:red
     }
 </style>
-@include('errors.alerts')
-@include('errors.errors')
+@include('sweetalert::alert')
 
 <div class="card" style="background-color:white">
 

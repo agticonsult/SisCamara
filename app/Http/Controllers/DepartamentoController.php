@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DepartamentoRequest;
-use App\Http\Requests\DepartamentoStoreRequest;
 use App\Models\Departamento;
 use App\Models\DepartamentoUsuario;
-use App\Models\ErrorLog;
-use App\Models\PerfilUser;
 use App\Models\User;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DepartamentoController extends Controller
 {
@@ -25,7 +23,8 @@ class DepartamentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Departamento', 'Listagem') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $departamentos = Departamento::retornaDepartamentosAtivos();
@@ -43,7 +42,7 @@ class DepartamentoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 
@@ -57,7 +56,8 @@ class DepartamentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Departamento', 'Cadastro') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $departamento = Departamento::create($request->validated() + [
@@ -69,12 +69,13 @@ class DepartamentoController extends Controller
                 'created_at' => Carbon::now()
             ]);
 
-            return redirect()->back()->with('success', 'Cadastro realizado com sucesso.');
+            Alert::toast('Cadastro realizado com sucesso!', 'success');
+            return redirect()->back();
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 
@@ -88,12 +89,14 @@ class DepartamentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Departamento', 'Alteração') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $departamento = Departamento::where('id', '=', $id)->where('ativo', '=', Departamento::ATIVO)->with('usuarios')->first();
             if (!$departamento) {
-                return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível alterar este departamento.');
+                Alert::toast('Não é possível alterar este departamento.','error');
+                return redirect()->route('configuracao.departamento.index');
             }
             $users = User::where('ativo', '=', User::ATIVO)->get();
 
@@ -102,7 +105,7 @@ class DepartamentoController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 
@@ -117,7 +120,8 @@ class DepartamentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Departamento', 'Alteração') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $departamento = Departamento::retornaDepartamentoAtivo($id);
@@ -135,13 +139,13 @@ class DepartamentoController extends Controller
                     }
                 }
             }
-
-            return redirect()->route('configuracao.departamento.edit', $departamento->id)->with('success', 'Departamento alterado com sucesso.');
+            Alert::toast('Departamento alterado com sucesso.', 'success');
+            return redirect()->route('configuracao.departamento.edit', $departamento->id);
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 
@@ -155,7 +159,8 @@ class DepartamentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('Departamento', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -165,7 +170,8 @@ class DepartamentoController extends Controller
 
             $departamento = Departamento::retornaDepartamentoAtivo($id);
             if (!$departamento) {
-                return redirect()->route('configuracao.departamento.index')->with('erro', 'Não é possível excluir este departamento.');
+                Alert::toast('Não é possível excluir este departamento.','error');
+                return redirect()->route('configuracao.departamento.index');
             }
             $departamento->update([
                 'inativadoPorUsuario' => Auth::user()->id,
@@ -174,25 +180,19 @@ class DepartamentoController extends Controller
                 'ativo' => Departamento::INATIVO
             ]);
 
-            // $departamentoUsuarios = DepartamentoUsuario::where('id_departamento', '=', $departamento->id)->where('ativo', '=', DepartamentoUsuario::ATIVO)->get();
-            // foreach ($departamentoUsuarios as $departamentoUsuario) {
-            //     $departamentoUsuario->update([
-            //         'ativo' => DepartamentoUsuario::INATIVO
-            //     ]);
-            // }
             $departamento->usuarios()->update([
                 'departamento_usuarios.ativo' => DepartamentoUsuario::INATIVO,
                 'departamento_usuarios.updated_at' => Carbon::now(),
                 'departamento_usuarios.inativadoPorUsuario' => Auth::user()->id,
                 'departamento_usuarios.dataInativado' => Carbon::now()
             ]);
-
-            return redirect()->route('configuracao.departamento.index')->with('success', 'Departamento excluído com sucesso.');
+            Alert::toast('Departamento alterado com sucesso.', 'success');
+            return redirect()->route('configuracao.departamento.index');
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 
@@ -200,7 +200,8 @@ class DepartamentoController extends Controller
     {
         try{
             if(Auth::user()->temPermissao('Departamento', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
             }
 
             $departamento = Departamento::retornaDepartamentoAtivo($id);
@@ -211,13 +212,13 @@ class DepartamentoController extends Controller
                     ]);
                 }
             }
-
-            return redirect()->back()->with('success', 'Usuário vinculado com sucesso.');
+            Alert::toast('Usuário vinculado com sucesso.', 'success');
+            return redirect()->back();
 
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'desvincularUsuario');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema.','error');
         }
     }
 }

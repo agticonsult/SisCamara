@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AgentePolitico;
-use App\Models\ErrorLog;
-use App\Models\FotoPerfil;
 use App\Models\VotacaoEletronica;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class GerenciamentoVotacaoController extends Controller
 {

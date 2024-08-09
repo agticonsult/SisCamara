@@ -12,14 +12,13 @@ use App\Services\EmailService;
 use App\Services\ErrorLogService;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ConfirmacaoEmailController extends Controller
 {
@@ -29,18 +28,11 @@ class ConfirmacaoEmailController extends Controller
     {
         try {
            return view('auth.confirmacaoEmail');
-
-        } catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
         }
-        catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'ConfirmacaoEmailController', 'encaminharLink');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -70,21 +62,23 @@ class ConfirmacaoEmailController extends Controller
 
             //realiza a busca no BD o email informado
             $user = User::where('email', '=', $request->email)
-                    ->where('ativo', '=', 1)
-                    ->select('id', 'email', 'id_pessoa', 'confirmacao_email', 'envio_email_confirmacao', 'envio_email_recuperacao')
-                    ->first();
+                ->where('ativo', '=', 1)
+                ->select('id', 'email', 'id_pessoa', 'confirmacao_email', 'envio_email_confirmacao', 'envio_email_recuperacao')
+            ->first();
 
             // se existir usuario ativo
             if($user){
 
                 //verificar se o e-mail está ativo, caso esteja redireciona para tela de login
                 if($user->confirmacao_email == 1 || $user->confirmacao_email == true){
-                    return redirect()->route('login')->with('erro', 'Usuário já foi confirmado por e-mail e as credencias já estão válidas para acessar o sistema.');
+                    Alert::toast('Usuário já foi confirmado por e-mail e as credencias já estão válidas para acessar o sistema.','error');
+                    return redirect()->route('login');
                 }
 
                 // se exceder 3 tentativas de encaminhar link, será bloqueado o e-mail cadastrado
                 if($user->envio_email_confirmacao == 3){
-                    return redirect()->route('login')->with('erro', 'Já foram enviados 3 links de confirmação de cadastro por email. Não é permitido enviar mais links.')->withInput();
+                    Alert::toast('Já foram enviados 3 links de confirmação de cadastro por email. Não é permitido enviar mais links.','error');
+                    return redirect()->route('login');
                 }
 
                 // timestamp atual
@@ -94,7 +88,7 @@ class ConfirmacaoEmailController extends Controller
                 $emails = Email::where('recebidoPorUsuario', '=', $user->id)
                     ->where('id_tipo_email', '=', 3) //confirmacao
                     ->where('expiradoEm', '>', $agora)
-                    ->get();
+                ->get();
 
                 //Se expiradoEm > agora está valido
                 //Se agora > expiradoEm não está valido
@@ -126,23 +120,25 @@ class ConfirmacaoEmailController extends Controller
                 $user->envio_email_confirmacao++;
                 $user->save();
 
-                return redirect()->route('login')->with('success', 'Confirmação de email enviado. Por favor! Cheque sua caixa de spam.');
+                Alert::toast('Confirmação de email enviado. Por favor! Cheque sua caixa de spam.','success');
+                return redirect()->route('login');
             }
             else{
-                return redirect()->route('login')->with('erro', 'CPF e/ou E-mail não localizado no sistema.')->withInput();
+                Alert::toast('CPF e/ou E-mail não localizado no sistema.','error');
+                return redirect()->route('login');
             }
 
-        } catch (ValidationException $e ) {
+        }
+        catch (ValidationException $e ) {
             $message = $e->errors();
             return redirect()->back()
                 ->withErrors($message)
                 ->withInput();
         }
-        catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'ConfirmacaoEmailController', 'linkEncaminhado');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -176,19 +172,11 @@ class ConfirmacaoEmailController extends Controller
                 return view('mail.expiredMail3');
             }
         }
-        catch (ValidationException $e ) {
-            $message = $e->errors();
-            return redirect()->back()
-                ->withErrors($message)
-                ->withInput();
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'ConfirmacaoEmailController', 'confirmacaoEmail');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
-        catch(\Exception $ex){
-            $erro = new ErrorLog();
-            $erro->erro = $ex->getMessage();
-            $erro->save();
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
-        }
-
     }
 
     public function linkEncaminhadoAPI(Request $request)

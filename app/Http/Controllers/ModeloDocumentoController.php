@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ErrorLog;
 use App\Models\ModeloDocumento;
 use App\Services\ErrorLogService;
 use App\Traits\ApiResponser;
@@ -11,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ModeloDocumentoController extends Controller
 {
@@ -20,7 +20,8 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('ModeloDocumento', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $modelos = ModeloDocumento::retornaModelosAtivos();
@@ -29,7 +30,8 @@ class ModeloDocumentoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -37,14 +39,16 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('ModeloDocumento', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             return view('documento.modelo.create');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'create');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -52,7 +56,8 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('ModeloDocumento', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -73,8 +78,8 @@ class ModeloDocumentoController extends Controller
             $modelo_documento->cadastradoPorUsuario = Auth::user()->id;
             $modelo_documento->ativo = 1;
             $modelo_documento->save();
-
-            return redirect()->route('documento.modelo.index')->with('success', 'Cadastro realizado com sucesso');
+            Alert::toast('Cadastro realizado com sucesso','success');
+            return redirect()->route('documento.modelo.index');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -84,7 +89,8 @@ class ModeloDocumentoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'store');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -92,19 +98,22 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('ModeloDocumento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $modelo_documento = ModeloDocumento::retornaModeloAtivo($id);
             if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+                Alert::toast('Modelo inválido.','error');
+                return redirect()->back();
             }
 
             return view('documento.modelo.edit', compact('modelo_documento'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'edit');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -112,7 +121,8 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('ModeloDocumento', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $input = [
@@ -131,14 +141,15 @@ class ModeloDocumentoController extends Controller
 
             $modelo_documento = ModeloDocumento::retornaModeloAtivo($id);
             if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+                Alert::toast('Modelo inválido.','error');
+                return redirect()->back();
             }
 
             $modelo_documento->assunto = $request->assunto;
             $modelo_documento->conteudo = $request->conteudo;
             $modelo_documento->save();
-
-            return redirect()->route('documento.modelo.index')->with('success', 'Alteração realizada com sucesso');
+            Alert::toast('Alteração realizada com sucesso','success');
+            return redirect()->route('documento.modelo.index');
         }
         catch (ValidationException $e ) {
             $message = $e->errors();
@@ -148,7 +159,8 @@ class ModeloDocumentoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'update');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -156,7 +168,8 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('ModeloDocumento', 'Exclusão') != 1) {
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $motivo = $request->motivo;
@@ -166,7 +179,8 @@ class ModeloDocumentoController extends Controller
 
             $modelo_documento = ModeloDocumento::retornaModeloAtivo($id);
             if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+                Alert::toast('Modelo inválido.','error');
+                return redirect()->back();
             }
 
             $modelo_documento->update([
@@ -175,12 +189,13 @@ class ModeloDocumentoController extends Controller
                 'motivoInativado' => $motivo,
                 'ativo' => ModeloDocumento::ATIVO
             ]);
-
-            return redirect()->route('documento.modelo.index')->with('success', 'Exclusão realizada com sucesso.');
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('documento.modelo.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloDocumentoController', 'destroy');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.')->withInput();
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -188,12 +203,14 @@ class ModeloDocumentoController extends Controller
     {
         try {
             if (Auth::user()->temPermissao('User', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $modelo_documento = ModeloDocumento::retornaModeloAtivo($id);
             if (!$modelo_documento){
-                return redirect()->back()->with('erro', 'Modelo inválido.');
+                Alert::toast('Modelo inválido.','error');
+                return redirect()->back();
             }
 
             return $this->success($modelo_documento);

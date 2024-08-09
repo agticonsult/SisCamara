@@ -294,12 +294,12 @@
                                             href="{{ route('configuracao.departamento.index') }}">Departamento
                                         </a>
                                     </li>
-                                    <li
+                                    {{-- <li
                                         class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/autoridade' ? 'active' : null }}">
                                         <a class="sidebar-link "
                                             href="{{ route('configuracao.autoridade.index') }}">Autoridades
                                         </a>
-                                    </li>
+                                    </li> --}}
                                     <li
                                         class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/tipo-ato' ? 'active' : null }}">
                                         <a class="sidebar-link " href="{{ route('configuracao.tipo_ato.index') }}">Tipos de

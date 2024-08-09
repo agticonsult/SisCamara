@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\AssuntoAto;
 use App\Models\Ato;
 use App\Models\ClassificacaoAto;
-use App\Models\ErrorLog;
 use App\Models\FormaPublicacaoAto;
 use App\Models\LinhaAto;
 use App\Models\OrgaoAto;
 use App\Models\TipoAto;
 use App\Services\ErrorLogService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AtoPublicoController extends Controller
 {
@@ -33,7 +31,8 @@ class AtoPublicoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -47,7 +46,8 @@ class AtoPublicoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'show');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -259,7 +259,8 @@ class AtoPublicoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'buscaLivre');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -278,7 +279,8 @@ class AtoPublicoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvarPublico($ex->getMessage(), 'AtoPublicoController', 'buscar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

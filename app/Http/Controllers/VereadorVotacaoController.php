@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgentePolitico;
-use App\Models\ErrorLog;
 use App\Models\VereadorVotacao;
-use App\Models\VotacaoEletronica;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class VereadorVotacaoController extends Controller
 {
@@ -18,13 +17,14 @@ class VereadorVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VereadorVotacao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $vereador = AgentePolitico::where('id_user', '=', Auth::user()->id)->first();
-
             if (!$vereador){
-                return redirect()->back()->with('erro', 'Vereador não cadastrado.');
+                Alert::toast('Vereador não cadastrado.','error');
+                return redirect()->back();
             }
 
             $vereador_votacaos = VereadorVotacao::where('id_vereador', '=', $vereador->id)->where('ativo', VereadorVotacao::ATIVO)->get();
@@ -34,7 +34,8 @@ class VereadorVotacaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VereadorVotacaoController', 'index');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -42,12 +43,14 @@ class VereadorVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VereadorVotacao', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $vereadorVotacao = VereadorVotacao::where('id', '=', $id)->where('ativo', '=', VereadorVotacao::ATIVO)->first();
             if (!$vereadorVotacao){
-                return redirect()->back()->with('erro', 'Dados inválidos.');
+                Alert::toast('Dados inválidos.','error');
+                return redirect()->back();
             }
 
             if ($vereadorVotacao->votacaoIniciada != 1){
@@ -57,11 +60,13 @@ class VereadorVotacaoController extends Controller
                 $vereadorVotacao->save();
             }
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $vereadorVotacao->id_votacao)->with('success', 'Votação do vereador iniciada com sucesso!');
+            Alert::toast('Votação do vereador iniciada com sucesso!','success');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $vereadorVotacao->id_votacao);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VereadorVotacaoController', 'liberarVotacao');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -69,22 +74,26 @@ class VereadorVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VereadorVotacao', 'Listagem') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $vereador = AgentePolitico::where('id_user', Auth::user()->id)->first();
             $vereador_votacao = VereadorVotacao::where('id', '=', $id)->where('id_vereador', $vereador->id)->where('ativo', '=', VereadorVotacao::ATIVO)->first();
 
             if (!$vereador_votacao){
-                return redirect()->back()->with('erro', 'Dados inválidos.');
+                Alert::toast('Dados inválidos','error');
+                return redirect()->back();
             }
 
             if($vereador_votacao->votou == 1) {
-                return redirect()->back()->with('erro', 'Você já votou.');
+                Alert::toast('Você já votou.','error');
+                return redirect()->back();
             }
 
             if($vereador_votacao->votacaoAutorizada != 1) {
-                return redirect()->back()->with('erro', 'Votação não autorizada.');
+                Alert::toast('Votação não autorizada.','error');
+                return redirect()->back();
             }
 
             return view('votacao-eletronica.vereador.votacao', compact('vereador_votacao'));
@@ -92,7 +101,8 @@ class VereadorVotacaoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VereadorVotacaoController', 'votacao');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -100,7 +110,8 @@ class VereadorVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VereadorVotacao', 'Cadastro') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $vereador_votacao = VereadorVotacao::find($id);
@@ -109,11 +120,13 @@ class VereadorVotacaoController extends Controller
             $vereador_votacao->votouEm = Carbon::now();
             $vereador_votacao->save();
 
-            return redirect()->route('votacao_eletronica.vereador.index')->with('success', 'Sua votação foi registrada com sucesso!');
+            Alert::toast('Sua votação foi registrada com sucesso!','success');
+            return redirect()->route('votacao_eletronica.vereador.index');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'VereadorVotacaoController', 'votar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }
