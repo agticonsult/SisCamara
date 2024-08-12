@@ -66,7 +66,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="anexo">Arquivo</label>
-                                    <input type="file" name="anexo[]" id="anexo" class="form-control-file" multiple>
+                                    <input type="file" name="anexo" id="anexo" class="form-control-file" required>
                                 </div>
                             </div>
 
@@ -167,7 +167,7 @@
 
     $("#form-anexo").validate({
         rules : {
-            "arquivo[]":{
+            "arquivo":{
                 required:true
             },
             id_tipo_anexo:{
@@ -175,7 +175,7 @@
             }
         },
         messages:{
-            "arquivo[]":{
+            "arquivo":{
                 required:"Campo obrigatório",
             },
             id_tipo_anexo:{

@@ -457,9 +457,11 @@ class DocumentoController extends Controller
             // se deu erro no anexo, mostra o erro
             if ($respostaAnexo['sucesso']) {
                 Alert::toast('Aprovação realizada com sucesso, o documento foi encaminhado ao departamento '. $proximo_departamento->departamento->descricao . '.' ,'success')->autoClose(5000);
+                return redirect()->back();
             }
             else {
                 Alert::toast('Aprovação realizada com sucesso, o documento foi encaminhado ao departamento '. $proximo_departamento->departamento->descricao . '. Mas houve um erro no anexo: ' . $respostaAnexo['mensagem'] ,'warning')->autoClose(5000);
+                return redirect()->back();
             }
         }
         catch (ValidationException $e) {

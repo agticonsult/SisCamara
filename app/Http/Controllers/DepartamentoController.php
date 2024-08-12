@@ -43,6 +43,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'index');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -76,6 +77,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'store');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -106,6 +108,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'edit');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -146,6 +149,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'update');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -193,6 +197,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'destroy');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 
@@ -219,6 +224,7 @@ class DepartamentoController extends Controller
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'desvincularUsuario');
             Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 }

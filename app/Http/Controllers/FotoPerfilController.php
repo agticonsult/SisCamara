@@ -23,7 +23,7 @@ class FotoPerfilController extends Controller
         }
         catch(\Exception $ex){
             ErrorLogService::salvar($ex->getMessage(), 'FotoPerfilController', 'store');
-            Alert::toast('Contate o administrador do sistema.','error');
+            Alert::toast($ex->getMessage(),'error');
             return redirect()->back();
         }
     }

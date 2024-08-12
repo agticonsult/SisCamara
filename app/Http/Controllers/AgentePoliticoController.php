@@ -140,13 +140,13 @@ class AgentePoliticoController extends Controller
             ->first();
             if (!$pleito_cargo){
                 Alert::toast('Cargo eletivo inválido.','error');
-                return redirect()->back()->withInput();
+                return redirect()->back();
             }
 
             //verifica se a confirmação de senha estão ok
             if($request->password != $request->confirmacao){
                 Alert::toast('Senhas não conferem.','error');
-                return redirect()->back()->withInput();
+                return redirect()->back();
             }
 
             $novaPessoa = Pessoa::create($request->validated() + [
@@ -190,7 +190,7 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'store');
-            Alert::toast('Contate o administrador do sistema.','error');
+            Alert::toast($ex->getMessage(),'error');
             return redirect()->back();
         }
     }
@@ -351,7 +351,7 @@ class AgentePoliticoController extends Controller
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'AgentePoliticoController', 'update');
-            Alert::toast('Contate o administrador do sistema.','error');
+            Alert::toast($ex->getMessage(),'error');
             return redirect()->back();
         }
     }

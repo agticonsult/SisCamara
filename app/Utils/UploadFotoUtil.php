@@ -5,6 +5,7 @@ namespace App\Utils;
 use App\Models\Filesize;
 use App\Models\FotoPerfil;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
@@ -27,15 +28,15 @@ class UploadFotoUtil
                         self::salvarImagem($nome_original, $nome_hash, $usuario->id);
                     }
                     else {
-                        return self::redirectWithError('Ocorreu um erro ao salvar a foto de perfil.');
+                        throw new Exception('Ocorreu um erro ao salvar a foto de perfil.');
                     }
                 }
                 else {
-                    return self::redirectWithError('Extensão de imagem inválida. Extensões permitidas: .png, .jpg e .jpeg');
+                    throw new Exception('Extensão de imagem inválida. Extensões permitidas: .png, .jpg e .jpeg');
                 }
             }
             else {
-                return self::redirectWithError('Arquivo maior que ' . $mb . 'MB');
+                throw new Exception('Arquivo maior que ' . $mb . 'MB');
             }
         }
     }
@@ -98,10 +99,5 @@ class UploadFotoUtil
                 ]);
             }
         }
-    }
-
-    private static function redirectWithError($message)
-    {
-        return redirect()->back()->with('erro', $message)->withInput();
     }
 }
