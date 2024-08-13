@@ -8,6 +8,8 @@
         }
     </style>
 
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Gestão Administrativa</h1>
+
     @include('sweetalert::alert')
 
     @if (!isset($departamentos[0]))
@@ -19,8 +21,6 @@
             </div>
         </div>
     @endif
-
-    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Gestão Administrativa</h1>
 
     <div class="card">
         <div class="card-body">
