@@ -2,6 +2,12 @@
 
 @section('content')
 
+    <style>
+        .caminho {
+            font-size: 12px;
+        }
+    </style>
+
     @include('sweetalert::alert')
 
     @if (!isset($departamentos[0]))
@@ -14,7 +20,7 @@
         </div>
     @endif
 
-    <h1 class="h3 mb-3">Gestão Administrativa</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Gestão Administrativa</h1>
 
     <div class="card">
         <div class="card-body">
