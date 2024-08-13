@@ -859,4 +859,30 @@ class DocumentoController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroy(Request $request, $id)
+    {
+        try{
+            if(Auth::user()->temPermissao('Documento', 'Exclusão') != 1){
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
+            }
+
+            $documento = Documento::where('ativo', Documento::ATIVO)->findOrFail($id);
+            $documento->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo,
+                'ativo' => Documento::INATIVO
+            ]);
+
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('documento.index');
+        }
+        catch(\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'destroy');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
+        }
+    }
 }

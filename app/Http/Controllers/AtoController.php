@@ -422,11 +422,7 @@ class AtoController extends Controller
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }
-
-            if ($request->motivo == null || $request->motivo == "") {
-                $motivo = "Exclusão pelo usuário.";
-            }
-
+            
             $ato = Ato::retornaAtoAtivo($id);
             if (!$ato){
                 Alert::toast('Não é possível excluir este assunto.','error');
@@ -436,7 +432,7 @@ class AtoController extends Controller
             $ato->update([
                 'inativadoPorUsuario' => Auth::user()->id,
                 'dataInativado' => Carbon::now(),
-                'motivoInativado' => $motivo,
+                'motivoInativado' => $request->motivo != null ? $request->motivo : "Exclusão pelo usuário.",
                 'ativo' => Ato::INATIVO
             ]);
 
@@ -446,7 +442,7 @@ class AtoController extends Controller
                 $atoRelacionado->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
-                    'motivoInativado' => $motivo,
+                    'motivoInativado' => $request->motivo != null ? $request->motivo : "Exclusão pelo usuário.",
                     'ativo' => AtoRelacionado::INATIVO
                 ]);
 
@@ -455,10 +451,9 @@ class AtoController extends Controller
                 $linhaAto->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
-                    'motivoInativado' => $motivo,
+                    'motivoInativado' => $request->motivo != null ? $request->motivo : "Exclusão pelo usuário.",
                     'ativo' => LinhaAto::INATIVO
                 ]);
-
             }
 
             $anexoAto = AnexoAto::where('id_ato', '=', $id)->where('ativo', '=', AnexoAto::ATIVO)->first();
@@ -466,7 +461,7 @@ class AtoController extends Controller
                 $anexoAto->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
-                    'motivoInativado' => $motivo,
+                    'motivoInativado' => $request->motivo != null ? $request->motivo : "Exclusão pelo usuário.",
                     'ativo' => AnexoAto::INATIVO
                 ]);
             }

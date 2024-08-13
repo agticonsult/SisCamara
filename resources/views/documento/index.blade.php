@@ -58,17 +58,17 @@
                                     </td>
                                 </tr>
 
-                                {{-- <div class="modal fade" id="exampleModalExcluir{{ $reparticao->id }}"
+                                <div class="modal fade" id="exampleModalExcluir{{ $documento->id }}"
                                     tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
                                     aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('reparticao.destroy', $reparticao->id) }}">
+                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('documento.destroy', $documento->id) }}">
                                                 @csrf
                                                 @method('POST')
                                                 <div class="modal-header btn-danger">
                                                     <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
-                                                        Excluir <strong>{{ $reparticao->descricao != null ? $reparticao->descricao : 'não informado' }} - {{ $reparticao->id_tipo_reparticao != null ? $reparticao->tipo_reparticao->descricao : 'não informado' }}</strong>
+                                                        Excluir <strong>{{ $documento->titulo != null ? $documento->titulo : 'não informado' }} - {{ $documento->id_tipo_documento != null ? $documento->tipoDocumento->nome : 'não informado' }}</strong>
                                                     </h5>
                                                 </div>
                                                 <div class="modal-body">
@@ -85,7 +85,7 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
