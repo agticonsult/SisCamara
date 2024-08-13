@@ -73,7 +73,7 @@ class RegistrarController extends Controller
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvarPublico($ex->getMessage(), 'RegistrarController', 'pessoaFisicaStore');
+            ErrorLogService::salvarPublico($ex->getMessage(), 'RegistrarController', 'store');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }

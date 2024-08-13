@@ -58,17 +58,20 @@ class HomeController extends Controller
 
                 //verificar se a senha antiga está correta
                 if (!Hash::check($request->senha_antiga, $user->password)){
-                    return redirect()->back()->with('erro', 'A senha antiga está incorreta.')->withInput();
+                    Alert::toast('A senha antiga está incorreta.','error');
+                    return redirect()->back();
                 }
 
                 //verifica se a confirmação de senha estão ok
                 if($request->password != $request->confirmacao){
-                    return redirect()->back()->with('erro', 'Senhas não conferem.')->withInput();
+                    Alert::toast('Senhas não conferem.','error');
+                    return redirect()->back();
                 }
 
                 $tamanho_senha = strlen($request->password);
                 if ($tamanho_senha < 6 || $tamanho_senha > 35){
-                    return redirect()->back()->with('erro', 'Senha inválida.')->withInput();
+                    Alert::toast('Senha inválida.','error');
+                    return redirect()->back();
                 }
 
                 $user->password = Hash::make($request->password);

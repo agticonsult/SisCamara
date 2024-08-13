@@ -59,14 +59,14 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card">
-                                <div class="card-header">
+                                {{-- <div class="card-header">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h4 class="text-left mb-0 mt-2">Atualizar dados</h4>
                                         </div>
                                     </div>
                                 </div>
-                                <hr class="my-0">
+                                <hr class="my-0"> --}}
                                 <div class="card-body">
                                     <div class="col-md-12">
                                         <div class="row">

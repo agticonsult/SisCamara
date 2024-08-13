@@ -5,36 +5,38 @@
 
     <h1 class="h3 mb-3">Tipos de Ato</h1>
     <div class="card" style="background-color:white">
-        <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
-                    aria-expanded="false" aria-controls="collapseThree">
-                    Cadastro
-                </button>
-            </h5>
-        </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
-            <div class="card-body">
-                <form action="{{ route('configuracao.tipo_ato.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
-                    @csrf
-                    @method('POST')
+        <div id="accordion3">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree"
+                        aria-expanded="false" aria-controls="collapseThree">
+                        Cadastro
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion3">
+                <div class="card-body">
+                    <form action="{{ route('configuracao.tipo_ato.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                        @csrf
+                        @method('POST')
 
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-label">*Nome</label>
-                                <input class="form-control @error('descricao') is-invalid @enderror" type="text" name="descricao" id="descricao"  placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
-                                @error('descricao')
-                                    <div class="invalid-feedback">{{ $message }}</div><br>
-                                @enderror
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">*Nome</label>
+                                    <input class="form-control @error('descricao') is-invalid @enderror" type="text" name="descricao" id="descricao"  placeholder="Informe o nome do tipo de ato" value="{{ old('descricao') }}">
+                                    @error('descricao')
+                                        <div class="invalid-feedback">{{ $message }}</div><br>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-12">
-                        <button type="submit" class="button_submit btn btn-primary">Salvar</button>
-                    </div>
-                </form>
+                        <div class="col-md-12">
+                            <button type="submit" class="button_submit btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
