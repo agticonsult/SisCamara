@@ -45,6 +45,9 @@
         .error{
             color:red
         }
+        .caminho {
+            font-size: 12px;
+        }
     </style>
 
     <body>
@@ -78,7 +81,7 @@
 
                         {{-- Atos --}}
                         @if (Auth::user()->temPermissao('Ato', 'Listagem') == 1)
-                            <li class="sidebar-item {{ Route::current()->uri == 'ato' || Route::current()->uri == 'ato/create' ? 'active' : null }}">
+                            <li class="sidebar-item {{ Route::current()->uri == 'ato' || Route::current()->uri == 'ato/create' || Route::current()->uri == 'ato/show/{id}' || Route::current()->uri == 'ato/dados-gerais/edit/{id}' || Route::current()->uri == 'ato/corpo-do-texto/edit/{id}' || Route::current()->uri == 'ato/anexos/edit/{id}' ? 'active' : null }}">
                                 <a href="{{ route('ato.index') }}" class="sidebar-link">
                                     <i class="fas fa-fw fa-file-alt" aria-hidden="true"></i>
                                     <span>Atos</span>
@@ -186,7 +189,7 @@
 
                         {{-- Documentos --}}
                         @if (Auth::user()->temPermissao('Documento', 'Listagem') == 1)
-                            <li class="sidebar-item {{ Route::current()->uri == 'documento' || Route::current()->uri == 'documento/create' || Route::current()->uri == 'documento/edit/{id}' ? 'active' : null }}">
+                            <li class="sidebar-item {{ Route::current()->uri == 'documento' || Route::current()->uri == 'documento/create' || Route::current()->uri == 'documento/edit/{id}' || Route::current()->uri == 'documento/show/{id}' ? 'active' : null }}">
                                 <a href="{{ route('documento.index') }}" class="sidebar-link">
                                     <i class="fa fa-book" aria-hidden="true"></i>
                                     <span>Documentos</span>

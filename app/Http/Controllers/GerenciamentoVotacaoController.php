@@ -6,6 +6,7 @@ use App\Models\VotacaoEletronica;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class GerenciamentoVotacaoController extends Controller
 {
@@ -13,19 +14,22 @@ class GerenciamentoVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             return view('votacao-eletronica.gerenciamento.votacao', compact('votacao'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'gerenciar');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -33,12 +37,14 @@ class GerenciamentoVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             if ($votacao->votacaoIniciada != 1){
@@ -55,11 +61,13 @@ class GerenciamentoVotacaoController extends Controller
                 $votacao->save();
             }
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação iniciada com sucesso!');
+            Alert::toast('Votação iniciada com sucesso!','success');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'iniciarVotacao');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -67,12 +75,14 @@ class GerenciamentoVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             if ($votacao->votacaoPausada != 1){
@@ -85,11 +95,13 @@ class GerenciamentoVotacaoController extends Controller
                 $votacao->save();
             }
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação pausada com sucesso!');
+            Alert::toast('Votação pausada com sucesso!','success');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'pausarVotacao');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 
@@ -97,12 +109,14 @@ class GerenciamentoVotacaoController extends Controller
     {
         try {
             if(Auth::user()->temPermissao('VotacaoEletronica', 'Alteração') != 1){
-                return redirect()->back()->with('erro', 'Acesso negado.');
+                Alert::toast('Acesso Negado!','error');
+                return redirect()->back();
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
             if (!$votacao){
-                return redirect()->back()->with('erro', 'Votação inválida.');
+                Alert::toast('Votação inválida.','error');
+                return redirect()->back();
             }
 
             $votacao->votacaoIniciada = 0;
@@ -113,11 +127,13 @@ class GerenciamentoVotacaoController extends Controller
             // $votacao->ativo = 0;
             $votacao->save();
 
-            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id)->with('success', 'Votação encerrada com sucesso!');
+            Alert::toast('Votação encerrada com sucesso!','success');
+            return redirect()->route('votacao_eletronica.gerenciamento.gerenciar', $id);
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'GerenciamentoVotacaoController', 'encerrarVotacao');
-            return redirect()->back()->with('erro', 'Contate o administrador do sistema.');
+            Alert::toast('Contate o administrador do sistema','error');
+            return redirect()->back();
         }
     }
 }

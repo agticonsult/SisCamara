@@ -12,7 +12,7 @@
 </style>
 @include('sweetalert::alert')
 
-<h1 class="h3 mb-3">Alteração de Votação Eletrônica</h1>
+<h1 class="h3 mb-3"><span class="caminho">Votação Eletrônica > Gerenciar Votações > </span>Alteração de Votação Eletrônica</h1>
 <div class="card" style="background-color:white">
     <div class="card-body">
         <div class="col-md-12">
@@ -69,13 +69,12 @@
                         @enderror
                     </div>
                 </div>
-
-                <br>
-                <div class="col-md-12">
-                    <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
-                    <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                        <a href="{{ route('votacao_eletronica.index') }}" class="btn btn-light m-1">Voltar</a>
+                    </div>
                 </div>
-                <br>
             </form>
         </div>
     </div>

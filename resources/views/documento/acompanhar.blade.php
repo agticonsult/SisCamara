@@ -2,6 +2,7 @@
 
 @section('content')
 
+    <h1 class="h3 mb-3"><span class="caminho">Documentos > </span>Visualização</h1>
     <style>
         .error{
             color:red

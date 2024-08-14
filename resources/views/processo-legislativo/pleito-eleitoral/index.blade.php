@@ -4,7 +4,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Pleitos Eleitorais</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Processo Legislativo > </span>Pleitos Eleitorais</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             @if (Count($pleitos) == 0)

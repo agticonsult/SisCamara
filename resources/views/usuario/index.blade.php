@@ -4,7 +4,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Usuários</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Usuários > </span>Listagem dos Usuários</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             @if (Count($usuarios) == 0)

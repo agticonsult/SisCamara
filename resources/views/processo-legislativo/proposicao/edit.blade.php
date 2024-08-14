@@ -2,8 +2,6 @@
 
 @section('content')
 
-    @include('sweetalert::alert')
-
     <style>
         .form-control:focus {
             background-color: #ffffff !important; /* Altere a cor de fundo conforme necessário */
@@ -23,28 +21,20 @@
         }
     </style>
 
-    <h1 class="h3 mb-3">Cadastro de Proposição</h1>
-    @if (!isset($modelos[0]))
-        <div class="alert alert-warning alert-dismissible" role="alert">
-            {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
-            <div class="alert-message">
-                <strong>Sem MODELO DE PROPOSIÇÃO cadastrado!</strong>
-                <a href="{{ route('proposicao.modelo.create') }}">Clique aqui para cadastrar</a>
-            </div>
-        </div>
-    @endif
+    @include('sweetalert::alert')
 
+    <h1 class="h3 mb-3"><span class="caminho">Processo Legislativo > </span>Alteração de Proposição</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">
-                <form action="{{ route('proposicao.store') }}" id="form" method="POST" class="form_prevent_multiple_submits">
+                <form action="{{ route('proposicao.update', $proposicao->id) }}" id="form" method="POST" class="form_prevent_multiple_submits">
                     @csrf
                     @method('POST')
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label" for="titulo">*Título</label>
-                            <input type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" value="{{ old("titulo") }}">
+                            <input type="text" class="form-control @error('titulo') is-invalid @enderror" name="titulo" value="{{ $proposicao->titulo }}">
                             @error('titulo')
                                 <div class="invalid-feedback">{{ $message }}</div><br>
                             @enderror
@@ -52,12 +42,33 @@
                         <div class="form-group col-md-6">
                             <label class="form-label">*Modelo</label>
                             <select name="id_modelo" id="id_modelo" class="select2 form-control @error('id_modelo') is-invalid @enderror">
-                                <option value="" selected disabled>--Selecione--</option>
-                                @foreach ($modelos as $modelo)
-                                    <option value="{{ $modelo->id }}">{{ $modelo->assunto }}</option>
-                                @endforeach
+                                <option value="{{ $proposicao->id_modelo }}" selected>{{ $proposicao->modelo->assunto }}</option>
                             </select>
                             @error('id_modelo')
+                                <div class="invalid-feedback">{{ $message }}</div><br>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_localizacao">*Localização</label>
+                            <select name="id_localizacao" id="id_localizacao" class="select2 form-control @error('id_localizacao') is-invalid @enderror">
+                                @foreach ($localizacaos as $localizacao)
+                                    <option value="{{ $localizacao->id }}" {{ $localizacao->id == $proposicao->id_localizacao ? 'selected' : '' }}>{{ $localizacao->descricao }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_localizacao')
+                                <div class="invalid-feedback">{{ $message }}</div><br>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">*Status</label>
+                            <select name="id_status" id="id_status" class="select2 form-control @error('id_status') is-invalid @enderror">
+                                @foreach ($statuses as $status)
+                                    <option value="{{ $status->id }}" {{ $status->id == $proposicao->id_status ? 'selected' : '' }}>{{ $status->descricao }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_status')
                                 <div class="invalid-feedback">{{ $message }}</div><br>
                             @enderror
                         </div>
@@ -81,7 +92,7 @@
                                     <div class="tab-pane active" id="colored-icon-3" role="tabpanel">
                                         <div class="">
                                             <div class="col-md-6 mb-3">
-                                                <input type="text" class="form-control @error('assunto') is-invalid @enderror" name="assunto" id="assunto">
+                                                <input type="text" class="form-control @error('assunto') is-invalid @enderror" name="assunto" id="assunto" value="{{ $proposicao->assunto }}">
                                                 @error('assunto')
                                                     <div class="invalid-feedback">{{ $message }}</div><br>
                                                 @enderror
@@ -89,7 +100,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="colored-icon-4" role="tabpanel">
-                                        <textarea name="conteudo" id="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="10"></textarea>
+                                        <textarea name="conteudo" id="conteudo" class="form-control @error('conteudo') is-invalid @enderror" cols="30" rows="10">{{ $proposicao->conteudo }}</textarea>
                                         @error('conteudo')
                                             <div class="invalid-feedback">{{ $message }}</div><br>
                                         @enderror
@@ -98,16 +109,17 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <input type="text" class="form-control" name="texto_proposicao" id="texto_proposicao" value="{{ old("texto_proposicao") }}" hidden> --}}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="submit" class="button_submit btn btn-primary m-1" id="salvar">Salvar</button>
-                            <a href="{{ route('proposicao.index') }}" class="btn btn-light m-1">Voltar</a>
-                        </div>
+
+                    <br>
+                    <div class="col-md-12">
+                        <button type="submit" class="button_submit btn btn-primary m-1">Salvar</button>
+                        <a href="{{ route('proposicao.index') }}" class="btn btn-light m-1">Voltar</a>
                     </div>
+                    <br>
                 </form>
             </div>
         </div>
+
     </div>
 @endsection
 
@@ -157,11 +169,6 @@
         });
 
         $(document).ready(function() {
-            // $('#salvar').on('click', function(){
-            //     var plainText = tinymce.activeEditor.getBody().textContent;
-            //     $('#texto_proposicao').val(plainText);
-            // });
-
             $('#id_modelo').on('change', function(e){
                 var id_modelo = $(this).val();
 

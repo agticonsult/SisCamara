@@ -32,7 +32,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Cadastro de Agente Político</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Agentes Políticos > </span>Cadastro de Agente Político</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">

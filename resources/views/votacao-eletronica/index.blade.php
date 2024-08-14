@@ -51,8 +51,8 @@
                                 </td>
                                 <td>
                                     @if ($votacao->votacaoEncerrada != 1)
-                                        <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning m-1">Alterar</a>
-                                        <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}">Excluir</button>
+                                        <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                        <a href="{{ route('votacao_eletronica.edit', $votacao->id) }}" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalExcluir{{ $votacao->id }}"><i class="align-middle me-2 fas fa-fw fa-trash"></i></a>
                                         @if (Auth::user()->temPermissao('VotacaoEletronica', 'Alteração'))
                                             <a href="{{ route('votacao_eletronica.gerenciamento.gerenciar', $votacao->id) }}" class="btn btn-info m-1">Gerenciar Votação</a>
                                         @endif

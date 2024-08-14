@@ -12,7 +12,7 @@
 </style>
 @include('sweetalert::alert')
 
-<h1 class="h3 mb-3">Tamanho dos Anexos</h1>
+<h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Listagem dos Tamanhos dos Anexos</h1>
 <div class="card" style="background-color:white">
     <div id="accordion2">
         <div class="card">

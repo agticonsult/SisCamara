@@ -22,7 +22,7 @@
 @section('content')
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Departamentos</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Listagem dos Departamentos</h1>
     <div class="card" style="background-color:white">
         <div id="accordion3">
             <div class="card-header" id="headingThree">

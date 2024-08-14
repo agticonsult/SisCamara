@@ -25,7 +25,7 @@ class ModeloProposicaoController extends Controller
 
             $modelos = ModeloProposicao::where('ativo', '=', ModeloProposicao::ATIVO)->get();
 
-            return view('proposicao.modelo.index', compact('modelos'));
+            return view('processo-legislativo.modelo.index', compact('modelos'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'index');
@@ -42,7 +42,7 @@ class ModeloProposicaoController extends Controller
                 return redirect()->back();
             }
 
-            return view('proposicao.modelo.create');
+            return view('processo-legislativo.modelo.create');
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'create');
@@ -86,7 +86,7 @@ class ModeloProposicaoController extends Controller
                 return redirect()->back();
             }
 
-            return view('proposicao.modelo.edit', compact('modelo_proposicao'));
+            return view('processo-legislativo.modelo.edit', compact('modelo_proposicao'));
         }
         catch (\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'ModeloProposicaoController', 'edit');

@@ -4,7 +4,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Cadastro Tipo de Documento</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Cadastro Tipo de Documento</h1>
     @if (!isset($departamentos[0]))
         <div class="alert alert-warning alert-dismissible" role="alert">
             <div class="alert-message">

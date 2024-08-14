@@ -4,8 +4,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Alterar Gestão Administrativa</h1>
-
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Alterar Gestão Administrativa</h1>
     <div class="card">
         <div class="card-body">
             <form action="{{ route('configuracao.gestao_administrativa.update', $alterarGestaoAdm->id) }}" method="POST" class="form_prevent_multiple_submits">

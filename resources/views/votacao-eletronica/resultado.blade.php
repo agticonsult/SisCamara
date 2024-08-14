@@ -13,7 +13,8 @@
     </style>
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Resultado da Votação</h1>
+    <h1 class="h3 mb-3"></h1>
+    <h1 class="h3 mb-3"><span class="caminho">Votação Eletrônica > Gerenciar Votações > </span>Resultado da Votação</h1>
     <div class="card" style="background-color:white">
         <div id="accordion">
             <div class="card">
@@ -37,64 +38,64 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="accordion2">
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="false" aria-controls="collapseTwo">
-                            Votos
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
-                    <div class="card-body">
-                        @if (Count($vereadorVotacaos) == 0)
-                            <div>
-                                <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há
-                                    cadastros no sistema.</h1>
-                            </div>
-                        @elseif ($votacao->tipo_votacao->descricao == 'Fechada')
-                            <div>
-                                <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Esta
-                                    votação é fechada.</h1>
-                            </div>
-                        @else
-                            <div class="table-responsive">
-                                <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
-                                    <thead>
+    <div id="accordion2">
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="false" aria-controls="collapseTwo">
+                        Votos
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
+                <div class="card-body">
+                    @if (Count($vereadorVotacaos) == 0)
+                        <div>
+                            <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Não há
+                                cadastros no sistema.</h1>
+                        </div>
+                    @elseif ($votacao->tipo_votacao->descricao == 'Fechada')
+                        <div>
+                            <h1 class="alert-info px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Esta
+                                votação é fechada.</h1>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table id="datatables-reponsive" class="table table-bordered" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Vereador</th>
+                                        <th scope="col">Voto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($vereadorVotacaos as $vereadorVotacao)
                                         <tr>
-                                            <th scope="col">Vereador</th>
-                                            <th scope="col">Voto</th>
+                                            <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nome : 'não informado' }}
+                                            </td>
+                                            <td>
+                                                <button
+                                                    class="btn
+                                                    {{ $vereadorVotacao->voto == 'Sim' ? 'btn-success' : '' }}
+                                                    {{ $vereadorVotacao->voto == 'Não' ? 'btn-danger' : '' }}
+                                                    {{ $vereadorVotacao->voto == 'Abstenção' ? 'btn-warning' : '' }}
+                                                    m-1">{{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
+                                                </button>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($vereadorVotacaos as $vereadorVotacao)
-                                            <tr>
-                                                <td>{{ $vereadorVotacao->id_vereador != null ? $vereadorVotacao->vereador->usuario->pessoa->nome : 'não informado' }}
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        class="btn
-                                                        {{ $vereadorVotacao->voto == 'Sim' ? 'btn-success' : '' }}
-                                                        {{ $vereadorVotacao->voto == 'Não' ? 'btn-danger' : '' }}
-                                                        {{ $vereadorVotacao->voto == 'Abstenção' ? 'btn-warning' : '' }}
-                                                        m-1">{{ $vereadorVotacao->voto != null ? $vereadorVotacao->voto : 'não informado' }}
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-
     </div>
+
 
     <script src="{{ asset('js/datatables.min.js') }}"></script>
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>

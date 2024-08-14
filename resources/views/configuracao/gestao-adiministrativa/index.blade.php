@@ -2,12 +2,6 @@
 
 @section('content')
 
-    <style>
-        .caminho {
-            font-size: 12px;
-        }
-    </style>
-
     <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Gestão Administrativa</h1>
 
     @include('sweetalert::alert')
