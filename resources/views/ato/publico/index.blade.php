@@ -9,164 +9,132 @@
     date_default_timezone_set('America/Campo_Grande');
 @endphp
 
-<div class="card" style="background-color:white">
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('web_publica.ato.busca.livre') }}" method="POST" id="form-buscar">
+                @csrf
+                @method('POST')
 
-    <div class="card-header" style="background-color:white">
-        <h2 class="text-center">
-            <div>
-                <span><i class="fas fa-address-book"></i></span>
-            </div>
-            <strong>Listagem de Atos</strong>
-        </h2>
-    </div>
-
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="heading">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse"
-                        data-target="#collapse" aria-expanded="false"
-                        aria-controls="collapse">
-                        Filtros
-                    </button>
-                </h5>
-            </div>
-            <div id="collapse" class="collapse show" aria-labelledby="heading"
-                data-parent="#accordion">
-                <div class="card-body">
-                    <form action="{{ route('web_publica.ato.busca.livre') }}" method="POST" id="form-buscar">
-                        @csrf
-                        @method('POST')
-
-                        <h4 style="text-align: center" class="m-3">Filtro por Busca Livre</h4>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class="form-label">Pesquisar por palavras</label>
-                                <input type="text" placeholder="Pesquisar por palavras" class="form-control" name="palavra" id="palavra" value="{{ $filtros['palavra'] ?? '' }}">
-                                @if(isset($filtros['palavra']))
-                                    <span class="badge bg-warning">Filtro aplicado</span>
-                                @endif
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label">Exclusão de palavras</label>
-                                <input type="text" placeholder="Palavras a serem excluídas" class="form-control" name="exclusao" id="exclusao">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <button type="submit" class="btn btn-primary float-right">
-                                    <i class="fas fa-search-location"></i>
-                                    &nbspPesquisar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <br><hr><br>
-
-                    <form action="{{ route('web_publica.ato.busca.especifica') }}" method="POST" id="form-buscar">
-                        @csrf
-                        @method('POST')
-
-                        <h4 style="text-align: center" class="m-3">Filtro Específico</h4>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Classificação do Ato</label>
-                                <select name="id_classificacao" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($classificacaos as $classificacao)
-                                        <option value="{{ $classificacao->id }}">{{ $classificacao->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Ano</label>
-                                <input type="text" class="form-control" name="ano" id="ano">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Número</label>
-                                <input type="text" class="form-control" name="numero">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Tipo de Ato</label>
-                                <select name="id_tipo_ato" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($tipo_atos as $tipo_ato)
-                                        <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Assunto</label>
-                                <select name="id_assunto" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($assuntos as $assunto)
-                                        <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="altera_dispositivo">Altera dispositivo</label>
-                                <select name="altera_dispositivo" class="form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Órgão que editou o ato</label>
-                                <select name="id_orgao" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($orgaos as $orgao)
-                                        <option value="{{ $orgao->id }}">{{ $orgao->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Forma de Publicação</label>
-                                <select name="id_forma_publicacao" class="select2 form-control">
-                                    <option value="" selected disabled>--Selecione--</option>
-                                    @foreach ($forma_publicacaos as $forma_publicacao)
-                                        <option value="{{ $forma_publicacao->id }}">{{ $forma_publicacao->descricao }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label class="form-label">Data de Publicação</label>
-                                <input type="date" class="form-control" name="data_publicacao">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <button type="submit" class="btn btn-primary float-right">
-                                    <i class="fas fa-search-location"></i>
-                                    &nbspPesquisar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <h4 style="text-align: center" class="m-3">Filtro por Busca Livre</h4>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Pesquisar por palavras</label>
+                        <input type="text" placeholder="Pesquisar por palavras" class="form-control" name="palavra" id="palavra" value="{{ $filtros['palavra'] ?? '' }}">
+                        @if(isset($filtros['palavra']))
+                            <span class="badge bg-warning">Filtro aplicado</span>
+                        @endif
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Exclusão de palavras</label>
+                        <input type="text" placeholder="Palavras a serem excluídas" class="form-control" name="exclusao" id="exclusao">
+                    </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary float-right">
+                            <i class="fas fa-search-location"></i>
+                            &nbspPesquisar
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
-    <br><hr><br>
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('web_publica.ato.busca.especifica') }}" method="POST" id="form-buscar">
+                @csrf
+                @method('POST')
+
+                <h4 style="text-align: center" class="m-3">Filtro Específico</h4>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Classificação do Ato</label>
+                        <select name="id_classificacao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($classificacaos as $classificacao)
+                                <option value="{{ $classificacao->id }}">{{ $classificacao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Ano</label>
+                        <input type="text" class="form-control" name="ano" id="ano">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Número</label>
+                        <input type="text" class="form-control" name="numero">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Tipo de Ato</label>
+                        <select name="id_tipo_ato" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($tipo_atos as $tipo_ato)
+                                <option value="{{ $tipo_ato->id }}">{{ $tipo_ato->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Assunto</label>
+                        <select name="id_assunto" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($assuntos as $assunto)
+                                <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="altera_dispositivo">Altera dispositivo</label>
+                        <select name="altera_dispositivo" class="form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            <option value="0">Não</option>
+                            <option value="1">Sim</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Órgão que editou o ato</label>
+                        <select name="id_orgao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($orgaos as $orgao)
+                                <option value="{{ $orgao->id }}">{{ $orgao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Forma de Publicação</label>
+                        <select name="id_forma_publicacao" class="select2 form-control">
+                            <option value="" selected disabled>--Selecione--</option>
+                            @foreach ($forma_publicacaos as $forma_publicacao)
+                                <option value="{{ $forma_publicacao->id }}">{{ $forma_publicacao->descricao }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Data de Publicação</label>
+                        <input type="date" class="form-control" name="data_publicacao">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary float-right">
+                            <i class="fas fa-search-location"></i>
+                            &nbspPesquisar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div id="accordion2">
         <div class="card">
             <div class="card-header" id="heading2">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse"
-                        data-target="#collapse2" aria-expanded="false"
-                        aria-controls="collapse">
-                        Listagem
-                    </button>
-                </h5>
+                <h4 style="text-align: center" class="m-3">Listagem dos Atos</h4>
             </div>
             <div id="collapse2" class="collapse show" aria-labelledby="heading2" data-parent="#accordion2">
                 <div class="card-body">
@@ -218,11 +186,7 @@
 
     </div>
 
-    <div class="card-footer">
-        <a href="{{ route('ato.create') }}" class="btn btn-primary">Cadastrar Ato</a>
-    </div>
-
-</div>
+    <a href="{{ route('ato.create') }}" class="btn btn-primary">Cadastrar Ato</a>
 
 @endsection
 
