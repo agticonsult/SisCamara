@@ -43,7 +43,7 @@ class BuscaPalavraExclusaoService
                 'atos.*', 'assunto_atos.descricao as assunto', 'tipo_atos.descricao as tipo_ato',
                 'orgao_atos.descricao as orgao', 'forma_publicacao_atos.descricao as forma_publicacao'
             )
-            ->get();
+        ->get();
 
         foreach ($atos_titulo_excluidos as $ato_titulo_excluido) {
             $atos = array_filter($atos, function($ato) use ($ato_titulo_excluido) {
@@ -51,14 +51,14 @@ class BuscaPalavraExclusaoService
             });
         }
 
-        return array_values($atos); // Reindexar array
+        return array_values($atos);
     }
 
     private static function excluirAtosComTexto($atos, $exclusao)
     {
         $linhas_texto_excluidos = LinhaAto::where('texto', 'LIKE', '%'.$exclusao.'%')
             ->where('ativo', '=', LinhaAto::ATIVO)
-            ->get();
+        ->get();
 
         foreach ($linhas_texto_excluidos as $linha_texto_excluido) {
             $atos = array_filter($atos, function($ato) use ($linha_texto_excluido) {
@@ -66,6 +66,6 @@ class BuscaPalavraExclusaoService
             });
         }
 
-        return array_values($atos); // Reindexar array
+        return array_values($atos);
     }
 }
