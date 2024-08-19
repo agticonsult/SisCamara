@@ -12,10 +12,26 @@
         .error {
             color: red
         }
+        .form-control:focus {
+            background-color: #ffffff !important; /* Altere a cor de fundo conforme necessário */
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .trumbowyg-box, .trumbowyg-editor {
+            border-color: #ced4da; /* Mesma cor da borda do campo de input */
+            background-color: #ffffff; /* Fundo branco para o editor */
+            color: #000000; /* Cor do texto para preto */
+        }
+        .trumbowyg-box.trumbowyg-editor-focused, .trumbowyg-editor:focus {
+            background-color: #ffffff !important; /* Mesma cor de fundo do campo de input */
+            border-color: #80bdff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+        }
     </style>
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3">Votação</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Votação Eletrônica > Acompanhar Votação > </span>Votação</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">
@@ -63,7 +79,7 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="colored-icon-4" role="tabpanel">
-                                            <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="10">{{ $vereador_votacao->votacao->proposicao->conteudo }}</textarea>
+                                            <textarea name="conteudo" id="conteudo" class="form-control" cols="30" rows="30">{{ $vereador_votacao->votacao->proposicao->conteudo }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -194,99 +210,93 @@
     <script src="{{ asset('jquery-mask/src/jquery.mask.js') }}"></script>
     <script src="https://cdn.tiny.cloud/1/hh6dctatzptohe71nfevw76few6kevzc4i1q1utarze7tude/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
-    <script>
-        $('#cep').mask('00.000-000');
+    @section('scripts')
+        <script>
+            $('#cep').mask('00.000-000');
 
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
 
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-
-        today = yyyy + '-' + mm + '-' + dd;
-        $('.dataFormat').attr('max', today);
-
-        $("#form").validate({
-            rules: {
-                titulo: {
-                    required: true
-                },
-                ano: {
-                    required: true
-                },
-                numero: {
-                    required: true
-                },
-                id_grupo: {
-                    required: true
-                },
-                id_tipo_ato: {
-                    required: true
-                },
-                subtitulo: {
-                    required: true
-                },
-                corpo_texto: {
-                    required: true
-                }
-            },
-            messages: {
-                titulo: {
-                    required: "Campo obrigatório"
-                },
-                ano: {
-                    required: "Campo obrigatório"
-                },
-                numero: {
-                    required: "Campo obrigatório"
-                },
-                id_grupo: {
-                    required: "Campo obrigatório"
-                },
-                id_tipo_ato: {
-                    required: "Campo obrigatório"
-                },
-                subtitulo: {
-                    required: "Campo obrigatório"
-                },
-                corpo_texto: {
-                    required: "Campo obrigatório"
-                }
+            if (dd < 10) {
+                dd = '0' + dd;
             }
-        });
 
-        tinymce.init({
-            selector: 'textarea',
-            readonly: true,
-            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            toolbar_mode: 'floating',
-            entity_encoding: "raw",
-            force_br_newlines: false,
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            spellchecker_language: 'br',
-            language: 'pt_BR',
-        });
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
 
-        $(document).ready(function() {
+            today = yyyy + '-' + mm + '-' + dd;
+            $('.dataFormat').attr('max', today);
 
-            $('.select2').select2({
-                language: {
-                    noResults: function() {
-                        return "Nenhum resultado encontrado";
+            $("#form").validate({
+                rules: {
+                    titulo: {
+                        required: true
+                    },
+                    ano: {
+                        required: true
+                    },
+                    numero: {
+                        required: true
+                    },
+                    id_grupo: {
+                        required: true
+                    },
+                    id_tipo_ato: {
+                        required: true
+                    },
+                    subtitulo: {
+                        required: true
+                    },
+                    corpo_texto: {
+                        required: true
                     }
                 },
-                closeOnSelect: true,
-                width: '100%',
+                messages: {
+                    titulo: {
+                        required: "Campo obrigatório"
+                    },
+                    ano: {
+                        required: "Campo obrigatório"
+                    },
+                    numero: {
+                        required: "Campo obrigatório"
+                    },
+                    id_grupo: {
+                        required: "Campo obrigatório"
+                    },
+                    id_tipo_ato: {
+                        required: "Campo obrigatório"
+                    },
+                    subtitulo: {
+                        required: "Campo obrigatório"
+                    },
+                    corpo_texto: {
+                        required: "Campo obrigatório"
+                    }
+                }
             });
 
-        });
-    </script>
+            $('#conteudo').trumbowyg({
+                lang: 'pt_br',
+            }).trumbowyg('disable'); // Desabilita a edição, deixando apenas leitura
+
+            $(document).ready(function() {
+
+                $('.select2').select2({
+                    language: {
+                        noResults: function() {
+                            return "Nenhum resultado encontrado";
+                        }
+                    },
+                    closeOnSelect: true,
+                    width: '100%',
+                });
+
+            });
+        </script>
+    @endsection
+
 @endsection

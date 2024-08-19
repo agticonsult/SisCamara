@@ -206,14 +206,14 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Reparticao
-    Route::group(['prefix' => '/reparticao', 'as' => 'reparticao.'], function() {
-        Route::get('/index', [ReparticaoController::class, 'index'])->name('index');
-        Route::get('/create', [ReparticaoController::class, 'create'])->name('create');
-        Route::post('/store', [ReparticaoController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [ReparticaoController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [ReparticaoController::class, 'update'])->name('update');
-        Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
-    });
+    // Route::group(['prefix' => '/reparticao', 'as' => 'reparticao.'], function() {
+    //     Route::get('/index', [ReparticaoController::class, 'index'])->name('index');
+    //     Route::get('/create', [ReparticaoController::class, 'create'])->name('create');
+    //     Route::post('/store', [ReparticaoController::class, 'store'])->name('store');
+    //     Route::get('/edit/{id}', [ReparticaoController::class, 'edit'])->name('edit');
+    //     Route::post('/update/{id}', [ReparticaoController::class, 'update'])->name('update');
+    //     Route::post('/destroy/{id}', [ReparticaoController::class, 'destroy'])->name('destroy');
+    // });
 
     // Documento
     Route::group(['prefix' => '/documento', 'as' => 'documento.'], function() {

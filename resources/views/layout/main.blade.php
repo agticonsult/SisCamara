@@ -178,14 +178,14 @@
                         @endif
 
                         {{-- Repartição --}}
-                        @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
+                        {{-- @if (Auth::user()->temPermissao('Reparticao', 'Listagem') == 1)
                             <li class="sidebar-item {{ Route::current()->uri == 'reparticao/index' || Route::current()->uri == 'reparticao/create' || Route::current()->uri == 'reparticao/edit/{id}' ? 'active' : null }}">
                                 <a href="{{ route('reparticao.index') }}" class="sidebar-link">
                                     <i class="fa fa-list-alt" aria-hidden="true"></i>
                                     <span>Repartição</span>
                                 </a>
                             </li>
-                        @endif
+                        @endif --}}
 
                         {{-- Documentos --}}
                         @if (Auth::user()->temPermissao('Documento', 'Listagem') == 1)
