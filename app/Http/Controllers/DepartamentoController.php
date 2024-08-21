@@ -47,6 +47,33 @@ class DepartamentoController extends Controller
         }
     }
 
+    public function create()
+    {
+        try {
+            if(Auth::user()->temPermissao('Departamento', 'Cadastro') != 1) {
+                Alert::toast('Acesso negado.','error');
+                return redirect()->back();
+            }
+
+            $users = User::where('ativo', '=', User::ATIVO)->get();
+
+            $usuarios = array();
+            foreach ($users as $user) {
+                if ($user->usuarioInterno() == 1) {
+                    array_push($usuarios, $user);
+                }
+            }
+
+            return view('configuracao.departamento.create', compact('usuarios'));
+
+        }
+        catch(\Exception $ex){
+            ErrorLogService::salvar($ex->getMessage(), 'DepartamentoController', 'create');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -71,7 +98,7 @@ class DepartamentoController extends Controller
             ]);
 
             Alert::toast('Cadastro realizado com sucesso!', 'success');
-            return redirect()->back();
+            return redirect()->route('configuracao.departamento.index');
 
         }
         catch(\Exception $ex){

@@ -154,7 +154,7 @@ class TipoAtoController extends Controller
                 'inativadoPorUsuario' => Auth::user()->id,
                 'dataInativado' => Carbon::now(),
                 'motivoInativado' => $motivo,
-                'ativo' => TipoAto::ATIVO
+                'ativo' => TipoAto::INATIVO
             ]);
 
             Alert::toast('Exclusão realizada com sucesso.','success');
