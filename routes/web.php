@@ -317,7 +317,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Departamento
         Route::group(['prefix' => '/departamento', 'as' => 'departamento.'], function() {
             Route::get('/index', [DepartamentoController::class, 'index'])->name('index');
-            // Route::get('/create', [DepartamentoController::class, 'create'])->name('create');
+            Route::get('/create', [DepartamentoController::class, 'create'])->name('create');
             Route::post('/store', [DepartamentoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [DepartamentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [DepartamentoController::class, 'update'])->name('update');

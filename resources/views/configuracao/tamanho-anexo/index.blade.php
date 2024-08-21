@@ -16,13 +16,6 @@
 <div class="card" style="background-color:white">
     <div id="accordion2">
         <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Listagem
-                    </button>
-                </h5>
-            </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
                 <div class="card-body">
                     <div class="table-responsive">

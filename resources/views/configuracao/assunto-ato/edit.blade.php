@@ -4,7 +4,7 @@
 
     @include('sweetalert::alert')
 
-    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Alteração do Ato</h1>
+    <h1 class="h3 mb-3"><span class="caminho">Configuração > </span>Alteração Assunto do Ato</h1>
     <div class="card" style="background-color:white">
         <div class="card-body">
             <div class="col-md-12">
