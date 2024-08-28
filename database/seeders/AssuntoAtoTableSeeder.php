@@ -16,10 +16,10 @@ class AssuntoAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('assunto_atos')->insert([
-            ['descricao' => 'Assunto 1', 'ativo' => AssuntoAto::ATIVO],
-            ['descricao' => 'Assunto 2', 'ativo' => AssuntoAto::ATIVO],
-            ['descricao' => 'Assunto 3', 'ativo' => AssuntoAto::ATIVO],
-            ['descricao' => 'Assunto 4', 'ativo' => AssuntoAto::ATIVO]
+            ['descricao' => 'Nomeação servidores públicos', 'ativo' => AssuntoAto::ATIVO],
+            ['descricao' => 'Discussão e votação de projetos de lei', 'ativo' => AssuntoAto::ATIVO],
+            ['descricao' => 'Aprovação de orçamento', 'ativo' => AssuntoAto::ATIVO],
+            ['descricao' => 'Autorização e homologação de processos licitatórios', 'ativo' => AssuntoAto::ATIVO]
         ]);
     }
 }

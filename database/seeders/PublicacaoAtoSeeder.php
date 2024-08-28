@@ -16,10 +16,7 @@ class PublicacaoAtoSeeder extends Seeder
     public function run()
     {
         DB::table('publicacao_atos')->insert([
-            ['descricao' => 'Publicação 1', 'ativo' => PublicacaoAto::ATIVO],
-            ['descricao' => 'Publicação 2', 'ativo' => PublicacaoAto::ATIVO],
-            ['descricao' => 'Publicação 3', 'ativo' => PublicacaoAto::ATIVO],
-            ['descricao' => 'Publicação 4', 'ativo' => PublicacaoAto::ATIVO]
+            ['descricao' => 'Diário Oficial do Município, Edição nº 456, de 15 de julho de 2024', 'ativo' => PublicacaoAto::ATIVO]
         ]);
     }
 }

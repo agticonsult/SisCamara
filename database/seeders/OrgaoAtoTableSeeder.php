@@ -16,10 +16,10 @@ class OrgaoAtoTableSeeder extends Seeder
     public function run()
     {
         DB::table('orgao_atos')->insert([
-            ['descricao' => 'Órgão 1', 'ativo' => OrgaoAto::ATIVO],
-            ['descricao' => 'Órgão 2', 'ativo' => OrgaoAto::ATIVO],
-            ['descricao' => 'Órgão 3', 'ativo' => OrgaoAto::ATIVO],
-            ['descricao' => 'Órgão 4', 'ativo' => OrgaoAto::ATIVO]
+            ['descricao' => 'Procuradoria Municipal', 'ativo' => OrgaoAto::ATIVO],
+            ['descricao' => 'Polícia', 'ativo' => OrgaoAto::ATIVO],
+            ['descricao' => 'Controladoria-Geral da União', 'ativo' => OrgaoAto::ATIVO],
+            ['descricao' => 'Tribunais de Contas', 'ativo' => OrgaoAto::ATIVO]
         ]);
     }
 }
