@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
+use App\Http\Controllers\CertificadoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\ProposicaoController;
@@ -396,6 +397,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [GestaoAdministrativaController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [GestaoAdministrativaController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [GestaoAdministrativaController::class, 'update'])->name('update');
+        });
+
+        //Certificado
+        Route::group(['prefix' => '/certificado', 'as' => 'certificado.'], function() {
+            Route::get('/', [CertificadoController::class, 'index'])->name('index');
+            Route::post('/store', [CertificadoController::class, 'store'])->name('store');
+            Route::post('/destroy/{id}', [CertificadoController::class, 'destroy'])->name('destroy');
         });
 
     });

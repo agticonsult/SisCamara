@@ -332,6 +332,12 @@
                                             href="{{ route('configuracao.gestao_administrativa.index') }}">Gestão Administrativa
                                         </a>
                                     </li>
+                                    <li
+                                        class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/certificado' ? 'active' : null }}">
+                                        <a class="sidebar-link "
+                                            href="{{ route('configuracao.certificado.index') }}">Meu certificado
+                                        </a>
+                                    </li>
 
                                 </ul>
                             </li>
