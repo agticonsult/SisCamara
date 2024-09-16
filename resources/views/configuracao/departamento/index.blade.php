@@ -32,6 +32,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th scope="col">Departamento</th>
+                                    <th scope="col">Coordenador</th>
                                     <th scope="col">Cadastrado por</th>
                                     <th scope="col">Usuários vinculados</th>
                                     <th scope="col">Editar</th>
@@ -42,6 +43,7 @@
                                 @foreach ($departamentos as $departamento)
                                     <tr>
                                         <td>{{ $departamento->descricao != null ? $departamento->descricao : 'não informado' }}</td>
+                                        <td>{{ $departamento->id_coordenador != null ? $departamento->coordenador->pessoa->nome : 'não informado' }}</td>
                                         <td>
                                             <strong>{{ $departamento->cadastradoPorUsuario != null ? $departamento->cad_usuario->pessoa->nome : 'cadastrado pelo sistema' }}</strong>
                                             em

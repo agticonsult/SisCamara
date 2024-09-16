@@ -54,5 +54,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoVotacaoTableSeeder::class);
         $this->call(StatusDocTableSeeder::class);
         $this->call(TipoWorkflowSeeder::class);
+        $this->call(DepartamentoTableSeeder::class);
+        $this->call(TipoDocumentoTableSeeder::class);
     }
 }
