@@ -59,7 +59,7 @@
                             @foreach ($legislaturas as $legislatura)
                                 <option value="{{ $legislatura->id }}">
                                     Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
-                                    Fim: <strong>{{ $legislatura->fim_mandato }}
+                                    Fim: <strong>{{ $legislatura->fim_mandato }}</strong>
                                 </option>
                             @endforeach
                         </select>

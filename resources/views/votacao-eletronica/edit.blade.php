@@ -48,7 +48,7 @@
                             @foreach ($legislaturas as $legislatura)
                                 <option value="{{ $legislatura->id }}" {{ $legislatura->id == $votacao->id_legislatura ? 'selected' : '' }}>
                                     Início: <strong>{{ $legislatura->inicio_mandato }}</strong> -
-                                    Fim: <strong>{{ $legislatura->fim_mandato }}
+                                    Fim: <strong>{{ $legislatura->fim_mandato }} </strong>
                                 </option>
                             @endforeach
                         </select>
@@ -61,7 +61,9 @@
                         <select name="id_proposicao" class="select2 form-control @error('id_proposicao') is-invalid @enderror">
                             <option value="" selected disabled>--Selecione--</option>
                             @foreach ($proposicaos as $proposicao)
-                                <option value="{{ $proposicao->id }}" {{ $proposicao->id == $votacao->id_proposicao ? 'selected' : '' }}>{{ $proposicao->titulo }}</option>
+                                <option value="{{ $proposicao->id }}" {{ $proposicao->id == $votacao->id_proposicao ? 'selected' : '' }}>
+                                    {{ $proposicao->titulo }}
+                                </option>
                             @endforeach
                         </select>
                         @error('id_proposicao')
