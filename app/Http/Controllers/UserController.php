@@ -124,7 +124,6 @@ class UserController extends Controller
                 return redirect()->back();
             }
 
-            // $usuario = User::where('id', '=', $id)->Where('ativo', '=', User::ATIVO)->first();
             $usuario = User::retornaUsuarioAtivo($id);
             $usuario->update($request->validated());
 
