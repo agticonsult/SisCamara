@@ -276,10 +276,13 @@
                                 <ul id="configuracao"
                                     class="sidebar-dropdown list-unstyled {{ Route::current()->getPrefix() == 'configuracao/finalidade-grupo' ||
                                     Route::current()->getPrefix() == 'configuracao/assunto-ato' ||
+                                    Route::current()->getPrefix() == 'configuracao/classificacao-ato' ||
+                                    Route::current()->getPrefix() == 'configuracao/orgao-ato' ||
                                     Route::current()->getPrefix() == 'configuracao/departamento' ||
                                     Route::current()->getPrefix() == 'configuracao/autoridade' ||
                                     Route::current()->getPrefix() == 'configuracao/tipo-ato' ||
                                     Route::current()->getPrefix() == 'configuracao/publicacao-ato' ||
+                                    Route::current()->getPrefix() == 'configuracao/forma-publi-ato' ||
                                     Route::current()->getPrefix() == 'configuracao/tamanho-anexo' ||
                                     Route::current()->getPrefix() == 'configuracao/tipo-documento' ||
                                     Route::current()->getPrefix() == 'configuracao/gestao-administrativa'
@@ -289,6 +292,18 @@
                                         class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/assunto-ato' ? 'active' : null }}">
                                         <a class="sidebar-link "
                                             href="{{ route('configuracao.assunto_ato.index') }}">Assuntos
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/classificacao-ato' ? 'active' : null }}">
+                                        <a class="sidebar-link "
+                                            href="{{ route('configuracao.classificacao_ato.index') }}">Classificação do Ato
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/orgao-ato' ? 'active' : null }}">
+                                        <a class="sidebar-link "
+                                            href="{{ route('configuracao.orgao_ato.index') }}">Órgão do Ato
                                         </a>
                                     </li>
                                     <li
@@ -313,6 +328,12 @@
                                         class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/publicacao-ato' ? 'active' : null }}">
                                         <a class="sidebar-link "
                                             href="{{ route('configuracao.publicacao_ato.index') }}">Publicações
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="sidebar-item {{ Route::current()->getPrefix() == 'configuracao/forma-publi-ato' ? 'active' : null }}">
+                                        <a class="sidebar-link "
+                                            href="{{ route('configuracao.forma_publi_ato.index') }}">Forma de Publicação
                                         </a>
                                     </li>
                                     <li

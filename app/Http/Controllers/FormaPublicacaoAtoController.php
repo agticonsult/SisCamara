@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClassificacaoAtoRequest;
-use App\Models\ClassificacaoAto;
+use App\Http\Requests\FormaPublicacaoAtoRequest;
+use App\Models\FormaPublicacaoAto;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class ClassificacaoAtoController extends Controller
+class FormaPublicacaoAtoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,12 +25,12 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $forma_publicacao_atos = FormaPublicacaoAto::where('ativo', FormaPublicacaoAto::ATIVO)->get();
 
-            return view('configuracao.classificacao-ato.index', compact('classificacao_ato'));
+            return view('configuracao.forma-publi-ato.index', compact('forma_publicacao_atos'));
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'index');
+            ErrorLogService::salvar($ex->getMessage(), 'FormaPublicacaoAtoController', 'index');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -42,7 +42,7 @@ class ClassificacaoAtoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClassificacaoAtoRequest $request)
+    public function store(FormaPublicacaoAtoRequest $request)
     {
         try {/*
             if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
@@ -50,16 +50,16 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            ClassificacaoAto::create($request->validated() + [
+            FormaPublicacaoAto::create($request->validated() + [
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
             Alert::toast('Cadastro realizado com sucesso.','success');
-            return redirect()->route('configuracao.classificacao_ato.index');
+            return redirect()->route('configuracao.forma_publi_ato.index');
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'store');
+            ErrorLogService::salvar($ex->getMessage(), 'FormaPublicacaoAtoController', 'store');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -79,16 +79,12 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            if (!$classificacao_ato){
-                Alert::toast('Não é possível alterar este assunto.','error');
-                return redirect()->route('configuracao.classificacao_ato.index');
-            } else {
-                return view('configuracao.classificacao-ato.edit', compact('classificacao_ato'));
-            }
+            $forma_publicacao_atos = FormaPublicacaoAto::where('ativo', FormaPublicacaoAto::ATIVO)->findOrFail($id);
+
+            return view('configuracao.forma-publi-ato.edit', compact('forma_publicacao_atos'));
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'CLassificacaoAtoController', 'edit');
+            ErrorLogService::salvar($ex->getMessage(), 'FormaPublicacaoAtoController', 'edit');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -101,7 +97,7 @@ class ClassificacaoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ClassificacaoAtoRequest $request, $id)
+    public function update(FormaPublicacaoAtoRequest $request, $id)
     {
         try {/*
             if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
@@ -109,15 +105,15 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            $classificacao_ato->update($request->validated());
+            $forma_publicacao_atos = FormaPublicacaoAto::where('id', $id)->where('ativo', FormaPublicacaoAto::ATIVO)->first();
+            $forma_publicacao_atos->update($request->validated());
 
             Alert::toast('Alteração realizada com sucesso.','success');
-            return redirect()->route('configuracao.classificacao_ato.index');
+            return redirect()->route('configuracao.forma_publi_ato.index');
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'update');
+            ErrorLogService::salvar($ex->getMessage(), 'FormaPublicacaoAtoController', 'update');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -137,24 +133,19 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            if (!$classificacao_ato){
-                Alert::toast('Não é possível excluir este assunto.','error');
-                return redirect()->back();
-            } else {
-                $classificacao_ato->update([
-                    'inativadoPorUsuario' => Auth::user()->id,
-                    'dataInativado' => Carbon::now(),
-                    'motivoInativado' => $request->motivo ?? "Exlcusão pelo usuário.",
-                    'ativo' => ClassificacaoAto::INATIVO
-                ]);
+            $forma_publicacao_atos = FormaPublicacaoAto::where('id', $id)->where('ativo', FormaPublicacaoAto::ATIVO)->findOrFail($id);
+            $forma_publicacao_atos->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => FormaPublicacaoAto::INATIVO
+            ]);
 
-                Alert::toast('Exclusão realizada com sucesso.','success');
-                return redirect()->route('configuracao.classificacao_ato.index');
-            }
+            Alert::toast('Exclusão realizada com sucesso.','success');
+            return redirect()->route('configuracao.forma_publi_ato.index');
         }
         catch (\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'destroy');
+            ErrorLogService::salvar($ex->getMessage(), 'FormaPublicacaoAtoController', 'destroy');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }

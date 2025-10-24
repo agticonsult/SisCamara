@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClassificacaoAtoRequest;
-use App\Models\ClassificacaoAto;
+use App\Http\Requests\OrgaoAtoRequest;
+use App\Models\OrgaoAto;
 use App\Services\ErrorLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class ClassificacaoAtoController extends Controller
+class OrgaoAtoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,16 +25,26 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('ativo', '=', ClassificacaoAto::ATIVO)->get();
+            $orgao_ato = OrgaoAto::where('ativo', '=', OrgaoAto::ATIVO)->get();
 
-            return view('configuracao.classificacao-ato.index', compact('classificacao_ato'));
+            return view('configuracao.orgao-ato.index', compact('orgao_ato'));
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'index');
+            ErrorLogService::salvar($ex->getMessage(), 'OrgaoAtoController', 'index');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    /*public function create()
+    {
+        //
+    }*/
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +52,7 @@ class ClassificacaoAtoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClassificacaoAtoRequest $request)
+    public function store(OrgaoAtoRequest $request)
     {
         try {/*
             if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
@@ -50,20 +60,31 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            ClassificacaoAto::create($request->validated() + [
+            OrgaoAto::create($request->validated() + [
                 'cadastradoPorUsuario' => Auth::user()->id
             ]);
 
             Alert::toast('Cadastro realizado com sucesso.','success');
-            return redirect()->route('configuracao.classificacao_ato.index');
+            return redirect()->route('configuracao.orgao_ato.index');
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'store');
+            ErrorLogService::salvar($ex->getMessage(), 'OrgaoAtoController', 'store');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*public function show($id)
+    {
+        //
+    }*/
 
     /**
      * Show the form for editing the specified resource.
@@ -79,16 +100,16 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            if (!$classificacao_ato){
+            $orgao_ato = OrgaoAto::where('id', '=', $id)->where('ativo', '=', OrgaoAto::ATIVO)->first();
+            if (!$orgao_ato){
                 Alert::toast('Não é possível alterar este assunto.','error');
-                return redirect()->route('configuracao.classificacao_ato.index');
+                return redirect()->route('configuracao.orgao_ato.index');
             } else {
-                return view('configuracao.classificacao-ato.edit', compact('classificacao_ato'));
+                return view('configuracao.orgao-ato.edit', compact('orgao_ato'));
             }
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'CLassificacaoAtoController', 'edit');
+            ErrorLogService::salvar($ex->getMessage(), 'OrgaoAtoController', 'edit');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -101,7 +122,7 @@ class ClassificacaoAtoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ClassificacaoAtoRequest $request, $id)
+    public function update(OrgaoAtoRequest $request, $id)
     {
         try {/*
             if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
@@ -109,15 +130,15 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            $classificacao_ato->update($request->validated());
+            $orgao_ato = OrgaoAto::where('id', '=', $id)->where('ativo', '=', OrgaoAto::ATIVO)->first();
+            $orgao_ato->update($request->validated());
 
             Alert::toast('Alteração realizada com sucesso.','success');
-            return redirect()->route('configuracao.classificacao_ato.index');
+            return redirect()->route('configuracao.orgao_ato.index');
 
         }
         catch(\Exception $ex){
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'update');
+            ErrorLogService::salvar($ex->getMessage(), 'OrgaoAtoController', 'update');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
@@ -137,24 +158,24 @@ class ClassificacaoAtoController extends Controller
                 return redirect()->back();
             }*/
 
-            $classificacao_ato = ClassificacaoAto::where('id', '=', $id)->where('ativo', '=', ClassificacaoAto::ATIVO)->first();
-            if (!$classificacao_ato){
+            $orgao_ato = OrgaoAto::where('id', '=', $id)->where('ativo', '=', OrgaoAto::ATIVO)->first();
+            if (!$orgao_ato){
                 Alert::toast('Não é possível excluir este assunto.','error');
                 return redirect()->back();
             } else {
-                $classificacao_ato->update([
+                $orgao_ato->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
                     'motivoInativado' => $request->motivo ?? "Exlcusão pelo usuário.",
-                    'ativo' => ClassificacaoAto::INATIVO
+                    'ativo' => OrgaoAto::INATIVO
                 ]);
 
                 Alert::toast('Exclusão realizada com sucesso.','success');
-                return redirect()->route('configuracao.classificacao_ato.index');
+                return redirect()->route('configuracao.orgao_ato.index');
             }
         }
         catch (\Exception $ex) {
-            ErrorLogService::salvar($ex->getMessage(), 'ClassificacaoAtoController', 'destroy');
+            ErrorLogService::salvar($ex->getMessage(), 'OrgaoAtoController', 'destroy');
             Alert::toast('Contate o administrador do sistema','error');
             return redirect()->back();
         }
