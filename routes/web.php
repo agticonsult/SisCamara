@@ -13,11 +13,13 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\ExportAtoController;
 use App\Http\Controllers\AutoridadeController;
 use App\Http\Controllers\CertificadoController;
+use App\Http\Controllers\ClassificacaoAtoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\ProposicaoController;
 use App\Http\Controllers\FileSizeController;
 use App\Http\Controllers\FinalidadeGrupoController;
+use App\Http\Controllers\FormaPublicacaoAtoController;
 use App\Http\Controllers\FotoPerfilController;
 use App\Http\Controllers\FuncionalidadeController;
 use App\Http\Controllers\GerenciamentoVotacaoController;
@@ -26,6 +28,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\LegislaturaController;
 use App\Http\Controllers\ModeloProposicaoController;
+use App\Http\Controllers\OrgaoAtoController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\PerfilFuncionalidadeController;
 use App\Http\Controllers\PessoaController;
@@ -336,6 +339,26 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/destroy/{id}', [AssuntoAtoController::class, 'destroy'])->name('destroy');
         });
 
+        //Classificação do Ato
+        Route::group(['prefix' => '/classificacao-ato', 'as' => 'classificacao_ato.'], function() {
+            Route::get('/index', [ClassificacaoAtoController::class, 'index'])->name('index');
+            Route::get('/create', [ClassificacaoAtoController::class, 'create'])->name('create');
+            Route::post('/store', [ClassificacaoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [ClassificacaoAtoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [ClassificacaoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [ClassificacaoAtoController::class, 'destroy'])->name('destroy');
+        });
+
+        //Órgão do Ato
+        Route::group(['prefix' => '/orgao-ato', 'as' => 'orgao_ato.'], function() {
+            Route::get('/index', [OrgaoAtoController::class, 'index'])->name('index');
+            Route::get('/create', [OrgaoAtoController::class, 'create'])->name('create');
+            Route::post('/store', [OrgaoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [OrgaoAtoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [OrgaoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [OrgaoAtoController::class, 'destroy'])->name('destroy');
+        });
+
         //Autoridades
         // Route::group(['prefix' => '/autoridade', 'as' => 'autoridade.'], function() {
         //     Route::get('/index', [AutoridadeController::class, 'index'])->name('index');
@@ -364,6 +387,16 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/edit/{id}', [PublicacaoAtoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [PublicacaoAtoController::class, 'update'])->name('update');
             Route::post('/destroy/{id}', [PublicacaoAtoController::class, 'destroy'])->name('destroy');
+        });
+
+        //Forma de Publicação
+        Route::group(['prefix' => '/forma-publi-ato', 'as' => 'forma_publi_ato.'], function() {
+            Route::get('/index', [FormaPublicacaoAtoController::class, 'index'])->name('index');
+            Route::get('/create', [FormaPublicacaoAtoController::class, 'create'])->name('create');
+            Route::post('/store', [FormaPublicacaoAtoController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [FormaPublicacaoAtoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [FormaPublicacaoAtoController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [FormaPublicacaoAtoController::class, 'destroy'])->name('destroy');
         });
 
         // Finalidade dos Grupos de Usuário
