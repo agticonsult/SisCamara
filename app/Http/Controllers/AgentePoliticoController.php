@@ -202,11 +202,6 @@ class AgentePoliticoController extends Controller
                 ->where('ativo', '=', User::ATIVO)
                 ->select('id')
                 ->first();
-            if (!$temUsuario){
-                Alert::toast('Usuário não encontrado.','error');
-                return redirect()->back()->withInput();
-            }
-
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', PleitoCargo::ATIVO)
@@ -317,11 +312,6 @@ class AgentePoliticoController extends Controller
             }
 
             $agente_politico = AgentePolitico::where('id_user', '=', $id)->where('ativo', '=', AgentePolitico::ATIVO)->first();
-            if (!$agente_politico){
-                Alert::toast('Agente Político inválido.','error');
-                return redirect()->back();
-            }
-
             $pleito_cargo = PleitoCargo::where('id_cargo_eletivo', '=', $request->id_cargo_eletivo)
                 ->where('id_pleito_eleitoral', '=', $request->id_pleito_eleitoral)
                 ->where('ativo', '=', PleitoCargo::ATIVO)
@@ -363,10 +353,7 @@ class AgentePoliticoController extends Controller
                 Alert::toast('Acesso negado','error');
                 return redirect()->back();
             }
-
-            if ($request->motivo == null || $request->motivo == "") {
-                $motivo = "Exclusão pelo usuário.";
-            }
+            dd('ola');
 
             $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
             if (!$pleito_eleitoral){
@@ -377,7 +364,7 @@ class AgentePoliticoController extends Controller
             $pleito_eleitoral->update([
                 'inativadoPorUsuario' => Auth::user()->id,
                 'dataInativado' => Carbon::now(),
-                'motivoInativado' => $motivo,
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
                 'ativo' => PleitoEleitoral::INATIVO
             ]);
 
@@ -385,10 +372,27 @@ class AgentePoliticoController extends Controller
                 $pleito_cargo_ativo->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
-                    'motivoInativado' => $motivo,
+                    'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
                     'ativo' => PleitoEleitoral::INATIVO
                 ]);
             }
+
+            //  $perfilUserAlterar = PerfilUser::where('id_user', '=', $temUsuario->id)->where('ativo', '=', PerfilUser::ATIVO)->first();
+            // if ($perfilUserAlterar) {
+            //     $perfilUserAlterar->update([
+            //         'id_user' => $temUsuario->id,
+            //         'id_tipo_perfil' => Perfil::USUARIO_POLITICO
+            //     ]);
+            // }
+
+            // $permissaoUserAlterar = Permissao::where('id_user', '=', $temUsuario->id)->where('ativo', '=', Permissao::ATIVO)->first();
+            // if ($permissaoUserAlterar) {
+            //     $permissaoUserAlterar->update([
+            //         'id_user' => $temUsuario->id,
+            //         'id_perfil' => Perfil::USUARIO_POLITICO
+            //     ]);
+            // }
+
 
             Alert::toast('Exclusão realizado com sucesso!', 'success');
             return redirect()->route('agente_politico.index');
