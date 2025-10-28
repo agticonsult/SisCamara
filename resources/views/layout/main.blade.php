@@ -197,6 +197,15 @@
                             </li>
                         @endif
 
+                        @if (Auth::user()->temPermissao('Auditoria', 'Listagem') == 1)
+                            <li class="sidebar-item {{ Route::current()->uri == 'auditoria/index' ? 'active' : null }}">
+                                <a href="{{ route('auditoria.index') }}" class="sidebar-link">
+                                    <i class="fa fa-registered" aria-hidden="true"></i>
+                                    <span>Auditoria</span>
+                                </a>
+                            </li>
+                        @endif
+
                         {{-- Usuários --}}
                         @if (Auth::user()->temPermissao('User', 'Listagem') == 1)
                             <li class="sidebar-item">
@@ -216,17 +225,6 @@
                                         class="sidebar-item {{ Route::current()->uri == 'usuario/create' ? 'active' : null }}">
                                         <a class="sidebar-link" href="{{ route('usuario.create') }}">Cadastro</a>
                                     </li>
-                                    <li
-                                        class="sidebar-item {{ Route::current()->getPrefix() == '/auditoria' ? 'active' : null }}">
-                                        <a class="sidebar-link" href="{{ route('auditoria.index') }}">Auditoria</a>
-                                    </li>
-                                    {{-- @if(Auth::user()->permissaoAprovacaoUsuario())
-                                        <li class="sidebar-item {{ Route::current()->uri == 'usuario/aprovacao-cadastros-externos' ? 'active' : null }}">
-                                            <a href="{{ route('usuario.aprovacaoCadastroUsuario') }}" class="sidebar-link">
-                                                Aprovação de cadastro de Usuários Externos
-                                            </a>
-                                        </li>
-                                    @endif --}}
                                 </ul>
                             </li>
                         @endif
