@@ -19,8 +19,8 @@ class ClassificacaoAtoController extends Controller
      */
     public function index()
     {
-        try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Listagem') != 1){
+        try {
+            /*if(Auth::user()->temPermissao('ClassificacaoAto', 'Listagem') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -45,7 +45,7 @@ class ClassificacaoAtoController extends Controller
     public function store(ClassificacaoAtoRequest $request)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('ClassificacaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -74,7 +74,7 @@ class ClassificacaoAtoController extends Controller
     public function edit($id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('ClassificacaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -104,7 +104,7 @@ class ClassificacaoAtoController extends Controller
     public function update(ClassificacaoAtoRequest $request, $id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('ClassificacaoAto', 'Alteração') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -132,7 +132,7 @@ class ClassificacaoAtoController extends Controller
     public function destroy(Request $request, $id)
     {
         try {/*
-            if (Auth::user()->temPermissao('AssuntoAto', 'Exclusão') != 1) {
+            if (Auth::user()->temPermissao('ClassificacaoAto', 'Exclusão') != 1) {
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
