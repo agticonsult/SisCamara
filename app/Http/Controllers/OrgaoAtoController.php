@@ -20,7 +20,7 @@ class OrgaoAtoController extends Controller
     public function index()
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('OrgaoAto', 'Listagem') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -55,7 +55,7 @@ class OrgaoAtoController extends Controller
     public function store(OrgaoAtoRequest $request)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('OrgaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -95,7 +95,7 @@ class OrgaoAtoController extends Controller
     public function edit($id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('OrgaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -125,7 +125,7 @@ class OrgaoAtoController extends Controller
     public function update(OrgaoAtoRequest $request, $id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('OrgaoAto', 'Alteração') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -153,7 +153,7 @@ class OrgaoAtoController extends Controller
     public function destroy(Request $request, $id)
     {
         try {/*
-            if (Auth::user()->temPermissao('AssuntoAto', 'Exclusão') != 1) {
+            if (Auth::user()->temPermissao('OrgaoAto', 'Exclusão') != 1) {
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/

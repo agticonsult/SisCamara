@@ -353,48 +353,64 @@ class AgentePoliticoController extends Controller
                 Alert::toast('Acesso negado','error');
                 return redirect()->back();
             }
-            dd('ola');
 
-            $pleito_eleitoral = PleitoEleitoral::where('id', '=', $id)->where('ativo', '=', PleitoEleitoral::ATIVO)->first();
-            if (!$pleito_eleitoral){
-                Alert::toast('Pleito eleitoral inválido.','error');
+            $agente_politico = AgentePolitico::where('id_user', $id)->where('ativo', AgentePolitico::ATIVO)->first();
+            $pessoa = Pessoa::find($agente_politico->usuario->id_pessoa);
+            $usuario = User::find($agente_politico->id_user);
+            $foto_perfil = FotoPerfil::where('id_user', $agente_politico->id_user)->where('ativo', FotoPerfil::ATIVO)->first();
+            $perfil_user = PerfilUser::where('id_user', $agente_politico->id_user)->where('ativo', PerfilUser::ATIVO)->first();
+            $permissao = Permissao::where('id_user', $agente_politico->id_user)->where('ativo', Permissao::ATIVO)->first();
+
+            if (!$agente_politico){
+                Alert::toast('Agente Político inválido.','error');
                 return redirect()->back();
             }
 
-            $pleito_eleitoral->update([
+            $agente_politico->update([
                 'inativadoPorUsuario' => Auth::user()->id,
                 'dataInativado' => Carbon::now(),
                 'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
-                'ativo' => PleitoEleitoral::INATIVO
+                'ativo' => AgentePolitico::INATIVO
             ]);
 
-            foreach ($pleito_eleitoral->cargos_eletivos_ativos() as $pleito_cargo_ativo){
-                $pleito_cargo_ativo->update([
+            $pessoa->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => Pessoa::INATIVO
+            ]);
+
+            $usuario->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => User::INATIVO
+            ]);
+
+            if ($foto_perfil) {
+                $foto_perfil->update([
                     'inativadoPorUsuario' => Auth::user()->id,
                     'dataInativado' => Carbon::now(),
                     'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
-                    'ativo' => PleitoEleitoral::INATIVO
+                    'ativo' => FotoPerfil::INATIVO
                 ]);
             }
 
-            //  $perfilUserAlterar = PerfilUser::where('id_user', '=', $temUsuario->id)->where('ativo', '=', PerfilUser::ATIVO)->first();
-            // if ($perfilUserAlterar) {
-            //     $perfilUserAlterar->update([
-            //         'id_user' => $temUsuario->id,
-            //         'id_tipo_perfil' => Perfil::USUARIO_POLITICO
-            //     ]);
-            // }
+            $perfil_user->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => User::INATIVO
+            ]);
 
-            // $permissaoUserAlterar = Permissao::where('id_user', '=', $temUsuario->id)->where('ativo', '=', Permissao::ATIVO)->first();
-            // if ($permissaoUserAlterar) {
-            //     $permissaoUserAlterar->update([
-            //         'id_user' => $temUsuario->id,
-            //         'id_perfil' => Perfil::USUARIO_POLITICO
-            //     ]);
-            // }
+            $permissao->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => User::INATIVO
+            ]);
 
-
-            Alert::toast('Exclusão realizado com sucesso!', 'success');
+            Alert::toast('Exclusão realizada com sucesso!', 'success');
             return redirect()->route('agente_politico.index');
         }
         catch (\Exception $ex) {

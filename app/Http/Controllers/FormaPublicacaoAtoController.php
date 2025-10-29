@@ -20,7 +20,7 @@ class FormaPublicacaoAtoController extends Controller
     public function index()
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Listagem') != 1){
+            if(Auth::user()->temPermissao('FormaPublicacaoAto', 'Listagem') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -45,7 +45,7 @@ class FormaPublicacaoAtoController extends Controller
     public function store(FormaPublicacaoAtoRequest $request)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('FormaPublicacaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -74,7 +74,7 @@ class FormaPublicacaoAtoController extends Controller
     public function edit($id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Cadastro') != 1){
+            if(Auth::user()->temPermissao('FormaPublicacaoAto', 'Cadastro') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -100,7 +100,7 @@ class FormaPublicacaoAtoController extends Controller
     public function update(FormaPublicacaoAtoRequest $request, $id)
     {
         try {/*
-            if(Auth::user()->temPermissao('AssuntoAto', 'Alteração') != 1){
+            if(Auth::user()->temPermissao('FormaPublicacaoAto', 'Alteração') != 1){
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
@@ -128,7 +128,7 @@ class FormaPublicacaoAtoController extends Controller
     public function destroy(Request $request, $id)
     {
         try {/*
-            if (Auth::user()->temPermissao('AssuntoAto', 'Exclusão') != 1) {
+            if (Auth::user()->temPermissao('FormaPublicacaoAto', 'Exclusão') != 1) {
                 Alert::toast('Acesso Negado!','error');
                 return redirect()->back();
             }*/
