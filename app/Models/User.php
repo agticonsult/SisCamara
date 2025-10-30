@@ -96,15 +96,15 @@ class User extends Authenticatable
     public static function retornaUsuariosAtivos()
     {
         $usuarios = User::leftJoin('pessoas', 'pessoas.id', '=', 'users.id_pessoa')
-                ->select(
-                    'users.id', 'users.cpf', 'users.cnpj', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
-                    'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
-                    'users.dataInativado', 'users.motivoInativado'
-                )
-                ->where('cadastroAprovado', User::USUARIO_APROVADO)
-                ->orderBy('users.ativo', 'asc')
-                ->orderBy('pessoas.nome', 'asc')
-                ->get();
+            ->select(
+                'users.id', 'users.cpf', 'users.cnpj', 'users.email', 'users.id_pessoa', 'users.ativo', 'users.tentativa_senha',
+                'users.bloqueadoPorTentativa', 'users.dataBloqueadoPorTentativa', 'users.created_at', 'users.inativadoPorUsuario',
+                'users.dataInativado', 'users.motivoInativado'
+            )
+            ->where('cadastroAprovado', User::USUARIO_APROVADO)
+            ->orderBy('users.ativo', 'asc')
+            ->orderBy('pessoas.nome', 'asc')
+            ->get();
 
         return $usuarios;
     }
