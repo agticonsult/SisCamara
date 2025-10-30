@@ -421,7 +421,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [TipoDocumentoController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [TipoDocumentoController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [TipoDocumentoController::class, 'update'])->name('update');
-            // Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
+            Route::post('/destroy/{id}', [TipoDocumentoController::class, 'destroy'])->name('destroy');
         });
 
         //Gestão administrativa
@@ -430,6 +430,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/store', [GestaoAdministrativaController::class, 'store'])->name('store');
             Route::get('/edit/{id}', [GestaoAdministrativaController::class, 'edit'])->name('edit');
             Route::post('/update/{id}', [GestaoAdministrativaController::class, 'update'])->name('update');
+            Route::post('/destroy/{id}', [GestaoAdministrativaController::class, 'destroy'])->name('destroy');
         });
 
         //Certificado

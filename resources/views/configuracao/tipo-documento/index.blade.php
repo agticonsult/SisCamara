@@ -39,6 +39,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('configuracao.tipo_documento.edit', $tp->id) }}" class="btn btn-warning"><i class="align-middle me-2 fas fa-fw fa-pen"></i></a>
+                                        <button type="button" class="btn btn-danger m-1" data-toggle="modal" data-target="#exampleModalExcluir{{ $tp->id }}"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="exampleModalVisualizar{{ $tp->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelVisualizar" aria-hidden="true">
@@ -65,6 +66,34 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">voltar</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="exampleModalExcluir{{ $tp->id }}"
+                                    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelExcluir"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form method="POST" class="form_prevent_multiple_submits" action="{{ route('configuracao.tipo_documento.destroy', $tp->id) }}">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="modal-header btn-danger">
+                                                    <h5 class="modal-title text-center" id="exampleModalLabelExcluir">
+                                                        Excluir: <strong>{{ $tp->nome != null ? $tp->nome : 'não informado' }}</strong>
+                                                    </h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="motivo" class="form-label">Motivo</label>
+                                                        <input type="text" class="form-control" name="motivo" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                                    </button>
+                                                    <button type="submit" class="button_submit btn btn-danger">Excluir</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

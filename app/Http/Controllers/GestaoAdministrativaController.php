@@ -186,4 +186,31 @@ class GestaoAdministrativaController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroy(Request $request, $id)
+    {
+        try {
+            /*if (Auth::user()->temPermissao('GestaoAdministrativaController', 'Exclusão') != 1) {
+                Alert::toast('Acesso negado','error');
+                return redirect()->back();
+            }*/
+
+            $gestao_administrativa = GestaoAdministrativa::where('id', $id)->where('ativo', GestaoAdministrativa::ATIVO)->first();
+
+            $gestao_administrativa->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => GestaoAdministrativa::INATIVO
+            ]);
+
+            Alert::toast('Exclusão realizada com sucesso!', 'success');
+            return redirect()->route('configuracao.gestao_administrativa.index');
+        }
+        catch (\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'GestaoAdministrativaController', 'destroy');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
+        }
+    }
 }
