@@ -12,7 +12,7 @@ class DepartamentoTramitacao extends Model implements Auditable
 
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
-        'id_tipo_documento', 'id_departamento', 'ordem', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'ativo'
+        'id_tipo_documento', 'id_departamento', 'ordem', 'cadastradoPorUsuario', 'inativadoPorUsuario', 'dataInativado', 'motivoInativado', 'ativo'
     ];
 
     protected $guarded = ['id', 'created_at', 'update_at'];
@@ -47,7 +47,7 @@ class DepartamentoTramitacao extends Model implements Auditable
     {
         return DepartamentoTramitacao::where('id_tipo_documento', '=', $id)->where('ativo', '=', DepartamentoTramitacao::ATIVO)->orderBy('ordem')->first();
     }
-    
+
     public static function retornaDepartamentoTramitacoes($id)
     {
         return DepartamentoTramitacao::where('id_tipo_documento', '=', $id)->orderBy('ordem')->get();

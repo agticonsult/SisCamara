@@ -8,6 +8,8 @@ use App\Models\Departamento;
 use App\Models\DepartamentoTramitacao;
 use App\Models\TipoDocumento;
 use App\Services\ErrorLogService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -181,6 +183,41 @@ class TipoDocumentoController extends Controller
         catch(\Exception $ex) {
             ErrorLogService::salvar($ex->getMessage(), 'DocumentoController', 'get');
             return $this->error('Erro', 'Contate o administrador do sistema', 500);
+        }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        try {
+            /*if (Auth::user()->temPermissao('TipoDocumentoController', 'Exclusão') != 1) {
+                Alert::toast('Acesso negado','error');
+                return redirect()->back();
+            }*/
+
+            $tipo_documento = TipoDocumento::where('id', $id)->where('ativo', TipoDocumento::ATIVO)->first();
+            $departamento_tramitacao = DepartamentoTramitacao::where('id_tipo_documento', $id)->where('ativo', DepartamentoTramitacao::ATIVO)->first();
+
+            $tipo_documento->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => TipoDocumento::INATIVO
+            ]);
+
+            $departamento_tramitacao->update([
+                'inativadoPorUsuario' => Auth::user()->id,
+                'dataInativado' => Carbon::now(),
+                'motivoInativado' => $request->motivo ?? "Exclusão pelo usuário.",
+                'ativo' => DepartamentoTramitacao::INATIVO
+            ]);
+
+            Alert::toast('Exclusão realizada com sucesso!', 'success');
+            return redirect()->route('configuracao.tipo_documento.index');
+        }
+        catch (\Exception $ex) {
+            ErrorLogService::salvar($ex->getMessage(), 'TipoDocumentoController', 'destroy');
+            Alert::toast('Contate o administrador do sistema.','error');
+            return redirect()->back();
         }
     }
 }
