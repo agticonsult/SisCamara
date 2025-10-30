@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\CpfRule;
+use App\Rules\PleitoCargoRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AgentePoliticoStoreRequest extends FormRequest
@@ -49,6 +50,9 @@ class AgentePoliticoStoreRequest extends FormRequest
             'complemento' => 'max:255',
             'ponto_referencia' => 'max:255',
 
+            'password' => ['required', 'min:6', 'max:35'],
+            'confirmacao' => ['required', 'min:6', 'max:35', 'same:password'],
+
         ];
     }
 
@@ -83,6 +87,7 @@ class AgentePoliticoStoreRequest extends FormRequest
             'confirmacao.required' => 'Confirmação obrigatória',
             'confirmacao.min' => 'Confirmação: Minímo 6 caracteres',
             'confirmacao.max' => 'Confirmação: Máximo 35 caracteres',
+            'confirmacao.same' => 'Confirmação de senha não coincide.',
 
             'id_pleito_eleitoral.required' => 'Seleção de Pleito Eleitoral obrigatório.',
             'id_pleito_eleitoral.integer' => 'Seleção de Pleito Eleitoral é um número inteiro.',

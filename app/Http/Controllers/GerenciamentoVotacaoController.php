@@ -19,6 +19,7 @@ class GerenciamentoVotacaoController extends Controller
             }
 
             $votacao = VotacaoEletronica::where('id', '=', $id)->where('ativo', '=', VotacaoEletronica::ATIVO)->first();
+            // dd($votacao->vereadores_ativos());
             if (!$votacao){
                 Alert::toast('Votação inválida.','error');
                 return redirect()->back();

@@ -59,7 +59,7 @@
                                                 <div class="modal-body">
                                                     <div class="form-group">
                                                         <label for="motivo" class="form-label">Motivo</label>
-                                                        <input type="text" class="form-control" name="motivo" required>
+                                                        <input type="text" class="form-control" name="motivo">
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
